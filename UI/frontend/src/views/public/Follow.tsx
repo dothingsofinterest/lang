@@ -191,6 +191,7 @@ const Follow = () => {
         if (v) {
             if (refAudio.current) {
                 refAudio.current.pause();
+                setWordsCurIndex(0);
             }
         } else {
             fnPlayAudio(0);
@@ -232,6 +233,9 @@ const Follow = () => {
         if (inputMode) {
             console.log("subtitles[subtitlesCurIndex].text", subtitles[subtitlesCurIndex]);
             const answer = subtitles[subtitlesCurIndex].texts.map((v) => v.split("\n")[0]).join("\n");
+            console.log("answer", `|${answer}|`);
+            console.log(value);
+            console.log(answer === value);
             if (answer === value) {
                 setInputValue("");
                 setSubtitlesCurIndex(subtitlesCurIndex + 1);
@@ -239,7 +243,8 @@ const Follow = () => {
                 setPlayButton(<PauseCircleOutlined />);
             }
         } else {
-            if (words[wordsCurIndex].split(" ")[1] === value.replaceAll(" ", "/")) {
+            const valueTrans = value.includes(",") ? value.replaceAll(",", "/") : value;
+            if (words[wordsCurIndex].split(", ")[1] === valueTrans) {
                 setInputValue("");
                 setWordsCurIndex(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
                 fnPlayAudio(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
@@ -254,7 +259,6 @@ const Follow = () => {
         const minutes = Math.floor((floatSeconds % 3600) / 60);
         const seconds = Math.floor(floatSeconds % 60);
         const milliseconds = Math.round((floatSeconds % 1) * 1000);
-
         // 格式化成 SRT 时间格式 (hh:mm:ss,SSS)
         const timeString = `${fnPadZero(hours)}:${fnPadZero(minutes)}:${fnPadZero(seconds)},${fnPadZero(milliseconds, 3)}`;
         return timeString;
@@ -267,7 +271,6 @@ const Follow = () => {
         const minutes = parseInt(timeParts[1], 10); // MM
         const seconds = parseInt(timeParts[2], 10); // SS
         const milliseconds = parseInt(timeParts[3], 10); // SSS
-
         // Convert to seconds
         return hours * 3600 + minutes * 60 + seconds + milliseconds / 1000;
     };
@@ -285,7 +288,7 @@ const Follow = () => {
     };
     const fnPlayAudio = async (index: number) => {
         if (words && words.length) {
-            const wordsArr = words[index].split(" ");
+            const wordsArr = words[index].split(", ");
             const content = dictationWordsMode ? wordsArr[1].replaceAll("/", ", ") : wordsArr[0].split(".")[1];
             const type = dictationWordsMode ? 1 : 2;
             try {
@@ -352,7 +355,7 @@ const Follow = () => {
                             <article id="article" ref={articleRef}>
                                 <h5>{script?.name}</h5>
                                 {script?.subtitles.map((paragragh) => {
-                                    return paragragh.roles.length === 1 ? (
+                                    return paragragh.roles.length <= 1 ? (
                                         <div className="p" key={paragragh.key}>
                                             <p>
                                                 {paragragh.roles.length === 1 ? <i className="role">{paragragh.roles[0].split("-")[0]}: </i> : <></>}

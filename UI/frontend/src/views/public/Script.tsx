@@ -565,16 +565,28 @@ const Script = () => {
         const subArr: string[] = [];
         script.subtitles.forEach((paragragh, key, origin) => {
             const childrenArr = paragragh.children.map((sentence, k) => {
-                const textMulti = sentence.texts
-                    .map((partOfSentence, n) => {
-                        const roleTrans = paragragh.roles[n].split("-");
-                        const text = partOfSentence.split("\n");
-                        return `${roleTrans[1]}: ${text[1]}\n${roleTrans[0]}: ${text[0]}`;
-                    })
-                    .join("\n");
-                const roleTrans = paragragh.roles[0].split("-");
+                let text = "";
                 const textTrans = sentence.texts[0].split("\n");
-                const text = paragragh.roles.length === 1 ? `${roleTrans[1]}: ${textTrans[1]}\n${roleTrans[0]}: ${textTrans[0]}` : textMulti;
+                if (paragragh.roles.length === 0) {
+                    text = `${textTrans[1]}\n${textTrans[0]}`;
+                } else if (paragragh.roles.length === 1) {
+                    const roleTrans = paragragh.roles[0].split("-");
+                    text = `${roleTrans[1]}: ${textTrans[1]}\n${roleTrans[0]}: ${textTrans[0]}`;
+                } else {
+                    text = sentence.texts
+                        .map((partOfSentence, n, whole) => {
+                            let text = "";
+                            if (whole.length === paragragh.roles.length) {
+                                const roleTrans = paragragh.roles[n].split("-");
+                                const textTrans = partOfSentence.split("\n");
+                                text = `${roleTrans[1]}: ${textTrans[1]}\n${roleTrans[0]}: ${textTrans[0]}`;
+                            } else {
+                                text = `${text[1]}\n${text[0]}`;
+                            }
+                            return text;
+                        })
+                        .join("\n");
+                }
                 return key === 0 ? `${k + 1}\n${sentence.startTime} --> ${sentence.endTime}\n${text}\n` : `${k + 1 + origin[key - 1].children.length}\n${sentence.startTime} --> ${sentence.endTime}\n${text}\n`;
             });
             subArr.push(...childrenArr);
@@ -590,7 +602,7 @@ const Script = () => {
                 const matchCN = text.match(types[i]);
                 if (matchCN && matchCN[2]) {
                     let str = "";
-                    str += i === 1 ? `v.${matchCN[2]} ` : `${matchCN[1]}.${matchCN[2]} `;
+                    str += i === 1 ? `v.${matchCN[2]}, ` : `${matchCN[1]}.${matchCN[2]}, `;
                     const matchName = text.match(/^([a-zA-Z ]+)/);
                     if (matchName && matchName[1]) {
                         str += matchName[1];
@@ -615,7 +627,7 @@ const Script = () => {
                     }
                     const matchPronounce = text.match(/\/(.*?)\//g);
                     if (matchPronounce && matchPronounce[1]) {
-                        str += ` ${matchPronounce[1]}`;
+                        str += `, ${matchPronounce[1]}`;
                     }
                     res.push(str);
                 }
