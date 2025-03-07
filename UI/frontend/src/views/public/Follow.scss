@@ -1,0 +1,115 @@
+.ant-layout {
+    .ant-list-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 0;
+        height: 80px;
+        width: 600px;
+        box-sizing: border-box;
+        display: flex;
+        background-color: #2c2c31;
+    }
+}
+.ant-tree {
+    border-radius: 0;
+    background-color: rgb(32, 32, 36);
+    .ant-tree-title {
+        width: 100%;
+        display: flex;
+    }
+    .ant-tree-treenode {
+        width: 100%;
+        .ant-tree-switcher {
+            color: #fff;
+        }
+        .ant-tree-node-content-wrapper {
+            flex: 1;
+            padding: 0;
+            background-color: rgb(32, 32, 36);
+            .ant-tree-title {
+                color: #fff;
+                width: 100%;
+            }
+        }
+    }
+}
+.ant-spin-nested-loading {
+    .ant-list-item {
+        background-color: #2c2c31;
+        padding-inline: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+        &.current {
+            border-left: 10px solid #0a87ff;
+        }
+    }
+}
+.ant-upload-select {
+    width: 100%;
+}
+.ant-upload-wrapper {
+    flex: 1;
+}
+
+#article {
+    h5 {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 900;
+        line-height: 40px;
+        color: #fff;
+        margin: 10px 16px;
+    }
+    .p {
+        border: 1px dotted #fff;
+        margin: 12px 10px;
+        padding: 2px 6px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 28px;
+        .role {
+            color: #d21b46;
+            font-weight: 900;
+        }
+        .point {
+            padding: 0 4px;
+            &.active {
+                color: rgb(252, 221, 92);
+            }
+        }
+        ul {
+            font-style: italic;
+            font-size: 12px;
+        }
+    }
+    footer {
+        background-color: rgb(32, 32, 36) !important;
+        padding: 0 10px;
+        color: #fff;
+        .words,
+        .grammers {
+            line-height: 28px;
+            .item-index {
+                font-weight: 900;
+            }
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            color: #fff;
+            &:before,
+            &:after {
+                position: relative;
+                width: 50%;
+                border-block-start: 1px dotted #fff;
+                border-block-end: 0;
+                transform: translateY(50%);
+                content: "";
+            }
+        }
+    }
+}

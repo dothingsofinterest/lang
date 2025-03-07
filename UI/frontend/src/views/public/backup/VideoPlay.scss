@@ -1,0 +1,40 @@
+.ant-layout {
+    .ant-list-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding-inline: 0;
+        padding-block: 0;
+        height: 43px;
+        width: 600px;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        background: #202024;
+        overflow: hidden;
+        z-index: 999;
+    }
+    .ant-spin-nested-loading {
+        margin-top: 43px;
+        margin-bottom: 80px;
+        .ant-list-item {
+            background-color: #2c2c31;
+            padding-inline: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            &.current {
+                border-left: 10px solid #0a87ff;
+            }
+        }
+    }
+
+    .ant-list-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 0;
+        height: 80px;
+        width: 600px;
+        box-sizing: border-box;
+        display: flex;
+        background-color: #2c2c31;
+    }
+}

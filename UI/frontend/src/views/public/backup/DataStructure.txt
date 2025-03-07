@@ -1,0 +1,214 @@
+
+段落:
+	-由某个人发起的一段话，可以包含多句话
+	-演讲的段落，可以包含多句话
+	
+语句：段落里的话。必须按时间线性排列。多人同时说话是一种特殊的语句而已。
+
+[对话型]
+{
+    "name": "Reporter questions why President Zelensky doesn't wear a suit",
+    "roles": [
+        "Zelensky-泽连司机",
+        "Reporter-记者"
+    ],
+    "words": [
+        "v.提问 question/questions/questioned/questioned/questioning /ˈkwestʃən/",
+        "n.西装 suit/suits /suːt/",
+        "v.穿戴 wear/wears/wore/worn/wearing /wer/",
+        "n.问题;疑问 problem/problems /ˈprɑːbləm/",
+        "n.记者 reporter/reporters /rɪˈpɔːrtər/",
+        "v.拥有 own/owns/owned/owned/owning /oʊn/",
+        "v.尊重 respect/respects/respected/respected/respecting /rɪˈspekt/"
+    ],
+    "grammers": [
+        "problem本身是中性的：\n但如果 Yeah problems? 指 What is the problems? 或 What is your problems?  那么有不满或质疑之意。",
+        "可数名词前需加定冠词 a: \n原句：I will wear suit after this war will finish.\n正确：I will wear suit a after this war finishes. "
+    ],
+    "subtitles": [
+        {
+            "key": "0",
+            "title": "P0",
+            "roles": [
+                "Reporter-记者"
+            ],
+            "children": [
+                {
+                    "key": "0-0",
+                    "startTime": "00:00:00,100",
+                    "endTime": "00:00:01,504",
+                    "texts": [
+                        "Why don't you wear a suit?\n为什么您不穿西装？"
+                    ]
+                },
+                {
+                    "key": "0-1",
+                    "startTime": "00:00:02,911",
+                    "endTime": "00:00:10,419",
+                    "texts": [
+                        "Why don't you wear a suit? You're the highest level in this country's office and you refuse to wear a suit. Just want to see if you own a suit?\n为什么您不穿西装？你是这个国家办公室里的最高级别，然而您拒绝穿西装。就想看看您是否有西装."
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "1",
+            "title": "P1",
+            "roles": [
+                "Zelensky-泽连司机"
+            ],
+            "children": [
+                {
+                    "key": "1-0",
+                    "startTime": "00:00:10,583",
+                    "endTime": "00:00:11,834",
+                    "texts": [
+                        "Yeah problems?\n是的，有什么问题吗？"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "2",
+            "title": "P2",
+            "roles": [
+                "Reporter-记者",
+                "Zelensky-泽连司机"
+            ],
+            "children": [
+                {
+                    "key": "2-0",
+                    "startTime": "00:00:12,441",
+                    "endTime": "00:00:16,301",
+                    "texts": [
+                        "A lot of Americans have problems with you not respecting the office.\n许多美国人对你不尊重办公室有意见. ",
+                        "Zelensky: I don't have sides.\n泽连司机: 我在其他国家也不穿西服。"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "3",
+            "title": "P3",
+            "roles": [
+                "Zelensky-泽连司机"
+            ],
+            "children": [
+                {
+                    "key": "3-0",
+                    "startTime": "00:00:16,876",
+                    "endTime": "00:00:20,410",
+                    "texts": [
+                        "I will wear a suit after this war will finish.\n这场战争结束后，我会穿上西装。"
+                    ]
+                },
+                {
+                    "key": "3-1",
+                    "startTime": "00:00:20,557",
+                    "endTime": "00:00:28,283",
+                    "texts": [
+                        "Yes maybe something like yours, maybe something better. I don't know.\n是的，也许像你这样的，也许更好的。我不知道。"
+                    ]
+                },
+                {
+                    "key": "3-2",
+                    "startTime": "00:00:28,382",
+                    "endTime": "00:00:31,068",
+                    "texts": [
+                        "We will see. Maybe something cheaper.\n我们看看。也许更便宜的。"
+                    ]
+                }
+            ]
+        }
+    ]
+}
+        <article>
+            <h5>Reporter questions why President Zelensky doesn't wear a suit</h5>
+            <div class="p">
+                <p><i class="role">Reporter: </i><span class="point active">Why don't you wear a suit?</span><span class="point">Why don't you wear a suit? You're the highest level in this country's office and you refuse to wear a suit. Just want to see if you own a suit?</span></p>
+            </div>
+            <div class="p">
+                <p><i class="role">Zelensky: </i><span class="point">Yeah problems?</span></p>
+            </div>
+            <div class="p">
+                <ul class="point">
+                    <li><i class="role">Reporter: </i><span>A lot of Americans have problems with you not respecting the office.</span></li>
+                    <li><i class="role">Zelensky: </i><span>Zelensky: I don't have sides.</span></li>
+                </ul>
+            </div>
+            <div class="p">
+                <p><i class="role">Zelensky: </i><span class="point">I will wear a suit after this war will finish.</span><span class="point">Yes maybe something like yours, maybe something better. I don't know.</span><span class="point">We will see. Maybe something cheaper.</span></p>
+            </div>
+            <footer style="height: 100%">
+                <div class="divider">Words</div>
+                <div class="words">
+                    <p><span class="item-index">[1] </span>v.提问 question/questions/questioned/questioned/questioning /ˈkwestʃən/</p>
+                    <p><span class="item-index">[2] </span>n.西装 suit/suits /suːt/</p>
+                    <p><span class="item-index">[3] </span>v.穿戴 wear/wears/wore/worn/wearing /wer/</p>
+                    <p><span class="item-index">[4] </span>n.问题;疑问 problem/problems /ˈprɑːbləm/</p>
+                    <p><span class="item-index">[5] </span>n.记者 reporter/reporters /rɪˈpɔːrtər/</p>
+                    <p><span class="item-index">[6] </span>v.拥有 own/owns/owned/owned/owning /oʊn/</p>
+                    <p><span class="item-index">[7] </span>v.尊重 respect/respects/respected/respected/respecting /rɪˈspekt/</p>
+                </div>
+                <div class="divider">Grammers</div>
+                <div class="grammers">
+                    <p><span class="item-index">[1] </span>problem本身是中性的： 但如果 Yeah problems? 指 What is the problems? 或 What is your problems? 那么有不满或质疑之意。</p>
+                    <p><span class="item-index">[2] </span>可数名词前需加定冠词 a: 原句：I will wear suit after this war will finish. 正确：I will wear suit a after this war finishes.</p>
+                </div>
+            </footer>
+        </article>
+
+
+讲述型：
+{
+    "name": "Jordan and Kobe",
+    "roles": [],
+    "words": [
+        "grateful adj.感激的 /ˈɡreɪtfl/"
+    ],
+    "grammers": [
+        "aaa",
+        "bbb"
+    ],
+    "subtitles": [
+        {
+            "key": "0",
+            "title": "P0",
+            "children": [
+                {
+                    "key": "0-0",
+                    "startTime": "00:00:00,000",
+                    "endTime": "00:00:01,000",
+                    "text": "I would say good morning, but it's afternoon.",
+                    "role": ""
+                },
+                {
+                    "key": "0-1",
+                    "startTime": "00:00:02,000",
+                    "endTime": "00:00:03,000",
+                    "text": "I'm grateful to Vanessa and the Bryant family for the opportunity to speak today.",
+                    "role": ""
+                }
+            ]
+        },
+        {
+            "key": "1",
+            "title": "P1",
+            "children": [
+                {
+                    "key": "1-0",
+                    "startTime": "00:00:05,000",
+                    "endTime": "00:00:06,000",
+                    "text": "I'm grateful.",
+                    "role": ""
+                }
+            ]
+        }
+    ]
+}
+
+<p>
+    <span data-index00>I would say good morning, but it's afternoon.</span>
+    <span data-index01>I'm grateful to Vanessa and the Bryant family for the opportunity to speak today.</span>
+    <span data-index02>I'm grateful.</span>
+</p>

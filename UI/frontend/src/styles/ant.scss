@@ -1,0 +1,43 @@
+// side menu
+.ant-menu-inline,
+.ant-menu-vertical {
+    .ant-menu-item,
+    .ant-menu-submenu-title {
+        border-bottom: 1px solid #333;
+        margin-inline: 0 0;
+        margin-block: 0 0;
+        width: 100%;
+        border-radius: 0;
+    }
+}
+.ant-menu-submenu-popup {
+    .ant-menu-vertical {
+        .ant-menu-item {
+            border-bottom: 1px solid #333;
+            margin-inline: 0 0;
+            margin-block: 0 0;
+            width: 100%;
+            border-radius: 0;
+        }
+    }
+}
+// side menu
+
+// table
+.ant-table-tbody > tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+.ant-table-tbody > tr:nth-child(even) {
+    background-color: #ffffff;
+}
+.ant-table-tbody tr.clicked td {
+    cursor: pointer;
+    background-color: #ccc !important;
+}
+.ant-table-container table > thead > tr:first-child > *:first-child {
+    border-start-start-radius: 6px !important;
+}
+.ant-table-container table > thead > tr:first-child > *:last-child {
+    border-start-end-radius: 6px !important;
+}
+// table

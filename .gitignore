@@ -1,0 +1,31 @@
+# Compressed Files
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# SQL #
+*.sql
+
+# Media #
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.m4a
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.wmv
+*.webm
+
+
+# Binary
+*.psd
+*.ai
+*.pdf
+*.srt

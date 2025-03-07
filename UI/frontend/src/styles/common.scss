@@ -1,0 +1,113 @@
+body {
+    height: 100%;
+    font-size: 1rem;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+body,
+p,
+pre,
+blockquote,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+form,
+select,
+input,
+textarea,
+button,
+table,
+caption,
+tr,
+th,
+td {
+    margin: 0;
+    padding: 0;
+}
+ol,
+ul,
+li {
+    list-style: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img {
+    max-width: 100%;
+    border: 0 none;
+}
+a {
+    color: #666;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
+input,
+button,
+textarea,
+select,
+option {
+    font-family: inherit;
+    font-size: 100%;
+    outline: 0;
+}
+textarea {
+    overflow: auto;
+    resize: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: yellow !important; /* 设置文字颜色 */
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important; /* 设置背景透明 */
+    transition: background-color 5000s ease-in-out 0s !important; /* 延长背景色 */
+    background-color: transparent !important; /* 强制背景透明 */
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+a:focus,
+a:active {
+    outline: none;
+}
+a,
+a:focus,
+a:hover {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+.clear {
+    &:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+}

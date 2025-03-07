@@ -1,0 +1,116 @@
+{
+    "name": "Reporter questions why President Zelensky doesn't wear a suit",
+    "roles": [
+        "Zelensky-泽连司机",
+        "Reporter-记者"
+    ],
+    "words": [
+        "v.提问 question/questions/questioned/questioned/questioning /ˈkwestʃən/",
+        "n.西装 suit/suits /suːt/",
+        "v.穿戴 wear/wears/wore/worn/wearing /wer/",
+        "n.问题;疑问 problem/problems /ˈprɑːbləm/",
+        "n.记者 reporter/reporters /rɪˈpɔːrtər/",
+        "v.拥有 own/owns/owned/owned/owning /oʊn/",
+        "v.尊重 respect/respects/respected/respected/respecting /rɪˈspekt/"
+    ],
+    "grammers": [
+        "problem本身是中性的：\n但如果 Yeah problems? 指 What is the problems? 或 What is your problems?  那么有不满或质疑之意。",
+        "可数名词前需加定冠词 a: \n原句：I will wear suit after this war will finish.\n正确：I will wear suit a after this war finishes. "
+    ],
+    "subtitles": [
+        {
+            "key": "0",
+            "title": "P0",
+            "roles": [
+                "Reporter-记者"
+            ],
+            "children": [
+                {
+                    "key": "0-0",
+                    "startTime": "00:00:00,100",
+                    "endTime": "00:00:01,504",
+                    "texts": [
+                        "Why don't you wear a suit?\n为什么您不穿西装？"
+                    ]
+                },
+                {
+                    "key": "0-1",
+                    "startTime": "00:00:02,911",
+                    "endTime": "00:00:10,419",
+                    "texts": [
+                        "Why don't you wear a suit? You're the highest level in this country's office and you refuse to wear a suit. Just want to see if you own a suit?\n为什么您不穿西装？你是这个国家办公室里的最高级别，然而您拒绝穿西装。就想看看您是否有西装."
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "1",
+            "title": "P1",
+            "roles": [
+                "Zelensky-泽连司机"
+            ],
+            "children": [
+                {
+                    "key": "1-0",
+                    "startTime": "00:00:10,583",
+                    "endTime": "00:00:11,834",
+                    "texts": [
+                        "Yeah problems?\n是的，有什么问题吗？"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "2",
+            "title": "P2",
+            "roles": [
+                "Reporter-记者",
+                "Zelensky-泽连司机"
+            ],
+            "children": [
+                {
+                    "key": "2-0",
+                    "startTime": "00:00:12,441",
+                    "endTime": "00:00:16,301",
+                    "texts": [
+                        "A lot of Americans have problems with you not respecting the office.\n许多美国人对你不尊重办公室有意见. ",
+                        "I don't have sides.\n我在其他国家也不穿西服。"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "3",
+            "title": "P3",
+            "roles": [
+                "Zelensky-泽连司机"
+            ],
+            "children": [
+                {
+                    "key": "3-0",
+                    "startTime": "00:00:16,876",
+                    "endTime": "00:00:20,410",
+                    "texts": [
+                        "I will wear a suit after this war will finish.\n这场战争结束后，我会穿上西装。"
+                    ]
+                },
+                {
+                    "key": "3-1",
+                    "startTime": "00:00:20,557",
+                    "endTime": "00:00:28,283",
+                    "texts": [
+                        "Yes maybe something like yours, maybe something better. I don't know.\n是的，也许像你这样的，也许更好的。我不知道。"
+                    ]
+                },
+                {
+                    "key": "3-2",
+                    "startTime": "00:00:28,382",
+                    "endTime": "00:00:31,068",
+                    "texts": [
+                        "We will see. Maybe something cheaper.\n我们看看。也许更便宜的。"
+                    ]
+                }
+            ]
+        }
+    ]
+}

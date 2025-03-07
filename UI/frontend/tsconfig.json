@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es5", // 编译结果使用的 ES 版本
+        "lib": ["dom", "dom.iterable", "esnext"], // 项目需要的 API 支持
+        "allowJs": true, // 支持纯 JavaScript
+        "skipLibCheck": true, // 跳过对库的类型检查以提高编译速度
+        "esModuleInterop": true, // 允许使用 ESM 语法导入 CommonJS 模块。反之亦然。
+        "allowSyntheticDefaultImports": true,
+        "strict": true, // 启用严格模式
+        "forceConsistentCasingInFileNames": true, // 文件名区分大小写
+        "module": "esnext", // 使用最新的 ES 模块语法
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true, // 编译文存不会复制到编译目录
+        "jsx": "react-jsx" // 支持 react 的 JSX
+    },
+    "include": ["src", "assets.d.ts"] // 对要编译的源文件进一步筛选
+}
