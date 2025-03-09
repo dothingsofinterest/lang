@@ -383,10 +383,21 @@ const Script = () => {
         if (refVideo.current && videoSRC && audioSRC) {
             if (refVideo.current.paused) {
                 setPlayButton(<PauseCircleOutlined />);
-                refVideo.current.play();
-                if (wavesurfer) {
-                    wavesurfer.play();
-                }
+                refVideo.current
+                    .play()
+                    .then(() => {
+                        if (wavesurfer && refVideo.current) {
+                            const newPos = Math.max(0, refVideo.current.currentTime - 0.1);
+                            const SRTTime = fnFloatToSRTTime(newPos);
+                            refVideo.current.currentTime = newPos;
+                            wavesurfer.seekTo(newPos / wavesurfer.getDuration());
+                            wavesurfer.play();
+                            setCurrent(`${SRTTime} / ${newPos}`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("播放失败:", err);
+                    });
             } else {
                 setPlayButton(<PlayCircleOutlined />);
                 refVideo.current.pause();
@@ -531,7 +542,6 @@ const Script = () => {
     const fnSRTTimeToFloat = (srtTime: string): number => {
         // Split the SRT time into hours, minutes, seconds, and milliseconds
         const timeParts = srtTime.split(/[:,]/); // Split by ":" and ","
-
         // Parse the parts
         const hours = parseInt(timeParts[0], 10); // HH
         const minutes = parseInt(timeParts[1], 10); // MM

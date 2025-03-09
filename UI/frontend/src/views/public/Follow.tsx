@@ -135,11 +135,11 @@ const Follow = () => {
             ol, ul, li { list-style: none; }
             article { width: 1000px; }
             article h5 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
-            article .p { border: 1px dotted #000; margin: 12px 10px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
+            article .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
             article .p .point { padding: 0 4px; }
             article .p .role { font-weight: 900; padding-right: 2px; }
             article .p ul { font-style: italic; font-size: 12px; }
-            article footer { padding: 0 10px; color: #000;}
+            article footer { padding: 0 20px; color: #000;}
             article footer .words,
             article footer .grammers { line-height: 28px; }
             article footer .words .item-index,
