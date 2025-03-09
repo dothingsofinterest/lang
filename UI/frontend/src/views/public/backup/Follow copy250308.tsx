@@ -3,7 +3,7 @@ import { Layout, Input, Button, Upload, Switch } from "antd";
 import "./Follow.scss";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { PrinterOutlined, RedoOutlined, UploadOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
-import { ttsGen } from "../../api/request";
+import { ttsGen } from "../../../api/request";
 import printJS from "print-js";
 interface Script {
     name: string;
@@ -208,12 +208,11 @@ const Follow = () => {
         setDictationWordsMode(v);
     };
     const handlersKeyboardOnDown = (event: KeyboardEvent) => {
-        console.log("event.key", event.key);
-        console.log("event.key", event.code);
-        if (event.code === "NumpadSubtract") {
+        console.log("event.key", `|${event.key}|`);
+        if (event.key === "-") {
             handlersPanelPlayBackward();
         }
-        if (event.code === "NumpadAdd") {
+        if (event.key === "+") {
             handlersPanelPlayForward();
         }
         // if (event.key === "7") {
@@ -408,12 +407,10 @@ const Follow = () => {
                                     <div className="grammers">
                                         {script?.grammers.map((value, key) => {
                                             return (
-                                                <div key={key}>
+                                                <p key={key}>
                                                     <span className="item-index">[{key + 1}] </span>
-                                                    {value.split("\n").map((v, k) => {
-                                                        return k === 0 ? <span>{v}</span> : <p>{v}</p>;
-                                                    })}
-                                                </div>
+                                                    {value}
+                                                </p>
                                             );
                                         })}
                                     </div>
