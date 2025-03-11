@@ -15,11 +15,11 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-// Routes
+// Routes API
 app.use("/api/open", routesOpen);
 app.use("/api", checkUnauthorized, routes);
+// Routes 404
 app.use(routeNotFound);
-
 // Exception
 app.use(GlobalExceptionHandler);
 

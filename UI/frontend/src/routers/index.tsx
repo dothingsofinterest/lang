@@ -24,4 +24,4 @@ const routes = [
     },
 ];
 
-export default createBrowserRouter(routes);
+export default createHashRouter(routes);
