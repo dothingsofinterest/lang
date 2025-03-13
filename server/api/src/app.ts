@@ -17,7 +17,7 @@ app.use(cors());
 
 // Routes API
 app.use("/api/open", routesOpen);
-// app.use("/api", checkUnauthorized, routes);
+app.use("/api", checkUnauthorized, routes);
 // Routes 404
 app.use(routeNotFound);
 // Exception

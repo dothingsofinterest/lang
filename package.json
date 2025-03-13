@@ -1,0 +1,16 @@
+{
+    "name": "lang",
+    "version": "1.0.0",
+    "description": "Learning Language",
+    "main": "index.js",
+    "scripts": {
+        "start": "gulp run",
+        "build": "gulp build"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "gulp": "^5.0.0",
+        "gulp-shell": "^0.8.0"
+    }
+}
