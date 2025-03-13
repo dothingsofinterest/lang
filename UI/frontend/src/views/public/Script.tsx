@@ -104,23 +104,34 @@ const Script = () => {
             setPanelVersion((prev) => prev + 1);
         }
     };
-    const handlersSubCreateParagraph = () => {
+    const handlersSubInsertParagraph = () => {
         const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
-        const subtitles = JSON.parse(JSON.stringify(script.subtitles));
-        subtitles.push({
-            key: `${subtitles.length}`,
-            title: `P${subtitles.length}`,
+        const curParagraghKey = curSentenceKey.split("-")[0];
+        const a = script.subtitles.slice(0, parseInt(curParagraghKey) + 1);
+        a.push({
+            key: `n`,
+            title: `n`,
             roles: [],
             children: [
                 {
-                    key: `${subtitles.length}-0`,
-                    startTime: "",
-                    endTime: "",
+                    key: "n",
+                    startTime: "00:00:00,000",
+                    endTime: "00:00:00,001",
                     texts: [],
                 },
             ],
         });
-        setScript({ ...script, subtitles: subtitles });
+        const b = script.subtitles.slice(parseInt(curParagraghKey) + 1);
+        const newSubtitles = [...a, ...b].map((v, k) => {
+            v.key = `${k}`;
+            v.title = `P${k}`;
+            v.children = v.children.map((vv, kk) => {
+                vv.key = `${k}-${kk}`;
+                return vv;
+            });
+            return v;
+        });
+        setScript({ ...script, subtitles: newSubtitles });
         setPanelVersion((prev) => prev + 1);
         setLastScrollTop(scrollToTop);
     };
@@ -265,12 +276,21 @@ const Script = () => {
                 });
                 if (curSentence !== undefined) {
                     curParagragh.children = curParagragh.children.map((v) => {
-                        return v.key == curSentence.key ? { ...curSentence, texts: event.target.value.split("\n---\n") } : v;
+                        return v.key == curSentence.key
+                            ? {
+                                  ...curSentence,
+                                  texts: event.target.value.split("\n---\n").map((v: any) => {
+                                      return v.replaceAll(/\s+/g, " ").trim();
+                                  }),
+                              }
+                            : v;
                     });
                     const newSubtitles = script.subtitles.map((v) => {
                         return v.key == curParagragh.key ? curParagragh : v;
                     });
+
                     setScript({ ...script, subtitles: newSubtitles });
+                    setPanelVersion((prev) => prev + 1);
                 }
             }
         }
@@ -454,17 +474,21 @@ const Script = () => {
             }
         }
     };
-    const handlersSubCreateSentence = () => {
-        const curParagraghKey = curSentenceKey.split("-")[0];
-        const curParagragh = script.subtitles.find((v) => {
-            return v.key == curParagraghKey;
-        });
+    const handlersSubInsertSentence = () => {
+        const curKey = curSentenceKey.split("-");
+        const curParagragh = script.subtitles[parseInt(curKey[0])];
         if (curParagragh !== undefined) {
-            curParagragh.children.push({
-                key: `${curParagragh.key}-${curParagragh.children.length}`,
-                startTime: "",
-                endTime: "",
+            const a = curParagragh.children.slice(0, parseInt(curKey[1]) + 1);
+            a.push({
+                key: "n",
+                startTime: "00:00:00,000",
+                endTime: "00:00:00,001",
                 texts: [],
+            });
+            const b = curParagragh.children.slice(parseInt(curKey[1]) + 1);
+            curParagragh.children = [...a, ...b].map((v, k) => {
+                v.key = `${curKey[0]}-${k}`;
+                return v;
             });
             const newSubtitles = script.subtitles.map((v) => {
                 return v.key == curParagragh.key ? curParagragh : v;
@@ -696,7 +720,7 @@ const Script = () => {
                                         </div>
                                         {item.isLast ? (
                                             <div style={{ width: "100%", display: "flex", marginTop: "4px" }}>
-                                                <Button icon={<PlusCircleOutlined />} onClick={handlersSubCreateSentence} size="small" style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                                                <Button icon={<PlusCircleOutlined />} onClick={handlersSubInsertSentence} size="small" style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                                                     Sentence
                                                 </Button>
                                                 <Button icon={<MinusCircleOutlined />} onClick={handlersSubDeleteSentence} size="small" style={{ flex: 1, marginLeft: "4px", borderRadius: "0", backgroundColor: "#ccc" }}>
@@ -718,7 +742,7 @@ const Script = () => {
                                 Export
                             </Button>
                             <InputNumber min={0.0} max={50.0} step={0.1} value={timeOffset} onChange={(v) => handlersSubUpdateTimeOffset(v)} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                            <Button icon={<PlusCircleOutlined />} onClick={handlersSubCreateParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                            <Button icon={<PlusCircleOutlined />} onClick={handlersSubInsertParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                                 Paragraph
                             </Button>
                             <Button icon={<MinusCircleOutlined />} onClick={handlersSubDeleteParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
