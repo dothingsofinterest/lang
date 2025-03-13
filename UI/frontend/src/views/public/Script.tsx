@@ -50,10 +50,9 @@ const Script = () => {
     const [current, setCurrent] = useState("00:00:00,000 / 0");
     const [waveScale, setWaveScale] = useState(0);
     const [videoSRC, setVideoSRC] = useState("");
-    const [audioSRC, setAudioSRC] = useState("");
     const [timeOffset, setTimeOffset] = useState<number>(0.0);
     const [lastScrollTop, setLastScrollTop] = useState<number>(0);
-    const [audioMuted, setAudioMuted] = useState(true);
+    const [videoMuted, setVideoMuted] = useState(true);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
@@ -317,14 +316,57 @@ const Script = () => {
         if (/^(.+?)\.(mp4|MP4)$/g.test(file.name)) {
             const videoURL = URL.createObjectURL(file);
             setVideoSRC(videoURL);
-            refVideo.current?.load();
+            if (refVideo.current) {
+                if (wavesurfer === null) {
+                    const waver = WaveSurfer.create({
+                        container: "#waver",
+                        media: refVideo.current || undefined,
+                        waveColor: "rgb(200, 0, 200)",
+                        progressColor: "rgb(100, 0, 100)",
+                        interact: true,
+                        height: 129,
+                        cursorColor: "rgb(87, 87, 89)",
+                        autoScroll: true,
+                        dragToSeek: true,
+                    });
+                    waver.on("click", async () => {
+                        const currentTime = waver.getCurrentTime();
+                        const SRTTime = fnFloatToSRTTime(currentTime);
+                        waver.seekTo(currentTime / waver.getDuration());
+                        await navigator.clipboard.writeText(SRTTime);
+                        if (refVideo.current) {
+                            refVideo.current.currentTime = currentTime;
+                            setCurrent(`${SRTTime} / ${currentTime}`);
+                        }
+                    });
+                    waver.setMuted(false);
+                    waver.on("loading", (percent) => {
+                        console.log("Loading", percent + "%");
+                    });
+                    waver.on("ready", (duration) => {
+                        console.log("Ready", duration + "s");
+                    });
+                    waver.once("decode", () => {
+                        const slider = document.querySelector('input[type="range"]');
+                        if (slider) {
+                            slider.addEventListener("input", (e: any) => {
+                                console.log("slider input e.target", e.target);
+                                const minPxPerSec = e.target?.valueAsNumber;
+                                waver.zoom(minPxPerSec);
+                            });
+                        }
+                    });
+                    setWavesurfer(waver);
+                }
+                refVideo.current.load();
+            }
             return false;
         } else {
             alert("Please upload mp4 format video.");
         }
     };
     const handlersVideoPlayBackward = async () => {
-        if (refVideo.current && videoSRC && audioSRC) {
+        if (refVideo.current && videoSRC) {
             const pos = Math.max(0, refVideo.current.currentTime - 0.1);
             const SRTTime = fnFloatToSRTTime(pos);
             refVideo.current.currentTime = pos;
@@ -336,7 +378,7 @@ const Script = () => {
         }
     };
     const handlersVideoPlayForward = async () => {
-        if (refVideo.current && videoSRC && audioSRC) {
+        if (refVideo.current && videoSRC) {
             const pos = refVideo.current.currentTime + 0.1;
             const SRTTime = fnFloatToSRTTime(pos);
             refVideo.current.currentTime = pos;
@@ -347,74 +389,13 @@ const Script = () => {
             await navigator.clipboard.writeText(SRTTime);
         }
     };
-    const handlersVideoUploadAudio = (file: any) => {
-        if (/^(.+?)\.(mp3|MP3)$/g.test(file.name)) {
-            const audioURL = URL.createObjectURL(file);
-            setAudioSRC(audioURL);
-            if (wavesurfer) {
-                wavesurfer.load(audioURL);
-            } else {
-                const waver = WaveSurfer.create({
-                    container: "#waver",
-                    waveColor: "rgb(200, 0, 200)",
-                    progressColor: "rgb(100, 0, 100)",
-                    url: audioURL,
-                    interact: true, // 禁用与波形的交互，点击时不会跳转
-                    height: 129,
-                    cursorColor: "rgb(87, 87, 89)",
-                    autoScroll: true,
-                    dragToSeek: true,
-                });
-                waver.on("click", async () => {
-                    const currentTime = waver.getCurrentTime();
-                    const SRTTime = fnFloatToSRTTime(currentTime);
-                    waver.seekTo(currentTime / waver.getDuration());
-                    await navigator.clipboard.writeText(SRTTime);
-                    if (refVideo.current) {
-                        refVideo.current.currentTime = currentTime;
-                        setCurrent(`${SRTTime} / ${currentTime}`);
-                    }
-                });
-                waver.setMuted(true);
-                waver.on("loading", (percent) => {
-                    console.log("Loading", percent + "%");
-                });
-                waver.on("ready", (duration) => {
-                    console.log("Ready", duration + "s");
-                });
-                waver.once("decode", () => {
-                    const slider = document.querySelector('input[type="range"]');
-                    if (slider) {
-                        slider.addEventListener("input", (e: any) => {
-                            console.log("slider input e.target", e.target);
-                            const minPxPerSec = e.target?.valueAsNumber;
-                            waver.zoom(minPxPerSec);
-                        });
-                    }
-                });
-                setWavesurfer(waver);
-            }
-            return false;
-        } else {
-            alert("Please upload mp3 format audio.");
-        }
-    };
     const handlersVideoPlay = () => {
-        if (refVideo.current && videoSRC && audioSRC) {
+        if (refVideo.current && videoSRC) {
             if (refVideo.current.paused) {
                 setPlayButton(<PauseCircleOutlined />);
                 refVideo.current
                     .play()
-                    .then(() => {
-                        if (wavesurfer && refVideo.current) {
-                            const newPos = Math.max(0, refVideo.current.currentTime - 0.1);
-                            const SRTTime = fnFloatToSRTTime(newPos);
-                            refVideo.current.currentTime = newPos;
-                            wavesurfer.seekTo(newPos / wavesurfer.getDuration());
-                            wavesurfer.play();
-                            setCurrent(`${SRTTime} / ${newPos}`);
-                        }
-                    })
+                    .then()
                     .catch((err) => {
                         console.error("播放失败:", err);
                     });
@@ -426,7 +407,7 @@ const Script = () => {
                 }
             }
         } else {
-            alert("Please upload video and audio.");
+            alert("Please upload video.");
         }
     };
     const handlersVideoSlide = (e: any) => {
@@ -436,9 +417,14 @@ const Script = () => {
         console.log("script", script);
         console.log("curSentenceKey", curSentenceKey);
         console.log("parsedWords", parsedWords);
-        setAudioMuted(e.target.checked);
+        setVideoMuted(e.target.checked);
         wavesurfer?.setMuted(e.target.checked);
         console.log("refScrollbar.current?.scrollTop", refScrollbar.current);
+    };
+    const handlersVideoCanPlayThrough = () => {
+        if (wavesurfer) {
+            wavesurfer.load(videoSRC);
+        }
     };
     const handlersVideoTagOnTimeUpdate = (e: any) => {
         console.log("video current time:", e.target.currentTime);
@@ -769,7 +755,7 @@ const Script = () => {
                     </Scrollbars>
                 </aside>
                 <main style={{ flex: 1, height: "100%", display: "flex", justifyContent: "flex-start", boxSizing: "border-box", backgroundColor: "#ffffff1a" }}>
-                    <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} ref={refVideo}>
+                    <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
                         <source src={videoSRC} type="video/mp4" /> Your browser does not support video tag.
                     </video>
                 </main>
@@ -780,16 +766,11 @@ const Script = () => {
                                 Video
                             </Button>
                         </Upload>
-                        <Upload beforeUpload={handlersVideoUploadAudio} showUploadList={false}>
-                            <Button icon={<UploadOutlined />} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
-                                Audio
-                            </Button>
-                        </Upload>
                         <Button icon={<FastBackwardOutlined />} onClick={handlersVideoPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                         <Button icon={playButton} onClick={handlersVideoPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                         <Button icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                         <Input value={current} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                        <Checkbox onChange={handlersVideoMute} checked={audioMuted} style={{ flex: 1, borderRadius: "0", justifyContent: "center", lineHeight: "30px", backgroundColor: "#ccc" }}>
+                        <Checkbox onChange={handlersVideoMute} checked={videoMuted} style={{ flex: 1, borderRadius: "0", justifyContent: "center", lineHeight: "30px", backgroundColor: "#ccc" }}>
                             Mute
                         </Checkbox>
                         <input type="range" value={waveScale} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
