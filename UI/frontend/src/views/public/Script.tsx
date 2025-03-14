@@ -52,7 +52,7 @@ const Script = () => {
     const [videoSRC, setVideoSRC] = useState("");
     const [timeOffset, setTimeOffset] = useState<number>(0.0);
     const [lastScrollTop, setLastScrollTop] = useState<number>(0);
-    const [videoMuted, setVideoMuted] = useState(true);
+    const [videoMuted, setVideoMuted] = useState(false);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
@@ -278,9 +278,7 @@ const Script = () => {
                         return v.key == curSentence.key
                             ? {
                                   ...curSentence,
-                                  texts: event.target.value.split("\n---\n").map((v: any) => {
-                                      return v.replaceAll(/\s+/g, " ").trim();
-                                  }),
+                                  texts: event.target.value.split("\n---\n"),
                               }
                             : v;
                     });
@@ -289,7 +287,6 @@ const Script = () => {
                     });
 
                     setScript({ ...script, subtitles: newSubtitles });
-                    setPanelVersion((prev) => prev + 1);
                 }
             }
         }
@@ -416,10 +413,8 @@ const Script = () => {
     const handlersVideoMute = (e: any) => {
         console.log("script", script);
         console.log("curSentenceKey", curSentenceKey);
-        console.log("parsedWords", parsedWords);
         setVideoMuted(e.target.checked);
         wavesurfer?.setMuted(e.target.checked);
-        console.log("refScrollbar.current?.scrollTop", refScrollbar.current);
     };
     const handlersVideoCanPlayThrough = () => {
         if (wavesurfer) {
@@ -427,8 +422,8 @@ const Script = () => {
         }
     };
     const handlersVideoTagOnTimeUpdate = (e: any) => {
-        console.log("video current time:", e.target.currentTime);
-        console.log("video current time SRC:", fnFloatToSRTTime(e.target.currentTime));
+        // console.log("video current time:", e.target.currentTime);
+        // console.log("video current time SRC:", fnFloatToSRTTime(e.target.currentTime));
     };
     const handlersVideoTagOnEnded = () => {
         setCurrent("00:00:00,000 / 0");
@@ -467,8 +462,8 @@ const Script = () => {
             const a = curParagragh.children.slice(0, parseInt(curKey[1]) + 1);
             a.push({
                 key: "n",
-                startTime: "00:00:00,000",
-                endTime: "00:00:00,001",
+                startTime: "",
+                endTime: "",
                 texts: [],
             });
             const b = curParagragh.children.slice(parseInt(curKey[1]) + 1);
@@ -573,6 +568,9 @@ const Script = () => {
             const newChildren = value.children.map((v) => {
                 return {
                     ...v,
+                    texts: v.texts.map((vv: any) => {
+                        return vv.replaceAll(/[^\S\n]+/g, " ").trim();
+                    }),
                     startTime: fnIsSRTTime(v.startTime) ? fnFloatToSRTTime(fnSRTTimeToFloat(v.startTime) + timeOffset) : v.startTime,
                     endTime: fnIsSRTTime(v.endTime) ? fnFloatToSRTTime(fnSRTTimeToFloat(v.endTime) + timeOffset) : v.endTime,
                 };

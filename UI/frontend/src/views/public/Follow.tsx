@@ -439,7 +439,7 @@ const Follow = () => {
                             onChange={(e) => handlersTextInput(e.target.value)}
                             autoSize
                             style={{ minHeight: "100px", borderRadius: "0", color: "#000" }}
-                            placeholder="Input sentences or words.&#10;EX: wear wears wore worn wearing"
+                            placeholder="Input sentences or words.&#10;EX: wear,wears,wore,worn,wearing"
                         />
                     </section>
                 </aside>
