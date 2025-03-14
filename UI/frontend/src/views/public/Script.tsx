@@ -3,7 +3,7 @@ import { Layout, Input, Space, Button, Upload, Checkbox, Tree, Select, InputNumb
 import "./Script.scss";
 import WaveSurfer from "wavesurfer.js";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { MinusCircleOutlined, PlusCircleOutlined, UploadOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined, UploadOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 interface Script {
     name: string;
     roles: string[];
@@ -121,6 +121,34 @@ const Script = () => {
             ],
         });
         const b = script.subtitles.slice(parseInt(curParagraghKey) + 1);
+        const newSubtitles = [...a, ...b].map((v, k) => {
+            v.key = `${k}`;
+            v.title = `P${k}`;
+            v.children = v.children.map((vv, kk) => {
+                vv.key = `${k}-${kk}`;
+                return vv;
+            });
+            return v;
+        });
+        setScript({ ...script, subtitles: newSubtitles });
+        setPanelVersion((prev) => prev + 1);
+        setLastScrollTop(scrollToTop);
+    };
+    const handlersSubCutParagraph = () => {
+        const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
+        const curKey = curSentenceKey.split("-");
+        const curParagragh = script.subtitles[parseInt(curKey[0])];
+        const childrenA = curParagragh.children.slice(0, parseInt(curKey[1]));
+        const childrenB = curParagragh.children.slice(parseInt(curKey[1]));
+        curParagragh.children = childrenA;
+        const a = script.subtitles.slice(0, parseInt(curKey[0]));
+        a.push(curParagragh, {
+            key: ``,
+            title: ``,
+            roles: [],
+            children: childrenB,
+        });
+        const b = script.subtitles.slice(parseInt(curKey[0]) + 1);
         const newSubtitles = [...a, ...b].map((v, k) => {
             v.key = `${k}`;
             v.title = `P${k}`;
@@ -726,11 +754,14 @@ const Script = () => {
                                 Export
                             </Button>
                             <InputNumber min={0.0} max={50.0} step={0.1} value={timeOffset} onChange={(v) => handlersSubUpdateTimeOffset(v)} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                            <Button icon={<ScissorOutlined />} onClick={handlersSubCutParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                                Cut
+                            </Button>
                             <Button icon={<PlusCircleOutlined />} onClick={handlersSubInsertParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Paragraph
+                                Insert
                             </Button>
                             <Button icon={<MinusCircleOutlined />} onClick={handlersSubDeleteParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Paragraph
+                                Delete
                             </Button>
                         </div>
                         <div style={{ width: "100%" }}>
