@@ -108,14 +108,14 @@ const Script = () => {
         const curParagraghKey = curSentenceKey.split("-")[0];
         const a = script.subtitles.slice(0, parseInt(curParagraghKey) + 1);
         a.push({
-            key: `n`,
-            title: `n`,
+            key: ``,
+            title: ``,
             roles: [],
             children: [
                 {
-                    key: "n",
-                    startTime: "00:00:00,000",
-                    endTime: "00:00:00,001",
+                    key: "",
+                    startTime: "",
+                    endTime: "",
                     texts: [],
                 },
             ],
