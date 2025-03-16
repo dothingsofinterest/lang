@@ -736,15 +736,15 @@ const Script = () => {
                                 return title ? (
                                     <div style={{ width: "100%", display: "flex" }}>
                                         {title}
-                                        <Mentions autoSize onChange={(v) => handlersSubUpdateRole(v, item.key)} defaultValue={filterItemRoles(item.roles)} options={script.roles.map((v) => ({ label: v, value: v }))} style={{ fontSize: "12px", lineHeight: "22px", marginLeft: "9px", borderRadius: 0 }} />
+                                        <Mentions autoSize onChange={(v) => handlersSubUpdateRole(v, item.key)} defaultValue={filterItemRoles(item.roles)} options={script.roles.map((v) => ({ label: v, value: v }))} style={{ fontSize: "12px", lineHeight: "22px", marginLeft: "9px", borderRadius: 0 }} placeholder="@Role1-角色1 @Role2-角色2" />
                                         <Select size="small" onChange={(v) => handlersSubUpdateScene(v, item.key)} defaultValue={item.scene} options={script.scenes.map((v) => ({ label: v, value: v }))} style={{ width: "426px", marginLeft: "4px", borderRadius: 0 }} />
                                     </div>
                                 ) : (
                                     <div style={{ width: "100%" }}>
                                         <div style={{ width: "100%", display: "flex" }}>
                                             <Space size="small" style={{ flex: "0 0 100px", rowGap: "4px", overflow: "hidden" }} direction="vertical">
-                                                <Input size="small" defaultValue={filterPlusOffset(item.startTime)} onBlur={(e) => handlersSubUpdateStartTime(e, item.key)} style={{ borderRadius: 0 }} />
-                                                <Input size="small" defaultValue={filterPlusOffset(item.endTime)} onBlur={(e) => handlersSubUpdateEndTime(e, item.key)} style={{ borderRadius: 0 }} />
+                                                <Input size="small" defaultValue={filterPlusOffset(item.startTime)} onBlur={(e) => handlersSubUpdateStartTime(e, item.key)} style={{ borderRadius: 0 }} placeholder="00:00:00,000" />
+                                                <Input size="small" defaultValue={filterPlusOffset(item.endTime)} onBlur={(e) => handlersSubUpdateEndTime(e, item.key)} style={{ borderRadius: 0 }} placeholder="00:00:00,001" />
                                             </Space>
                                             <Input.TextArea autoSize defaultValue={item.texts.join("\n---\n")} onFocus={(e) => handlersSubSetCurSentence(item.key)} onBlur={(e) => handlersSubUpdateText(e, item.key)} style={{ flex: 1, fontSize: "12px", minHeight: "52px", marginLeft: "4px", borderRadius: "0", color: "#000" }} />
                                         </div>
@@ -789,7 +789,7 @@ const Script = () => {
                                 defaultValue={script.words.join("\n")}
                                 onBlur={(e) => handlersSubUpdateWords(e.target.value)}
                                 style={{ flex: 1, minHeight: "200px", borderRadius: "0", color: "#000" }}
-                                placeholder="Unfamiliar Words. &#10;Each word takes one line. &#10;名词：n.内容;目录 content/contents /ˈkɑːntent/ &#10;动词：v.满足 content/contents/contented/contented/contenting /kənˈtent/ &#10;形容词：adj.满意的 content /kənˈtent/"
+                                placeholder="n.内容;目录, content/contents, /ˈkɑːntent/ &#10;v.满足, content/contents/contented/contented/contenting, /kənˈtent/ &#10;adj.满意的, content, /kənˈtent/"
                             />
                             <Input.TextArea
                                 autoSize
