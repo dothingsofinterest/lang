@@ -50,7 +50,6 @@
 .ant-upload-wrapper {
     flex: 1;
 }
-
 #article {
     h5 {
         text-align: center;
@@ -60,6 +59,19 @@
         color: #fff;
         margin: 10px 16px;
     }
+    .scene {
+        background: #666;
+        padding: 6px 0;
+        margin-bottom: 10px;
+        h2 {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 20px;
+            color: #fff;
+            margin: 10px 16px;
+        }
+    }
     .p {
         border: 1px dotted #fff;
         margin: 12px 10px;
@@ -68,7 +80,6 @@
         font-size: 14px;
         line-height: 28px;
         .role {
-            color: #d21b46;
             font-weight: 900;
         }
         .point {

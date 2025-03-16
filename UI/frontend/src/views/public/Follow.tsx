@@ -8,24 +8,33 @@ import printJS from "print-js";
 interface Script {
     name: string;
     roles: string[];
+    scenes: string[];
     words: string[];
     grammers: string[];
-    subtitles: {
-        key: string;
-        title: string;
-        roles: string[];
-        children: Subtitle[];
-    }[];
+    paragraghs: Paragragh[];
 }
-interface Subtitle {
+interface Paragragh {
+    key: string;
+    title: string;
+    scene: string;
+    roles: string[];
+    children: Sentence[];
+}
+interface Sentence {
     key: string;
     startTime: string;
     endTime: string;
     texts: string[];
 }
+interface Scene {
+    key: string;
+    name: string;
+    paragraghs: Paragragh[];
+}
 const Follow = () => {
-    const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
-    const [subtitlesCurIndex, setSubtitlesCurIndex] = useState(0);
+    const [sentences, setSentences] = useState<Sentence[]>([]);
+    const [sentencesCurIndex, setSentencesCurIndex] = useState(0);
+    const [sentencesTree, setSentencesTree] = useState<Scene[]>([]);
     const [wordsCurIndex, setWordsCurIndex] = useState(0);
     const [script, setScript] = useState<Script>();
     const [videoSRC, setVideoSRC] = useState("");
@@ -46,12 +55,45 @@ const Follow = () => {
             try {
                 if (e.target?.result) {
                     const scriptParsed: Script = JSON.parse(e.target.result as string);
-                    const subs: Subtitle[] = [];
-                    scriptParsed.subtitles.forEach((v: any) => {
-                        subs.push(...v.children);
+                    const scences: Sentence[] = [];
+                    const scencesTree: Scene[] = [];
+                    let hasScene: boolean = false;
+                    scriptParsed.paragraghs.forEach((v: Paragragh) => {
+                        scences.push(...v.children);
+                        hasScene = v.scene ? true : false;
                     });
+                    if (hasScene) {
+                        scriptParsed.paragraghs.forEach((v: Paragragh) => {
+                            const sceneArr = v.scene.split("-");
+                            const sceneKey = sceneArr[0].replaceAll(/[\s\'\,]/g, "");
+                            if (sceneKey) {
+                                const theSc = scencesTree.find(({ key }) => {
+                                    return key === sceneKey;
+                                });
+                                if (theSc) {
+                                    theSc.paragraghs.push(v);
+                                } else {
+                                    scencesTree.push({
+                                        key: sceneKey,
+                                        name: sceneArr[0],
+                                        paragraghs: [v],
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        scencesTree.push({
+                            key: "",
+                            name: "",
+                            paragraghs: [],
+                        });
+                        scriptParsed.paragraghs.forEach((v: Paragragh) => {
+                            scencesTree[0].paragraghs.push(v);
+                        });
+                    }
+                    setSentencesTree(scencesTree);
                     setScript(scriptParsed);
-                    setSubtitles(subs);
+                    setSentences(scences);
                     setWords(scriptParsed.words);
                 }
             } catch (e: any) {
@@ -85,7 +127,7 @@ const Follow = () => {
     };
     const handlersPanelPlayAgain = () => {
         if (refVideo.current && videoSRC) {
-            const cur = subtitles[subtitlesCurIndex];
+            const cur = sentences[sentencesCurIndex];
             if (cur !== undefined) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 refVideo.current?.play();
@@ -97,10 +139,10 @@ const Follow = () => {
     };
     const handlersPanelPlayBackward = () => {
         if (refVideo.current && videoSRC) {
-            const prevIndex = subtitlesCurIndex <= 0 ? 0 : subtitlesCurIndex - 1;
-            const prev = subtitles[prevIndex];
+            const prevIndex = sentencesCurIndex <= 0 ? 0 : sentencesCurIndex - 1;
+            const prev = sentences[prevIndex];
             if (prev !== undefined) {
-                setSubtitlesCurIndex(prevIndex);
+                setSentencesCurIndex(prevIndex);
                 refVideo.current.currentTime = fnSRTTimeToFloat(prev.startTime);
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
@@ -111,10 +153,10 @@ const Follow = () => {
     };
     const handlersPanelPlayForward = () => {
         if (refVideo.current && videoSRC) {
-            const nextIndex = subtitlesCurIndex === subtitles.length - 1 ? subtitlesCurIndex : subtitlesCurIndex + 1;
-            const next = subtitles[nextIndex];
+            const nextIndex = sentencesCurIndex === sentences.length - 1 ? sentencesCurIndex : sentencesCurIndex + 1;
+            const next = sentences[nextIndex];
             if (next !== undefined) {
-                setSubtitlesCurIndex(nextIndex);
+                setSentencesCurIndex(nextIndex);
                 refVideo.current.currentTime = fnSRTTimeToFloat(next.startTime);
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
@@ -135,6 +177,8 @@ const Follow = () => {
             ol, ul, li { list-style: none; }
             article { width: 1000px; }
             article h5 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
+            article .scene { background: #ccc; padding: 6px 0; margin-bottom: 10px; }
+            article h2 {text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
             article .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
             article .p .point { padding: 0 4px; }
             article .p .role { font-weight: 900; padding-right: 2px; }
@@ -155,7 +199,7 @@ const Follow = () => {
     };
     const handlersVideoEnded = () => {
         console.log("video ended");
-        setSubtitlesCurIndex(0);
+        setSentencesCurIndex(0);
         fnSentenceHighlight(0);
         setPlayButton(<PlayCircleOutlined />);
     };
@@ -168,19 +212,19 @@ const Follow = () => {
     const handlersVideoTimeUpdate = (e: any) => {
         if (inputMode) {
             console.log("video current time:", `${fnFloatToSRTTime(e.target.currentTime)} / ${e.target.currentTime}`);
-            console.log("subtitles current index:", subtitlesCurIndex);
-            const cur = subtitles[subtitlesCurIndex];
+            console.log("sentences current index:", sentencesCurIndex);
+            const cur = sentences[sentencesCurIndex];
             if (cur !== undefined) {
-                fnSentenceHighlight(subtitlesCurIndex);
+                fnSentenceHighlight(sentencesCurIndex);
                 const endTime = fnSRTTimeToFloat(cur.endTime);
                 if (e.target.currentTime >= endTime) {
                     if (stopMode) {
-                        if (subtitlesCurIndex <= subtitles.length - 1) {
+                        if (sentencesCurIndex <= sentences.length - 1) {
                             refVideo.current?.pause();
                             setPlayButton(<PlayCircleOutlined />);
                         }
                     } else {
-                        setSubtitlesCurIndex(subtitlesCurIndex === subtitles.length - 1 ? subtitlesCurIndex : subtitlesCurIndex + 1);
+                        setSentencesCurIndex(sentencesCurIndex === sentences.length - 1 ? sentencesCurIndex : sentencesCurIndex + 1);
                     }
                 }
             }
@@ -198,13 +242,14 @@ const Follow = () => {
             if (refVideo.current) {
                 refVideo.current.pause();
                 refVideo.current.currentTime = 0;
-                setSubtitlesCurIndex(0);
+                setSentencesCurIndex(0);
                 setPlayButton(<PlayCircleOutlined />);
                 fnSentenceHighlight(0);
             }
         }
     };
     const handlersPanel2SwitchDictationWordsMode = (v: boolean) => {
+        console.log("sentencesTree", sentencesTree);
         setDictationWordsMode(v);
     };
     const handlersKeyboardOnDown = (event: KeyboardEvent) => {
@@ -238,10 +283,10 @@ const Follow = () => {
     const handlersTextInput = (value: string) => {
         setInputValue(value);
         if (inputMode) {
-            const answer = subtitles[subtitlesCurIndex].texts.map((v) => v.split("\n")[0]).join("\n");
+            const answer = sentences[sentencesCurIndex].texts.map((v) => v.split("\n")[0]).join("\n");
             if (answer === value) {
                 setInputValue("");
-                setSubtitlesCurIndex(subtitlesCurIndex + 1);
+                setSentencesCurIndex(sentencesCurIndex + 1);
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
             }
@@ -328,7 +373,7 @@ const Follow = () => {
         return () => {
             window.removeEventListener("keydown", handlersKeyboardOnDown);
         };
-    }, [refVideo, videoSRC, subtitles, subtitlesCurIndex]);
+    }, [refVideo, videoSRC, sentences, sentencesCurIndex]);
     return (
         <>
             <Layout style={{ width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", backgroundColor: "#000" }}>
@@ -359,39 +404,80 @@ const Follow = () => {
                         {script ? (
                             <article id="article" ref={articleRef}>
                                 <h5>{script?.name}</h5>
-                                {script?.subtitles.map((paragragh) => {
-                                    return paragragh.roles.length <= 1 ? (
-                                        <div className="p" key={paragragh.key}>
-                                            <p>
-                                                {paragragh.roles.length === 1 ? <i className="role">{paragragh.roles[0].split("-")[0]}: </i> : <></>}
-                                                {paragragh.children.map((v) => {
-                                                    return (
-                                                        <React.Fragment key={v.key}>
-                                                            <span className="point">{v.texts[0].split("\n")[0]}</span>
-                                                        </React.Fragment>
-                                                    );
-                                                })}
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        <div className="p" key={paragragh.key}>
-                                            {paragragh.children.map((sentence) => {
-                                                return (
-                                                    <ul className="point" key={sentence.key}>
-                                                        {sentence.texts.map((partOfSentence, n) => {
-                                                            return (
-                                                                <li key={n}>
-                                                                    <i className="role">{paragragh.roles[n].split("-")[0]}: </i>
-                                                                    <span>{partOfSentence.split("\n")[0]}</span>
-                                                                </li>
-                                                            );
-                                                        })}
-                                                    </ul>
-                                                );
-                                            })}
-                                        </div>
-                                    );
-                                })}
+                                {sentencesTree.length === 1
+                                    ? sentencesTree[0].paragraghs.map((paragragh) => {
+                                          return paragragh.roles.length <= 1 ? (
+                                              <div className="p" key={paragragh.key}>
+                                                  <p>
+                                                      {paragragh.roles.length === 1 ? <i className="role">{paragragh.roles[0].split("-")[0]}: </i> : <></>}
+                                                      {paragragh.children.map((v) => {
+                                                          return (
+                                                              <React.Fragment key={v.key}>
+                                                                  <span className="point">{v.texts[0].split("\n")[0]}</span>
+                                                              </React.Fragment>
+                                                          );
+                                                      })}
+                                                  </p>
+                                              </div>
+                                          ) : (
+                                              <div className="p" key={paragragh.key}>
+                                                  {paragragh.children.map((sentence) => {
+                                                      return (
+                                                          <ul className="point" key={sentence.key}>
+                                                              {sentence.texts.map((partOfSentence, n) => {
+                                                                  return (
+                                                                      <li key={n}>
+                                                                          <i className="role">{paragragh.roles[n].split("-")[0]}: </i>
+                                                                          <span>{partOfSentence.split("\n")[0]}</span>
+                                                                      </li>
+                                                                  );
+                                                              })}
+                                                          </ul>
+                                                      );
+                                                  })}
+                                              </div>
+                                          );
+                                      })
+                                    : sentencesTree.map((scene) => {
+                                          return (
+                                              <div className="scene" key={scene.key}>
+                                                  <h2>{scene.name}</h2>
+                                                  {scene.paragraghs.map((paragragh) => {
+                                                      return paragragh.roles.length <= 1 ? (
+                                                          <div className="p" key={paragragh.key}>
+                                                              <p>
+                                                                  {paragragh.roles.length === 1 ? <i className="role">{paragragh.roles[0].split("-")[0]}: </i> : <></>}
+                                                                  {paragragh.children.map((v) => {
+                                                                      return (
+                                                                          <React.Fragment key={v.key}>
+                                                                              <span className="point">{v.texts[0].split("\n")[0]}</span>
+                                                                          </React.Fragment>
+                                                                      );
+                                                                  })}
+                                                              </p>
+                                                          </div>
+                                                      ) : (
+                                                          <div className="p" key={paragragh.key}>
+                                                              {paragragh.children.map((sentence) => {
+                                                                  return (
+                                                                      <ul className="point" key={sentence.key}>
+                                                                          {sentence.texts.map((partOfSentence, n) => {
+                                                                              return (
+                                                                                  <li key={n}>
+                                                                                      <i className="role">{paragragh.roles[n].split("-")[0]}: </i>
+                                                                                      <span>{partOfSentence.split("\n")[0]}</span>
+                                                                                  </li>
+                                                                              );
+                                                                          })}
+                                                                      </ul>
+                                                                  );
+                                                              })}
+                                                          </div>
+                                                      );
+                                                  })}
+                                              </div>
+                                          );
+                                      })}
                                 <footer style={{ height: "100%" }}>
                                     <div className="divider">Words</div>
                                     <div className="words">
@@ -411,7 +497,7 @@ const Follow = () => {
                                                 <div key={key}>
                                                     <span className="item-index">[{key + 1}] </span>
                                                     {value.split("\n").map((v, k) => {
-                                                        return k === 0 ? <span>{v}</span> : <p>{v}</p>;
+                                                        return k === 0 ? <span key={k}>{v}</span> : <p key={k}>{v}</p>;
                                                     })}
                                                 </div>
                                             );

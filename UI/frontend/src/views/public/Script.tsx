@@ -7,16 +7,19 @@ import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined, UploadOutline
 interface Script {
     name: string;
     roles: string[];
+    scenes: string[];
     words: string[];
     grammers: string[];
-    subtitles: {
-        key: string;
-        title: string;
-        roles: string[];
-        children: Subtitle[];
-    }[];
+    paragraghs: Paragragh[];
 }
-interface Subtitle {
+interface Paragragh {
+    key: string;
+    title: string;
+    scene: string;
+    roles: string[];
+    children: Sentence[];
+}
+interface Sentence {
     key: string;
     startTime: string;
     endTime: string;
@@ -26,18 +29,20 @@ const Script = () => {
     const [script, setScript] = useState<Script>({
         name: "",
         roles: [],
+        scenes: [],
         words: [],
         grammers: [],
-        subtitles: [
+        paragraghs: [
             {
                 key: "0",
                 title: "P0",
+                scene: "",
                 roles: [],
                 children: [
                     {
                         key: "0-0",
-                        startTime: "00:00:00,000",
-                        endTime: "00:00:00,001",
+                        startTime: "",
+                        endTime: "",
                         texts: [],
                     },
                 ],
@@ -106,10 +111,11 @@ const Script = () => {
     const handlersSubInsertParagraph = () => {
         const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
         const curParagraghKey = curSentenceKey.split("-")[0];
-        const a = script.subtitles.slice(0, parseInt(curParagraghKey) + 1);
+        const a = script.paragraghs.slice(0, parseInt(curParagraghKey) + 1);
         a.push({
             key: ``,
             title: ``,
+            scene: ``,
             roles: [],
             children: [
                 {
@@ -120,8 +126,8 @@ const Script = () => {
                 },
             ],
         });
-        const b = script.subtitles.slice(parseInt(curParagraghKey) + 1);
-        const newSubtitles = [...a, ...b].map((v, k) => {
+        const b = script.paragraghs.slice(parseInt(curParagraghKey) + 1);
+        const newParagraghs = [...a, ...b].map((v, k) => {
             v.key = `${k}`;
             v.title = `P${k}`;
             v.children = v.children.map((vv, kk) => {
@@ -130,26 +136,27 @@ const Script = () => {
             });
             return v;
         });
-        setScript({ ...script, subtitles: newSubtitles });
+        setScript({ ...script, paragraghs: newParagraghs });
         setPanelVersion((prev) => prev + 1);
         setLastScrollTop(scrollToTop);
     };
     const handlersSubCutParagraph = () => {
         const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
         const curKey = curSentenceKey.split("-");
-        const curParagragh = script.subtitles[parseInt(curKey[0])];
+        const curParagragh = script.paragraghs[parseInt(curKey[0])];
         const childrenA = curParagragh.children.slice(0, parseInt(curKey[1]));
         const childrenB = curParagragh.children.slice(parseInt(curKey[1]));
         curParagragh.children = childrenA;
-        const a = script.subtitles.slice(0, parseInt(curKey[0]));
+        const a = script.paragraghs.slice(0, parseInt(curKey[0]));
         a.push(curParagragh, {
             key: ``,
             title: ``,
+            scene: ``,
             roles: [],
             children: childrenB,
         });
-        const b = script.subtitles.slice(parseInt(curKey[0]) + 1);
-        const newSubtitles = [...a, ...b].map((v, k) => {
+        const b = script.paragraghs.slice(parseInt(curKey[0]) + 1);
+        const newParagraghs = [...a, ...b].map((v, k) => {
             v.key = `${k}`;
             v.title = `P${k}`;
             v.children = v.children.map((vv, kk) => {
@@ -158,26 +165,26 @@ const Script = () => {
             });
             return v;
         });
-        setScript({ ...script, subtitles: newSubtitles });
+        setScript({ ...script, paragraghs: newParagraghs });
         setPanelVersion((prev) => prev + 1);
         setLastScrollTop(scrollToTop);
     };
     const handlersSubDeleteParagraph = () => {
         if (curSentenceKey !== undefined) {
             const curParagraghKey = curSentenceKey.split("-")[0];
-            const curParagragh = script.subtitles.find((v) => {
+            const curParagragh = script.paragraghs.find((v) => {
                 return v.key == curParagraghKey;
             });
             if (curParagragh !== undefined) {
-                if (script.subtitles.length > 1) {
+                if (script.paragraghs.length > 1) {
                     const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
-                    const curSentenceIndex = script.subtitles.findIndex((v) => {
+                    const curSentenceIndex = script.paragraghs.findIndex((v) => {
                         return v.key == curParagragh.key;
                     });
-                    const a = script.subtitles.slice(0, curSentenceIndex);
-                    const b = script.subtitles.slice(curSentenceIndex);
+                    const a = script.paragraghs.slice(0, curSentenceIndex);
+                    const b = script.paragraghs.slice(curSentenceIndex);
                     b.shift();
-                    const newSubtitles = [...a, ...b].map((v, k) => {
+                    const newParagraghs = [...a, ...b].map((v, k) => {
                         v.key = `${k}`;
                         v.title = `P${k}`;
                         v.children = v.children.map((vv, kk) => {
@@ -186,7 +193,7 @@ const Script = () => {
                         });
                         return v;
                     });
-                    setScript({ ...script, subtitles: newSubtitles });
+                    setScript({ ...script, paragraghs: newParagraghs });
                     setPanelVersion((prev) => prev + 1);
                     setLastScrollTop(scrollToTop);
                 }
@@ -199,11 +206,14 @@ const Script = () => {
             setPanelVersion((prev) => prev + 1);
         }
     };
-    const handlersSubUpdateRoleList = (value: string) => {
-        if (value) {
-            setScript({ ...script, roles: value.split("/") });
-            setPanelVersion((prev) => prev + 1);
-        }
+    const handlersSubUpdateRoles = (value: string) => {
+        setScript({ ...script, roles: value ? value.split("/") : [] });
+        setPanelVersion((prev) => prev + 1);
+    };
+
+    const handlersSubUpdateScenes = (value: string) => {
+        setScript({ ...script, scenes: value ? value.split("/") : [] });
+        setPanelVersion((prev) => prev + 1);
     };
     const handlersSubUpdateWords = (value: string) => {
         if (value) {
@@ -223,9 +233,9 @@ const Script = () => {
                 }
                 const keyArr = key.split("-");
                 const curParagraghKey: number = parseInt(keyArr[0]);
-                const curParagragh = script.subtitles[curParagraghKey];
+                const curParagragh = script.paragraghs[curParagraghKey];
                 if (curParagragh !== undefined) {
-                    const lastParagragh = script.subtitles[curParagraghKey - 1];
+                    const lastParagragh = script.paragraghs[curParagraghKey - 1];
                     if (lastParagragh !== undefined) {
                         const lastSentenceInLastParagragh = lastParagragh.children[lastParagragh.children.length - 1];
                         if (lastSentenceInLastParagragh !== undefined) {
@@ -246,10 +256,10 @@ const Script = () => {
                         curParagragh.children = curParagragh.children.map((v) => {
                             return v.key == curSentence.key ? { ...curSentence, startTime: event.target.value } : v;
                         });
-                        const newSubtitles = script.subtitles.map((v) => {
+                        const newParagraghs = script.paragraghs.map((v) => {
                             return v.key == curParagragh.key ? curParagragh : v;
                         });
-                        setScript({ ...script, subtitles: newSubtitles });
+                        setScript({ ...script, paragraghs: newParagraghs });
                     }
                 }
             } catch (e: any) {
@@ -265,7 +275,7 @@ const Script = () => {
                 }
                 const keyArr = key.split("-");
                 const curParagraghKey = keyArr[0];
-                const curParagragh = script.subtitles.find((v) => {
+                const curParagragh = script.paragraghs.find((v) => {
                     return v.key == curParagraghKey;
                 });
                 if (curParagragh !== undefined) {
@@ -279,10 +289,10 @@ const Script = () => {
                         curParagragh.children = curParagragh.children.map((v) => {
                             return v.key == curSentence.key ? { ...curSentence, endTime: event.target.value } : v;
                         });
-                        const newSubtitles = script.subtitles.map((v) => {
+                        const newParagraghs = script.paragraghs.map((v) => {
                             return v.key == curParagragh.key ? curParagragh : v;
                         });
-                        setScript({ ...script, subtitles: newSubtitles });
+                        setScript({ ...script, paragraghs: newParagraghs });
                     }
                 }
             } catch (e: any) {
@@ -294,7 +304,7 @@ const Script = () => {
         if (event.target.value) {
             const keyArr = key.split("-");
             const curParagraghKey = keyArr[0];
-            const curParagragh = script.subtitles.find((v) => {
+            const curParagragh = script.paragraghs.find((v) => {
                 return v.key == curParagraghKey;
             });
             if (curParagragh !== undefined) {
@@ -310,17 +320,17 @@ const Script = () => {
                               }
                             : v;
                     });
-                    const newSubtitles = script.subtitles.map((v) => {
+                    const newParagraghs = script.paragraghs.map((v) => {
                         return v.key == curParagragh.key ? curParagragh : v;
                     });
 
-                    setScript({ ...script, subtitles: newSubtitles });
+                    setScript({ ...script, paragraghs: newParagraghs });
                 }
             }
         }
     };
     const handlersSubUpdateRole = (value: string, key: string) => {
-        const curParagragh = script.subtitles[parseInt(key)];
+        const curParagragh = script.paragraghs[parseInt(key)];
         if (curParagragh !== undefined) {
             const newParagragh = {
                 ...curParagragh,
@@ -331,10 +341,20 @@ const Script = () => {
                           .map((v) => v.slice(1))
                     : [],
             };
-            const newSubtitles = script.subtitles.map((v) => {
+            const newParagraghs = script.paragraghs.map((v) => {
                 return v.key === newParagragh.key ? newParagragh : v;
             });
-            setScript({ ...script, subtitles: newSubtitles });
+            setScript({ ...script, paragraghs: newParagraghs });
+        }
+    };
+    const handlersSubUpdateScene = (value: string, key: string) => {
+        const curParagragh = script.paragraghs[parseInt(key)];
+        if (curParagragh !== undefined) {
+            const newParagragh = { ...curParagragh, scene: value };
+            const newParagraghs = script.paragraghs.map((v) => {
+                return v.key === newParagragh.key ? newParagragh : v;
+            });
+            setScript({ ...script, paragraghs: newParagraghs });
         }
     };
     const handlersVideoUploadVideo = (file: any) => {
@@ -485,7 +505,7 @@ const Script = () => {
     };
     const handlersSubInsertSentence = () => {
         const curKey = curSentenceKey.split("-");
-        const curParagragh = script.subtitles[parseInt(curKey[0])];
+        const curParagragh = script.paragraghs[parseInt(curKey[0])];
         if (curParagragh !== undefined) {
             const a = curParagragh.children.slice(0, parseInt(curKey[1]) + 1);
             a.push({
@@ -499,11 +519,11 @@ const Script = () => {
                 v.key = `${curKey[0]}-${k}`;
                 return v;
             });
-            const newSubtitles = script.subtitles.map((v) => {
+            const newParagraghs = script.paragraghs.map((v) => {
                 return v.key == curParagragh.key ? curParagragh : v;
             });
             const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
-            setScript({ ...script, subtitles: newSubtitles });
+            setScript({ ...script, paragraghs: newParagraghs });
             setPanelVersion((prev) => prev + 1);
             setLastScrollTop(scrollToTop);
         }
@@ -511,7 +531,7 @@ const Script = () => {
     const handlersSubDeleteSentence = () => {
         const scrollToTop = refScrollbar.current?.getScrollTop() || 0;
         const curParagraghKey = curSentenceKey.split("-")[0];
-        const curParagragh = script.subtitles.find((v) => {
+        const curParagragh = script.paragraghs.find((v) => {
             return v.key == curParagraghKey;
         });
         if (curParagragh !== undefined) {
@@ -527,10 +547,10 @@ const Script = () => {
                     v.key = `${curParagragh.key}-${k}`;
                     return v;
                 });
-                const newSubtitles = script.subtitles.map((v) => {
+                const newParagraghs = script.paragraghs.map((v) => {
                     return v.key == curParagragh.key ? curParagragh : v;
                 });
-                setScript({ ...script, subtitles: newSubtitles });
+                setScript({ ...script, paragraghs: newParagraghs });
                 setPanelVersion((prev) => prev + 1);
                 setLastScrollTop(scrollToTop);
             }
@@ -542,8 +562,8 @@ const Script = () => {
     };
     // Event Handlers
     // Template Functions
-    const filterSubtitles = (subtitles: any[]) => {
-        return subtitles.map((paragragh, index, subArr) => {
+    const filterParagraghs = (paragraghs: any[]) => {
+        return paragraghs.map((paragragh, index, subArr) => {
             const newChildren = paragragh.children.map((v: any, k: number, a: any) => {
                 return { ...v, isLast: k === a.length - 1 ? 1 : 0 };
             });
@@ -554,11 +574,7 @@ const Script = () => {
         return fnIsSRTTime(SRTTime) ? fnFloatToSRTTime(fnSRTTimeToFloat(SRTTime) + timeOffset) : "";
     };
     const filterItemRoles = (roles: string[]): string => {
-        if (roles.length > 0) {
-            return roles.map((v: string) => `@${v}`).join(" ");
-        } else {
-            return "";
-        }
+        return roles.length > 0 ? roles.map((v: string) => `@${v}`).join(" ") : "";
     };
     // Functions
     const fnFloatToSRTTime = (floatSeconds: number): string => {
@@ -592,7 +608,7 @@ const Script = () => {
         return value.match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/) ? true : false;
     };
     const fnGetScriptWithTimeOffset = (): Script => {
-        const newSubtitles = script.subtitles.map((value) => {
+        const newParagraghs = script.paragraghs.map((value) => {
             const newChildren = value.children.map((v) => {
                 return {
                     ...v,
@@ -605,11 +621,11 @@ const Script = () => {
             });
             return { ...value, children: newChildren };
         });
-        return { ...script, subtitles: newSubtitles };
+        return { ...script, paragraghs: newParagraghs };
     };
     const fnGetSRT = (): string => {
         const subArr: string[] = [];
-        script.subtitles.forEach((paragragh, key, origin) => {
+        script.paragraghs.forEach((paragragh, key, origin) => {
             const childrenArr = paragragh.children.map((sentence, k) => {
                 let text = "";
                 const textTrans = sentence.texts[0].split("\n");
@@ -707,20 +723,22 @@ const Script = () => {
                     <Scrollbars key={panelVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar}>
                         <div style={{ width: "100%", display: "flex", marginBottom: "14px" }}>
                             <Input defaultValue={script.name} onBlur={(e) => handlersSubUpdateName(e.target.value)} style={{ borderRadius: "0" }} placeholder="Script Title" />
-                            <Input defaultValue={script.roles.join("/")} onBlur={(e) => handlersSubUpdateRoleList(e.target.value)} style={{ borderRadius: "0", marginLeft: "4px" }} placeholder="Role1-角色1/Role2-角色2" />
+                            <Input defaultValue={script.roles.join("/")} onBlur={(e) => handlersSubUpdateRoles(e.target.value)} style={{ borderRadius: "0", marginLeft: "4px" }} placeholder="Role1-角色1/Role2-角色2" />
+                            <Input defaultValue={script.scenes.join("/")} onBlur={(e) => handlersSubUpdateScenes(e.target.value)} style={{ borderRadius: "0", marginLeft: "4px" }} placeholder="Scene1-场景1/Scene2-场景2" />
                         </div>
                         <Tree
                             style={{ height: "100%", borderRadius: "0" }}
                             showLine
                             defaultExpandAll
-                            treeData={filterSubtitles(script.subtitles)}
+                            treeData={filterParagraghs(script.paragraghs)}
                             titleRender={(item: any) => {
                                 const title = item.title as React.ReactNode;
                                 return title ? (
-                                    <>
+                                    <div style={{ width: "100%", display: "flex" }}>
                                         {title}
-                                        <Mentions autoSize onChange={(v) => handlersSubUpdateRole(v, item.key)} defaultValue={filterItemRoles(item.roles)} options={script.roles.map((v) => ({ label: v, value: v }))} style={{ marginLeft: "9px", borderRadius: 0 }} />
-                                    </>
+                                        <Mentions autoSize onChange={(v) => handlersSubUpdateRole(v, item.key)} defaultValue={filterItemRoles(item.roles)} options={script.roles.map((v) => ({ label: v, value: v }))} style={{ fontSize: "12px", lineHeight: "22px", marginLeft: "9px", borderRadius: 0 }} />
+                                        <Select size="small" onChange={(v) => handlersSubUpdateScene(v, item.key)} defaultValue={item.scene} options={script.scenes.map((v) => ({ label: v, value: v }))} style={{ width: "426px", marginLeft: "4px", borderRadius: 0 }} />
+                                    </div>
                                 ) : (
                                     <div style={{ width: "100%" }}>
                                         <div style={{ width: "100%", display: "flex" }}>
