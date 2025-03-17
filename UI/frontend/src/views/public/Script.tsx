@@ -365,14 +365,11 @@ const Script = () => {
     const handlersSubUpdateRole = (value: string, key: string) => {
         const curParagragh = script.paragraghs[parseInt(key)];
         if (curParagragh !== undefined) {
+            const match = value ? value.trim().match(/@[^@]+/g) : null;
+            const res = match !== null ? match.map((v) => v.slice(1)) : [];
             const newParagragh = {
                 ...curParagragh,
-                roles: value
-                    ? value
-                          .trim()
-                          .split(" ")
-                          .map((v) => v.slice(1))
-                    : [],
+                roles: res,
             };
             const newParagraghs = script.paragraghs.map((v) => {
                 return v.key === newParagragh.key ? newParagragh : v;
