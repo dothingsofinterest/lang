@@ -83,24 +83,57 @@ const Script = () => {
         }
         return false;
     };
-    const handlersSubExportScript = () => {
-        const blob = new Blob([JSON.stringify(fnGetScriptWithTimeOffset(), null, 4)], { type: "application/json" });
-        const a = document.createElement("a");
-        a.href = window.URL.createObjectURL(blob);
-        a.download = `${script.name}.json`;
-        window.document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(a.href);
-        window.document.body.removeChild(a);
-
-        const blob2 = new Blob([fnGetSRT()], { type: "text/srt" });
-        const ab = document.createElement("a");
-        ab.href = window.URL.createObjectURL(blob2);
-        ab.download = `${script.name}.srt`;
-        window.document.body.appendChild(ab);
-        ab.click();
-        window.URL.revokeObjectURL(ab.href);
-        window.document.body.removeChild(ab);
+    const handlersSubExportJSON = async () => {
+        try {
+            const blob = new Blob([JSON.stringify(fnGetScriptWithTimeOffset(), null, 4)], { type: "application/json" });
+            // const a = document.createElement("a");
+            // a.href = window.URL.createObjectURL(blob);
+            // a.download = `${script.name}.json`;
+            // window.document.body.appendChild(a);
+            // a.click();
+            // window.URL.revokeObjectURL(a.href);
+            // window.document.body.removeChild(a);
+            const handle = await await (window as any).showSaveFilePicker({
+                suggestedName: `${script.name}.json`,
+                types: [
+                    {
+                        description: script.name,
+                        accept: { "application/json": [".json"] },
+                    },
+                ],
+            });
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+        } catch (error) {
+            console.error("save error: ", error);
+        }
+    };
+    const handlersSubExportSRT = async () => {
+        try {
+            const blob = new Blob([fnGetSRT()], { type: "text/srt" });
+            // const ab = document.createElement("a");
+            // ab.href = window.URL.createObjectURL(blob2);
+            // ab.download = `${script.name}.srt`;
+            // window.document.body.appendChild(ab);
+            // ab.click();
+            // window.URL.revokeObjectURL(ab.href);
+            // window.document.body.removeChild(ab);
+            const handle = await await (window as any).showSaveFilePicker({
+                suggestedName: `${script.name}.srt`,
+                types: [
+                    {
+                        description: script.name,
+                        accept: { "text/srt": [".srt"] },
+                    },
+                ],
+            });
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+        } catch (error) {
+            console.error("save error: ", error);
+        }
     };
     const handlersSubUpdateTimeOffset = (v: number | null) => {
         if (v !== null && !isNaN(v)) {
@@ -386,7 +419,7 @@ const Script = () => {
                     });
                     waver.setMuted(false);
                     waver.on("loading", (percent) => {
-                        console.log("Loading", percent + "%");
+                        // console.log("Loading", percent + "%");
                     });
                     waver.on("ready", (duration) => {
                         console.log("Ready", duration + "s");
@@ -395,7 +428,6 @@ const Script = () => {
                         const slider = document.querySelector('input[type="range"]');
                         if (slider) {
                             slider.addEventListener("input", (e: any) => {
-                                console.log("slider input e.target", e.target);
                                 const minPxPerSec = e.target?.valueAsNumber;
                                 waver.zoom(minPxPerSec);
                             });
@@ -483,7 +515,6 @@ const Script = () => {
         setCurrent(`${SRTTime} / ${e.target.currentTime}`);
     };
     const handlersKeyboardOnDown = (event: KeyboardEvent) => {
-        console.log("event.key", event.key);
         if (event.key === "7") {
             if (refVideo.current) {
                 refVideo.current.currentTime = Math.max(0, refVideo.current.currentTime - 0.5);
@@ -557,7 +588,6 @@ const Script = () => {
         }
     };
     const handlersSubSetCurSentence = (key: string) => {
-        console.log("key", key);
         setCurSentenceKey(key);
     };
     // Event Handlers
@@ -656,7 +686,6 @@ const Script = () => {
         return subArr.join("\n");
     };
     const fnParseWords = (text: string) => {
-        console.log("text", text);
         if (text) {
             const res = [];
             const types = [/(n)\.\s*([^\n]+)/, /\b(v|vi|vt)\.\s*([^\n]+)/, /(adj)\.\s*([^\n]+)/, /(adv)\.\s*([^\n]+)/, /(conj)\.\s*([^\n]+)/, /(pron)\.\s*([^\n]+)/, /(prep)\.\s*([^\n]+)/];
@@ -768,8 +797,11 @@ const Script = () => {
                             <Upload beforeUpload={handlersSubImportScript} showUploadList={false}>
                                 <Button style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>Import</Button>
                             </Upload>
-                            <Button onClick={handlersSubExportScript} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                            <Button onClick={handlersSubExportJSON} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                                 Export
+                            </Button>
+                            <Button onClick={handlersSubExportSRT} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                                Export SRT
                             </Button>
                             <InputNumber min={0.0} max={50.0} step={0.1} value={timeOffset} onChange={(v) => handlersSubUpdateTimeOffset(v)} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                             <Button icon={<ScissorOutlined />} onClick={handlersSubCutParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
