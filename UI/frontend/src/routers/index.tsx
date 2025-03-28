@@ -1,7 +1,8 @@
-import { createBrowserRouter, createHashRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react-router-dom";
 import Index from "../views/public/Index";
-import Script from "../views/public/Script";
-import Follow from "../views/public/Follow";
+import ScriptEdit from "../views/script/Edit";
+import ScriptView from "../views/script/View";
+import VideoCompress from "../views/video/Compress";
 import IndexLayout from "../views/layout/Index";
 
 const routes = [
@@ -10,12 +11,16 @@ const routes = [
         element: <Index />,
     },
     {
-        path: "/script",
-        element: <Script />,
+        path: "/edit",
+        element: <ScriptEdit />,
     },
     {
-        path: "/follow",
-        element: <Follow />,
+        path: "/view",
+        element: <ScriptView />,
+    },
+    {
+        path: "/video/compress",
+        element: <VideoCompress />,
     },
     {
         path: "/home",

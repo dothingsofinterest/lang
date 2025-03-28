@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button, Upload, Switch } from "antd";
-import "./Follow.scss";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { PrinterOutlined, RedoOutlined, UploadOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { ttsGen } from "../../api/request";
 import printJS from "print-js";
+import "./View.scss";
 interface Script {
     name: string;
     roles: string[];
@@ -15,7 +15,6 @@ interface Script {
 }
 interface Paragragh {
     key: string;
-    title: string;
     scene: string;
     roles: string[];
     children: Sentence[];
@@ -27,11 +26,10 @@ interface Sentence {
     texts: string[];
 }
 interface Scene {
-    key: string;
     name: string;
     paragraghs: Paragragh[];
 }
-const Follow = () => {
+const View = () => {
     const [sentences, setSentences] = useState<Sentence[]>([]);
     const [sentencesCurIndex, setSentencesCurIndex] = useState(0);
     const [sentencesTree, setSentencesTree] = useState<Scene[]>([]);
@@ -55,35 +53,39 @@ const Follow = () => {
             try {
                 if (e.target?.result) {
                     const scriptParsed: Script = JSON.parse(e.target.result as string);
-                    const scences: Sentence[] = [];
+                    const sentences: Sentence[] = [];
                     const scencesTree: Scene[] = [];
                     let hasScene: boolean = false;
                     scriptParsed.paragraghs.forEach((v: Paragragh) => {
-                        scences.push(...v.children);
+                        sentences.push(...v.children);
                         hasScene = v.scene ? true : false;
                     });
                     if (hasScene) {
-                        scriptParsed.paragraghs.forEach((v: Paragragh) => {
-                            const sceneArr = v.scene.split("-");
-                            const sceneKey = sceneArr[0].replaceAll(/[\s\'\,]/g, "");
-                            if (sceneKey) {
-                                const theSc = scencesTree.find(({ key }) => {
-                                    return key === sceneKey;
-                                });
-                                if (theSc) {
-                                    theSc.paragraghs.push(v);
-                                } else {
-                                    scencesTree.push({
-                                        key: sceneKey,
-                                        name: sceneArr[0],
-                                        paragraghs: [v],
-                                    });
+                        scriptParsed.paragraghs.forEach((v: Paragragh, k: number, a: Paragragh[]) => {
+                            if (v.scene) {
+                                const sceneArr = v.scene.split("-");
+                                const sceneKey = sceneArr[0].replaceAll(/[\s\'\,]/g, "");
+                                if (sceneKey) {
+                                    if (k === 0) {
+                                        scencesTree.push({
+                                            name: sceneArr[0],
+                                            paragraghs: [v],
+                                        });
+                                    } else {
+                                        if (v.scene !== a[k - 1].scene) {
+                                            scencesTree.push({
+                                                name: sceneArr[0],
+                                                paragraghs: [v],
+                                            });
+                                        } else {
+                                            scencesTree[scencesTree.length - 1].paragraghs.push(v);
+                                        }
+                                    }
                                 }
                             }
                         });
                     } else {
                         scencesTree.push({
-                            key: "",
                             name: "",
                             paragraghs: [],
                         });
@@ -93,8 +95,9 @@ const Follow = () => {
                     }
                     setSentencesTree(scencesTree);
                     setScript(scriptParsed);
-                    setSentences(scences);
+                    setSentences(sentences);
                     setWords(scriptParsed.words);
+                    document.title = scriptParsed.name;
                 }
             } catch (e: any) {
                 alert(e.message);
@@ -181,8 +184,8 @@ const Follow = () => {
             article h2 {text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
             article .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
             article .p .point { padding: 0 4px; }
-            article .p .role { font-weight: 900; padding-right: 2px; }
-            article .p ul { font-style: italic; font-size: 12px; }
+            article .p .role { font-style: normal; font-weight: 900; padding-right: 2px; }
+            article .p ul { font-style: normal; font-size: 12px; }
             article footer { padding: 0 20px; color: #000;}
             article footer .words,
             article footer .grammers { line-height: 28px; }
@@ -249,7 +252,6 @@ const Follow = () => {
         }
     };
     const handlersPanel2SwitchDictationWordsMode = (v: boolean) => {
-        console.log("sentencesTree", sentencesTree);
         setDictationWordsMode(v);
     };
     const handlersKeyboardOnDown = (event: KeyboardEvent) => {
@@ -282,20 +284,22 @@ const Follow = () => {
     };
     const handlersTextInput = (value: string) => {
         setInputValue(value);
-        if (inputMode) {
-            const answer = sentences[sentencesCurIndex].texts.map((v) => v.split("\n")[0]).join("\n");
-            if (answer === value) {
-                setInputValue("");
-                setSentencesCurIndex(sentencesCurIndex + 1);
-                refVideo.current?.play();
-                setPlayButton(<PauseCircleOutlined />);
-            }
-        } else {
-            const valueTrans = value.includes(",") ? value.replaceAll(",", "/") : value;
-            if (words[wordsCurIndex].split(", ")[1] === valueTrans) {
-                setInputValue("");
-                setWordsCurIndex(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
-                fnPlayAudio(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
+        if (sentences.length > 0) {
+            if (inputMode) {
+                const answer = sentences[sentencesCurIndex].texts.map((v) => v.split("\n")[0]).join("\n");
+                if (answer === value) {
+                    setInputValue("");
+                    setSentencesCurIndex(sentencesCurIndex + 1);
+                    refVideo.current?.play();
+                    setPlayButton(<PauseCircleOutlined />);
+                }
+            } else {
+                const valueTrans = value.includes(",") ? value.replaceAll(",", "/") : value;
+                if (words[wordsCurIndex].split(", ")[1] === valueTrans) {
+                    setInputValue("");
+                    setWordsCurIndex(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
+                    fnPlayAudio(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
+                }
             }
         }
     };
@@ -438,9 +442,9 @@ const Follow = () => {
                                               </div>
                                           );
                                       })
-                                    : sentencesTree.map((scene) => {
+                                    : sentencesTree.map((scene, index) => {
                                           return (
-                                              <div className="scene" key={scene.key}>
+                                              <div className="scene" key={index}>
                                                   <h2>{scene.name}</h2>
                                                   {scene.paragraghs.map((paragragh) => {
                                                       return paragragh.roles.length <= 1 ? (
@@ -542,4 +546,4 @@ const Follow = () => {
     );
 };
 
-export default Follow;
+export default View;

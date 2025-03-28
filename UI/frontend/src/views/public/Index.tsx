@@ -1,36 +1,20 @@
-import { Layout } from "antd";
 import { Link } from "react-router-dom";
+import { Flex } from "antd";
 import "./Index.scss";
-const { Header, Footer, Sider, Content } = Layout;
-const Video = () => {
+const Index = () => {
     return (
-        <Layout>
-            <Header>
-                <div className="logo">Logo</div>
-                <div className="nav">
-                    <ul>
-                        <li>nav1</li>
-                        <li>nav2</li>
-                    </ul>
-                </div>
-            </Header>
-            <Layout className="body">
-                <Sider>
-                    <ul>
-                        <li>
-                            <Link to="/video">Video</Link>
-                        </li>
-                        <li>aa</li>
-                        <li>bb</li>
-                    </ul>
-                </Sider>
-                <Content>Content</Content>
-            </Layout>
-            <Footer>
-                <div className="main">Footer</div>
-            </Footer>
-        </Layout>
+        <Flex style={{ height: "100%", alignItems: "stretch" }}>
+            <Link to="/edit" className="item" style={{ backgroundColor: "blue" }}>
+                edit
+            </Link>
+            <Link to="/view" className="item" style={{ backgroundColor: "red" }}>
+                view
+            </Link>
+            <Link to="/video/compress" className="item" style={{ backgroundColor: "purple" }}>
+                compress
+            </Link>
+        </Flex>
     );
 };
 
-export default Video;
+export default Index;
