@@ -113,6 +113,26 @@ const Script = React.memo(() => {
             console.error("save error: ", error);
         }
     };
+    const handlersSubExportASS = async () => {
+        console.log("script", script);
+        try {
+            const blob = new Blob([fnGetASS()], { type: "text/plain" });
+            const handle = await await (window as any).showSaveFilePicker({
+                suggestedName: `${script.name}.ass`,
+                types: [
+                    {
+                        description: script.name,
+                        accept: { "text/plain": [".ass"] },
+                    },
+                ],
+            });
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+        } catch (error) {
+            console.error("save error: ", error);
+        }
+    };
     // 使用方法：为已存在的字幕添加时间偏移，导出。再导入不再依赖偏移。
     const handlersSubUpdateTimeOffset = (timeOffset: number | null) => {
         if (timeOffset !== null && !isNaN(timeOffset)) {
@@ -309,6 +329,13 @@ const Script = React.memo(() => {
     };
     const handlersSubUpdateText = (event: any, key: string) => {
         if (event.target.value) {
+            const text = event.target.value
+                .split("\n---\n")
+                .map((v: string) => {
+                    const s = v.split("\n");
+                    return s[1] === undefined ? `${s[0].trim()}` : `${s[0].trim()}\n${s[1].trim()}`;
+                })
+                .join("\n---\n");
             const keyArr = key.split("-");
             const curParagraghKey = keyArr[0];
             const curParagragh = script.paragraghs[parseInt(curParagraghKey)];
@@ -317,12 +344,12 @@ const Script = React.memo(() => {
                     return v.key == key;
                 });
                 if (curSentence !== undefined) {
-                    if (event.target.value !== curSentence?.texts.join("\n---\n")) {
+                    if (text !== curSentence?.texts.join("\n---\n")) {
                         curParagragh.children = curParagragh.children.map((v) => {
                             return v.key == curSentence.key
                                 ? {
                                       ...curSentence,
-                                      texts: event.target.value.split("\n---\n"),
+                                      texts: text.split("\n---\n"),
                                   }
                                 : v;
                         });
@@ -371,6 +398,7 @@ const Script = React.memo(() => {
         const curParagragh = script.paragraghs[parseInt(curKey[0])];
         if (curParagragh !== undefined) {
             const a = curParagragh.children.slice(0, parseInt(curKey[1]) + 1);
+            console.log("a", a);
             a.push({ key: "n", startTime: "", endTime: "", texts: [] });
             const b = curParagragh.children.slice(parseInt(curKey[1]) + 1);
             curParagragh.children = [...a, ...b].map((v, k) => {
@@ -448,6 +476,17 @@ const Script = React.memo(() => {
         // Convert to seconds
         return hours * 3600 + minutes * 60 + seconds + milliseconds / 1000;
     };
+    const fnFloatToASSTime = (floatSeconds: number): string => {
+        // 计算小时、分钟、秒数和毫秒
+        const hours = Math.floor(floatSeconds / 3600);
+        const minutes = Math.floor((floatSeconds % 3600) / 60);
+        const seconds = Math.floor(floatSeconds % 60);
+        const milliseconds = Math.round((floatSeconds % 1) * 1000);
+
+        // 格式化成 SRT 时间格式 (hh:mm:ss,SSS)
+        const timeString = `${fnPadZero(hours)}:${fnPadZero(minutes)}:${fnPadZero(seconds)}.${fnPadZero(milliseconds, 3).slice(0, 2)}`;
+        return timeString;
+    };
     // 辅助函数：补零以确保数字有指定的长度
     const fnPadZero = (num: number, length: number = 2): string => {
         return num.toString().padStart(length, "0");
@@ -515,6 +554,63 @@ const Script = React.memo(() => {
         });
         return subArr.join("\n");
     };
+    const fnGetASS = (): string => {
+        let base = `[Script Info]
+Title: ${script.name}
+ScriptType: v4.00+
+Collisions: Normal
+PlayDepth: 0
+Timer: 100.0000
+WrapStyle: 1
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Yantramanav,22,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,2,0,8,20,20,20,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
+        const subArr: string[] = [];
+        script.paragraghs.forEach((paragragh, key, origin) => {
+            const childrenArr = paragragh.children.map((sentence, k) => {
+                let startTime = sentence.startTime;
+                let endTime = sentence.endTime;
+                let text = "";
+                if (timeOffset && fnSRTTimeToFloat(script.paragraghs[0].children[0].startTime) + timeOffset > 0) {
+                    startTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.startTime) + timeOffset);
+                    endTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.endTime) + timeOffset);
+                } else {
+                    // TODO
+                    startTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.startTime));
+                    console.log("startTime", startTime);
+                    endTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.endTime));
+                    console.log("endTime", endTime);
+                }
+                if (sentence.texts[0]) {
+                    const textTrans = sentence.texts[0].split("\n");
+                    if (paragragh.roles.length < 2) {
+                        text = `${textTrans[0]}\\N{\\fs16}${textTrans[1]}`;
+                    } else {
+                        text = sentence.texts
+                            .map((partOfSentence, n, whole) => {
+                                let text = "";
+                                if (whole.length === paragragh.roles.length) {
+                                    const roleTrans = paragragh.roles[n].split("-");
+                                    const textTrans = partOfSentence.split("\n");
+                                    text = `${roleTrans[0]}: ${textTrans[0]}\\N{\\fs16}${roleTrans[1]}: ${textTrans[1]}`;
+                                } else {
+                                    text = `${text[0]}\\N{\\fs16}${text[1]}`;
+                                }
+                                return text;
+                            })
+                            .join("\\N---\\N{\\fs22}");
+                    }
+                }
+                return `Dialogue: 0,${startTime},${endTime},Default,,0,0,0,,${text}`;
+            });
+            subArr.push(...childrenArr);
+        });
+        return base + subArr.join("\n");
+    };
     const fnParseWords = (text: string) => {
         if (text) {
             const res = [];
@@ -523,8 +619,8 @@ const Script = React.memo(() => {
                 const matchCN = text.match(types[i]);
                 if (matchCN && matchCN[2]) {
                     let str = "";
-                    str += i === 1 ? `v.${matchCN[2]}, ` : `${matchCN[1]}.${matchCN[2]}, `;
-                    const matchName = text.match(/^([a-zA-Z ]+)/);
+                    str += i === 1 ? `v.${matchCN[2]}, ` : `${matchCN[1]}.${matchCN[2]}, `; // 区分 v|vi|vt
+                    const matchName = text.match(/^([a-zA-Z ]+)/); // 单词本身
                     if (matchName && matchName[1]) {
                         str += matchName[1];
                         if (i === 0) {
@@ -538,6 +634,15 @@ const Script = React.memo(() => {
                         }
                         if (i === 1) {
                             const nameExt = [/第三人称单数(.*?)(\w+)/, /过去式(.*?)(\w+)/, /过去分词(.*?)(\w+)/, /现在分词(.*?)(\w+)/];
+                            for (let k = 0; k < nameExt.length; k++) {
+                                const matchNameExt = text.match(nameExt[k]);
+                                if (matchNameExt && matchNameExt[2]) {
+                                    str += `/${matchNameExt[2]}`;
+                                }
+                            }
+                        }
+                        if (i === 2) {
+                            const nameExt = [/比较级(.*?)(\w+)/, /最高级(.*?)(\w+)/];
                             for (let k = 0; k < nameExt.length; k++) {
                                 const matchNameExt = text.match(nameExt[k]);
                                 if (matchNameExt && matchNameExt[2]) {
@@ -580,6 +685,9 @@ const Script = React.memo(() => {
                 </Button>
                 <Button onClick={handlersSubExportSRT} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                     SRT
+                </Button>
+                <Button onClick={handlersSubExportASS} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                    ASS
                 </Button>
                 <InputNumber min={-100.0} max={100.0} step={0.01} value={timeOffset} onChange={(v) => handlersSubUpdateTimeOffset(v)} style={{ flex: "0 0 80px", borderRadius: "0", backgroundColor: "#ccc" }} />
                 <Button icon={<ScissorOutlined />} onClick={handlersSubCutParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>

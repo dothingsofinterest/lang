@@ -10,6 +10,9 @@ const Index = () => {
             <Link to="/view" className="item" style={{ backgroundColor: "red" }}>
                 view
             </Link>
+            <Link to="/clip" className="item" style={{ backgroundColor: "green" }}>
+                clip
+            </Link>
             <Link to="/video/compress" className="item" style={{ backgroundColor: "purple" }}>
                 compress
             </Link>

@@ -51,7 +51,7 @@
     flex: 1;
 }
 #article {
-    h5 {
+    h1 {
         text-align: center;
         font-size: 16px;
         font-weight: 900;
@@ -66,7 +66,7 @@
         h2 {
             text-align: center;
             font-size: 14px;
-            font-weight: 300;
+            font-weight: 900;
             line-height: 20px;
             color: #fff;
             margin: 10px 16px;
@@ -79,6 +79,7 @@
         color: #fff;
         font-size: 14px;
         line-height: 28px;
+        font-weight: 300;
         .role {
             font-style: normal;
             font-weight: 900;
@@ -88,39 +89,44 @@
             &.active {
                 color: rgb(252, 221, 92);
             }
+            &:first-child {
+                padding: 0;
+            }
         }
         ul {
             font-style: normal;
-            font-size: 12px;
+            font-size: 14px;
         }
     }
     footer {
-        background-color: rgb(32, 32, 36) !important;
-        padding: 0 10px;
-        color: #fff;
+        height: 100%;
         .words,
         .grammers {
+            color: #fff;
             line-height: 28px;
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            .title {
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+                font-weight: 900;
+                font-size: 14px;
+                color: #fff;
+                &:before,
+                &:after {
+                    position: relative;
+                    width: 50%;
+                    border-block-start: 1px dotted #fff;
+                    border-block-end: 0;
+                    transform: translateY(50%);
+                    content: "";
+                }
+            }
             .item-index {
                 font-weight: 900;
-            }
-        }
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 14px;
-            color: #fff;
-            &:before,
-            &:after {
-                position: relative;
-                width: 50%;
-                border-block-start: 1px dotted #fff;
-                border-block-end: 0;
-                transform: translateY(50%);
-                content: "";
             }
         }
     }

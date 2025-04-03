@@ -175,25 +175,27 @@ const View = () => {
         if (articleRef && script) {
             const css = `
             * { outline: none; }
-            html,body,p,h5,ul,ol,li { margin: 0; padding: 0; }
+            html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
             body { margin: 0; padding: 0; font-size: 14px; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
             ol, ul, li { list-style: none; }
             article { width: 1000px; }
-            article h5 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
+            article h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
+            article h2 { text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
             article .scene { background: #ccc; padding: 6px 0; margin-bottom: 10px; }
-            article h2 {text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
             article .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
             article .p .point { padding: 0 4px; }
             article .p .role { font-style: normal; font-weight: 900; padding-right: 2px; }
             article .p ul { font-style: normal; font-size: 12px; }
-            article footer { padding: 0 20px; color: #000;}
+            article footer { height: 100%; }
+            article footer .words { margin-bottom: 10px; }
             article footer .words,
-            article footer .grammers { line-height: 28px; }
+            article footer .grammers { color: #fff; line-height: 28px; background-color: #333; padding: 10px 20px; }
             article footer .words .item-index,
             article footer .grammers .item-index { font-weight: 900; }
-            article footer .divider { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; color: #000;}
-            article footer .divider:before, 
-            article footer .divider:after { position: relative; width: 50%; border-block-start: 1px dotted #000; border-block-end: 0; transform: translateY(50%); content: ""; }
+            article footer .words .title,
+            article footer .grammers .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
+            article footer .title:before, 
+            article footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #fff; border-block-end: 0; transform: translateY(50%); content: ""; }
         `;
             printJS({ printable: `<article>${articleRef.current?.innerHTML}</article>` || "", type: "raw-html", style: css });
         } else {
@@ -256,12 +258,15 @@ const View = () => {
     };
     const handlersKeyboardOnDown = (event: KeyboardEvent) => {
         console.log("event.key", event.key);
-        console.log("event.key", event.code);
+        console.log("event.code", event.code);
         if (event.code === "NumpadSubtract") {
             handlersPanelPlayBackward();
         }
         if (event.code === "NumpadAdd") {
             handlersPanelPlayForward();
+        }
+        if (event.code === "F8") {
+            handlersPanelPlayAgain();
         }
         // if (event.key === "7") {
         //     if (refVideo.current) {
@@ -381,7 +386,7 @@ const View = () => {
     return (
         <>
             <Layout style={{ width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", backgroundColor: "#000" }}>
-                <aside id="asider" style={{ flex: "0 0 600px", position: "relative", height: "100%", padding: "32px 0 132px", boxSizing: "border-box", backgroundColor: "#202024" }}>
+                <aside id="asider" style={{ flex: "0 0 800px", position: "relative", height: "100%", padding: "32px 0 132px", boxSizing: "border-box", backgroundColor: "#202024" }}>
                     <section id="asider" style={{ width: "100%", height: "32px", position: "absolute", right: "0", top: "0", backgroundColor: "#202024" }}>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
                             <Upload beforeUpload={handlersPanelUploadVideo} showUploadList={false}>
@@ -407,7 +412,7 @@ const View = () => {
                     <Scrollbars>
                         {script ? (
                             <article id="article" ref={articleRef}>
-                                <h5>{script?.name}</h5>
+                                <h1>{script?.name}</h1>
                                 {sentencesTree.length === 1
                                     ? sentencesTree[0].paragraghs.map((paragragh) => {
                                           return paragragh.roles.length <= 1 ? (
@@ -482,9 +487,9 @@ const View = () => {
                                               </div>
                                           );
                                       })}
-                                <footer style={{ height: "100%" }}>
-                                    <div className="divider">Words</div>
+                                <footer>
                                     <div className="words">
+                                        <div className="title">Words</div>
                                         {script?.words.map((value, key) => {
                                             return (
                                                 <p key={key}>
@@ -494,8 +499,8 @@ const View = () => {
                                             );
                                         })}
                                     </div>
-                                    <div className="divider">Grammers</div>
                                     <div className="grammers">
+                                        <div className="title">Grammers</div>
                                         {script?.grammers.map((value, key) => {
                                             return (
                                                 <div key={key}>

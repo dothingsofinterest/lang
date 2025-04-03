@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Yantramanav&display=swap");
+
+#article-clip {
+    width: 2160px;
+    height: 3840px;
+    font-size: 50px;
+    font-family: "Yantramanav";
+    background-color: rgba(0, 42, 81) !important;
+    overflow: hidden;
+    position: relative;
+    h1 {
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: 900;
+        line-height: 2.2em;
+        color: #fff;
+        margin: 0;
+        text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+    h2 {
+        text-align: center;
+        font-size: 1em !important;
+        font-weight: 300;
+        line-height: 1em !important;
+        color: #fff;
+        margin: 0 !important;
+        text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+    .scene {
+        background: rgba(0, 42, 81) !important;
+        margin: 0 !important;
+        padding: 0;
+        overflow: hidden;
+        font-weight: 300;
+        margin: 0.5em 0 0.5em !important;
+    }
+    .p {
+        border: 1px solid #fff;
+        margin: 0.8em;
+        padding: 0.2em 0.6em;
+        color: #fff;
+        font-size: 1em;
+        line-height: 1.8em;
+        text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+        .point {
+            padding: 0 0.1em;
+            &:first-child {
+                padding: 0;
+            }
+        }
+        .role {
+            font-style: normal;
+            font-weight: 900;
+            padding-right: 0.1em;
+        }
+        ul {
+            font-style: normal;
+            font-size: 1em;
+        }
+    }
+    footer {
+        color: #fff;
+        text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+        .words,
+        .grammers {
+            margin: 0.8em;
+            line-height: 1.8em;
+            .title {
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+                font-weight: 900;
+                color: #fff;
+                &:before,
+                &:after {
+                    position: relative;
+                    width: 50%;
+                    border-block-start: 1px dotted #fff;
+                    border-block-end: 0;
+                    transform: translateY(50%);
+                    content: "";
+                }
+            }
+            .item-index {
+                font-weight: 900;
+            }
+        }
+    }
+}
