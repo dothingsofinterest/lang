@@ -1,5 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./stores";
 import router from "./routers";
 import "./styles/base.scss";
 
@@ -10,4 +12,8 @@ if (!app) {
 
 const root = ReactDOM.createRoot(app);
 
-root.render(<RouterProvider router={router} />);
+root.render(
+    <Provider store={store}>
+        <RouterProvider router={router} />
+    </Provider>,
+);

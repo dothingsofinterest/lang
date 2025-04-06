@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RequestResponse, StoreReducerStateAuth } from "../../types";
+import { RequestResponse, StateAuth } from "../../types";
 import Cookies from "js-cookie";
 
-const initialState: StoreReducerStateAuth = {
+const initialState: StateAuth = {
     ACCESS_TOKEN: `${Cookies.get(`AUTH`)}`,
 };
 const slice = createSlice({

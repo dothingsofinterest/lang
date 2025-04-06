@@ -17,9 +17,10 @@ Express
 
 # 降低视频篇幅、码率。该命令生成的视频，以最小化浏览器播放后，再回来会出现画面与声音不同步的问题。
 
-ffmpeg -i a.mp4 -vf scale=600:-2 -c:v libx264 -b:v 600k -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart output.mp4
+ffmpeg -i a.mp4 -y -vf scale=600:-2 -c:v libx264 -b:v 600k -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart output.mp4
 
 【参数说明】
+-y 如果文件已存在则覆盖
 -vf scale=800:-2：宽度 800，高度自适应。
 -b:v 600k：比特率 600 kb/s。每秒输出的数据。
 -c:v libx264 H.264 压缩方式。

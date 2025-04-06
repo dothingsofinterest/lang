@@ -1,15 +1,17 @@
-import axios, { InternalAxiosRequestConfig, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from "axios";
 import store from "../stores";
 import { clearToken } from "../stores/reducers/auth";
 import { APIPrefix } from "../settings.js";
 import { RequestResponse, RequestOAuthUpdatePasswordData } from "../types";
 
 // Request Instance
-const requestInstance = axios.create({
+const requestInstance: AxiosInstance = axios.create({
     baseURL: APIPrefix,
     timeout: 10000,
 });
+// Request Instance
 
+// Request Instance Interceptor
 requestInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         const state = store.getState();
@@ -26,7 +28,6 @@ requestInstance.interceptors.request.use(
         return Promise.reject(error);
     },
 );
-
 requestInstance.interceptors.response.use(
     (response) => {
         if (response.status === 200 && response.data.code === 1) {
@@ -38,9 +39,9 @@ requestInstance.interceptors.response.use(
         return Promise.reject(error);
     },
 );
-// Request Instance
+// Request Instance Interceptor
 
-// User Request
+// User
 export const OAuthLogout = (): Promise<RequestResponse> => {
     return requestInstance.request({
         method: "post",
@@ -55,4 +56,4 @@ export const OAuthUpdatePassword = (data: RequestOAuthUpdatePasswordData): Promi
         data: data,
     });
 };
-// User Request
+// User

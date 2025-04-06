@@ -7,7 +7,9 @@ const instance: AxiosInstance = axios.create({
     baseURL: APIPrefix,
     timeout: 10000,
 });
+// Request Instance
 
+// Request Instance Interceptor
 instance.interceptors.response.use(
     (response) => {
         if (response.status === 200 && response.data.code === 1) {
@@ -19,22 +21,21 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     },
 );
-// Request Instance
+// Request Instance Interceptor
 
-// Login Request
+// Login
 const OAuthLogin = (params: RequestOAuthLoginParams): Promise<RequestResponse> => {
-    return instance.post("/open/login", params);
+    return instance.post("/login", params);
 };
-
 const OAuthCaptcha = (): Promise<RequestResponse> => {
     return instance.request({
         method: "get",
-        url: "/open/captcha",
+        url: "/captcha",
     });
 };
-// Login Request
+// Login
 
-// TTS Request
+// TTS
 const ttsGen = (params: RequestTtsData): Promise<RequestResponse> => {
     return instance.request({
         method: "get",
@@ -42,6 +43,6 @@ const ttsGen = (params: RequestTtsData): Promise<RequestResponse> => {
         params: params,
     });
 };
-// TTS Request
+// TTS
 
 export { OAuthLogin, OAuthCaptcha, ttsGen };

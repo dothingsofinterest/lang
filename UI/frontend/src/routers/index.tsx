@@ -1,41 +1,42 @@
 import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react-router-dom";
-import Index from "../views/public/Index";
+import Login from "../views/public/Login";
+import App from "../views/layout/App";
+import Set from "../views/set/Index";
 import ScriptEdit from "../views/script/Edit";
 import ScriptView from "../views/script/View";
-import ClipScript from "../views/clip/Script";
-import ClipBackground from "../views/clip/Background";
-import VideoCompress from "../views/video/Compress";
-import IndexLayout from "../views/layout/Index";
+import VideoClipScript from "../views/video/ClipScript";
+import VideoClipBg from "../views/video/ClipBg";
 
 const routes = [
     {
+        path: "/login",
+        element: <Login />,
+    },
+    {
         path: "/",
-        element: <Index />,
-    },
-    {
-        path: "/edit",
-        element: <ScriptEdit />,
-    },
-    {
-        path: "/view",
-        element: <ScriptView />,
-    },
-    {
-        path: "/clip/script",
-        element: <ClipScript />,
-    },
-    {
-        path: "/clip/background",
-        element: <ClipBackground />,
-    },
-    {
-        path: "/video/compress",
-        element: <VideoCompress />,
-    },
-    {
-        path: "/home",
-        element: <IndexLayout />,
-        Children: [],
+        element: <App />,
+        children: [
+            {
+                path: "/set",
+                element: <Set />,
+            },
+            {
+                path: "/script/edit",
+                element: <ScriptEdit />,
+            },
+            {
+                path: "/script/view",
+                element: <ScriptView />,
+            },
+            {
+                path: "/video/clip-script",
+                element: <VideoClipScript />,
+            },
+            {
+                path: "/video/clip-bg",
+                element: <VideoClipBg />,
+            },
+        ],
     },
 ];
 

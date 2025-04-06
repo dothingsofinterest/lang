@@ -1,8 +1,8 @@
 import "./lib/Env";
 import express from "express";
 import cors from "cors";
-import routes from "./routes/Api";
-import routesOpen from "./routes/Open";
+import routesAuth from "./routes/Api";
+import routes from "./routes/Open";
 import routeNotFound from "./routes/NotFound";
 import bodyParser from "body-parser";
 import GlobalExceptionHandler from "./middleware/GlobalExceptionHandler";
@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Routes API
-app.use("/api/open", routesOpen);
-app.use("/api", checkUnauthorized, routes);
+app.use("/api", routes);
+app.use("/api/auth", checkUnauthorized, routesAuth);
 // Static assets
 app.use("/uploads", express.static("uploads"));
 // Routes 404

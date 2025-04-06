@@ -89,7 +89,7 @@ const Script = () => {
         window.URL.revokeObjectURL(a.href);
         window.document.body.removeChild(a);
 
-        const blob2 = new Blob([fnGetSRT()], { type: "text/srt" });
+        const blob2 = new Blob([fnGenerateSRT()], { type: "text/srt" });
         const ab = document.createElement("a");
         ab.href = window.URL.createObjectURL(blob2);
         ab.download = `${script.name}.srt`;
