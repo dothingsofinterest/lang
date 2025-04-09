@@ -12,7 +12,6 @@ const Edit = () => {
     const localOriginCompress = useSelector((state: RootState) => state.video.localOriginCompress);
     const [current, setCurrent] = useState("00:00:00,000 / 0");
     const [waveScale, setWaveScale] = useState(0);
-    const [videoMuted, setVideoMuted] = useState(false);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refSlider = useRef<HTMLInputElement>(null);
@@ -65,10 +64,6 @@ const Edit = () => {
     };
     const handlersVideoSlide = (e: any) => {
         setWaveScale(e.target.value);
-    };
-    const handlersVideoMute = (e: any) => {
-        setVideoMuted(e.target.checked);
-        refWavesurfer.current?.setMuted(e.target.checked);
     };
     const handlersVideoCanPlayThrough = () => {
         if (refWavesurfer.current) {
@@ -170,9 +165,6 @@ const Edit = () => {
                         <Button icon={playButton} onClick={handlersVideoPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                         <Button icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                         <Input value={current} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                        <Checkbox onChange={handlersVideoMute} checked={videoMuted} style={{ flex: 1, borderRadius: "0", justifyContent: "center", lineHeight: "30px", backgroundColor: "#ccc" }}>
-                            Mute
-                        </Checkbox>
                         <input ref={refSlider} type="range" value={waveScale} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                     </div>
                     <div id="waver" style={{ height: "146px" }}></div>

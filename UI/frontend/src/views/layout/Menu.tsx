@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Layout, Input, Button, Upload, Checkbox } from "antd";
-import { EyeOutlined, BookOutlined, SettingOutlined, VideoCameraOutlined, DesktopOutlined } from "@ant-design/icons";
+import { Button, Tooltip } from "antd";
+import { EyeOutlined, FormOutlined, SettingOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "./Menu.scss";
 
@@ -9,29 +9,24 @@ const Menu = () => {
     return (
         <nav id="menu">
             <Link to="/set">
-                <Button className={location.pathname + location.search === "/set" ? `menu-item active` : `menu-item`} type="primary" icon={<SettingOutlined />}>
-                    Set
-                </Button>
+                <Tooltip title="Project settings" mouseEnterDelay={1}>
+                    <Button className={location.pathname + location.search === "/set" ? `menu-item active` : `menu-item`} type="primary" icon={<SettingOutlined />} />
+                </Tooltip>
             </Link>
             <Link to="/script/edit">
-                <Button className={location.pathname + location.search === "/script/edit" ? `menu-item active` : `menu-item`} type="primary" icon={<BookOutlined />}>
-                    Edit
-                </Button>
+                <Tooltip title="Edit script" mouseEnterDelay={1}>
+                    <Button className={location.pathname + location.search === "/script/edit" ? `menu-item active` : `menu-item`} type="primary" icon={<FormOutlined />} />
+                </Tooltip>
             </Link>
             <Link to="/script/view">
-                <Button className={location.pathname + location.search === "/script/view" ? `menu-item active` : `menu-item`} type="primary" icon={<BookOutlined />}>
-                    View
-                </Button>
+                <Tooltip title="View script" mouseEnterDelay={1}>
+                    <Button className={location.pathname + location.search === "/script/view" ? `menu-item active` : `menu-item`} type="primary" icon={<EyeOutlined />} />
+                </Tooltip>
             </Link>
-            <Link to="/video/clip-script">
-                <Button className={location.pathname + location.search === "/video/clip-script" ? `menu-item active` : `menu-item`} type="primary" icon={<VideoCameraOutlined />}>
-                    Script
-                </Button>
-            </Link>
-            <Link to="/video/clip-bg">
-                <Button className={location.pathname + location.search === "/video/clip-bg" ? `menu-item active` : `menu-item`} type="primary" icon={<DesktopOutlined />}>
-                    Bg
-                </Button>
+            <Link to="/video/subtitle">
+                <Tooltip title="Generate a video with subtitle" mouseEnterDelay={1}>
+                    <Button size="large" className={location.pathname + location.search === "/video/subtitle" ? `menu-item active` : `menu-item`} type="primary" icon={<VideoCameraOutlined />} />
+                </Tooltip>
             </Link>
         </nav>
     );

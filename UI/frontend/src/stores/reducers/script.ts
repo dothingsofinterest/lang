@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Script as DataScript, Script as DataScriptAricle, Scene as DataScene, Paragragh as DataParagragh, PayloadScript, StateScript } from "../../types";
+import { Script as DataScript, Script as DataScriptAricle, Scene as DataScene, Paragraph as DataParagraph, PayloadScript, StateScript, AssFormat } from "../../types";
 import { fnGetArticleData, fnSRTTimeToFloat, fnIsSRTTime } from "../../utils/script";
+import { lineBreak } from "html2canvas/dist/types/css/property-descriptors/line-break";
 
 const dataSentence = {
     key: "0-0",
@@ -12,23 +13,43 @@ const dataParagraph = {
     key: `0`,
     scene: ``,
     roles: [],
-    children: [dataSentence],
+    sentences: [dataSentence],
+};
+const dataAssFormat = {
+    enFontSize: 8,
+    enFontColor: "H00FFFFFF",
+    enFontColorInline: "H3517DC",
+    enFontOutlineWidth: 6,
+    enFontOutlineColor: "H00000000",
+    enAlignment: 2,
+    enMarginLR: 4,
+    enMarginV: 40,
+    cnFontSize: 6,
+    cnFontColor: "H00FFFFFF",
+    cnFontColorInline: "H3517DC",
+    cnFontOutlineWidth: 6,
+    cnFontOutlineColor: "H00000000",
+    cnAlignment: 8,
+    cnMarginLR: 4,
+    cnMarginV: 40,
+    cnLineBreak: 20,
 };
 const initialState: StateScript = {
     timeOffset: 0,
     dataArticle: {
         name: "",
-        words: [],
-        grammers: [],
+        vocabs: [],
+        notes: [],
         scenes: [],
     },
     data: {
         name: "",
         roles: [],
         scenes: [],
-        words: [],
-        grammers: [],
-        paragraghs: [dataParagraph],
+        vocabs: [],
+        notes: [],
+        paragraphs: [dataParagraph],
+        assFormat: dataAssFormat,
     },
 };
 
@@ -58,41 +79,41 @@ const slice = createSlice({
                 state.dataArticle = fnGetArticleData(state.data);
             }
         },
-        updateWords: (state, action: PayloadAction<PayloadScript>) => {
+        updateVocabs: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.text !== undefined) {
-                state.data = { ...state.data, words: action.payload.text ? action.payload.text.split("\n") : [] };
+                state.data = { ...state.data, vocabs: action.payload.text ? action.payload.text.split("\n") : [] };
                 state.dataArticle = fnGetArticleData(state.data);
             }
         },
-        updateGrammers: (state, action: PayloadAction<PayloadScript>) => {
+        updateNotes: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.text !== undefined) {
-                state.data = { ...state.data, grammers: action.payload.text ? action.payload.text.split("\n---\n") : [] };
+                state.data = { ...state.data, notes: action.payload.text ? action.payload.text.split("\n---\n") : [] };
                 state.dataArticle = fnGetArticleData(state.data);
             }
         },
         updateParagraphsByInsert: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined) {
-                const a = state.data.paragraghs.slice(0, action.payload.pKey + 1);
+                const a = state.data.paragraphs.slice(0, action.payload.pKey + 1);
                 a.push(dataParagraph);
-                const b = state.data.paragraghs.slice(action.payload.pKey + 1);
-                const newParagraghs = [...a, ...b].map((v, k) => {
-                    return { ...v, key: `${k}`, children: v.children.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
+                const b = state.data.paragraphs.slice(action.payload.pKey + 1);
+                const newParagraphs = [...a, ...b].map((v, k) => {
+                    return { ...v, key: `${k}`, sentences: v.sentences.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
                 });
-                state.data = { ...state.data, paragraghs: newParagraghs };
+                state.data = { ...state.data, paragraphs: newParagraphs };
                 state.dataArticle = fnGetArticleData(state.data);
             }
         },
         updateParagraphsByDelete: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    if (state.data.paragraghs.length > 1) {
-                        const a = state.data.paragraghs.slice(0, action.payload.pKey);
-                        const b = state.data.paragraghs.slice(action.payload.pKey + 1);
-                        const newParagraghs = [...a, ...b].map((v, k) => {
-                            return { ...v, key: `${k}`, children: v.children.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    if (state.data.paragraphs.length > 1) {
+                        const a = state.data.paragraphs.slice(0, action.payload.pKey);
+                        const b = state.data.paragraphs.slice(action.payload.pKey + 1);
+                        const newParagraphs = [...a, ...b].map((v, k) => {
+                            return { ...v, key: `${k}`, sentences: v.sentences.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
                         });
-                        state.data = { ...state.data, paragraghs: newParagraghs };
+                        state.data = { ...state.data, paragraphs: newParagraphs };
                         state.dataArticle = fnGetArticleData(state.data);
                     }
                 }
@@ -100,19 +121,19 @@ const slice = createSlice({
         },
         updateParagraphsByCut: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.sKey !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    if (curParagragh.children.length > 1) {
-                        const curParagraghChildren = curParagragh.children.slice(0, action.payload.sKey);
-                        const newParagraghChildren = curParagragh.children.slice(action.payload.sKey);
-                        curParagragh.children = curParagraghChildren;
-                        const a = state.data.paragraghs.slice(0, action.payload.pKey + 1);
-                        a.push({ ...dataParagraph, children: newParagraghChildren });
-                        const b = state.data.paragraghs.slice(action.payload.pKey + 1);
-                        const newParagraghs = [...a, ...b].map((v, k) => {
-                            return { ...v, key: `${k}`, children: v.children.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    if (curParagraph.sentences.length > 1) {
+                        const curParagraphSentences = curParagraph.sentences.slice(0, action.payload.sKey);
+                        const newParagraphSentences = curParagraph.sentences.slice(action.payload.sKey);
+                        curParagraph.sentences = curParagraphSentences;
+                        const a = state.data.paragraphs.slice(0, action.payload.pKey + 1);
+                        a.push({ ...dataParagraph, sentences: newParagraphSentences });
+                        const b = state.data.paragraphs.slice(action.payload.pKey + 1);
+                        const newParagraphs = [...a, ...b].map((v, k) => {
+                            return { ...v, key: `${k}`, sentences: v.sentences.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
                         });
-                        state.data = { ...state.data, paragraghs: newParagraghs };
+                        state.data = { ...state.data, paragraphs: newParagraphs };
                         state.dataArticle = fnGetArticleData(state.data);
                     }
                 }
@@ -120,25 +141,25 @@ const slice = createSlice({
         },
         updateParagraphsByInsertSentence: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.sKey !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    const a = curParagragh.children.slice(0, action.payload.sKey + 1);
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    const a = curParagraph.sentences.slice(0, action.payload.sKey + 1);
                     a.push(dataSentence);
-                    const b = curParagragh.children.slice(action.payload.sKey + 1);
-                    curParagragh.children = [...a, ...b].map((v, k) => ({ ...v, key: `${curParagragh.key}-${k}` }));
+                    const b = curParagraph.sentences.slice(action.payload.sKey + 1);
+                    curParagraph.sentences = [...a, ...b].map((v, k) => ({ ...v, key: `${curParagraph.key}-${k}` }));
                     state.dataArticle = fnGetArticleData(state.data);
                 }
             }
         },
         updateParagraphsByDeleteSentence: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.sKey !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    if (curParagragh.children.length > 1) {
-                        const a = curParagragh.children.slice(0, action.payload.sKey);
-                        const b = curParagragh.children.slice(action.payload.sKey);
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    if (curParagraph.sentences.length > 1) {
+                        const a = curParagraph.sentences.slice(0, action.payload.sKey);
+                        const b = curParagraph.sentences.slice(action.payload.sKey);
                         b.shift();
-                        curParagragh.children = [...a, ...b].map((v, k) => ({ ...v, key: `${curParagragh.key}-${k}` }));
+                        curParagraph.sentences = [...a, ...b].map((v, k) => ({ ...v, key: `${curParagraph.key}-${k}` }));
                         state.dataArticle = fnGetArticleData(state.data);
                     }
                 }
@@ -146,46 +167,46 @@ const slice = createSlice({
         },
         updateParagraphRole: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.text !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
                     const match = action.payload.text ? action.payload.text.match(/@[^@]+/g) : null;
                     const res = match !== null ? match.map((v) => v.slice(1)) : [];
-                    const newParagragh = { ...curParagragh, roles: res };
-                    const newParagraghs = state.data.paragraghs.map((v) => {
-                        return v.key === newParagragh.key ? newParagragh : v;
+                    const newParagraph = { ...curParagraph, roles: res };
+                    const newParagraphs = state.data.paragraphs.map((v) => {
+                        return v.key === newParagraph.key ? newParagraph : v;
                     });
-                    state.data = { ...state.data, paragraghs: newParagraghs };
+                    state.data = { ...state.data, paragraphs: newParagraphs };
                     state.dataArticle = fnGetArticleData(state.data);
                 }
             }
         },
         updateParagraphScene: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.text !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    const newParagragh = { ...curParagragh, scene: action.payload.text };
-                    const newParagraghs = state.data.paragraghs.map((v) => {
-                        return v.key === newParagragh.key ? newParagragh : v;
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    const newParagraph = { ...curParagraph, scene: action.payload.text };
+                    const newParagraphs = state.data.paragraphs.map((v) => {
+                        return v.key === newParagraph.key ? newParagraph : v;
                     });
-                    state.data = { ...state.data, paragraghs: newParagraghs };
+                    state.data = { ...state.data, paragraphs: newParagraphs };
                     state.dataArticle = fnGetArticleData(state.data);
                 }
             }
         },
         updateSentenceText: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.sKey !== undefined && action.payload.text !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    const curSentence = curParagragh.children[action.payload.sKey];
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    const curSentence = curParagraph.sentences[action.payload.sKey];
                     if (curSentence !== undefined) {
                         if (action.payload.text !== curSentence?.texts.join("\n---\n")) {
-                            curParagragh.children = curParagragh.children.map((v) => {
+                            curParagraph.sentences = curParagraph.sentences.map((v) => {
                                 return v.key == curSentence.key ? { ...curSentence, texts: action.payload.text ? action.payload.text.split("\n---\n") : [] } : v;
                             });
-                            const newParagraghs = state.data.paragraghs.map((v) => {
-                                return v.key == curParagragh.key ? curParagragh : v;
+                            const newParagraphs = state.data.paragraphs.map((v) => {
+                                return v.key == curParagraph.key ? curParagraph : v;
                             });
-                            state.data = { ...state.data, paragraghs: newParagraghs };
+                            state.data = { ...state.data, paragraphs: newParagraphs };
                             state.dataArticle = fnGetArticleData(state.data);
                         }
                     }
@@ -194,21 +215,21 @@ const slice = createSlice({
         },
         updateSentenceTime: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.pKey !== undefined && action.payload.sKey !== undefined && action.payload.text !== undefined) {
-                const curParagragh = state.data.paragraghs[action.payload.pKey];
-                if (curParagragh !== undefined) {
-                    const curSentence = curParagragh.children[action.payload.sKey];
+                const curParagraph = state.data.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    const curSentence = curParagraph.sentences[action.payload.sKey];
                     if (curSentence !== undefined) {
                         if (fnIsSRTTime(action.payload.text)) {
                             if (action.payload.type === 0) {
                                 if (action.payload.text !== curSentence.startTime) {
                                     if ((curSentence.endTime && fnSRTTimeToFloat(action.payload.text) < fnSRTTimeToFloat(curSentence.endTime)) || !curSentence.endTime) {
-                                        curParagragh.children = curParagragh.children.map((v) => {
+                                        curParagraph.sentences = curParagraph.sentences.map((v) => {
                                             return v.key == curSentence.key ? { ...curSentence, startTime: action.payload.text ? action.payload.text : "" } : v;
                                         });
-                                        const newParagraghs = state.data.paragraghs.map((v) => {
-                                            return v.key == curParagragh.key ? curParagragh : v;
+                                        const newParagraphs = state.data.paragraphs.map((v) => {
+                                            return v.key == curParagraph.key ? curParagraph : v;
                                         });
-                                        state.data = { ...state.data, paragraghs: newParagraghs };
+                                        state.data = { ...state.data, paragraphs: newParagraphs };
                                         state.dataArticle = fnGetArticleData(state.data);
                                     }
                                 }
@@ -216,13 +237,13 @@ const slice = createSlice({
                             if (action.payload.type === 1) {
                                 if (action.payload.text !== curSentence.endTime) {
                                     if ((curSentence.startTime && fnSRTTimeToFloat(action.payload.text) > fnSRTTimeToFloat(curSentence.startTime)) || !curSentence.startTime) {
-                                        curParagragh.children = curParagragh.children.map((v) => {
+                                        curParagraph.sentences = curParagraph.sentences.map((v) => {
                                             return v.key == curSentence.key ? { ...curSentence, endTime: action.payload.text ? action.payload.text : "" } : v;
                                         });
-                                        const newParagraghs = state.data.paragraghs.map((v) => {
-                                            return v.key == curParagragh.key ? curParagragh : v;
+                                        const newParagraphs = state.data.paragraphs.map((v) => {
+                                            return v.key == curParagraph.key ? curParagraph : v;
                                         });
-                                        state.data = { ...state.data, paragraghs: newParagraghs };
+                                        state.data = { ...state.data, paragraphs: newParagraphs };
                                         state.dataArticle = fnGetArticleData(state.data);
                                     }
                                 }
@@ -235,9 +256,12 @@ const slice = createSlice({
         updateTimeOffset: (state, action: PayloadAction<number>) => {
             state.timeOffset = action.payload;
         },
+        updateAssFormat: (state, action: PayloadAction<AssFormat>) => {
+            state.data.assFormat = action.payload;
+        },
     },
 });
 
-export const { updateData, updateParagraphsByInsert, updateParagraphsByDelete, updateParagraphsByCut, updateParagraphsByInsertSentence, updateParagraphsByDeleteSentence, updateName, updateRoles, updateScenes, updateWords, updateGrammers, updateParagraphScene, updateParagraphRole, updateTimeOffset, updateSentenceText, updateSentenceTime } = slice.actions;
+export const { updateData, updateParagraphsByInsert, updateParagraphsByDelete, updateParagraphsByCut, updateParagraphsByInsertSentence, updateParagraphsByDeleteSentence, updateName, updateRoles, updateScenes, updateVocabs, updateNotes, updateParagraphScene, updateParagraphRole, updateTimeOffset, updateSentenceText, updateSentenceTime, updateAssFormat } = slice.actions;
 
 export default slice.reducer;

@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from "winston";
 
-const SystemLogger = createLogger({
+const LoggerSystem = createLogger({
     level: "info",
     format: format.combine(
         format.timestamp(),
@@ -15,7 +15,7 @@ const SystemLogger = createLogger({
     ],
 });
 
-const ServiceLogger = createLogger({
+const LoggerService = createLogger({
     level: "error",
     format: format.combine(
         format.timestamp(),
@@ -29,4 +29,4 @@ const ServiceLogger = createLogger({
     ],
 });
 
-export { SystemLogger, ServiceLogger };
+export { LoggerSystem, LoggerService };

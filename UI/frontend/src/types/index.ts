@@ -39,21 +39,22 @@ interface Script {
     name: string;
     roles: string[];
     scenes: string[];
-    words: string[];
-    grammers: string[];
-    paragraghs: Paragragh[];
+    vocabs: string[];
+    notes: string[];
+    paragraphs: Paragraph[];
+    assFormat: AssFormat;
 }
 interface ScriptArticle {
     name: string;
-    words: string[];
-    grammers: string[];
+    vocabs: string[];
+    notes: string[];
     scenes: Scene[];
 }
-interface Paragragh {
+interface Paragraph {
     key: string;
     scene: string;
     roles: string[];
-    children: Sentence[];
+    sentences: Sentence[];
 }
 interface Sentence {
     key: string;
@@ -63,9 +64,28 @@ interface Sentence {
 }
 interface Scene {
     name: string;
-    paragraghs: Paragragh[];
+    paragraphs: Paragraph[];
 }
-export type { Script, ScriptArticle, Paragragh, Sentence, Scene };
+interface AssFormat {
+    enFontSize: number;
+    enFontColor: string;
+    enFontColorInline: string;
+    enFontOutlineWidth: number;
+    enFontOutlineColor: string;
+    enAlignment: number;
+    enMarginLR: number;
+    enMarginV: number;
+    cnFontSize: number;
+    cnFontColor: string;
+    cnFontColorInline: string;
+    cnFontOutlineWidth: number;
+    cnFontOutlineColor: string;
+    cnAlignment: number;
+    cnMarginLR: number;
+    cnMarginV: number;
+    cnLineBreak: number;
+}
+export type { Script, ScriptArticle, Paragraph, Sentence, Scene, AssFormat };
 /* Data Structure - Script */
 
 /* State Structure */
@@ -86,7 +106,6 @@ interface StateScript {
 interface StateVideo {
     localOrigin: string;
     localOriginCompress: string;
-    localOriginBgAss: string;
 }
 export type { StateAuth, StateProject, StateScript, StateVideo };
 /* State Structure */

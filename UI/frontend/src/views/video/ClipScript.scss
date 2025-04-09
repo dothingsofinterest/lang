@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Yantramanav&display=swap");
 
 #article-clip {
-    width: 2160px;
-    height: 3840px;
-    font-size: 50px;
+    width: 1080px;
+    height: 1920px;
+    font-size: 28px;
     font-family: "Yantramanav";
     background-color: rgba(0, 42, 81) !important;
     overflow: hidden;
@@ -36,12 +36,15 @@
     }
     .p {
         border: 1px solid #fff;
-        margin: 0.8em;
+        margin: 0.6em;
         padding: 0.2em 0.6em;
         color: #fff;
         font-size: 1em;
         line-height: 1.8em;
         text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+        &:nth-child(2) {
+            margin-top: 0;
+        }
         .point {
             padding: 0 0.1em;
             &:first-child {
@@ -61,10 +64,10 @@
     footer {
         color: #fff;
         text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
-        .words,
-        .grammers {
+        .vocabs,
+        .notes {
             margin: 0.8em;
-            line-height: 1.8em;
+            line-height: 2em;
             .title {
                 display: flex;
                 align-items: center;
@@ -75,7 +78,7 @@
                 &:before,
                 &:after {
                     position: relative;
-                    width: 50%;
+                    width: 48%;
                     border-block-start: 1px dotted #fff;
                     border-block-end: 0;
                     transform: translateY(50%);
@@ -84,7 +87,11 @@
             }
             .item-index {
                 font-weight: 900;
+                margin-right: 0.2em;
             }
+        }
+        .notes {
+            display: none !important;
         }
     }
 }

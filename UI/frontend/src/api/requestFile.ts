@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { APIPrefix } from "../settings.js";
-import { RequestResponse } from "../types/index.js";
+import { RequestResponse, AssFormat } from "../types/index.js";
 
 // Request Instance
 const requestInstance: AxiosInstance = axios.create({
@@ -63,11 +63,18 @@ export const videoCompress = (params: object): Promise<Blob> => {
         params: params,
     });
 };
-export const videoGenerateSubtitleClip = (params: object): Promise<Blob> => {
+export const videoGenerateSubtitleVideo = (params: object): Promise<Blob> => {
     return requestInstance.request({
         method: "get",
-        url: `/video/stream-subtitle`,
+        url: `/video/subtitle`,
         responseType: "blob",
+        params: params,
+    });
+};
+export const videoGetSubtitleVideoPreview = (params: object): Promise<RequestResponse> => {
+    return requestInstance.request({
+        method: "get",
+        url: `/video/subtitle-preview`,
         params: params,
     });
 };
@@ -78,8 +85,16 @@ export const scriptUpload = (params: object, data: FormData): Promise<RequestRes
     return requestInstance.request({
         method: "post",
         url: `/script/upload`,
-        data: data,
         params: params,
+        data: data,
+    });
+};
+export const scriptUpdateAss = (params: object, data: AssFormat): Promise<RequestResponse> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script/update-ass`,
+        params: params,
+        data: data,
     });
 };
 // Script

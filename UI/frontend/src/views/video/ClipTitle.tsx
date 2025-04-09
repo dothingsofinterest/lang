@@ -13,10 +13,11 @@ const ClipTitle = () => {
     const handlersRender = () => {
         if (clipRef.current) {
             html2canvas(clipRef.current, {
-                width: 2160,
-                height: 3840,
+                width: 1080,
+                height: 1920,
                 scale: 1,
-            }).then((canvas) => {console.log("canvas", canvas);
+            }).then((canvas) => {
+                console.log("canvas", canvas);
                 if (clipRef.current) {
                     clipRef.current.innerHTML = "";
                     clipRef.current.appendChild(canvas);
@@ -29,7 +30,7 @@ const ClipTitle = () => {
         <>
             <Layout style={{ width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", backgroundColor: "#000" }}>
                 <aside id="asider" style={{ width: "100%", height: "100%", padding: "32px 0 0", boxSizing: "border-box", backgroundColor: "#202024" }}>
-                    <section id="asider" style={{ width: "100%", height: "32px", position: "absolute", left: "100px", top: "0", backgroundColor: "#202024" }}>
+                    <section id="asider" style={{ width: "100%", height: "32px", backgroundColor: "#202024" }}>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
                             <Button icon={<PictureOutlined />} onClick={handlersRender} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
                         </div>

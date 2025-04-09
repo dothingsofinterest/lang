@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Space, Button, Tree, Select, InputNumber, Mentions } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusSquareOutlined, MinusSquareOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateParagraphsByInsert, updateParagraphsByDelete, updateParagraphsByCut, updateParagraphsByInsertSentence, updateParagraphsByDeleteSentence, updateName, updateRoles, updateScenes, updateWords, updateGrammers, updateSentenceText, updateSentenceTime, updateParagraphScene, updateParagraphRole, updateTimeOffset } from "../../stores/reducers/script";
-import { fnParseWords, fnFloatToSRTTime, fnSRTTimeToFloat } from "../../utils/script";
+import { updateParagraphsByInsert, updateParagraphsByDelete, updateParagraphsByCut, updateParagraphsByInsertSentence, updateParagraphsByDeleteSentence, updateName, updateRoles, updateScenes, updateVocabs, updateNotes, updateSentenceText, updateSentenceTime, updateParagraphScene, updateParagraphRole, updateTimeOffset } from "../../stores/reducers/script";
+import { fnParseVocabs, fnFloatToSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import "./Script.scss";
 const Script = React.memo(() => {
     console.log("----------Mounted | Script/Script----------");
@@ -13,7 +13,7 @@ const Script = React.memo(() => {
     const script = useSelector((state: RootState) => state.script.data);
     const timeOffset = useSelector((state: RootState) => state.script.timeOffset);
     const [renderVersion, setRenderVersion] = useState(0);
-    const [parsedWords, setParsedWords] = useState("");
+    const [parsedVocabs, setParsedVocabs] = useState("");
     const refScrollbar = useRef<Scrollbars>(null);
     const refPanel = useRef<HTMLDivElement>(null);
     const refCurSentenceKey = useRef("0-0");
@@ -23,7 +23,7 @@ const Script = React.memo(() => {
     const handlersSubUpdateTimeOffset = (value: number | null) => {
         console.log("value", value);
         if (value !== null && !isNaN(value)) {
-            const firstStartTime = script.paragraghs[0].children[0].startTime;
+            const firstStartTime = script.paragraphs[0].sentences[0].startTime;
             const firstStartTimeN = fnSRTTimeToFloat(firstStartTime) + value;
             console.log(firstStartTimeN);
             if (firstStartTimeN > 0) {
@@ -85,14 +85,14 @@ const Script = React.memo(() => {
             dispatch(updateScenes({ text: value.trim() }));
         }
     };
-    const handlersSubUpdateWords = (value: string) => {
-        if (value.trim() !== script.words.join("\n")) {
-            dispatch(updateWords({ text: value.trim() }));
+    const handlersSubUpdateVocabs = (value: string) => {
+        if (value.trim() !== script.vocabs.join("\n")) {
+            dispatch(updateVocabs({ text: value.trim() }));
         }
     };
-    const handlersSubUpdateGrammers = (value: string) => {
-        if (value.trim() !== script.grammers.join("\n---\n")) {
-            dispatch(updateGrammers({ text: value.trim() }));
+    const handlersSubUpdateNotes = (value: string) => {
+        if (value.trim() !== script.notes.join("\n---\n")) {
+            dispatch(updateNotes({ text: value.trim() }));
         }
     };
     const handlersSubUpdateStartTime = (event: any, key: string) => {
@@ -143,8 +143,8 @@ const Script = React.memo(() => {
             }
         }
     };
-    const handlersParseWords = (text: string) => {
-        setParsedWords(fnParseWords(text));
+    const handlersParseVocabs = (text: string) => {
+        setParsedVocabs(fnParseVocabs(text));
     };
     // Event Handlers
     // Template Functions
@@ -175,14 +175,10 @@ const Script = React.memo(() => {
     return (
         <Scrollbars key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
             <div ref={refPanel} style={{ width: "100%", marginBottom: "10px", height: "32px", display: "flex", justifyContent: "space-between" }}>
-                <InputNumber min={-100.0} max={100.0} step={0.01} value={timeOffset} onChange={(v) => handlersSubUpdateTimeOffset(v)} style={{ flex: "0 0 80px", borderRadius: "0", backgroundColor: "#ccc" }} />
-                <Button icon={<ScissorOutlined />} onClick={handlersSubCutParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                    Cut P With S
-                </Button>
-                <Button icon={<PlusCircleOutlined />} onClick={handlersSubInsertParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                <Button icon={<PlusSquareOutlined />} onClick={handlersSubInsertParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                     P
                 </Button>
-                <Button icon={<MinusCircleOutlined />} onClick={handlersSubDeleteParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                <Button icon={<MinusSquareOutlined />} onClick={handlersSubDeleteParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                     P
                 </Button>
                 <Button icon={<PlusCircleOutlined />} onClick={handlersSubInsertSentence} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
@@ -191,6 +187,10 @@ const Script = React.memo(() => {
                 <Button icon={<MinusCircleOutlined />} onClick={handlersSubDeleteSentence} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                     S
                 </Button>
+                <Button icon={<ScissorOutlined />} onClick={handlersSubCutParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                    Cut P
+                </Button>
+                <InputNumber min={-100.0} max={100.0} step={0.01} value={timeOffset} onChange={(v) => handlersSubUpdateTimeOffset(v)} style={{ flex: "0 0 80px", borderRadius: "0", backgroundColor: "#ccc" }} />
             </div>
             <div style={{ width: "100%", display: "flex", marginBottom: "4px" }}>
                 <Input defaultValue={script.name} onBlur={(e) => handlersSubUpdateName(e.target.value)} style={{ borderRadius: "0" }} placeholder="Script Title" />
@@ -200,11 +200,11 @@ const Script = React.memo(() => {
             <Tree
                 selectable={false}
                 style={{ height: "100%", borderRadius: "0" }}
+                fieldNames={{ key: "key", children: "sentences" }}
                 showLine
                 defaultExpandAll
-                treeData={script.paragraghs}
+                treeData={script.paragraphs}
                 titleRender={(item: any) => {
-                    // console.log(item);
                     return item.roles ? (
                         <div style={{ width: "100%", display: "flex" }}>
                             <Select size="small" onChange={(v) => handlersSubUpdateScene(v, item.key)} defaultValue={item.scene} options={script.scenes.map((v) => ({ label: v, value: v }))} style={{ width: "426px", borderRadius: 0 }} />
@@ -224,18 +224,18 @@ const Script = React.memo(() => {
                 }}
             />
             <div style={{ width: "100%" }}>
-                <Input.TextArea autoSize value={parsedWords} onChange={(e) => handlersParseWords(e.target.value)} style={{ flex: 1, minHeight: "100px", borderRadius: "0", color: "#000" }} placeholder="Paste Words" />
+                <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} style={{ flex: 1, minHeight: "100px", borderRadius: "0", color: "#000" }} placeholder="Paste Vocabs" />
                 <Input.TextArea
                     autoSize
-                    defaultValue={script.words.join("\n")}
-                    onBlur={(e) => handlersSubUpdateWords(e.target.value)}
+                    defaultValue={script.vocabs.join("\n")}
+                    onBlur={(e) => handlersSubUpdateVocabs(e.target.value)}
                     style={{ flex: 1, minHeight: "200px", borderRadius: "0", color: "#000" }}
                     placeholder="n.内容;目录, content/contents, /ˈkɑːntent/ &#10;v.满足, content/contents/contented/contented/contenting, /kənˈtent/ &#10;adj.满意的, content, /kənˈtent/"
                 />
                 <Input.TextArea
                     autoSize
-                    defaultValue={script.grammers.join("\n---\n")}
-                    onBlur={(e) => handlersSubUpdateGrammers(e.target.value)}
+                    defaultValue={script.notes.join("\n---\n")}
+                    onBlur={(e) => handlersSubUpdateNotes(e.target.value)}
                     style={{ flex: 1, minHeight: "200px", borderRadius: "0", color: "#000" }}
                     placeholder="Unfamiliar Grammars. &#10;To separate piece by ---"
                 />

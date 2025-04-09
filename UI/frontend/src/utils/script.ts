@@ -1,126 +1,27 @@
-import { Script as DataScript, ScriptArticle as DataScriptArticle, Scene as DataScene, Paragragh as DataParagragh } from "../types";
+import { Script as DataScript, ScriptArticle as DataScriptArticle, Paragraph as DataParagraph } from "../types";
+import Joi from "joi";
 
-export const fnGetScriptWithTimeOffset = (script: DataScript, scriptTimeOffset: number): DataScript => {
-    const newParagraghs = script.paragraghs.map((value) => {
-        const newChildren = value.children.map((v) => {
+export const createJson = (script: DataScript, scriptTimeOffset: number): DataScript => {
+    const newParagraphs = script.paragraphs.map((value) => {
+        const newSentences = value.sentences.map((v) => {
             let startTime = v.startTime;
             let endTime = v.endTime;
-            if (scriptTimeOffset && fnSRTTimeToFloat(script.paragraghs[0].children[0].startTime) + scriptTimeOffset > 0) {
+            if (scriptTimeOffset && fnSRTTimeToFloat(script.paragraphs[0].sentences[0].startTime) + scriptTimeOffset > 0) {
                 startTime = fnFloatToSRTTime(fnSRTTimeToFloat(v.startTime) + scriptTimeOffset);
                 endTime = fnFloatToSRTTime(fnSRTTimeToFloat(v.endTime) + scriptTimeOffset);
             }
             return {
                 ...v,
-                texts: v.texts.map((vv: any) => {
-                    return vv.replaceAll(/[^\S\n]+/g, " ").trim();
-                }),
                 startTime: startTime,
                 endTime: endTime,
             };
         });
-        return { ...value, children: newChildren };
+        return { ...value, sentences: newSentences };
     });
-    return { ...script, paragraghs: newParagraghs };
+    return { ...script, paragraphs: newParagraphs };
 };
 
-export const fnGenerateSRT = (script: DataScript, scriptTimeOffset: number): string => {
-    let count = 1;
-    const subArr: string[] = [];
-    script.paragraghs.forEach((paragragh, key, origin) => {
-        const childrenArr = paragragh.children.map((sentence, k) => {
-            let startTime = sentence.startTime;
-            let endTime = sentence.endTime;
-            let text = "";
-            if (scriptTimeOffset && fnSRTTimeToFloat(script.paragraghs[0].children[0].startTime) + scriptTimeOffset > 0) {
-                startTime = fnFloatToSRTTime(fnSRTTimeToFloat(sentence.startTime) + scriptTimeOffset);
-                endTime = fnFloatToSRTTime(fnSRTTimeToFloat(sentence.endTime) + scriptTimeOffset);
-            }
-            if (sentence.texts[0]) {
-                const textTrans = sentence.texts[0].split("\n");
-                if (paragragh.roles.length < 2) {
-                    text = `${textTrans[0]}\n${textTrans[1]}`;
-                } else {
-                    text = sentence.texts
-                        .map((partOfSentence, n, whole) => {
-                            let text = "";
-                            if (whole.length === paragragh.roles.length) {
-                                const roleTrans = paragragh.roles[n].split("-");
-                                const textTrans = partOfSentence.split("\n");
-                                text = `${roleTrans[0]}: ${textTrans[0]}\n${roleTrans[1]}: ${textTrans[1]}`;
-                            } else {
-                                text = `${text[0]}\n${text[1]}`;
-                            }
-                            return text;
-                        })
-                        .join("\n---\n");
-                }
-            }
-            return `${count++}\n${startTime} --> ${endTime}\n${text}\n`;
-        });
-        subArr.push(...childrenArr);
-    });
-    return subArr.join("\n");
-};
-
-export const fnGenerateASS = (script: DataScript, scriptTimeOffset: number): string => {
-    const specPart = "{\\c&H3517DC&\\bord8\\3c&H000000&}";
-    const commPart = "{\\c&H00FFFFFF&\\bord8\\3c&H000000&}";
-    let base = `[Script Info]
-Title: ${script.name}
-ScriptType: v4.00+
-Collisions: Normal
-PlayDepth: 0
-Timer: 100.0000
-WrapStyle: 1
-
-[V4+ Styles]
-Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Yantramanav,6,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,10,0,8,4,4,216,1
-
-[Events]
-Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n`;
-    const subArr: string[] = [];
-    script.paragraghs.forEach((paragragh, key, origin) => {
-        const childrenArr = paragragh.children.map((sentence, k) => {
-            let startTime = sentence.startTime;
-            let endTime = sentence.endTime;
-            let text = "";
-            if (scriptTimeOffset && fnSRTTimeToFloat(script.paragraghs[0].children[0].startTime) + scriptTimeOffset > 0) {
-                startTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.startTime) + scriptTimeOffset);
-                endTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.endTime) + scriptTimeOffset);
-            } else {
-                // TODO
-                startTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.startTime));
-                endTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.endTime));
-            }
-            if (sentence.texts[0]) {
-                const textTrans = sentence.texts[0].split("\n");
-                if (paragragh.roles.length < 2) {
-                    text = `${textTrans[0]}\\N\\N{\\fs5}${textTrans[1]}`;
-                } else {
-                    text = sentence.texts
-                        .map((partOfSentence, n, whole) => {
-                            let text = "";
-                            if (whole.length === paragragh.roles.length) {
-                                const roleTrans = paragragh.roles[n].split("-");
-                                const textTrans = partOfSentence.split("\n");
-                                text = `${roleTrans[0]}: ${textTrans[0]}\\N{\\fs5}${roleTrans[1]}: ${textTrans[1]}`;
-                            } else {
-                                text = `${text[0]}\\N\\N{\\fs5}${text[1]}`;
-                            }
-                            return text;
-                        })
-                        .join("\\N---\\N{\\fs6}");
-                }
-            }
-            return `Dialogue: 0,${startTime},${endTime},Default,,0,0,0,,${text}`;
-        });
-        subArr.push(...childrenArr);
-    });
-    return base + subArr.join("\n");
-};
-
-export const fnParseWords = (text: string): string => {
+export const fnParseVocabs = (text: string): string => {
     let r = ``;
     if (text) {
         const res = [];
@@ -176,31 +77,31 @@ export const fnParseWords = (text: string): string => {
 export const fnGetArticleData = (script: DataScript): DataScriptArticle => {
     const data: DataScriptArticle = {
         name: script.name,
-        words: script.words,
-        grammers: script.grammers,
+        vocabs: script.vocabs,
+        notes: script.notes,
         scenes: [],
     };
-    const hasScene = script.paragraghs.find(({ scene }) => {
+    const hasScene = script.paragraphs.find(({ scene }) => {
         return scene === "";
     });
     if (hasScene === undefined) {
-        script.paragraghs.forEach((v: DataParagragh, k: number, a: DataParagragh[]) => {
+        script.paragraphs.forEach((v: DataParagraph, k: number, a: DataParagraph[]) => {
             const sceneArr = v.scene.split("-");
             const sceneKey = sceneArr[0].replaceAll(/[\s\'\,]/g, "");
             if (sceneKey) {
                 if (k === 0) {
                     data.scenes.push({
                         name: sceneArr[0],
-                        paragraghs: [v],
+                        paragraphs: [v],
                     });
                 } else {
                     if (v.scene !== a[k - 1].scene) {
                         data.scenes.push({
                             name: sceneArr[0],
-                            paragraghs: [v],
+                            paragraphs: [v],
                         });
                     } else {
-                        data.scenes[data.scenes.length - 1].paragraghs.push(v);
+                        data.scenes[data.scenes.length - 1].paragraphs.push(v);
                     }
                 }
             }
@@ -208,10 +109,10 @@ export const fnGetArticleData = (script: DataScript): DataScriptArticle => {
     } else {
         data.scenes.push({
             name: "",
-            paragraghs: [],
+            paragraphs: [],
         });
-        script.paragraghs.forEach((v: DataParagragh) => {
-            data.scenes[0].paragraghs.push(v);
+        script.paragraphs.forEach((v: DataParagraph) => {
+            data.scenes[0].paragraphs.push(v);
         });
     }
     return data;
@@ -258,4 +159,22 @@ export const fnPadZero = (num: number, length: number = 2): string => {
 
 export const fnIsSRTTime = (value: string): boolean => {
     return value.match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/) ? true : false;
+};
+
+export const validateJsonFile = (data: any): boolean => {
+    const schema = Joi.object({
+        name: Joi.string().required(),
+        roles: Joi.array().items(Joi.string()).required(),
+        scenes: Joi.array().items(Joi.string()).required(),
+        vocabs: Joi.array().items(Joi.string()).required(),
+        notes: Joi.array().items(Joi.string()).required(),
+        paragraphs: Joi.array().items(Joi.object()).required(),
+        assFormat: Joi.object(),
+    });
+    const { error, value } = schema.validate(data);
+    if (error) {
+        console.log("Json file validatation error:", error);
+        return false;
+    }
+    return true;
 };

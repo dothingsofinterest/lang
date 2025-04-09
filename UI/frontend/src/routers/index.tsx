@@ -4,8 +4,7 @@ import App from "../views/layout/App";
 import Set from "../views/set/Index";
 import ScriptEdit from "../views/script/Edit";
 import ScriptView from "../views/script/View";
-import VideoClipScript from "../views/video/ClipScript";
-import VideoClipBg from "../views/video/ClipBg";
+import VideoSubtitle from "../views/video/Subtitle";
 
 const routes = [
     {
@@ -29,12 +28,8 @@ const routes = [
                 element: <ScriptView />,
             },
             {
-                path: "/video/clip-script",
-                element: <VideoClipScript />,
-            },
-            {
-                path: "/video/clip-bg",
-                element: <VideoClipBg />,
+                path: "/video/subtitle",
+                element: <VideoSubtitle />,
             },
         ],
     },

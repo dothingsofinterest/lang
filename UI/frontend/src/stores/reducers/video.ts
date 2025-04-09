@@ -4,7 +4,6 @@ import { StateVideo } from "../../types";
 const initialState: StateVideo = {
     localOrigin: "",
     localOriginCompress: "",
-    localOriginBgAss: "",
 };
 
 const slice = createSlice({
@@ -17,12 +16,9 @@ const slice = createSlice({
         updateLocalOriginCompress: (state, action: PayloadAction<string>) => {
             state.localOriginCompress = action.payload;
         },
-        updateLocalOriginBgAss: (state, action: PayloadAction<string>) => {
-            state.localOriginBgAss = action.payload;
-        },
     },
 });
 
-export const { updateLocalOrigin, updateLocalOriginCompress, updateLocalOriginBgAss } = slice.actions;
+export const { updateLocalOrigin, updateLocalOriginCompress } = slice.actions;
 
 export default slice.reducer;

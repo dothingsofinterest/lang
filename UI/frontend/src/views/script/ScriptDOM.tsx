@@ -5,8 +5,9 @@ import "./ScriptDOM.scss";
 interface ScriptDOMProps {
     dataArticle: DataScriptArticle;
     activeSentence: number;
+    boxID?: string;
 }
-const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSentence }) => {
+const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSentence, boxID = "article" }) => {
     console.log("----------Render | Script/ScriptDOM----------");
     const articleRef = useRef<HTMLDivElement>(null);
     // Functions
@@ -32,15 +33,15 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
         fnSentenceHighlight();
     }, [activeSentence]);
     return (
-        <article id="article" ref={articleRef}>
+        <article id={boxID} ref={articleRef}>
             {dataArticle.name ? <h1>{dataArticle.name.split("/")[0]}</h1> : ""}
             {dataArticle.scenes.length === 1
-                ? dataArticle.scenes[0].paragraghs.map((paragragh) => {
-                      return paragragh.roles.length <= 1 ? (
-                          <div className="p" key={paragragh.key}>
+                ? dataArticle.scenes[0].paragraphs.map((paragraph) => {
+                      return paragraph.roles.length <= 1 ? (
+                          <div className="p" key={paragraph.key}>
                               <p>
-                                  {paragragh.roles.length === 1 ? <i className="role">{paragragh.roles[0].split("-")[0]}: </i> : <></>}
-                                  {paragragh.children.map((v) => {
+                                  {paragraph.roles.length === 1 ? <i className="role">{paragraph.roles[0].split("-")[0]}: </i> : <></>}
+                                  {paragraph.sentences.map((v) => {
                                       return (
                                           <React.Fragment key={v.key}>
                                               <span className="point">{v.texts[0].split("\n")[0]}</span>
@@ -50,14 +51,14 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
                               </p>
                           </div>
                       ) : (
-                          <div className="p" key={paragragh.key}>
-                              {paragragh.children.map((sentence) => {
+                          <div className="p" key={paragraph.key}>
+                              {paragraph.sentences.map((sentence) => {
                                   return (
                                       <ul className="point" key={sentence.key}>
                                           {sentence.texts.map((partOfSentence, n) => {
                                               return (
                                                   <li key={n}>
-                                                      <i className="role">{paragragh.roles[n].split("-")[0]}: </i>
+                                                      <i className="role">{paragraph.roles[n].split("-")[0]}: </i>
                                                       <span>{partOfSentence.split("\n")[0]}</span>
                                                   </li>
                                               );
@@ -72,12 +73,12 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
                       return (
                           <div className="scene" key={index}>
                               <h2>{scene.name}</h2>
-                              {scene.paragraghs.map((paragragh) => {
-                                  return paragragh.roles.length <= 1 ? (
-                                      <div className="p" key={paragragh.key}>
+                              {scene.paragraphs.map((paragraph) => {
+                                  return paragraph.roles.length <= 1 ? (
+                                      <div className="p" key={paragraph.key}>
                                           <p>
-                                              {paragragh.roles.length === 1 ? <i className="role">{paragragh.roles[0].split("-")[0]}: </i> : <></>}
-                                              {paragragh.children.map((v) => {
+                                              {paragraph.roles.length === 1 ? <i className="role">{paragraph.roles[0].split("-")[0]}: </i> : <></>}
+                                              {paragraph.sentences.map((v) => {
                                                   return (
                                                       <React.Fragment key={v.key}>
                                                           <span className="point">{v.texts[0].split("\n")[0]}</span>
@@ -87,14 +88,14 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
                                           </p>
                                       </div>
                                   ) : (
-                                      <div className="p" key={paragragh.key}>
-                                          {paragragh.children.map((sentence) => {
+                                      <div className="p" key={paragraph.key}>
+                                          {paragraph.sentences.map((sentence) => {
                                               return (
                                                   <ul className="point" key={sentence.key}>
                                                       {sentence.texts.map((partOfSentence, n) => {
                                                           return (
                                                               <li key={n}>
-                                                                  <i className="role">{paragragh.roles[n].split("-")[0]}: </i>
+                                                                  <i className="role">{paragraph.roles[n].split("-")[0]}: </i>
                                                                   <span>{partOfSentence.split("\n")[0]}</span>
                                                               </li>
                                                           );
@@ -109,10 +110,10 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
                       );
                   })}
             <footer>
-                {dataArticle.words.length > 1 ? (
-                    <div className="words">
-                        <div className="title">Words</div>
-                        {dataArticle.words.map((value, key) => {
+                {dataArticle.vocabs.length > 1 ? (
+                    <div className="vocabs">
+                        <div className="title">Vocabs</div>
+                        {dataArticle.vocabs.map((value, key) => {
                             return (
                                 <p key={key}>
                                     <span className="item-index">[{key + 1}] </span>
@@ -124,10 +125,10 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
                 ) : (
                     ""
                 )}
-                {dataArticle.grammers.length > 1 ? (
-                    <div className="grammers">
-                        <div className="title">Grammers</div>
-                        {dataArticle.grammers.map((value, key) => {
+                {dataArticle.notes.length > 1 ? (
+                    <div className="notes">
+                        <div className="title">Notes</div>
+                        {dataArticle.notes.map((value, key) => {
                             return (
                                 <div key={key}>
                                     <span className="item-index">[{key + 1}] </span>

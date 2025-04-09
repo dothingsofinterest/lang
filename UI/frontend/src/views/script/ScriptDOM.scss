@@ -28,6 +28,9 @@
         font-size: 14px;
         line-height: 28px;
         font-weight: 300;
+        &:nth-child(2) {
+            margin-top: 0;
+        }
         .role {
             font-style: normal;
             font-weight: 900;
@@ -48,11 +51,10 @@
     }
     footer {
         height: 100%;
-        .words,
-        .grammers {
+        .vocabs,
+        .notes {
             color: #fff;
             line-height: 28px;
-            background-color: #333;
             padding: 10px;
             margin-bottom: 10px;
             .title {
@@ -75,6 +77,7 @@
             }
             .item-index {
                 font-weight: 900;
+                margin-right: 4px;
             }
         }
     }

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateName, updateProcessings } from "../../stores/reducers/project";
 import { updateLocalOrigin, updateLocalOriginCompress } from "../../stores/reducers/video";
 import { updateData } from "../../stores/reducers/script";
-import { fnGetScriptWithTimeOffset, fnGenerateSRT, fnGenerateASS } from "../../utils/script";
+import { createJson as fnCreateJson, validateJsonFile as fnValidateJsonFile } from "../../utils/script";
 import { videoUpload, videoCompress, scriptUpload } from "../../api/requestFile";
 import printJS from "print-js";
 import ScriptDOM from "../script/ScriptDOM";
@@ -53,7 +53,7 @@ const Index = () => {
         }
         return false;
     };
-    const handlersSubImportScript = (file: any) => {
+    const handlersImportScript = (file: any) => {
         if (/^(.+?)\.(json|JSON)$/g.test(file.name) && file.type === "application/json") {
             if (projectName) {
                 const reader = new FileReader();
@@ -63,17 +63,21 @@ const Index = () => {
                         if (e.target?.result) {
                             const content = e.target.result as string;
                             const data = JSON.parse(content);
-                            dispatch(updateData(data));
-                            // Upload Script
-                            const formData = new FormData();
-                            formData.append("file", file);
-                            const res = await scriptUpload({ project: projectName }, formData);
-                            if (res.code === 1) {
-                                console.log("Upload succeed.");
+                            if (fnValidateJsonFile(data)) {
+                                dispatch(updateData(data));
+                                // Upload Script
+                                const formData = new FormData();
+                                formData.append("file", file);
+                                const res = await scriptUpload({ project: projectName }, formData);
+                                if (res.code === 1) {
+                                    console.log("Upload succeed.");
+                                } else {
+                                    alert(res.message);
+                                }
+                                document.title = data.name;
                             } else {
-                                alert(res.message);
+                                alert(`Json file format is invalid.`);
                             }
-                            document.title = data.name;
                         }
                     } catch (e: any) {
                         alert(e.message);
@@ -87,64 +91,13 @@ const Index = () => {
         }
         return false;
     };
-    const handlersSubExportScript = async () => {
+    const handlersExportScript = async () => {
         if (dataArticle.name) {
             try {
-                const blob = new Blob([JSON.stringify(fnGetScriptWithTimeOffset(script, scriptTimeOffset), null, 4)], { type: "application/json" });
+                const blob = new Blob([JSON.stringify(fnCreateJson(script, scriptTimeOffset), null, 4)], { type: "application/json" });
                 const handle = await await (window as any).showSaveFilePicker({
-                    suggestedName: `${script.name}.json`,
-                    types: [
-                        {
-                            description: script.name,
-                            accept: { "application/json": [".json"] },
-                        },
-                    ],
-                });
-                const writable = await handle.createWritable();
-                await writable.write(blob);
-                await writable.close();
-            } catch (error) {
-                console.error("save error: ", error);
-            }
-        } else {
-            alert(`Data not be set`);
-        }
-    };
-    const handlersSubExportSRT = async () => {
-        if (dataArticle.name) {
-            try {
-                const blob = new Blob([fnGenerateSRT(script, scriptTimeOffset)], { type: "text/srt" });
-                const handle = await await (window as any).showSaveFilePicker({
-                    suggestedName: `${script.name}.srt`,
-                    types: [
-                        {
-                            description: script.name,
-                            accept: { "text/srt": [".srt"] },
-                        },
-                    ],
-                });
-                const writable = await handle.createWritable();
-                await writable.write(blob);
-                await writable.close();
-            } catch (error) {
-                console.error("save error: ", error);
-            }
-        } else {
-            alert(`Data not be set`);
-        }
-    };
-    const handlersSubExportASS = async () => {
-        if (script.name) {
-            try {
-                const blob = new Blob([fnGenerateASS(script, scriptTimeOffset)], { type: "text/plain" });
-                const handle = await await (window as any).showSaveFilePicker({
-                    suggestedName: `${script.name}.ass`,
-                    types: [
-                        {
-                            description: script.name,
-                            accept: { "text/plain": [".ass"] },
-                        },
-                    ],
+                    suggestedName: `${script.name.split("/")[0]}.json`,
+                    types: [{ description: script.name, accept: { "application/json": [".json"] } }],
                 });
                 const writable = await handle.createWritable();
                 await writable.write(blob);
@@ -163,25 +116,26 @@ const Index = () => {
             html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
             body { margin: 0; padding: 0; font-size: 14px; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
             ol, ul, li { list-style: none; }
-            article { width: 1000px; }
-            article h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
-            article h2 { text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
-            article .scene { background: #ccc; padding: 6px 0; margin-bottom: 10px; }
-            article .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
-            article .p .point { padding: 0 4px; }
-            article .p .role { font-style: normal; font-weight: 900; padding-right: 2px; }
-            article .p ul { font-style: normal; font-size: 12px; }
-            article footer { height: 100%; }
-            article footer .words { margin-bottom: 10px; }
-            article footer .words,
-            article footer .grammers { color: #fff; line-height: 28px; background-color: #333; padding: 10px 20px; }
-            article footer .words .item-index,
-            article footer .grammers .item-index { font-weight: 900; }
-            article footer .words .title,
-            article footer .grammers .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
-            article footer .title:before, 
-            article footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #fff; border-block-end: 0; transform: translateY(50%); content: ""; }`;
-            const content = ReactDOMServer.renderToStaticMarkup(<ScriptDOM dataArticle={dataArticle} activeSentence={0} />);
+            #article-print { width: 1000px; }
+            #article-print h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
+            #article-print h2 { text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
+            #article-print .scene { background: #ccc; padding: 6px 0; margin-bottom: 10px; }
+            #article-print .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
+            #article-print .p:nth-child(2) { margin-top: 0; }
+            #article-print .p .point { padding: 0 4px; }
+            #article-print .p .role { font-style: normal; font-weight: 900; padding-right: 2px; }
+            #article-print .p ul { font-style: normal; font-size: 12px; }
+            #article-print footer { height: 100%; }
+            #article-print footer .vocabs { margin-bottom: 10px; }
+            #article-print footer .vocabs,
+            #article-print footer .notes { color: #000; line-height: 28px; padding: 10px 20px; }
+            #article-print footer .vocabs .item-index,
+            #article-print footer .notes .item-index { font-weight: 900; margin-right: 4px; }
+            #article-print footer .vocabs .title,
+            #article-print footer .notes .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
+            #article-print footer .title:before, 
+            #article-print footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #000; border-block-end: 0; transform: translateY(50%); content: ""; }`;
+            const content = ReactDOMServer.renderToStaticMarkup(<ScriptDOM dataArticle={dataArticle} activeSentence={0} boxID="article-print" />);
             printJS({ printable: `${content}`, type: "raw-html", style: css });
         } else {
             alert(`Data not be set`);
@@ -207,28 +161,22 @@ const Index = () => {
                             </Upload>
                         </div>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Project Name: " value={projectName} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                            <Input addonBefore="Project name: " value={projectName} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                         </div>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Video Local: " value={localOrigin} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                            <Input addonBefore="Local video : " value={localOrigin} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                         </div>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Video Local Low: " value={localOriginCompress} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                            <Input addonBefore="Local compressed video : " value={localOriginCompress} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                         </div>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Upload beforeUpload={handlersSubImportScript} showUploadList={false}>
+                            <Upload beforeUpload={handlersImportScript} showUploadList={false}>
                                 <Button icon={<UploadOutlined />} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
-                                    Import JSON
+                                    Import
                                 </Button>
                             </Upload>
-                            <Button icon={<DownloadOutlined />} onClick={handlersSubExportScript} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Export JSON
-                            </Button>
-                            <Button icon={<DownloadOutlined />} onClick={handlersSubExportSRT} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Export SRT
-                            </Button>
-                            <Button icon={<DownloadOutlined />} onClick={handlersSubExportASS} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Export ASS
+                            <Button icon={<DownloadOutlined />} onClick={handlersExportScript} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                                Export
                             </Button>
                             <Button icon={<PrinterOutlined />} onClick={handlersPrint} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                                 Print

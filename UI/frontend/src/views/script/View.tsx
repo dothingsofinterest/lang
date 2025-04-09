@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button, Switch } from "antd";
-import { Script as DataScript, Paragragh as DataParagragh, Sentence as DataSentence, Scene as DataScene } from "../../types";
+import { Script as DataScript, Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
@@ -19,13 +19,13 @@ const View = () => {
     const activeSentence = useSelector((state: RootState) => state.project.activeSentence);
     const playStop = useSelector((state: RootState) => state.project.playStop);
     const [sentences, setSentences] = useState<DataSentence[]>([]);
-    const [wordsCurIndex, setWordsCurIndex] = useState(0);
+    const [vocabsCurIndex, setVocabsCurIndex] = useState(0);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [inputValue, setInputValue] = useState("");
     const [inputMode, setInputMode] = useState<boolean>(true); // true-sentence false-word
-    const [dictationWordsMode, setDictationWordsMode] = useState<boolean>(true); // true-EN false-CN
+    const [dictationVocabsMode, setDictationVocabsMode] = useState<boolean>(true); // true-EN false-CN
     const articleRef = useRef<HTMLDivElement>(null);
-    const [words, setWords] = useState<string[]>([]);
+    const [vocabs, setVocabs] = useState<string[]>([]);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     // Event Handlers
@@ -134,7 +134,7 @@ const View = () => {
         if (v) {
             if (refAudio.current) {
                 refAudio.current.pause();
-                setWordsCurIndex(0);
+                setVocabsCurIndex(0);
             }
         } else {
             fnPlayAudio(0);
@@ -147,8 +147,8 @@ const View = () => {
             }
         }
     };
-    const handlersPanel2SwitchDictationWordsMode = (v: boolean) => {
-        setDictationWordsMode(v);
+    const handlersPanel2SwitchDictationVocabsMode = (v: boolean) => {
+        setDictationVocabsMode(v);
     };
     const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
         console.log("event.key", event.key);
@@ -176,10 +176,10 @@ const View = () => {
                 }
             } else {
                 const valueTrans = value.includes(",") ? value.replaceAll(",", "/") : value;
-                if (words[wordsCurIndex].split(", ")[1] === valueTrans) {
+                if (vocabs[vocabsCurIndex].split(", ")[1] === valueTrans) {
                     setInputValue("");
-                    setWordsCurIndex(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
-                    fnPlayAudio(wordsCurIndex + 1 === words.length ? 0 : wordsCurIndex + 1);
+                    setVocabsCurIndex(vocabsCurIndex + 1 === vocabs.length ? 0 : vocabsCurIndex + 1);
+                    fnPlayAudio(vocabsCurIndex + 1 === vocabs.length ? 0 : vocabsCurIndex + 1);
                 }
             }
         }
@@ -195,10 +195,10 @@ const View = () => {
         }
     };
     const fnPlayAudio = async (index: number) => {
-        if (words && words.length) {
-            const wordsArr = words[index].split(", ");
-            const content = dictationWordsMode ? wordsArr[1].replaceAll("/", ", ") : wordsArr[0].split(".")[1];
-            const type = dictationWordsMode ? 1 : 2;
+        if (vocabs && vocabs.length) {
+            const vocabsArr = vocabs[index].split(", ");
+            const content = dictationVocabsMode ? vocabsArr[1].replaceAll("/", ", ") : vocabsArr[0].split(".")[1];
+            const type = dictationVocabsMode ? 1 : 2;
             try {
                 const res = await ttsGen({ content: content, type: type });
                 if (res.code) {
@@ -221,11 +221,11 @@ const View = () => {
     const livesHookParseScriptData = () => {
         if (script.name) {
             const sentences: DataSentence[] = [];
-            script.paragraghs.forEach((v: DataParagragh) => {
-                sentences.push(...v.children);
+            script.paragraphs.forEach((v: DataParagraph) => {
+                sentences.push(...v.sentences);
             });
             setSentences(sentences);
-            setWords(script.words);
+            setVocabs(script.vocabs);
         } else {
             console.log("Script not set.");
         }
@@ -277,7 +277,7 @@ const View = () => {
                                     <Switch checked={inputMode} onChange={handlersPanel2SwitchInputMode} size="small" checkedChildren="文章" unCheckedChildren="单词" />
                                 </div>
                                 <div style={{ flex: 1, borderRadius: "0", display: "flex", justifyContent: "center", alignItems: "center", background: "#fff", backgroundColor: "#ccc" }}>
-                                    <Switch checked={dictationWordsMode} onChange={handlersPanel2SwitchDictationWordsMode} size="small" checkedChildren="英" unCheckedChildren="中" />
+                                    <Switch checked={dictationVocabsMode} onChange={handlersPanel2SwitchDictationVocabsMode} size="small" checkedChildren="英" unCheckedChildren="中" />
                                 </div>
                             </div>
                         </section>
@@ -286,7 +286,7 @@ const View = () => {
                             onChange={(e) => handlersTextInput(e.target.value)}
                             autoSize
                             style={{ minHeight: "100px", borderRadius: "0", color: "#000" }}
-                            placeholder="Input sentences or words.&#10;EX: wear,wears,wore,worn,wearing"
+                            placeholder="Input sentences or vocabs.&#10;EX: wear,wears,wore,worn,wearing"
                         />
                     </section>
                 </aside>
