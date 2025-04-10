@@ -175,16 +175,16 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\
             const endTime = fnFloatToASSTime(fnSRTTimeToFloat(sentence.endTime));
             if (sentence.texts.length === 1) {
                 const textTrans = sentence.texts[0].split("\n");
-                dialogues.push(`Dialogue: 0,${startTime},${endTime},EN,,0,0,0,,${assTextFilter(textTrans[0], 0, vocabsEnSet, textEnSpecStyle, script.assFormat.cnLineBreak)}`);
-                dialogues.push(`Dialogue: 0,${startTime},${endTime},CN,,0,0,0,,${assTextFilter(textTrans[1], 1, vocabsCnSet, textCnSpecStyle, script.assFormat.cnLineBreak)}`);
+                textTrans[0] !== undefined && dialogues.push(`Dialogue: 0,${startTime},${endTime},EN,,0,0,0,,${assTextFilter(textTrans[0], 0, vocabsEnSet, textEnSpecStyle, script.assFormat.cnLineBreak)}`);
+                textTrans[1] !== undefined && dialogues.push(`Dialogue: 0,${startTime},${endTime},CN,,0,0,0,,${assTextFilter(textTrans[1], 1, vocabsCnSet, textCnSpecStyle, script.assFormat.cnLineBreak)}`);
             } else if (sentence.texts.length > 1) {
                 sentence.texts.forEach((line, index, texts) => {
                     const roleDia = paragraph.roles.length === texts.length ? paragraph.roles[index].split("-") : [];
                     const roleEN = roleDia.length === 2 ? roleDia[0] : "";
                     const roleCN = roleDia.length === 2 ? roleDia[1] : "";
                     const textDia = line.split("\n");
-                    dialogues.push(`Dialogue: 0,${startTime},${endTime},EN,,0,0,0,,${roleEN}: ${assTextFilter(textDia[0], 0, vocabsEnSet, textEnSpecStyle, script.assFormat.cnLineBreak)}`);
-                    dialogues.push(`Dialogue: 0,${startTime},${endTime},CN,,0,0,0,,${roleCN}: ${assTextFilter(textDia[1], 1, vocabsCnSet, textCnSpecStyle, script.assFormat.cnLineBreak)}`);
+                    textDia[0] !== undefined && dialogues.push(`Dialogue: 0,${startTime},${endTime},EN,,0,0,0,,${roleEN}: ${assTextFilter(textDia[0], 0, vocabsEnSet, textEnSpecStyle, script.assFormat.cnLineBreak)}`);
+                    textDia[1] !== undefined && dialogues.push(`Dialogue: 0,${startTime},${endTime},CN,,0,0,0,,${roleCN}: ${assTextFilter(textDia[1], 1, vocabsCnSet, textCnSpecStyle, script.assFormat.cnLineBreak)}`);
                 });
             }
         });
@@ -245,7 +245,7 @@ export const assWrite = async (input: string, output: string): Promise<void> => 
         const contentAss = assCreate(data);
         await fsPromise.writeFile(output, contentAss, "utf8");
     } catch (error) {
-        throw new Error(`Failed to write ass file: ${(error as Error).message}`);
+        throw new Error(`Failed to write ass file - ass format error or insufficient permissions: ${(error as Error).message}`);
     }
 };
 
@@ -259,7 +259,7 @@ export const assDemoWrite = async (input: string, output: string): Promise<void>
         const contentAss = assDemoCreate(data);
         await fsPromise.writeFile(output, contentAss, "utf8");
     } catch (error) {
-        throw new Error(`Failed to write ass file: ${(error as Error).message}`);
+        throw new Error(`Failed to write ass file - ass format error or insufficient permissions: ${(error as Error).message}`);
     }
 };
 

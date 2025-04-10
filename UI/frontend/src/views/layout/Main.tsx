@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "./Main.scss";
+
 const Main = () => {
     return (
         <main id="main">

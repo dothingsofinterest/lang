@@ -110,8 +110,8 @@ const View = () => {
     };
     const handlersVideoTimeUpdate = (e: any) => {
         if (inputMode) {
-            console.log("video current time:", `${fnFloatToSRTTime(e.target.currentTime)} / ${e.target.currentTime}`);
-            console.log("active sentence:", activeSentence);
+            // console.log("video current time:", `${fnFloatToSRTTime(e.target.currentTime)} / ${e.target.currentTime}`);
+            // console.log("active sentence:", activeSentence);
             const cur = sentences[activeSentence];
             if (cur !== undefined) {
                 fnSentenceHighlight(activeSentence);
@@ -254,9 +254,9 @@ const View = () => {
     }, [sentences]);
     return (
         <>
-            <Layout style={{ width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", backgroundColor: "#000" }}>
-                <aside id="asider" style={{ flex: "0 0 800px", position: "relative", height: "100%", padding: "32px 0 132px", boxSizing: "border-box", backgroundColor: "#202024" }}>
-                    <section id="asider" style={{ width: "100%", height: "32px", position: "absolute", right: "0", top: "0", backgroundColor: "#202024" }}>
+            <Layout id="script-view" className="main-inner">
+                <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 132px" }}>
+                    <section style={{ width: "100%", height: "32px", position: "absolute", right: "0", top: "0", backgroundColor: "#202024" }}>
                         <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
                             <Button icon={<RedoOutlined />} onClick={handlersPanelPlayAgain} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
                             <Button icon={<FastBackwardOutlined />} onClick={handlersPanelPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
@@ -270,7 +270,7 @@ const View = () => {
                     <Scrollbars>
                         <ScriptDOM dataArticle={dataArticle} activeSentence={activeSentence} />
                     </Scrollbars>
-                    <section id="asider" style={{ width: "100%", height: "132px", position: "absolute", left: "0", bottom: "0" }}>
+                    <section style={{ width: "100%", height: "132px", position: "absolute", left: "0", bottom: "0" }}>
                         <section id="asider" style={{ width: "100%", height: "32px", backgroundColor: "#202024" }}>
                             <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "space-between" }}>
                                 <div style={{ flex: 1, borderRadius: "0", display: "flex", justifyContent: "center", alignItems: "center", background: "#fff", backgroundColor: "#ccc", borderLeft: "1px solid #d9d9d9" }}>
@@ -289,16 +289,16 @@ const View = () => {
                             placeholder="Input sentences or vocabs.&#10;EX: wear,wears,wore,worn,wearing"
                         />
                     </section>
-                </aside>
-                <main style={{ flex: 1, display: "flex", height: "100%", justifyContent: "flex-start", boxSizing: "border-box", backgroundColor: "#ffffff1a" }}>
+                    <section style={{ display: "none" }}>
+                        <audio ref={refAudio} loop></audio>
+                    </section>
+                </div>
+                <div className="main-inner-item-main" style={{ display: "flex" }}>
                     <video controls style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
                         <source src={localOrigin} type="video/mp4" /> Your browser does not support video tag.
                     </video>
-                </main>
+                </div>
             </Layout>
-            <div style={{ display: "none" }}>
-                <audio ref={refAudio} loop></audio>
-            </div>
         </>
     );
 };

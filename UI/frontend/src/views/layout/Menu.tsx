@@ -7,7 +7,7 @@ import "./Menu.scss";
 const Menu = () => {
     const location = useLocation();
     return (
-        <nav id="menu">
+        <aside id="menu">
             <Link to="/set">
                 <Tooltip title="Project settings" mouseEnterDelay={1}>
                     <Button className={location.pathname + location.search === "/set" ? `menu-item active` : `menu-item`} type="primary" icon={<SettingOutlined />} />
@@ -28,7 +28,7 @@ const Menu = () => {
                     <Button size="large" className={location.pathname + location.search === "/video/subtitle" ? `menu-item active` : `menu-item`} type="primary" icon={<VideoCameraOutlined />} />
                 </Tooltip>
             </Link>
-        </nav>
+        </aside>
     );
 };
 

@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime } from "../../utils/script";
 import Script from "./Script";
 import "./Edit.scss";
+
 const Edit = () => {
     console.log("----------Render | Script/Edit----------");
     const localOriginCompress = useSelector((state: RootState) => state.video.localOriginCompress);
@@ -149,28 +150,26 @@ const Edit = () => {
         };
     }, []);
     return (
-        <>
-            <Layout style={{ width: "100%", height: "100%", position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", padding: "0 0 178px", boxSizing: "border-box", margin: "0", backgroundColor: "#000" }}>
-                <aside id="asider" style={{ flex: "0 0 800px", height: "100%", backgroundColor: "#202024" }}>
-                    <Script />
-                </aside>
-                <main style={{ flex: 1, height: "100%", display: "flex", justifyContent: "flex-start", boxSizing: "border-box", backgroundColor: "#ffffff1a" }}>
-                    <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
-                        <source src={localOriginCompress} type="video/mp4" /> Your browser does not support video tag.
-                    </video>
-                </main>
-                <footer style={{ width: "100%", height: "178px", position: "absolute", bottom: "0", left: "0", backgroundColor: "#2c2c31" }}>
-                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                        <Button icon={<FastBackwardOutlined />} onClick={handlersVideoPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                        <Button icon={playButton} onClick={handlersVideoPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                        <Button icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                        <Input value={current} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                        <input ref={refSlider} type="range" value={waveScale} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    </div>
-                    <div id="waver" style={{ height: "146px" }}></div>
-                </footer>
-            </Layout>
-        </>
+        <Layout id="script-edit" className="main-inner" style={{ position: "relative", padding: "0 0 178px", margin: "0" }}>
+            <div className="main-inner-item-aside">
+                <Script />
+            </div>
+            <div className="main-inner-item-main" style={{ display: "flex", justifyContent: "flex-start" }}>
+                <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
+                    <source src={localOriginCompress} type="video/mp4" /> Your browser does not support video tag.
+                </video>
+            </div>
+            <div className="main-inner-item-footer" style={{ height: "178px", position: "absolute", bottom: "0", left: "0" }}>
+                <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+                    <Button icon={<FastBackwardOutlined />} onClick={handlersVideoPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                    <Button icon={playButton} onClick={handlersVideoPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                    <Button icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                    <Input value={current} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                    <input ref={refSlider} type="range" value={waveScale} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                </div>
+                <div id="waver" style={{ height: "146px" }}></div>
+            </div>
+        </Layout>
     );
 };
 export default Edit;

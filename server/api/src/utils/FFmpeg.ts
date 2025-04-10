@@ -1,6 +1,7 @@
 import ffmpeg from "fluent-ffmpeg";
 import { LoggerSystem } from "../lib/Log";
 import { execSync } from "child_process";
+import path from "path";
 
 const ffmepgBin = process.env.FFMPEG_PATH;
 const ffprobeBin = process.env.FFMPEG_FFPROBE_PATH;
@@ -165,10 +166,9 @@ export const rasterizeSubtitleOnVideo = (inputVideo: string, inputASS: string, o
  */
 export const rasterizeSubtitleOnFrame = (inputVideo: string, inputASS: string, output: string): void => {
     try {
-        const commandFrame = `${ffmepgBin} -y -ss 00:00:05 -i \"${inputVideo}\" -frames:v 1 origin_frame.png`;
-        console.log("commandFrame", commandFrame);
+        const dirPath = path.dirname(output);
+        const commandFrame = `${ffmepgBin} -y -ss 00:00:05 -i \"${inputVideo}\" -frames:v 1 \"${dirPath}/origin_frame.png\"`;
         const command = `${ffmepgBin} -y -i origin_frame.png -vf "ass='${inputASS.replace(":", "\\:")}'" \"${output}\"`;
-        console.log("command", command);
         execSync(commandFrame, { encoding: "utf8" });
         execSync(command, { encoding: "utf8" });
         console.log("rasterizing subtitle on frame completed.", command);

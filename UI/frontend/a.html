@@ -5,34 +5,123 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Extract MP4 Audio</title>
         <style>
-            * { outline: none; }
-            html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
-            body { margin: 0; padding: 0; font-size: 14px; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
-            ol, ul, li { list-style: none; }
-            article { width: 1000px; }
-            article h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
-            article h2 { text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
-            article .scene { background: #ccc; padding: 6px 0; margin-bottom: 10px; }
-            article .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
-            article .p .point { padding: 0 4px; }
-            article .p .role { font-style: normal; font-weight: 900; padding-right: 2px; }
-            article .p ul { font-style: normal; font-size: 12px; }
-            article footer { height: 100%; }
-            article footer .vocabs { margin-bottom: 10px; }
+            * {
+                outline: none;
+            }
+            html,
+            body,
+            p,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            ul,
+            ol,
+            li {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica;
+                color: #333;
+                word-wrap: break-word;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            ol,
+            ul,
+            li {
+                list-style: none;
+            }
+            article {
+                width: 1000px;
+            }
+            article h1 {
+                text-align: center;
+                font-size: 16px;
+                font-weight: 900;
+                line-height: 50px;
+                color: #000;
+                margin: 10px 0;
+            }
+            article h2 {
+                text-align: center;
+                font-size: 14px;
+                font-weight: 300;
+                line-height: 20px;
+                color: #000;
+                margin: 10px 16px;
+            }
+            article .scene {
+                background: #ccc;
+                padding: 6px 0;
+                margin-bottom: 10px;
+            }
+            article .p {
+                border: 1px dotted #000;
+                margin: 12px 20px;
+                padding: 2px 6px;
+                color: #000;
+                font-size: 14px;
+                line-height: 28px;
+            }
+            article .p .point {
+                padding: 0 4px;
+            }
+            article .p .role {
+                font-style: normal;
+                font-weight: 900;
+                padding-right: 2px;
+            }
+            article .p ul {
+                font-style: normal;
+                font-size: 12px;
+            }
+            article footer {
+                height: 100%;
+            }
+            article footer .vocabs {
+                margin-bottom: 10px;
+            }
             article footer .vocabs,
-            article footer .notes { color: #fff; line-height: 28px; background-color: #333; padding: 10px 15px; }
+            article footer .notes {
+                color: #fff;
+                line-height: 28px;
+                background-color: #333;
+                padding: 10px 15px;
+            }
             article footer .vocabs .item-index,
-            article footer .notes .item-index { font-weight: 900; }
+            article footer .notes .item-index {
+                font-weight: 900;
+            }
             article footer .vocabs .title,
-            article footer .notes .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
-            article footer .title:before, 
-            article footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #fff; border-block-end: 0; transform: translateY(50%); content: ""; }
-       
-           
-
+            article footer .notes .title {
+                line-height: 36px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+                font-weight: 900;
+                font-size: 14px;
+            }
+            article footer .title:before,
+            article footer .title:after {
+                position: relative;
+                width: 50%;
+                border-block-start: 1px dotted #fff;
+                border-block-end: 0;
+                transform: translateY(50%);
+                content: "";
+            }
         </style>
     </head>
     <body>
-       <article id="article"><h1>The ALS Ice Bucket Challenge</h1><div class="scene"><h2>Boat</h2><div class="p"><p><i class="role">Lebron: </i><span class="point">I accept the challenge with Brandon Weems, Kevin Durant, Kevin Hart and DJ Steph Floss.</span><span class="point">And I nominate LeBron JR, Bryce Maximus and president Obama ALS challenge.</span></p></div></div><div class="scene"><h2>Outdoor</h2><div class="p"><p><i class="role">Swift: </i><span class="point">Hey, I'm Taylor.</span><span class="point">And I want to thank Lily Aldridge and Ingrid Michaelson for this challenge.</span><span class="point">I want to nominate Selena Gomez, Emma Stone and Ed Sheeran.</span><span class="point">We're not just casually holding all these hundred dollar bills.</span><span class="point">We're actually gonna put our money where our ALS are and every single person you see here.</span><span class="point">We're gonna donate on their behalf a hundred dollars each.</span></p></div></div><div class="scene"><h2>Top of Trump Tower</h2><div class="p"><p><i class="role">Trump: </i><span class="point">I've been called out by everybody for the ALS ice bucket challenge.</span><span class="point">Simpson, Mike Tyson, Vince McMahon like everybody's going crazy over this thing.</span><span class="point">I guess they want to see whether or not it's my real hair which it is.</span><span class="point">So here's what I'm gonna do.</span><span class="point">Miss Universe and Miss USA, I own it.</span><span class="point">They're gonna really do a number on me.</span><span class="point">I'm challenging president Obama, my son Donald, my son Eric.</span><span class="point">Let's go, ladies.</span><span class="point">What a mess.</span></p></div></div><div class="scene"><h2>Studio</h2><div class="p"><p><i class="role">Ellen: </i><span class="point">Such a good cause though.</span><span class="point">It's cold just to touch it.</span></p></div><div class="p"><ul class="point"><li><i class="role">Ellen: </i><span>This is a lot of water.</span></li><li><i class="role">Kardashian: </i><span>I don't wanna see this happening to me.</span></li></ul></div><div class="p"><p><i class="role">Ellen: </i><span class="point">You were not taking a picture.</span></p></div></div><div class="scene"><h2>Chicago</h2><div class="p"><p><i class="role">Curry: </i><span class="point">All right, this is team USA ALS bucket challenge. We challenge president Obama, Chicago Oprah.</span></p></div></div><div class="scene"><h2>Home</h2><div class="p"><p><i class="role">Bill Gates: </i><span class="point">I'm here to join the people bringing attention to Lou Gehrig's disease by taking a ALS ice bucket challenge.</span><span class="point">I'm going to challenge three more people, Elon Musk, Ryan Seacrest, Chris Anderson of TED.</span><span class="point">Consider yourself challenged.</span><span class="point">You have 24 hours. Good luck.</span></p></div></div><footer style="height: 100%;"><div class="vocabs"><div class="title">vocabs</div><p><span class="item-index">[1] </span>v.点名;挑选, nominate/nominates/nominated/nominated/nominating, /ˈnɑːmɪneɪt/</p><p><span class="item-index">[2] </span>v.接受, accept/accepts/accepted/accepted/accepting, /əkˈsept/</p><p><span class="item-index">[3] </span>n.挑战, challenge/challenges, /ˈtʃælɪndʒ/</p><p><span class="item-index">[4] </span>prep.关于, with, /wɪð/</p><p><span class="item-index">[5] </span>adv.随便地, casually, /ˈkæʒjʊəlɪ/</p><p><span class="item-index">[6] </span>n.美钞, dollar bill/dollar bills, /bɪl/</p><p><span class="item-index">[7] </span>adv.事实上, actually, /ˈæktʃuəli/</p><p><span class="item-index">[8] </span>v.捐赠, donate/donates/donated/donated/donating, /ˈdoʊneɪt/</p><p><span class="item-index">[9] </span>prep.代表他们, on their behalf, /bɪˈhæf/</p><p><span class="item-index">[10] </span>v.号召, call out, /a/</p><p><span class="item-index">[11] </span>n.桶, bucket/buckets, /ˈbʌkɪt/</p><p><span class="item-index">[12] </span>v.戏弄;搞, do a number on, /a/</p><p><span class="item-index">[13] </span>n.女士, lady/ladies, /ˈleɪdi/</p><p><span class="item-index">[14] </span>n.糟糕, mess/messes, /mes/</p><p><span class="item-index">[15] </span>n.世界小姐, Miss Universe, /ˈjuːnɪvɜːrs/</p><p><span class="item-index">[16] </span>v.猜, guess/guesses/guessed/guessed/guessing, /ɡes/</p><p><span class="item-index">[17] </span>n.毛发, hair/hairs, /her/</p><p><span class="item-index">[18] </span>v.接触, touch/touches/touched/touched/touching, /tʌtʃ/</p><p><span class="item-index">[19] </span>adj.凉的, cold/colder/coldest, /koʊld/</p><p><span class="item-index">[20] </span>n.芝加哥, Chicago, /ʃəˈkɑˌgoʊ/</p><p><span class="item-index">[21] </span>n.疾病, disease/diseases, /dɪˈziːz/</p><p><span class="item-index">[22] </span>v.认为, consider/considers/considered/considered/considering, /kənˈsɪdər/</p></div><div class="notes"><div class="title">Notes</div><div><span class="item-index">[1] </span><span>Consider yourself challenged 是祈使句。完整句子是：You consider yourself challenged. 你就认为你自己被挑战了吧</span></div></div></footer></article>
+        <div style="border: 1px solid red; background: purple">
+            <div style="border: 1px solid green; width: 2200px">abc</div>
+        </div>
     </body>
 </html>

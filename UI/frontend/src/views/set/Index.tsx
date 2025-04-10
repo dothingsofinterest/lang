@@ -11,6 +11,7 @@ import { videoUpload, videoCompress, scriptUpload } from "../../api/requestFile"
 import printJS from "print-js";
 import ScriptDOM from "../script/ScriptDOM";
 import ReactDOMServer from "react-dom/server";
+import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -151,44 +152,40 @@ const Index = () => {
     }, []);
     console.log("----------Rendered | Set/Index Component----------");
     return (
-        <>
-            <Layout style={{ width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", backgroundColor: "#000" }}>
-                <aside id="asider" style={{ flex: "0 0 800px", position: "relative", height: "100%", padding: "32px 0 132px", boxSizing: "border-box", backgroundColor: "#202024" }}>
-                    <section id="asider" style={{ width: "100%", height: "auto", position: "absolute", right: "0", top: "0", backgroundColor: "#202024", overflow: "hidden" }}>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Upload showUploadList={false} beforeUpload={handlersUploadVideo} disabled={processings[0]}>
-                                <Button icon={<PlusCircleOutlined />} loading={processings[0]} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc", justifyContent: "center" }} />
-                            </Upload>
-                        </div>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Project name: " value={projectName} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
-                        </div>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Local video : " value={localOrigin} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
-                        </div>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Local compressed video : " value={localOriginCompress} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
-                        </div>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Upload beforeUpload={handlersImportScript} showUploadList={false}>
-                                <Button icon={<UploadOutlined />} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
-                                    Import
-                                </Button>
-                            </Upload>
-                            <Button icon={<DownloadOutlined />} onClick={handlersExportScript} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Export
-                            </Button>
-                            <Button icon={<PrinterOutlined />} onClick={handlersPrint} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
-                                Print
-                            </Button>
-                        </div>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                            <Input addonBefore="Script Name: " value={script.name} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
-                        </div>
-                    </section>
-                </aside>
-            </Layout>
-        </>
+        <Layout className="main-inner" id="set-index">
+            <div className="main-inner-item-main">
+                <section>
+                    <Upload showUploadList={false} beforeUpload={handlersUploadVideo} disabled={processings[0]}>
+                        <Button icon={<PlusCircleOutlined />} loading={processings[0]} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc", justifyContent: "center" }} />
+                    </Upload>
+                </section>
+                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                    <Input addonBefore="Project name: " value={projectName} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                </section>
+                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                    <Input addonBefore="Local video : " value={localOrigin} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                </section>
+                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                    <Input addonBefore="Local compressed video : " value={localOriginCompress} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                </section>
+                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                    <Upload beforeUpload={handlersImportScript} showUploadList={false}>
+                        <Button icon={<UploadOutlined />} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
+                            Import
+                        </Button>
+                    </Upload>
+                    <Button icon={<DownloadOutlined />} onClick={handlersExportScript} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                        Export
+                    </Button>
+                    <Button icon={<PrinterOutlined />} onClick={handlersPrint} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                        Print
+                    </Button>
+                </section>
+                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                    <Input addonBefore="Script Name: " value={script.name} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                </section>
+            </div>
+        </Layout>
     );
 };
 export default Index;

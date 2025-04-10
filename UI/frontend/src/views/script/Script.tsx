@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateParagraphsByInsert, updateParagraphsByDelete, updateParagraphsByCut, updateParagraphsByInsertSentence, updateParagraphsByDeleteSentence, updateName, updateRoles, updateScenes, updateVocabs, updateNotes, updateSentenceText, updateSentenceTime, updateParagraphScene, updateParagraphRole, updateTimeOffset } from "../../stores/reducers/script";
 import { fnParseVocabs, fnFloatToSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import "./Script.scss";
+
 const Script = React.memo(() => {
     console.log("----------Mounted | Script/Script----------");
     const dispatch = useDispatch();
@@ -173,7 +174,7 @@ const Script = React.memo(() => {
         refScrollbar.current?.scrollTop(refScrollTop.current);
     }, [renderVersion]);
     return (
-        <Scrollbars key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
+        <Scrollbars id="script-script" key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
             <div ref={refPanel} style={{ width: "100%", marginBottom: "10px", height: "32px", display: "flex", justifyContent: "space-between" }}>
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubInsertParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                     P
