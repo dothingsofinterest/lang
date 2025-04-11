@@ -125,12 +125,6 @@ const Script = React.memo(() => {
     const handlersSubUpdateScene = (value: string, key: string) => {
         dispatch(updateParagraphScene({ pKey: parseInt(key), text: value.trim() }));
     };
-    const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
-        if (event.key === "7") {
-        } else if (event.key === "9") {
-        } else if (event.key === "8") {
-        }
-    };
     const handlersSubSetCurSentence = (key: string) => {
         refCurSentenceKey.current = key;
     };
@@ -163,10 +157,8 @@ const Script = React.memo(() => {
     // Template Functions
     useEffect(() => {
         console.log("----------Mounted | Script/Script----------");
-        window.addEventListener("keydown", handlersEventKeyboardOnDown);
         return () => {
             console.log("----------Unmounted | Script/Script----------");
-            window.removeEventListener("keydown", handlersEventKeyboardOnDown);
         };
     }, []);
     useEffect(() => {

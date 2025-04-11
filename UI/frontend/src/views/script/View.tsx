@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Layout, Input, Button, Switch } from "antd";
 import { Script as DataScript, Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -28,18 +28,13 @@ const View = () => {
     const [vocabs, setVocabs] = useState<string[]>([]);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
+    const refClosure = useRef({
+        refVideo: refVideo,
+        localOrigin: localOrigin,
+        sentences: sentences,
+        activeSentence: activeSentence,
+    });
     // Event Handlers
-    const handlersLivesWatchSentences = () => {
-        if (localOrigin && refVideo.current) {
-            if (activeSentence !== 0) {
-                const cur = sentences[activeSentence];
-                console.log("cur", cur);
-                if (cur !== undefined) {
-                    refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
-                }
-            }
-        }
-    };
     const handlersPanelPlay = () => {
         if (refVideo.current && localOrigin) {
             if (refVideo.current.paused) {
@@ -59,6 +54,19 @@ const View = () => {
             if (cur !== undefined) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 refVideo.current?.play();
+                setPlayButton(<PauseCircleOutlined />);
+            }
+        } else {
+            alert("Please upload video.");
+        }
+    };
+    const handlersEventPlayAgain = () => {
+        const closure = refClosure.current;
+        if (closure.refVideo.current && closure.localOrigin) {
+            const cur = closure.sentences[closure.activeSentence];
+            if (cur !== undefined) {
+                closure.refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
+                closure.refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
             }
         } else {
@@ -151,8 +159,7 @@ const View = () => {
         setDictationVocabsMode(v);
     };
     const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
-        console.log("event.key", event.key);
-        console.log("event.code", event.code);
+        console.log(event);
         if (event.code === "NumpadSubtract") {
             handlersPanelPlayBackward();
         }
@@ -160,7 +167,7 @@ const View = () => {
             handlersPanelPlayForward();
         }
         if (event.code === "F8") {
-            handlersPanelPlayAgain();
+            handlersEventPlayAgain();
         }
     };
     const handlersTextInput = (value: string) => {
@@ -218,30 +225,24 @@ const View = () => {
     };
     // Functions
     // Lives Hook
-    const livesHookParseScriptData = () => {
-        if (script.name) {
+    const livesHooksInit = () => {
+        if (!script.name || !localOrigin || !refVideo.current) {
+            console.log("Script or Video is required.");
+        } else {
             const sentences: DataSentence[] = [];
             script.paragraphs.forEach((v: DataParagraph) => {
                 sentences.push(...v.sentences);
             });
+            refVideo.current.load();
+            refVideo.current.currentTime = fnSRTTimeToFloat(sentences[activeSentence].startTime);
             setSentences(sentences);
             setVocabs(script.vocabs);
-        } else {
-            console.log("Script not set.");
-        }
-    };
-    const livesHookPreLoadVideo = () => {
-        if (localOrigin && refVideo.current) {
-            refVideo.current.load();
-        } else {
-            console.log("Video not set.");
         }
     };
     // Lives Hook
     useEffect(() => {
         console.log("----------Mounted | Script/View----------");
-        livesHookParseScriptData();
-        livesHookPreLoadVideo();
+        livesHooksInit();
         window.addEventListener("keydown", handlersEventKeyboardOnDown);
         return () => {
             console.log("----------Unmounted | Script/View----------");
@@ -249,9 +250,13 @@ const View = () => {
         };
     }, []);
     useEffect(() => {
-        console.log("----------Watch sentences | Script/View----------");
-        handlersLivesWatchSentences();
-    }, [sentences]);
+        refClosure.current = {
+            refVideo: refVideo,
+            localOrigin: localOrigin,
+            sentences: sentences,
+            activeSentence: activeSentence,
+        };
+    }, [refVideo, localOrigin, sentences, activeSentence]);
     return (
         <>
             <Layout id="script-view" className="main-inner">

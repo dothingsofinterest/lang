@@ -84,19 +84,6 @@ const Edit = () => {
         await navigator.clipboard.writeText(SRTTime);
         setCurrent(`${SRTTime} / ${e.target.currentTime}`);
     };
-    const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
-        if (event.key === "7") {
-        } else if (event.key === "9") {
-        } else if (event.key === "8") {
-        }
-    };
-    const handlersEventBeforeunload = (event: BeforeUnloadEvent) => {
-        // 自定义提示信息 (大多数现代浏览器会忽略自定义消息，显示默认提示)
-        const message = "你有未保存的更改，确定要离开吗？";
-        event.preventDefault(); // 阻止默认行为 (重要：在某些浏览器中仍然需要)
-        event.returnValue = message; // 设置提示信息
-        return message; // 某些浏览器可能使用此返回值
-    };
     // Lives Hook
     const livesHookCreateWavesurfer = () => {
         if (refVideo.current && localOriginCompress) {
@@ -140,13 +127,9 @@ const Edit = () => {
     useEffect(() => {
         console.log("----------Mounted | Script/Edit----------");
         livesHookCreateWavesurfer();
-        window.addEventListener("keydown", handlersEventKeyboardOnDown);
-        window.addEventListener("beforeunload", handlersEventBeforeunload);
         // Unmounted
         return () => {
             console.log("----------Unmounted | Script/Edit----------");
-            window.removeEventListener("keydown", handlersEventKeyboardOnDown);
-            window.removeEventListener("beforeunload", handlersEventBeforeunload);
         };
     }, []);
     return (
