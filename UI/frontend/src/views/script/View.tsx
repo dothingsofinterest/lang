@@ -230,7 +230,7 @@ const View = () => {
                 sentences.push(...v.sentences);
             });
             refVideo.current.load();
-            refVideo.current.currentTime = fnSRTTimeToFloat(sentences[activeSentence].startTime);
+            refVideo.current.currentTime = sentences[activeSentence] !== undefined ? fnSRTTimeToFloat(sentences[activeSentence].startTime) : 0;
             setSentences(sentences);
             setVocabs(script.vocabs);
         }

@@ -7,7 +7,7 @@ const rootPath = "D:/Github/lang";
 gulp.task("compileserver", shell.task([`cd ${rootPath}/server/api && tsc`, `cd ${rootPath}/server/ui && tsc`]));
 gulp.task("compileui", shell.task([`cd ${rootPath}/ui/frontend && npm run build`]));
 gulp.task("copy", () => {
-    return gulp.src(`${rootPath}/ui/frontend/dist/**/*`).pipe(gulp.dest(`${rootPath}/server/ui/dist/views/frontend/`));
+    return gulp.src(`${rootPath}/ui/frontend/dist/**/*`, { allowEmpty: true, encoding: false  }).pipe(gulp.dest(`${rootPath}/server/ui/dist/views/frontend/`));
 });
 gulp.task("build", gulp.series("compileserver", "compileui", "copy"));
 

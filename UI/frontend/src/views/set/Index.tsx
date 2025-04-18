@@ -3,7 +3,7 @@ import { Layout, Input, Button, Upload } from "antd";
 import { PlusCircleOutlined, UploadOutlined, PrinterOutlined, DownloadOutlined, LogoutOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateName, updateProcessings } from "../../stores/reducers/project";
+import { updateName, updateActiveSentence, updateProcessings } from "../../stores/reducers/project";
 import { updateLocalOrigin, updateLocalOriginCompress } from "../../stores/reducers/video";
 import { updateData } from "../../stores/reducers/script";
 import { clearToken } from "../../stores/reducers/auth";
@@ -37,6 +37,8 @@ const Index = () => {
                 if (res.code === 1) {
                     // Set Project Name
                     dispatch(updateName(res.data.project));
+                    // Reset avtive sentence
+                    dispatch(updateActiveSentence(0));
                     // Create Local Video URL
                     dispatch(updateLocalOrigin(URL.createObjectURL(file)));
                     // Create Local Low Video URL
@@ -75,6 +77,8 @@ const Index = () => {
                             if (res.code === 1) {
                                 // Set Project Name
                                 dispatch(updateName(res.data.project));
+                                // Reset avtive sentence
+                                dispatch(updateActiveSentence(0));
                                 console.log("Upload succeed.");
                             } else {
                                 alert(res.message);
