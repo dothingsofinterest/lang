@@ -168,7 +168,7 @@ export const rasterizeSubtitleOnFrame = (inputVideo: string, inputASS: string, o
     try {
         const dirPath = path.dirname(output);
         const commandFrame = `${ffmepgBin} -y -ss 00:00:05 -i \"${inputVideo}\" -frames:v 1 \"${dirPath}/origin_frame.png\"`;
-        const command = `${ffmepgBin} -y -i origin_frame.png -vf "ass='${inputASS.replace(":", "\\:")}'" \"${output}\"`;
+        const command = `${ffmepgBin} -y -i \"${dirPath}/origin_frame.png\" -vf "ass='${inputASS.replace(":", "\\:")}'" \"${output}\"`;
         execSync(commandFrame, { encoding: "utf8" });
         execSync(command, { encoding: "utf8" });
         console.log("rasterizing subtitle on frame completed.", command);

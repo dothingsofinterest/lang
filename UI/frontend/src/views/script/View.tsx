@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Layout, Input, Button, Switch } from "antd";
-import { Script as DataScript, Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types";
+import { Script as DataScript, Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types/Data";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateActiveSentence, updatePlayStop } from "../../stores/reducers/project";
 import { fnFloatToSRTTime, fnSRTTimeToFloat } from "../../utils/script";
-import { ttsGen } from "../../api/request";
+import { ttsGen } from "../../api/requestAuth";
 import "./View.scss";
 import ScriptDOM from "./ScriptDOM";
 const View = () => {
@@ -30,7 +30,6 @@ const View = () => {
     const refAudio = useRef<HTMLAudioElement>(null);
     const refClosure = useRef({
         refVideo: refVideo,
-        localOrigin: localOrigin,
         sentences: sentences,
         activeSentence: activeSentence,
     });
@@ -62,15 +61,13 @@ const View = () => {
     };
     const handlersEventPlayAgain = () => {
         const closure = refClosure.current;
-        if (closure.refVideo.current && closure.localOrigin) {
+        if (closure.refVideo.current && localOrigin) {
             const cur = closure.sentences[closure.activeSentence];
             if (cur !== undefined) {
                 closure.refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 closure.refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
             }
-        } else {
-            alert("Please upload video.");
         }
     };
     const handlersPanelPlayBackward = () => {
@@ -159,7 +156,6 @@ const View = () => {
         setDictationVocabsMode(v);
     };
     const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
-        console.log(event);
         if (event.code === "NumpadSubtract") {
             handlersPanelPlayBackward();
         }
@@ -250,13 +246,13 @@ const View = () => {
         };
     }, []);
     useEffect(() => {
+        console.log("----------Watch [refVideo,localOrigin,sentences,activeSentence] | Script/View----------");
         refClosure.current = {
             refVideo: refVideo,
-            localOrigin: localOrigin,
             sentences: sentences,
             activeSentence: activeSentence,
         };
-    }, [refVideo, localOrigin, sentences, activeSentence]);
+    }, [refVideo, sentences, activeSentence]);
     return (
         <>
             <Layout id="script-view" className="main-inner">

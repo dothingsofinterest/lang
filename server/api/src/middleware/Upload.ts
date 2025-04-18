@@ -3,6 +3,7 @@ import path from "path";
 import multer from "multer";
 import { LoggerSystem } from "../lib/Log";
 import { Request, Response, NextFunction } from "express";
+import { md5 } from "js-md5";
 
 const uploadFile = (req: Request, res: Response, next: NextFunction) => {
     uploaderFile.single("file")(req, res, (err) => {
@@ -46,11 +47,19 @@ const uploadVideo = (req: Request, res: Response, next: NextFunction) => {
 
 const storageVideo = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = `${process.env.UPLOAD_PATH}/${Date.now()}`;
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+        try {
+            const uploadPath = process.env.UPLOAD_PATH;
+            const project = md5(file.originalname.split(".")[0]).slice(25);
+            const dir = req.user?.id ? `${uploadPath}/user${req.user.id}/${project}` : `${uploadPath}/anonymous/${project}`;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            cb(null, dir);
+        } catch (error: any) {
+            console.error(error.message);
+            LoggerSystem.error(error.message);
+            cb(null, "abcdefgh");
         }
-        cb(null, dir);
     },
     filename: (req, file, cb) => {
         cb(null, `origin.mp4`);
@@ -59,8 +68,19 @@ const storageVideo = multer.diskStorage({
 
 const storageFile = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = `${process.env.UPLOAD_PATH}/${req.query.project}`;
-        cb(null, fs.existsSync(dir) ? dir : "abcdefg");
+        try {
+            const uploadPath = process.env.UPLOAD_PATH;
+            const project = md5(file.originalname.split(".")[0]).slice(25);
+            const dir = req.user?.id ? `${uploadPath}/user${req.user.id}/${project}` : `${uploadPath}/anonymous/${project}`;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            cb(null, dir);
+        } catch (error: any) {
+            console.error(error.message);
+            LoggerSystem.error(error.message);
+            cb(null, "abcdefgh");
+        }
     },
     filename: (req, file, cb) => {
         cb(null, `origin.json`);

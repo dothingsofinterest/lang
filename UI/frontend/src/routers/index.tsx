@@ -1,5 +1,6 @@
 import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react-router-dom";
 import Login from "../views/public/Login";
+import NotFound from "../views/public/NotFound";
 import App from "../views/layout/App";
 import Set from "../views/set/Index";
 import ScriptEdit from "../views/script/Edit";
@@ -32,6 +33,10 @@ const routes = [
                 element: <VideoSubtitle />,
             },
         ],
+    },
+    {
+        path: "*",
+        element: <NotFound />,
     },
 ];
 

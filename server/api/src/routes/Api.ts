@@ -1,42 +1,39 @@
 import express, { Request, Response } from "express";
-import { doList as LCDoList, doInsert as LCDoInsert, doUpdate as LCDoUpdate, doDelete as LCDoDelete } from "../controller/ListeningController";
-import { conList as ECList, conInsert as ECInsert, conUpdate as ECUpdate, conDelete as ECDelete } from "../controller/EssayController";
-import { conList as ICList, conInsert as ICInsert, conUpdate as ICUpdate, conDelete as ICDelete } from "../controller/ItemController";
-import { conList as GCList, conInsert as GCInsert, conUpdate as GCUpdate, conDelete as GCDelete } from "../controller/GrammarController";
-import { conGenerate as TCGenerate } from "../controller/TtsController";
-import { conUpdatePass as UCUpdatePass } from "../controller/UserController";
+import { conGenerate } from "../controller/TtsController";
+import { upload as videoUpload, stream as videoStream, compress as videoCompress, subtitle as videoSubtitle, subtitlePreview as videoSubtitlePreview, download as videoDownload } from "../controller/VideoController";
+import { upload as scriptUpload, updateAss as scriptUpdateAss } from "../controller/ScriptController";
+import { uploadFile as uploadFileMiddleware, uploadVideo as uploadVideoMiddleware } from "../middleware/Upload";
 
 const router = express.Router();
 
+// Index
 router.get("/", (res: Response) => {
     res.json({ code: 1, message: "success" });
 });
+// Index
 
-router.get("/items", ICList);
-router.post("/items", ICInsert);
-router.put("/items/:id", ICUpdate);
-router.delete("/items/:id", ICDelete);
+// Video
+router.post("/video/upload", uploadVideoMiddleware, videoUpload);
+router.get("/video/download", videoDownload);
+router.get("/video/stream", videoStream);
+router.get("/video/compress", videoCompress);
+router.get("/video/subtitle", videoSubtitle);
+router.get("/video/subtitle-preview", videoSubtitlePreview);
+// Video
 
-router.get("/tts/gen", TCGenerate);
+// Script
+router.post("/script/upload", uploadFileMiddleware, scriptUpload);
+router.post("/script/update-ass", scriptUpdateAss);
+// Script
 
-router.get("/listening", LCDoList);
-router.post("/listening", LCDoInsert);
-router.put("/listening/:id", LCDoUpdate);
-router.delete("/listening/:id", LCDoDelete);
+// TTS
+router.get("/tts/gen", conGenerate);
+// TTS
 
-router.get("/essays", ECList);
-router.post("/essays", ECInsert);
-router.put("/essays/:id", ECUpdate);
-router.delete("/essays/:id", ECDelete);
-
-router.get("/grammars", GCList);
-router.post("/grammars", GCInsert);
-router.put("/grammars/:id", GCUpdate);
-router.delete("/grammars/:id", GCDelete);
-
-router.put("/users/updatePass", UCUpdatePass);
+// User
 router.post("/logout", (req: Request, res: Response) => {
     res.json({ code: 1, message: "success" });
 });
+// User
 
 export default router;

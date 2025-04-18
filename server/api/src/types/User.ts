@@ -16,3 +16,14 @@ interface JwtPayload {
 }
 
 export type { TypeEntity, JwtPayload };
+
+/* Data Structure - User */
+interface User {
+    id: number;
+    username: string;
+    password_hashed: string;
+    status: number;
+}
+
+export type { User };
+/* Data Structure - User */

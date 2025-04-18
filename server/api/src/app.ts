@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Routes API
-app.use("/api", routes);
-app.use("/api/auth", checkUnauthorized, routesAuth);
+app.use("/api/open", routes);
+app.use("/api", checkUnauthorized, routesAuth);
 // Static assets
 app.use("/uploads", express.static("uploads"));
 // Routes 404

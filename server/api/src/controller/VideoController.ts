@@ -24,7 +24,7 @@ export const upload = async (req: Request, res: Response) => {
 
 export const download = async (req: Request, res: Response) => {
     const schema = Joi.object({
-        project: Joi.number().integer().required(),
+        project: Joi.string().required(),
         video: Joi.string().required(),
     });
     const { error, value } = schema.validate(req.query);
@@ -35,7 +35,7 @@ export const download = async (req: Request, res: Response) => {
             message: error.message,
         });
     }
-    const projectPath = `${process.env.UPLOAD_PATH}/${value.project}`;
+    const projectPath = `${process.env.UPLOAD_PATH}/user${req.user?.id}/${value.project}`;
     if (!fs.existsSync(projectPath)) {
         return res.status(200).json({
             code: 0,
@@ -67,7 +67,7 @@ export const download = async (req: Request, res: Response) => {
 
 export const stream = async (req: Request, res: Response) => {
     const schema = Joi.object({
-        project: Joi.number().integer().required(),
+        project: Joi.string().required(),
         video: Joi.string().required(),
     });
     const { error, value } = schema.validate(req.query);
@@ -78,7 +78,7 @@ export const stream = async (req: Request, res: Response) => {
             message: error.message,
         });
     }
-    const projectPath = `${process.env.UPLOAD_PATH}/${value.project}`;
+    const projectPath = `${process.env.UPLOAD_PATH}/user${req.user?.id}/${value.project}`;
     if (!fs.existsSync(projectPath)) {
         return res.status(200).json({
             code: 0,
@@ -120,7 +120,7 @@ export const stream = async (req: Request, res: Response) => {
 
 export const compress = async (req: Request, res: Response, next: NextFunction) => {
     const schema = Joi.object({
-        project: Joi.number().integer().required(),
+        project: Joi.string().required(),
     });
     const { error, value } = schema.validate(req.query);
     if (error) {
@@ -130,7 +130,7 @@ export const compress = async (req: Request, res: Response, next: NextFunction) 
             message: error.message,
         });
     }
-    const projectPath = `${process.env.UPLOAD_PATH}/${value.project}`;
+    const projectPath = `${process.env.UPLOAD_PATH}/user${req.user?.id}/${value.project}`;
     if (!fs.existsSync(projectPath)) {
         return res.status(200).json({
             code: 0,
@@ -187,7 +187,7 @@ export const compress = async (req: Request, res: Response, next: NextFunction) 
 
 export const subtitle = async (req: Request, res: Response) => {
     const schema = Joi.object({
-        project: Joi.number().integer().required(),
+        project: Joi.string().required(),
     });
     const { error, value } = schema.validate(req.query);
     if (error) {
@@ -197,7 +197,7 @@ export const subtitle = async (req: Request, res: Response) => {
             message: error.message,
         });
     }
-    const projectPath = `${process.env.UPLOAD_PATH}/${value.project}`;
+    const projectPath = `${process.env.UPLOAD_PATH}/user${req.user?.id}/${value.project}`;
     if (!fs.existsSync(projectPath)) {
         return res.status(200).json({
             code: 0,
@@ -268,7 +268,7 @@ export const subtitle = async (req: Request, res: Response) => {
 
 export const subtitlePreview = async (req: Request, res: Response) => {
     const schema = Joi.object({
-        project: Joi.number().integer().required(),
+        project: Joi.string().required(),
     });
     const { error, value } = schema.validate(req.query);
     if (error) {
@@ -278,7 +278,7 @@ export const subtitlePreview = async (req: Request, res: Response) => {
             message: error.message,
         });
     }
-    const projectPath = `${process.env.UPLOAD_PATH}/${value.project}`;
+    const projectPath = `${process.env.UPLOAD_PATH}/user${req.user?.id}/${value.project}`;
     if (!fs.existsSync(projectPath)) {
         return res.status(200).json({
             code: 0,

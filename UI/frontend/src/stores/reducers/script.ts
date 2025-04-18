@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Script as DataScript, Script as DataScriptAricle, Scene as DataScene, Paragraph as DataParagraph, PayloadScript, StateScript, AssFormat } from "../../types";
+import { Script as DataScript, Script as DataScriptAricle, Scene as DataScene, Paragraph as DataParagraph, PayloadScript, StateScript, AssFormat } from "../../types/Data";
 import { fnGetArticleData, fnSRTTimeToFloat, fnIsSRTTime } from "../../utils/script";
-import { lineBreak } from "html2canvas/dist/types/css/property-descriptors/line-break";
 
 const dataSentence = {
     key: "0-0",

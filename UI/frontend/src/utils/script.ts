@@ -1,4 +1,4 @@
-import { Script as DataScript, ScriptArticle as DataScriptArticle, Paragraph as DataParagraph } from "../types";
+import { Script as DataScript, ScriptArticle as DataScriptArticle, Paragraph as DataParagraph } from "../types/Data";
 import Joi from "joi";
 
 export const createJson = (script: DataScript, scriptTimeOffset: number): DataScript => {

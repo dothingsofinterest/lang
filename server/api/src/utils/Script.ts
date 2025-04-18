@@ -275,14 +275,19 @@ export const assTextFilter = (text: string, type: number, vocabs: string[], styl
     return content;
 };
 
-// 处理汉字无法自动换行的问题
+/**
+ * 处理汉字无法自动换行的问题
+ * \u4e00-\u9fa5：常用汉字
+ * \u3000-\u303F：CJK 符号和标点（如：、 。 《 》）
+ * \uFF00-\uFFEF：全角字符区（含：！＂＃￥……）
+ */
 export const assInsertLineBreak = (text: string, limit: number = 20) => {
     let res = "";
     let cnCount = 0;
     for (let i = 0; i < text.length; i++) {
         const char = text[i];
         res += char;
-        if (/[\u4e00-\u9fa5\uff00-\uffef]/.test(char)) {
+        if (/[\u4e00-\u9fa5\u3000-\u303F\uFF00-\uFFEF]/g.test(char)) {
             cnCount++;
             if (cnCount > 0 && cnCount % limit === 0) {
                 res += "\\N";

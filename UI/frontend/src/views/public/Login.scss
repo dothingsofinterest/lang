@@ -1,0 +1,40 @@
+#login {
+    height: 100%;
+    #logo {
+        background-color: #001529;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-image: url(../../assets/images/universe.png);
+        .logo-inner {
+            margin-top: 15%;
+            height: 120px;
+            box-sizing: border-box;
+            width: 100%;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2));
+            color: #ccc;
+            text-align: left;
+            line-height: 120px;
+            font-size: 50px;
+            padding-left: 30px;
+        }
+    }
+    #form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .ant-card {
+            width: 400px;
+            .ant-btn {
+                background-color: #666;
+                &:hover {
+                    background-color: #333;
+                }
+            }
+        }
+        .captcha {
+            height: 40px;
+            width: 130px;
+            cursor: pointer;
+        }
+    }
+}

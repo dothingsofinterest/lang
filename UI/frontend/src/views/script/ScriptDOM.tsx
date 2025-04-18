@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ScriptArticle as DataScriptArticle, Scene as DataScene } from "../../types";
+import { ScriptArticle as DataScriptArticle, Scene as DataScene } from "../../types/Data";
 
 interface ScriptDOMProps {
     dataArticle: DataScriptArticle;

@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { RequestResponse, RequestOAuthLoginParams, RequestTtsData } from "../types";
+import { Response, RequestDataLoginSimple } from "../types/Http";
 import { APIPrefix } from "../settings.js";
 
 // Request Instance
 const instance: AxiosInstance = axios.create({
-    baseURL: APIPrefix,
+    baseURL: `${APIPrefix}`,
     timeout: 10000,
 });
 // Request Instance
@@ -12,10 +12,10 @@ const instance: AxiosInstance = axios.create({
 // Request Instance Interceptor
 instance.interceptors.response.use(
     (response) => {
-        if (response.status === 200 && response.data.code === 1) {
+        if (response.status === 200) {
             return response.data;
         }
-        return Promise.reject(new Error(response.data.message, response.data));
+        return Promise.reject(response.data);
     },
     (error) => {
         return Promise.reject(error);
@@ -24,25 +24,19 @@ instance.interceptors.response.use(
 // Request Instance Interceptor
 
 // Login
-const OAuthLogin = (params: RequestOAuthLoginParams): Promise<RequestResponse> => {
-    return instance.post("/login", params);
+const OAuthLogin = (data: RequestDataLoginSimple): Promise<Response> => {
+    return instance.request({
+        method: "post",
+        url: `/open/login`,
+        data: data,
+    });
 };
-const OAuthCaptcha = (): Promise<RequestResponse> => {
+const OAuthCaptcha = (): Promise<Response> => {
     return instance.request({
         method: "get",
-        url: "/captcha",
+        url: "/open/captcha",
     });
 };
 // Login
 
-// TTS
-const ttsGen = (params: RequestTtsData): Promise<RequestResponse> => {
-    return instance.request({
-        method: "get",
-        url: "/tts/gen",
-        params: params,
-    });
-};
-// TTS
-
-export { OAuthLogin, OAuthCaptcha, ttsGen };
+export { OAuthLogin, OAuthCaptcha };

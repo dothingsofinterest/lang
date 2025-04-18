@@ -5,9 +5,9 @@ import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProcessings } from "../../stores/reducers/project";
 import { updateAssFormat } from "../../stores/reducers/script";
-import { videoGenerateSubtitleVideo, videoGetSubtitleVideoPreview, scriptUpdateAss } from "../../api/requestFile";
+import { AssFormat } from "../../types/Data";
+import { videoGenerateSubtitleVideo, videoGetSubtitleVideoPreview, scriptUpdateAss } from "../../api/requestAuth";
 import "./Subtitle.scss";
-import { AssFormat } from "../../types";
 
 const Subtitle = () => {
     console.log("----------Render | Video/Subtitle----------");

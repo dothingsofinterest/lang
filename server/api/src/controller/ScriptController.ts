@@ -5,41 +5,24 @@ import Joi from "joi";
 
 export const upload = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) {
-        console.log("Failed to find the file.");
+        console.error("Failed to find the file.");
         return res.status(200).json({
             code: 0,
             message: `Failed to find the file.`,
         });
     }
-    const schema = Joi.object({
-        project: Joi.number().integer().required(),
+    res.status(200).json({
+        code: 1,
+        message: `Upload succeed.`,
+        data: {
+            project: `${req.file?.destination.split("/").reverse()[0]}`,
+        },
     });
-    const { error, value } = schema.validate(req.query);
-    if (error) {
-        console.log("Failed to validate params: ", error.message);
-        return res.status(200).json({
-            code: 0,
-            message: `Failed to validate params.`,
-        });
-    }
-    try {
-        res.status(200).json({
-            code: 1,
-            message: `Upload succeed.`,
-        });
-    } catch (error: any) {
-        console.error("Failed to write ass: ", error);
-        LoggerSystem.error(error.message);
-        return res.status(200).json({
-            code: 0,
-            message: `Failed to write ass.`,
-        });
-    }
 };
 
-export const updateAss = async (req: Request, res: Response, next: NextFunction) => {
+export const updateAss = async (req: Request, res: Response) => {
     const schemaQuery = Joi.object({
-        project: Joi.number().integer().required(),
+        project: Joi.string().required(),
     });
     const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
     if (errorQuery) {
@@ -76,7 +59,7 @@ export const updateAss = async (req: Request, res: Response, next: NextFunction)
             message: error.message,
         });
     }
-    const inputJson = `${process.env.UPLOAD_PATH}/${valueQuery.project}/origin.json`;
+    const inputJson = `${process.env.UPLOAD_PATH}/user${req.user?.id}/${valueQuery.project}/origin.json`;
     if (!fs.existsSync(inputJson)) {
         return res.status(200).json({
             code: 0,

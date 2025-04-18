@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button, Upload } from "antd";
-import { PlusCircleOutlined, UploadOutlined, PrinterOutlined, DownloadOutlined, RetweetOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, UploadOutlined, PrinterOutlined, DownloadOutlined, LogoutOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateName, updateProcessings } from "../../stores/reducers/project";
 import { updateLocalOrigin, updateLocalOriginCompress } from "../../stores/reducers/video";
 import { updateData } from "../../stores/reducers/script";
+import { clearToken } from "../../stores/reducers/auth";
 import { createJson as fnCreateJson, validateJsonFile as fnValidateJsonFile } from "../../utils/script";
-import { videoUpload, videoCompress, scriptUpload } from "../../api/requestFile";
+import { videoUpload, videoCompress, scriptUpload } from "../../api/requestAuth";
 import printJS from "print-js";
 import ScriptDOM from "../script/ScriptDOM";
 import ReactDOMServer from "react-dom/server";
+import { useNavigate } from "react-router-dom";
 import "./Index.scss";
 
 const Index = () => {
@@ -23,6 +25,7 @@ const Index = () => {
     const localOriginCompress = useSelector((state: RootState) => state.video.localOriginCompress);
     const processings = useSelector((state: RootState) => state.project.processings);
     const [loadings, setLoadings] = useState<boolean[]>([]);
+    const navigate = useNavigate();
     // Event Handlers
     const handlersUploadVideo = async (file: any) => {
         if (/^(.+?)\.(mp4|MP4)$/g.test(file.name) && file.type === "video/mp4") {
@@ -56,37 +59,35 @@ const Index = () => {
     };
     const handlersImportScript = (file: any) => {
         if (/^(.+?)\.(json|JSON)$/g.test(file.name) && file.type === "application/json") {
-            if (projectName) {
-                const reader = new FileReader();
-                reader.readAsText(file);
-                reader.onload = async (e) => {
-                    try {
-                        if (e.target?.result) {
-                            const content = e.target.result as string;
-                            const data = JSON.parse(content);
-                            if (fnValidateJsonFile(data)) {
-                                dispatch(updateData(data));
-                                // Upload Script
-                                const formData = new FormData();
-                                formData.append("file", file);
-                                const res = await scriptUpload({ project: projectName }, formData);
-                                if (res.code === 1) {
-                                    console.log("Upload succeed.");
-                                } else {
-                                    alert(res.message);
-                                }
-                                document.title = data.name;
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = async (e) => {
+                try {
+                    if (e.target?.result) {
+                        const content = e.target.result as string;
+                        const data = JSON.parse(content);
+                        if (fnValidateJsonFile(data)) {
+                            dispatch(updateData(data));
+                            // Upload Script
+                            const formData = new FormData();
+                            formData.append("file", file);
+                            const res = await scriptUpload(formData);
+                            if (res.code === 1) {
+                                // Set Project Name
+                                dispatch(updateName(res.data.project));
+                                console.log("Upload succeed.");
                             } else {
-                                alert(`Json file format is invalid.`);
+                                alert(res.message);
                             }
+                            document.title = data.name;
+                        } else {
+                            alert(`Json file format is invalid.`);
                         }
-                    } catch (e: any) {
-                        alert(e.message);
                     }
-                };
-            } else {
-                alert(`Project name not be set`);
-            }
+                } catch (e: any) {
+                    alert(e.message);
+                }
+            };
         } else {
             alert("Please upload json file.");
         }
@@ -142,6 +143,10 @@ const Index = () => {
             alert(`Data not be set`);
         }
     };
+    const handlersLogout = () => {
+        dispatch(clearToken());
+        //navigate("/#login");
+    };
     // Event Handlers
     // Template Functions
     useEffect(() => {
@@ -154,21 +159,24 @@ const Index = () => {
     return (
         <Layout className="main-inner" id="set-index">
             <div className="main-inner-item-main">
-                <section>
+                <section className="sec upload">
                     <Upload showUploadList={false} beforeUpload={handlersUploadVideo} disabled={processings[0]}>
-                        <Button icon={<PlusCircleOutlined />} loading={processings[0]} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc", justifyContent: "center" }} />
+                        <Button icon={<PlusCircleOutlined />} loading={processings[0]} style={{ borderRadius: "0", width: "10%", backgroundColor: "#ccc", justifyContent: "center" }} />
                     </Upload>
+                    <Button icon={<LogoutOutlined />} onClick={handlersLogout} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
+                        Logout
+                    </Button>
                 </section>
-                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                <section className="sec">
                     <Input addonBefore="Project name: " value={projectName} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
-                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                <section className="sec">
                     <Input addonBefore="Local video : " value={localOrigin} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
-                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                <section className="sec">
                     <Input addonBefore="Local compressed video : " value={localOriginCompress} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
-                <section style={{ display: "flex", justifyContent: "space-between" }}>
+                <section className="sec upload">
                     <Upload beforeUpload={handlersImportScript} showUploadList={false}>
                         <Button icon={<UploadOutlined />} style={{ borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
                             Import
