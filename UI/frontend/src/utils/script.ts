@@ -44,7 +44,7 @@ export const fnParseVocabs = (text: string): string => {
                         }
                     }
                     if (i === 1) {
-                        const nameExt = [/第三人称单数(.*?)(\w+)/, /过去式(.*?)(\w+)/, /过去分词(.*?)(\w+)/, /现在分词(.*?)(\w+)/];
+                        const nameExt = [/第三人称单数(.*?)(\w+)/, /过去式(.*?)(\w+)/, /过去分词(.*?)(\w+)/, /现在进行时(.*?)(\w+)/];
                         for (let k = 0; k < nameExt.length; k++) {
                             const matchNameExt = text.match(nameExt[k]);
                             if (matchNameExt && matchNameExt[2]) {

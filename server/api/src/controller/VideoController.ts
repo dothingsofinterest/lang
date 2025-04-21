@@ -320,7 +320,7 @@ export const subtitlePreview = async (req: Request, res: Response) => {
             code: 1,
             message: `Succeed.`,
             data: {
-                preview: `${process.env.SITE_STATIC}/${value.project}/origin_subtitle_preview.png`,
+                preview: `${process.env.SITE_STATIC}/user${req.user?.id}/${value.project}/origin_subtitle_preview.png`,
             },
         });
     } catch (error: any) {

@@ -6,7 +6,7 @@ import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOut
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateActiveSentence, updatePlayStop } from "../../stores/reducers/project";
-import { fnFloatToSRTTime, fnSRTTimeToFloat } from "../../utils/script";
+import { fnFloatToSRTTime, fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import { ttsGen } from "../../api/requestAuth";
 import "./View.scss";
 import ScriptDOM from "./ScriptDOM";
@@ -50,7 +50,7 @@ const View = () => {
     const handlersPanelPlayAgain = () => {
         if (refVideo.current && localOrigin) {
             const cur = sentences[activeSentence];
-            if (cur !== undefined) {
+            if (cur !== undefined && fnIsSRTTime(cur.startTime)) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
@@ -63,7 +63,7 @@ const View = () => {
         const closure = refClosure.current;
         if (closure.refVideo.current && localOrigin) {
             const cur = closure.sentences[closure.activeSentence];
-            if (cur !== undefined) {
+            if (cur !== undefined && fnIsSRTTime(cur.startTime)) {
                 closure.refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 closure.refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
@@ -74,7 +74,7 @@ const View = () => {
         if (refVideo.current && localOrigin) {
             const prevIndex = activeSentence <= 0 ? 0 : activeSentence - 1;
             const prev = sentences[prevIndex];
-            if (prev !== undefined) {
+            if (prev !== undefined && fnIsSRTTime(prev.startTime)) {
                 dispatch(updateActiveSentence(prevIndex));
                 refVideo.current.currentTime = fnSRTTimeToFloat(prev.startTime);
                 refVideo.current?.play();
@@ -88,7 +88,7 @@ const View = () => {
         if (refVideo.current && localOrigin) {
             const nextIndex = activeSentence === sentences.length - 1 ? activeSentence : activeSentence + 1;
             const next = sentences[nextIndex];
-            if (next !== undefined) {
+            if (next !== undefined && fnIsSRTTime(next.startTime)) {
                 dispatch(updateActiveSentence(nextIndex));
                 refVideo.current.currentTime = fnSRTTimeToFloat(next.startTime);
                 refVideo.current?.play();
@@ -230,7 +230,7 @@ const View = () => {
                 sentences.push(...v.sentences);
             });
             refVideo.current.load();
-            refVideo.current.currentTime = sentences[activeSentence] !== undefined ? fnSRTTimeToFloat(sentences[activeSentence].startTime) : 0;
+            refVideo.current.currentTime = sentences[activeSentence] !== undefined && fnIsSRTTime(sentences[activeSentence].startTime) ? fnSRTTimeToFloat(sentences[activeSentence].startTime) : 0;
             setSentences(sentences);
             setVocabs(script.vocabs);
         }
