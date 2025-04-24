@@ -17,11 +17,11 @@ const Guard: React.FC<props> = ({ children }) => {
         const cookie = Cookies.get(`ACCESS_TOKEN`);
         if (!cookie) {
             dispatch(clearToken());
-            window.location.href = "/#login";
+            window.location.href = "/#/login";
         }
     }, [location.pathname]);
 
-    return token ? <>{children}</> : <Navigate to="/#login" replace />;
+    return token ? <>{children}</> : <Navigate to="/login" replace />;
 };
 
 export default Guard;

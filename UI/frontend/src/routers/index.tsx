@@ -18,22 +18,22 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="/set" replace />,
+                element: <Navigate to="set" replace />,
             },
             {
-                path: "/set",
+                path: "set",
                 element: <Set />,
             },
             {
-                path: "/script/edit",
+                path: "script/edit",
                 element: <ScriptEdit />,
             },
             {
-                path: "/script/view",
+                path: "script/view",
                 element: <ScriptView />,
             },
             {
-                path: "/video/subtitle",
+                path: "video/subtitle",
                 element: <VideoSubtitle />,
             },
         ],
