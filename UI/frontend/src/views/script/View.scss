@@ -76,9 +76,15 @@
                         content: "";
                     }
                 }
-                .item-index {
-                    font-weight: 900;
-                    margin-right: 4px;
+                .vocab-item {
+                    cursor: pointer;
+                    &.active {
+                        color: rgb(252, 221, 92);
+                    }
+                    .item-index {
+                        font-weight: 900;
+                        margin-right: 4px;
+                    }
                 }
             }
         }

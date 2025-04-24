@@ -5,7 +5,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateActiveSentence, updatePlayStop } from "../../stores/reducers/project";
+import { updateActiveSentence, updateActiveVocab, updatePlayStop } from "../../stores/reducers/project";
 import { fnFloatToSRTTime, fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import { ttsGen } from "../../api/requestAuth";
 import "./View.scss";
@@ -17,9 +17,9 @@ const View = () => {
     const dataArticle = useSelector((state: RootState) => state.script.dataArticle);
     const localOrigin = useSelector((state: RootState) => state.video.localOrigin);
     const activeSentence = useSelector((state: RootState) => state.project.activeSentence);
+    const activeVocab = useSelector((state: RootState) => state.project.activeVocab);
     const playStop = useSelector((state: RootState) => state.project.playStop);
     const [sentences, setSentences] = useState<DataSentence[]>([]);
-    const [vocabsCurIndex, setVocabsCurIndex] = useState(0);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [inputValue, setInputValue] = useState("");
     const [inputMode, setInputMode] = useState<boolean>(true); // true-sentence false-word
@@ -139,16 +139,12 @@ const View = () => {
         if (v) {
             if (refAudio.current) {
                 refAudio.current.pause();
-                setVocabsCurIndex(0);
             }
         } else {
-            fnPlayAudio(0);
+            fnPlayAudio(activeVocab);
             if (refVideo.current) {
                 refVideo.current.pause();
-                refVideo.current.currentTime = 0;
-                dispatch(updateActiveSentence(0));
                 setPlayButton(<PlayCircleOutlined />);
-                fnSentenceHighlight(0);
             }
         }
     };
@@ -179,10 +175,10 @@ const View = () => {
                 }
             } else {
                 const valueTrans = value.includes(",") ? value.replaceAll(",", "/") : value;
-                if (vocabs[vocabsCurIndex].split(", ")[1] === valueTrans) {
+                if (vocabs[activeVocab].split(", ")[1] === valueTrans) {
                     setInputValue("");
-                    setVocabsCurIndex(vocabsCurIndex + 1 === vocabs.length ? 0 : vocabsCurIndex + 1);
-                    fnPlayAudio(vocabsCurIndex + 1 === vocabs.length ? 0 : vocabsCurIndex + 1);
+                    dispatch(updateActiveVocab(activeVocab + 1 === vocabs.length ? 0 : activeVocab + 1));
+                    fnPlayAudio(activeVocab + 1 === vocabs.length ? 0 : activeVocab + 1);
                 }
             }
         }
@@ -269,7 +265,7 @@ const View = () => {
                         </div>
                     </section>
                     <Scrollbars>
-                        <ScriptDOM dataArticle={dataArticle} activeSentence={activeSentence} />
+                        <ScriptDOM dataArticle={dataArticle} activeSentence={activeSentence} activeVocab={activeVocab} />
                     </Scrollbars>
                     <section style={{ width: "100%", height: "132px", position: "absolute", left: "0", bottom: "0" }}>
                         <section id="asider" style={{ width: "100%", height: "32px", backgroundColor: "#202024" }}>

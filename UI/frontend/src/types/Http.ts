@@ -15,17 +15,12 @@ interface RequestDataLogin {
     uuid: string;
 }
 
-interface RequestDataLoginSimple {
-    username: string;
-    password: string;
-}
-
 interface RequestDataUpdatePassword {
     oldPassword: string;
     newPassword: string;
 }
 
-export type { RequestDataLogin, RequestDataLoginSimple, RequestDataUpdatePassword };
+export type { RequestDataLogin, RequestDataUpdatePassword };
 /* AUTH */
 
 /* TTS */

@@ -1,20 +1,32 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ScriptArticle as DataScriptArticle, Scene as DataScene } from "../../types/Data";
-
+import { useSelector, useDispatch } from "react-redux";
+import { updateActiveVocab } from "../../stores/reducers/project";
 interface ScriptDOMProps {
     dataArticle: DataScriptArticle;
     activeSentence: number;
+    activeVocab: number;
     boxID?: string;
 }
-const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSentence, boxID = "article" }) => {
+const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSentence, activeVocab, boxID = "article" }) => {
     console.log("----------Render | Script/ScriptDOM----------");
+    const dispatch = useDispatch();
     const articleRef = useRef<HTMLDivElement>(null);
+    // Event Handlers
+    const handlersSetVocabIndex = (index: number) => {
+        dispatch(updateActiveVocab(index));
+    };
+    // Event Handlers
     // Functions
-    const fnSentenceHighlight = () => {
+    const fnHighlight = () => {
         if (articleRef.current) {
             const spans = articleRef.current.querySelectorAll(".point");
             spans.forEach((span: any, k) => {
                 span.className = activeSentence === k ? "point active" : "point";
+            });
+            const vocabItems = articleRef.current.querySelectorAll(".vocab-item");
+            vocabItems.forEach((span: any, k) => {
+                span.className = activeVocab === k ? "vocab-item active" : "vocab-item";
             });
         }
     };
@@ -22,15 +34,15 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
     // Lives Hook
     useEffect(() => {
         console.log("----------Mounted | Script/ScriptDOM----------");
-        fnSentenceHighlight();
+        fnHighlight();
         return () => {
             console.log("----------Unmounted | Script/ScriptDOM----------");
         };
     }, []);
     useEffect(() => {
         console.log("----------Watch activeIndex | Script/ScriptDOM----------");
-        fnSentenceHighlight();
-    }, [activeSentence]);
+        fnHighlight();
+    }, [activeSentence, activeVocab]);
     return (
         <article id={boxID} ref={articleRef}>
             {dataArticle.name ? <h1>{dataArticle.name.split("/")[0]}</h1> : ""}
@@ -114,7 +126,7 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
                         <div className="title">Vocabs</div>
                         {dataArticle.vocabs.map((value, key) => {
                             return (
-                                <p key={key}>
+                                <p key={key} className="vocab-item" onClick={(e) => handlersSetVocabIndex(key)}>
                                     <span className="item-index">[{key + 1}] </span>
                                     {value}
                                 </p>

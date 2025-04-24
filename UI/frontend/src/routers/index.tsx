@@ -17,6 +17,10 @@ const routes = [
         element: <App />,
         children: [
             {
+                index: true,
+                element: <Navigate to="/set" replace />,
+            },
+            {
                 path: "/set",
                 element: <Set />,
             },

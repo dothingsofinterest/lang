@@ -5,6 +5,7 @@ const initialState: StateProject = {
     name: "",
     processings: [],
     activeSentence: 0,
+    activeVocab: 0,
     playStop: true,
 };
 
@@ -23,12 +24,15 @@ const slice = createSlice({
         updateActiveSentence: (state, action: PayloadAction<number>) => {
             state.activeSentence = action.payload;
         },
+        updateActiveVocab: (state, action: PayloadAction<number>) => {
+            state.activeVocab = action.payload;
+        },
         updatePlayStop: (state, action: PayloadAction<boolean>) => {
             state.playStop = action.payload;
         },
     },
 });
 
-export const { updateName, updateProcessings, updateActiveSentence, updatePlayStop } = slice.actions;
+export const { updateName, updateProcessings, updateActiveSentence, updateActiveVocab, updatePlayStop } = slice.actions;
 
 export default slice.reducer;

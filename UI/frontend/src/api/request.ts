@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { Response, RequestDataLoginSimple } from "../types/Http";
+import { Response, RequestDataLogin } from "../types/Http";
 import { APIPrefix } from "../settings.js";
 
 // Request Instance
@@ -24,7 +24,7 @@ instance.interceptors.response.use(
 // Request Instance Interceptor
 
 // Login
-const OAuthLogin = (data: RequestDataLoginSimple): Promise<Response> => {
+const OAuthLogin = (data: RequestDataLogin): Promise<Response> => {
     return instance.request({
         method: "post",
         url: `/open/login`,

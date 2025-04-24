@@ -53,7 +53,7 @@ const ClipScript = () => {
                             <Button icon={<PictureOutlined />} onClick={handlersPanelClip} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
                         </div>
                     </section>
-                    <ScriptDOM dataArticle={dataArticle} activeSentence={0} boxID="article-clip" />
+                    <ScriptDOM dataArticle={dataArticle} activeSentence={0} activeVocab={0} boxID="article-clip" />
                 </aside>
             </Layout>
         </>

@@ -141,7 +141,7 @@ const Index = () => {
             #article-print footer .notes .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
             #article-print footer .title:before, 
             #article-print footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #000; border-block-end: 0; transform: translateY(50%); content: ""; }`;
-            const content = ReactDOMServer.renderToStaticMarkup(<ScriptDOM dataArticle={dataArticle} activeSentence={0} boxID="article-print" />);
+            const content = ReactDOMServer.renderToStaticMarkup(<ScriptDOM dataArticle={dataArticle} activeSentence={0} activeVocab={0} boxID="article-print" />);
             printJS({ printable: `${content}`, type: "raw-html", style: css });
         } else {
             alert(`Data not be set`);
