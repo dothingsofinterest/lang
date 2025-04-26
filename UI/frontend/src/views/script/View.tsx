@@ -197,7 +197,7 @@ const View = () => {
         if (vocabs && vocabs.length) {
             const vocabsArr = vocabs[index].split(", ");
             const content = dictationVocabsMode ? vocabsArr[1].replaceAll("/", ", ") : vocabsArr[0].split(".")[1];
-            const type = dictationVocabsMode ? 1 : 2;
+            const type = / [A-Z]/.test(vocabsArr[2]) ? 3 : dictationVocabsMode ? 1 : 2;
             try {
                 const res = await ttsGen({ content: content, type: type });
                 if (res.code) {

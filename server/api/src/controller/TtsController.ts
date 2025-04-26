@@ -1,37 +1,42 @@
-import { Request, Response, NextFunction } from "express";
-import { ServiceError } from "../exception/CustomError";
-import { generateAudio } from "../service/Tts";
-import { findByID } from "../service/Item";
+import { Request, Response } from "express";
+import { generateAudio, searchAudio } from "../service/Tts";
+import { LoggerSystem } from "../lib/Log";
+import { Response as HttpResponse } from "../types/Http";
+import Joi from "joi";
 
-const conGenerate = async (req: Request, res: Response, next: NextFunction) => {
+const httpResponse: HttpResponse = {
+    code: 1,
+    message: `success`,
+    data: ``,
+};
+
+const conGenerate = async (req: Request, res: Response) => {
+    const schemaQuery = Joi.object({
+        type: Joi.number().integer().valid(1, 2, 3).required(),
+        content: Joi.string().required(),
+    });
+    const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
+    if (errorQuery) {
+        console.error("Failed to validate params: ", errorQuery.message);
+        httpResponse.code = 0;
+        httpResponse.message = errorQuery.message;
+        return res.status(200).json(httpResponse);
+    }
     try {
-        const id = Number(req.query.id);
-        const type = Number(req.query.type);
-        if (isNaN(type)) {
-            throw new ServiceError("Invalid type parameter");
+        let sound: string;
+        if (valueQuery.type === 3) {
+            sound = await searchAudio(valueQuery.content.replaceAll(", ", "_"));
+        } else {
+            sound = await generateAudio(valueQuery.content, valueQuery.type);
         }
-        if (![1, 2].includes(type)) {
-            throw new ServiceError("Invalid type parameter");
-        }
-        const content = req.query.content || "";
-        if (typeof content !== "string") {
-            throw new ServiceError("Content is required");
-        }
-        let sound: string | null = null;
-        if (id) {
-            const [one] = await findByID(id);
-            sound = one[0].sound;
-        }
-        if (!sound) {
-            sound = await generateAudio(content, type);
-        }
-        res.json({
-            code: 1,
-            message: "success",
-            data: sound,
-        });
-    } catch (error) {
-        next(error);
+        httpResponse.data = sound;
+        return res.json(httpResponse);
+    } catch (error: any) {
+        console.error("Failed to tts: ", error);
+        LoggerSystem.error(error.message);
+        httpResponse.code = 0;
+        httpResponse.message = `Failed to tts.`;
+        return res.status(200).json(httpResponse);
     }
 };
 
