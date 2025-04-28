@@ -3,7 +3,7 @@ import { StateProject, PayloadProject } from "../../types/Data";
 
 const initialState: StateProject = {
     name: "",
-    processings: [],
+    processings: [], // 0-Set/Index 1,2-Video/Subtitle 3-Audio/Index
     activeSentence: 0,
     activeVocab: 0,
     playStop: true,

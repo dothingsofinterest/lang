@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, Tooltip } from "antd";
-import { EyeOutlined, FormOutlined, SettingOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import { EyeOutlined, FormOutlined, SettingOutlined, VideoCameraOutlined, FileMarkdownOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "./Menu.scss";
 
@@ -28,9 +28,9 @@ const Menu = () => {
                     <Button size="large" className={location.pathname + location.search === "/video/subtitle" ? `menu-item active` : `menu-item`} type="primary" icon={<VideoCameraOutlined />} />
                 </Tooltip>
             </Link>
-            <Link to="/">
+            <Link to="/audio/list">
                 <Tooltip title="Multiple pronunciation" mouseEnterDelay={1}>
-                    <Button size="large" type="primary" icon={<VideoCameraOutlined />} />
+                    <Button size="large" className={location.pathname + location.search === "/audio/list" ? `menu-item active` : `menu-item`} type="primary" icon={<FileMarkdownOutlined />} />
                 </Tooltip>
             </Link>
         </aside>

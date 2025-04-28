@@ -1,0 +1,17 @@
+#audio-index {
+    .sec {
+        display: flex;
+        justify-content: space-between;
+        &.upload {
+            .ant-upload-wrapper {
+                flex: 1;
+                .ant-upload-select {
+                    width: 100%;
+                    .ant-btn {
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
+}

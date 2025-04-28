@@ -5,6 +5,7 @@ import App from "../views/layout/App";
 import Set from "../views/set/Index";
 import ScriptEdit from "../views/script/Edit";
 import ScriptView from "../views/script/View";
+import Audio from "../views/audio/index";
 import VideoSubtitle from "../views/video/Subtitle";
 
 const routes = [
@@ -35,6 +36,10 @@ const routes = [
             {
                 path: "video/subtitle",
                 element: <VideoSubtitle />,
+            },
+            {
+                path: "audio/list",
+                element: <Audio />,
             },
         ],
     },

@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import "./Index.scss";
 
 const Index = () => {
+    console.log("----------Rendered | Set/Index Component----------");
     const dispatch = useDispatch();
     const projectName = useSelector((state: RootState) => state.project.name);
     const script = useSelector((state: RootState) => state.script.data);
@@ -159,7 +160,6 @@ const Index = () => {
             console.log("----------Unmounted | Set/Index Component----------");
         };
     }, []);
-    console.log("----------Rendered | Set/Index Component----------");
     return (
         <Layout className="main-inner" id="set-index">
             <div className="main-inner-item-main">
