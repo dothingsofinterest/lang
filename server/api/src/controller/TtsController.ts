@@ -29,6 +29,8 @@ const conGenerate = async (req: Request, res: Response) => {
         } else {
             sound = await generateAudio(valueQuery.content, valueQuery.type);
         }
+        httpResponse.code = 1;
+        httpResponse.message = `success`;
         httpResponse.data = sound;
         return res.json(httpResponse);
     } catch (error: any) {

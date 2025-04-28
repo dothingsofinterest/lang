@@ -28,6 +28,11 @@ const Menu = () => {
                     <Button size="large" className={location.pathname + location.search === "/video/subtitle" ? `menu-item active` : `menu-item`} type="primary" icon={<VideoCameraOutlined />} />
                 </Tooltip>
             </Link>
+            <Link to="/">
+                <Tooltip title="Multiple pronunciation" mouseEnterDelay={1}>
+                    <Button size="large" type="primary" icon={<VideoCameraOutlined />} />
+                </Tooltip>
+            </Link>
         </aside>
     );
 };

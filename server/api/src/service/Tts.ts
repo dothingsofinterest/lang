@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import { promises as fsPromise } from "fs";
+import fs, { promises as fsPromise } from "fs";
 import util from "util";
 
 const execPromise = util.promisify(exec);
@@ -21,6 +21,9 @@ const generateAudio = async (content: string, type: number) => {
 const searchAudio = async (fileName: string) => {
     try {
         const file = `${process.env.UPLOAD_PATH}/tts/${fileName}.wav`;
+        if (!fs.existsSync(file)) {
+            throw new Error(`${file} doesn't exist.`);
+        }
         const binary = await fsPromise.readFile(file);
         const base64 = Buffer.from(binary).toString("base64");
         return base64;
