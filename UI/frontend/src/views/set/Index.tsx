@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button, Upload } from "antd";
 import { PlusCircleOutlined, UploadOutlined, PrinterOutlined, DownloadOutlined, LogoutOutlined } from "@ant-design/icons";
-import { RootState } from "../../stores";
-import { useSelector, useDispatch } from "react-redux";
+import store, { RootState } from "../../stores";
+import { useSelector, useDispatch, Provider } from "react-redux";
 import { updateName, updateActiveSentence, updateProcessings } from "../../stores/reducers/project";
 import { updateLocalOrigin, updateLocalOriginCompress } from "../../stores/reducers/video";
 import { updateData } from "../../stores/reducers/script";
@@ -142,7 +142,11 @@ const Index = () => {
             #article-print footer .notes .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
             #article-print footer .title:before, 
             #article-print footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #000; border-block-end: 0; transform: translateY(50%); content: ""; }`;
-            const content = ReactDOMServer.renderToStaticMarkup(<ScriptDOM dataArticle={dataArticle} activeSentence={0} activeVocab={0} boxID="article-print" />);
+            const content = ReactDOMServer.renderToStaticMarkup(
+                <Provider store={store}>
+                    <ScriptDOM dataArticle={dataArticle} activeSentence={0} activeVocab={0} boxID="article-print" />
+                </Provider>,
+            );
             printJS({ printable: `${content}`, type: "raw-html", style: css });
         } else {
             alert(`Data not be set`);

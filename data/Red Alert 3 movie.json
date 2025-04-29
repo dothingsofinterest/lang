@@ -15,6 +15,11 @@
         "Brussels-布鲁塞尔"
     ],
     "vocabs": [
+        "n.噩梦, nightmare/nightmares, /ˈnaɪtmer/",
+        "n.炸弹, bomb/bombs, /bɑːm/",
+        "adj.原子的, atomic, /əˈtɑːmɪk/",
+        "v.消灭;歼灭, annihilate/annihilates/annihilated/annihilated/annihilating, /əˈnaɪəleɪt/",
+        "adj.你死我活的;不共戴天的, mortal, /ˈmɔːrtl/",
         "n.旭日, rising sun, /ˈraɪzɪŋ/",
         "v.登上;安排, mount/mounts/mounted/mounted/mounting, /maʊnt/",
         "n.帝国, empire/empires, /ˈempaɪər/",
@@ -67,7 +72,7 @@
         "v.攻击, attack/attacks/attacked/attacked/attacking, /əˈtæk/",
         "v.听见, hear/hears/heard/heard/hearing, /hɪr/",
         "adj.正在逃跑的, on the run, /a/",
-        "v.突然撒开, unleash/unleashes/unleashed/unleashed/unleashing, /ʌnˈliːʃ/",
+        "v.撒开;释放, unleash/unleashes/unleashed/unleashed/unleashing, /ʌnˈliːʃ/",
         "adj.皇帝的;御用的, imperial, /ɪmˈpɪriəl/",
         "v.挣扎, struggle/struggles/struggled/struggled/struggling, /ˈstrʌɡl/",
         "adj.不可避免的, inevitable, /ɪnˈevɪtəbl/",
@@ -80,7 +85,7 @@
         "v.停止, cease/ceases/ceased/ceased/ceasing, /siːs/",
         "v.臣服, bow/bows/bowed/bowed/bowing, /baʊ B/",
         "v.袭击, assault/assaults, /əˈsɔːlt/",
-        "v.呈现;看来, appear/appears/appeared/appeared/appearing, /əˈpɪr/"
+        "v.似乎;看来, appear/appears/appeared/appeared/appearing, /əˈpɪr/"
     ],
     "notes": [
         "USSR - Union of Soviet Socialist Republics",
@@ -719,7 +724,7 @@
                     "startTime": "00:04:53,956",
                     "endTime": "00:04:58,689",
                     "texts": [
-                        "Sir, it appears that the Empire has mounted a full scale assault!\n先生，看来帝国已经发动了全面进攻！"
+                        "Sir, it appears that the Empire has mounted a full scale assault.\n先生，看来帝国已经发动了全面进攻！"
                     ]
                 }
             ]
@@ -737,6 +742,82 @@
                     "endTime": "00:05:02,950",
                     "texts": [
                         "The Empire of the Rising Sun, of course.\n当然是旭日帝国。"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "34",
+            "scene": "Premier's Office-总理办公室",
+            "roles": [
+                "Doctor-博士"
+            ],
+            "sentences": [
+                {
+                    "key": "34-0",
+                    "startTime": "00:05:03,495",
+                    "endTime": "00:05:06,260",
+                    "texts": [
+                        "We now have two mortal enemies?\n我们现在有两个不共戴天的敌人？"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "35",
+            "scene": "Premier's Office-总理办公室",
+            "roles": [
+                "Krukov-克鲁科夫"
+            ],
+            "sentences": [
+                {
+                    "key": "35-0",
+                    "startTime": "00:05:06,358",
+                    "endTime": "00:05:09,739",
+                    "texts": [
+                        "We must unleash our nuclear weapons. Annihilate them all!\n我们必须释放核武器。把他们全部消灭！"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "36",
+            "scene": "Premier's Office-总理办公室",
+            "roles": [
+                "Krukov-克鲁科夫"
+            ],
+            "sentences": [
+                {
+                    "key": "36-0",
+                    "startTime": "00:05:15,437",
+                    "endTime": "00:05:16,621",
+                    "texts": [
+                        "Our nuclear weapons. Our atomic bombs!\n我们的核武器。我们的原子弹！"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "37",
+            "scene": "Premier's Office-总理办公室",
+            "roles": [
+                "Doctor-博士"
+            ],
+            "sentences": [
+                {
+                    "key": "37-0",
+                    "startTime": "00:05:16,692",
+                    "endTime": "00:05:23,259",
+                    "texts": [
+                        "Don't you understand? Without Einstein, there is no nuclear weapons because we have altered the space time continue.\n你不明白吗？没有爱因斯坦就没有核武器，因为我们已经改变了时空的延续。"
+                    ]
+                },
+                {
+                    "key": "37-1",
+                    "startTime": "00:05:23,203",
+                    "endTime": "00:05:27,849",
+                    "texts": [
+                        "Oh who knows what nightmares we have created.\n哦，谁知道我们创造了什么样的噩梦。"
                     ]
                 }
             ]

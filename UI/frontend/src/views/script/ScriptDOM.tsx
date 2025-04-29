@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ScriptArticle as DataScriptArticle, Scene as DataScene } from "../../types/Data";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateActiveVocab } from "../../stores/reducers/project";
 interface ScriptDOMProps {
     dataArticle: DataScriptArticle;
