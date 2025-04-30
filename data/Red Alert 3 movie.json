@@ -15,6 +15,7 @@
         "Brussels-布鲁塞尔"
     ],
     "vocabs": [
+        "v.稍等, hold on, /a/",
         "n.噩梦, nightmare/nightmares, /ˈnaɪtmer/",
         "n.炸弹, bomb/bombs, /bɑːm/",
         "adj.原子的, atomic, /əˈtɑːmɪk/",
@@ -61,7 +62,7 @@
         "n.目前;礼物, present/presents, /ˈpreznt/",
         "v.意思是, mean/means/meant/meant/meaning, /miːn/",
         "n.欧洲, Europe, /ˈjʊrəp/",
-        "n.二次战中的同盟国, ally/allies, /ˈælaɪ , əˈlaɪ/",
+        "n.同盟国, ally/allies, /ˈælaɪ , əˈlaɪ/",
         "adj.西部的, western, /ˈwestərn/",
         "v.击败, defeat/defeats/defeated/defeated/defeating, /dɪˈfiːt/",
         "v.接收, receive/receives/received/received/receiving, /rɪˈsiːv/",
@@ -605,7 +606,7 @@
                     "startTime": "00:04:08,364",
                     "endTime": "00:04:12,556",
                     "texts": [
-                        "So the allies are on the run. Soon western europe will be ours.\n盟军正在溃败。很快，西欧就要落入我们的手中了。"
+                        "So the allies are on the run. Soon western Europe will be ours.\n盟军正在溃败。很快，西欧就要落入我们的手中了。"
                     ]
                 }
             ]
