@@ -3,7 +3,7 @@ import { Layout, Input, Button, Upload } from "antd";
 import { PlusCircleOutlined, UploadOutlined, PrinterOutlined, DownloadOutlined, LogoutOutlined } from "@ant-design/icons";
 import store, { RootState } from "../../stores";
 import { useSelector, useDispatch, Provider } from "react-redux";
-import { updateName, updateActiveSentence, updateProcessings } from "../../stores/reducers/project";
+import { updateName, updateActiveSentence, updateActiveVocab, updateProcessings } from "../../stores/reducers/project";
 import { updateLocalOrigin, updateLocalOriginCompress } from "../../stores/reducers/video";
 import { updateData } from "../../stores/reducers/script";
 import { clearToken } from "../../stores/reducers/auth";
@@ -40,6 +40,7 @@ const Index = () => {
                     dispatch(updateName(res.data.project));
                     // Reset avtive sentence
                     dispatch(updateActiveSentence(0));
+                    dispatch(updateActiveVocab(0));
                     // Create Local Video URL
                     dispatch(updateLocalOrigin(URL.createObjectURL(file)));
                     // Create Local Low Video URL
@@ -80,6 +81,7 @@ const Index = () => {
                                 dispatch(updateName(res.data.project));
                                 // Reset avtive sentence
                                 dispatch(updateActiveSentence(0));
+                                dispatch(updateActiveVocab(0));
                                 console.log("Upload succeed.");
                             } else {
                                 alert(res.message);
@@ -126,7 +128,7 @@ const Index = () => {
             #article-print { width: 1000px; }
             #article-print h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
             #article-print h2 { text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
-            #article-print .scene { background: #ccc; padding: 6px 0; margin-bottom: 10px; }
+            #article-print .scene { background: #ccc; padding: 6px 0; margin: 12px 20px; }
             #article-print .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
             #article-print .p:nth-child(2) { margin-top: 0; }
             #article-print .p .point { padding: 0 4px; }

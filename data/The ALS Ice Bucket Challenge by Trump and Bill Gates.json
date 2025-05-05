@@ -1,0 +1,185 @@
+{
+    "name": "The ALS Ice Bucket Challenge by Trump and Bill Gates",
+    "roles": [
+        "Trump-川普",
+        "Bill Gates-比尔盖茨"
+    ],
+    "scenes": [
+        "Top of Trump Tower-川普大厦楼顶",
+        "Home-家"
+    ],
+    "vocabs": [
+        "n.塔;楼, tower/towers, /ˈtaʊər/",
+        "v.拥有, own/owns/owned/owned/owning, /oʊn/",
+        "n.小时, hour/hours, /ˈaʊər/",
+        "v.带来, bring/brings/brought/brought/bringing, /brɪŋ/",
+        "v.加入, join/joins/joined/joined/joining, /dʒɔɪn/",
+        "n.挑战, challenge/challenges, /ˈtʃælɪndʒ/",
+        "v.号召, call out, /a/",
+        "n.桶, bucket/buckets, /ˈbʌkɪt/",
+        "v.戏弄;搞, do a number on, /a/",
+        "n.女士, lady/ladies, /ˈleɪdi/",
+        "n.糟糕, mess/messes, /mes/",
+        "n.世界小姐, Miss Universe, /ˈjuːnɪvɜːrs/",
+        "v.猜, guess/guesses/guessed/guessed/guessing, /ɡes/",
+        "n.毛发, hair/hairs, /her/",
+        "v.挑战, challenge/challenges/challenged/challenged/challenging, /ˈtʃælɪndʒ/",
+        "n.关注, attention/attentions, /əˈtenʃn/",
+        "n.疾病, disease/diseases, /dɪˈziːz/",
+        "v.认为, consider/considers/considered/considered/considering, /kənˈsɪdər/",
+        "n.伊隆马斯克, Elon Musk, /a/",
+        "n.奥巴马, Obama, /ˌoʊˈbɑmə/",
+        "n.辛普森, Simpson, /ˈsɪmpsən/",
+        "n.迈克·泰森, Mike Tyson, /maɪk ˈtaɪsən/",
+        "n.文斯·麦克马洪, Vince McMahon, /məkˈmeɪən/",
+        "n.唐纳德, Donald, /ˈdɔnəld/"
+    ],
+    "notes": [
+        "Consider yourself challenged 是祈使句。完整句子是：You consider yourself challenged. 你就认为你自己被挑战了吧",
+        "\"whether or not\" 可以简化为 \"whether\"",
+        "因为后面出现了 which it is 所以使用了 whether it's my real hair 否则可以使用 whether my hair is real"
+    ],
+    "paragraphs": [
+        {
+            "key": "0",
+            "scene": "Top of Trump Tower-川普大厦楼顶",
+            "roles": [
+                "Trump-川普"
+            ],
+            "sentences": [
+                {
+                    "key": "0-0",
+                    "startTime": "00:00:11,862",
+                    "endTime": "00:00:17,275",
+                    "texts": [
+                        "I've been called out by everybody for the ALS ice bucket challenge.\n大家都叫我参加渐冻症冰桶挑战。"
+                    ]
+                },
+                {
+                    "key": "0-1",
+                    "startTime": "00:00:17,375",
+                    "endTime": "00:00:24,528",
+                    "texts": [
+                        "Simpson, Mike Tyson, Vince McMahon, like everybody's going crazy over this thing.\n辛普森、迈克泰森、文斯麦克马洪，好像每个人都为这件事疯狂。"
+                    ]
+                },
+                {
+                    "key": "0-2",
+                    "startTime": "00:00:24,628",
+                    "endTime": "00:00:29,861",
+                    "texts": [
+                        "I guess they want to see whether or not it's my real hair which it is.\n我猜他们想看看这是不是我的真头发。"
+                    ]
+                },
+                {
+                    "key": "0-3",
+                    "startTime": "00:00:29,928",
+                    "endTime": "00:00:31,687",
+                    "texts": [
+                        "So here's what I'm gonna do.\n所以这就是我要做的。"
+                    ]
+                },
+                {
+                    "key": "0-4",
+                    "startTime": "00:00:31,697",
+                    "endTime": "00:00:35,713",
+                    "texts": [
+                        "Miss Universe and Miss USA, I own it.\n环球小姐和美国小姐，我都有。"
+                    ]
+                },
+                {
+                    "key": "0-5",
+                    "startTime": "00:00:35,723",
+                    "endTime": "00:00:39,850",
+                    "texts": [
+                        "They're gonna really do a number on me.\n她们真的要对我下手了。"
+                    ]
+                },
+                {
+                    "key": "0-6",
+                    "startTime": "00:00:39,950",
+                    "endTime": "00:00:46,818",
+                    "texts": [
+                        "I'm challenging president Obama, my son Donald, my son Eric.\n我要挑战总统奥巴马，我儿子唐纳德，我儿子埃里克。"
+                    ]
+                },
+                {
+                    "key": "0-7",
+                    "startTime": "00:00:46,918",
+                    "endTime": "00:00:49,174",
+                    "texts": [
+                        "Let's go, ladies.\n开始吧，女士们。"
+                    ]
+                },
+                {
+                    "key": "0-8",
+                    "startTime": "00:00:55,394",
+                    "endTime": "00:00:57,997",
+                    "texts": [
+                        "What a mess.\n糟了。"
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "1",
+            "scene": "Home-家",
+            "roles": [
+                "Bill Gates-比尔盖茨"
+            ],
+            "sentences": [
+                {
+                    "key": "1-0",
+                    "startTime": "00:01:00,586",
+                    "endTime": "00:01:09,779",
+                    "texts": [
+                        "I'm here to join the people bringing attention to Lou Gehrig's disease by taking a ALS ice bucket challenge.\n我和大家一起，通过冰桶挑战引起人们对卢格里格氏症的关注。"
+                    ]
+                },
+                {
+                    "key": "1-1",
+                    "startTime": "00:01:10,079",
+                    "endTime": "00:01:16,904",
+                    "texts": [
+                        "I'm going to challenge three more people, Elon Musk, Ryan Seacrest, Chris Anderson of TED.\n我要挑战三个人，伊隆·马斯克、主持人瑞安·西克雷斯特、TED的克里斯·安德森。"
+                    ]
+                },
+                {
+                    "key": "1-2",
+                    "startTime": "00:01:17,147",
+                    "endTime": "00:01:19,462",
+                    "texts": [
+                        "Consider yourself challenged.\n接受挑战吧。"
+                    ]
+                },
+                {
+                    "key": "1-3",
+                    "startTime": "00:01:19,562",
+                    "endTime": "00:01:24,045",
+                    "texts": [
+                        "You have 24 hours. Good luck.\n你有 24 小时时间。祝你好运。"
+                    ]
+                }
+            ]
+        }
+    ],
+    "assFormat": {
+        "enFontSize": 8,
+        "enFontColor": "H00FFFFFF",
+        "enFontColorInline": "H3517DC",
+        "enFontOutlineWidth": 6,
+        "enFontOutlineColor": "H00000000",
+        "enAlignment": 8,
+        "enMarginLR": 4,
+        "enMarginV": 190,
+        "cnFontSize": 6,
+        "cnFontColor": "H002CB2FE",
+        "cnFontColorInline": "H3517DC",
+        "cnFontOutlineWidth": 6,
+        "cnFontOutlineColor": "H00000000",
+        "cnAlignment": 8,
+        "cnMarginLR": 4,
+        "cnMarginV": 28,
+        "cnLineBreak": 30
+    }
+}

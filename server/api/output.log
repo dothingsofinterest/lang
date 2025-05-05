@@ -1,0 +1,21 @@
+Server is running on port 9000
+Frame Width: 1280
+Data Rate: 7250262
+fluent-ffmpeg compress video command:  ffmpeg -i D:/Github/lang/server/api/uploads/user1/7f3b284/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/7f3b284/origin_compress.mp4
+[2025-05-05T02:26:55.800Z] [info] -- ffmpeg -i D:/Github/lang/server/api/uploads/user1/7f3b284/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/7f3b284/origin_compress.mp4
+fluent-ffmpeg: succeed to compress video.
+Frame Width: 2160
+Data Rate: 28374751
+fluent-ffmpeg compress video command:  ffmpeg -i D:/Github/lang/server/api/uploads/user1/a8dcfa8/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/a8dcfa8/origin_compress.mp4
+[2025-05-05T03:10:11.463Z] [info] -- ffmpeg -i D:/Github/lang/server/api/uploads/user1/a8dcfa8/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/a8dcfa8/origin_compress.mp4
+fluent-ffmpeg: succeed to compress video.
+Frame Width: 3840
+Data Rate: 28431363
+fluent-ffmpeg compress video command:  ffmpeg -i D:/Github/lang/server/api/uploads/user1/d700026/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/d700026/origin_compress.mp4
+[2025-05-05T03:19:33.172Z] [info] -- ffmpeg -i D:/Github/lang/server/api/uploads/user1/d700026/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/d700026/origin_compress.mp4
+fluent-ffmpeg: succeed to compress video.
+Frame Width: 3840
+Data Rate: 28431363
+fluent-ffmpeg compress video command:  ffmpeg -i D:/Github/lang/server/api/uploads/user1/d700026/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/d700026/origin_compress.mp4
+[2025-05-05T03:50:40.281Z] [info] -- ffmpeg -i D:/Github/lang/server/api/uploads/user1/d700026/origin.mp4 -y -vcodec libx264 -b:v 600k -filter:v scale=600:-2 -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart D:/Github/lang/server/api/uploads/user1/d700026/origin_compress.mp4
+fluent-ffmpeg: succeed to compress video.
