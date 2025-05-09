@@ -5,7 +5,12 @@
     ],
     "scenes": [],
     "vocabs": [
-        "v.尊敬;致敬, honor/honors/honored/honored/honoring, /ˈɑːnər/",
+        "v.歌颂, celebrate/celebrates/celebrated/celebrated/celebrating, /ˈselɪbreɪt/",
+        "v.讲话, speak/speaks/spoke/spoken/speaking, /spiːk/",
+        "n.商人, businessman/businessmen, /ˈbɪznəsmæn/",
+        "n.油箱;智囊;坦克, tank/tanks, /tæŋk/",
+        "n.家庭, family/families, /ˈfæməli/",
+        "v.致敬, honor/honors/honored/honored/honoring, /ˈɑːnər/",
         "v.乱翻;乱动, get in, /ɡet ɪn/",
         "v.倾向于, tend to, /tend tu/",
         "n.东西, stuff, /stʌf/",
@@ -26,9 +31,9 @@
         "adj.某种, certain, /ˈsɜːrtn/",
         "n.汉堡, hamburger/hamburgers, /ˈhæmbɜːrɡər/",
         "n.可乐, coke/cokes, /koʊk/",
-        "n.启发, inspiration/inspirations, /ˌɪnspəˈreɪʃn/",
+        "n.鼓舞, inspiration/inspirations, /ˌɪnspəˈreɪʃn/",
         "adj.愚蠢的, dumb, /dʌm/",
-        "n.自豪, pride/prides, /praɪd/",
+        "n.骄傲, pride/prides, /praɪd/",
         "n.生意;买卖, business/businesses, /ˈbɪznəs/",
         "adv.真正地, truly, /ˈtruːli/",
         "v.忍受, put up with, /pʊt/",
@@ -46,7 +51,7 @@
         "adv.罕见地, rarely, /ˈrerli/",
         "n.对手, adversary/adversaries, /ˈædvərseri/",
         "v.成长, grow up, /ɡroʊ/",
-        "v.活;住, live/lives/lived/lived/living, /lɪv/",
+        "v.活;住, live/lives/lived/lived/living, /lɪv B/",
         "n.球馆, arena/arenas, /əˈriːnə/",
         "v.死, die/dies/died/died/dying, /daɪ/",
         "n.教练, coach/coaches, /koʊtʃ/",
@@ -57,7 +62,7 @@
         "n.哀悼, condolence/condolences, /kənˈdoʊləns/",
         "n.悲剧, tragedy/tragedies, /ˈtrædʒədi/",
         "adj.巨大的, enormous, /ɪˈnɔːrməs/",
-        "v.教授, teach/teaches/taught/taught/teaching, /tiːtʃ/",
+        "v.教导, teach/teaches/taught/taught/teaching, /tiːtʃ/",
         "v.拥抱, hug/hugs/hugged/hugged/hugging, /hʌɡ/",
         "v.成长, grow/grows/grew/grown/growing, /ɡroʊ/",
         "v.接触, come in contact with, /a/",
@@ -89,17 +94,33 @@
                 {
                     "key": "0-1",
                     "startTime": "00:00:05,829",
-                    "endTime": "00:00:27,439",
+                    "endTime": "00:00:14,895",
                     "texts": [
-                        "I'm grateful to be here to honor Gigi and celebrate the gifts that Kobe gave us all - what he accomplished as a basketball player, as a businessman, and a storyteller and as a father.\n感谢能在这里向Gigi致敬，赞颂科比给我们的礼物，这是他作为一名篮球运动员，商人，故事诉说者，父亲所取得的成就。"
+                        "I'm grateful to be here to honor Gigi and celebrate the gifts that Kobe gave us all -\n感谢能在这里向Gigi致敬，赞颂科比给我们的礼物，"
                     ]
                 },
                 {
                     "key": "0-2",
-                    "startTime": "00:00:30,068",
-                    "endTime": "00:00:42,906",
+                    "startTime": "00:00:15,933",
+                    "endTime": "00:00:27,439",
                     "texts": [
-                        "In the game of basketball, in life, as a parent, Kobe left nothing in the tank. He left it all on the floor.\n在篮球比赛中，在生活中，作为父亲，科比不遗余力。他将一切献给了球场。"
+                        "what he accomplished as a basketball player, as a businessman and a storyteller and as a father.\n这是他作为一名篮球运动员，商人，故事诉说者，父亲所取得的成就。"
+                    ]
+                },
+                {
+                    "key": "0-3",
+                    "startTime": "00:00:30,068",
+                    "endTime": "00:00:35,583",
+                    "texts": [
+                        "In the game of basketball, in life as a parent,\n在篮球比赛中，在生活中作为父亲，"
+                    ]
+                },
+                {
+                    "key": "0-4",
+                    "startTime": "00:00:36,059",
+                    "endTime": "00:00:43,366",
+                    "texts": [
+                        "Kobe left nothing in the tank. He left it all on the floor.\n科比不遗余力。他将一切献给了球场。"
                     ]
                 }
             ]
@@ -231,7 +252,7 @@
                     "startTime": "00:03:14,059",
                     "endTime": "00:03:25,246",
                     "texts": [
-                        "What Kobe Bryant was to me was the inspiration that someone truly cared about the way either I played the game or the way that he wanted to play the game.\n科比布莱恩特对我的启发是，有人真正关心我打球的方式，或者他想要打球的方式"
+                        "What Kobe Bryant was to me was the inspiration that someone truly cared about the way either I played the game or the way that he wanted to play the game.\n科比布莱恩特对我的鼓舞是，有人真正关心我打球的方式，或者他想要打球的方式"
                     ]
                 },
                 {
@@ -270,7 +291,7 @@
                     "startTime": "00:04:06,759",
                     "endTime": "00:04:17,187",
                     "texts": [
-                        "I took great pride as I got to know Kobe Bryant that he was just trying to be a better person – a better basketball player.\n当我认识科比布莱恩特时，我感到非常自豪，他只是想成为一个更好的人——一个更好的篮球运动员。"
+                        "I took great pride as I got to know Kobe Bryant that he was just trying to be a better person – a better basketball player.\n当我认识科比布莱恩特时，我感到非常骄傲，他只是想成为一个更好的人——一个更好的篮球运动员。"
                     ]
                 },
                 {
