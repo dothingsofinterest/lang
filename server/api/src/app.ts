@@ -25,6 +25,7 @@ app.use(routeNotFound);
 // Exception
 app.use(GlobalExceptionHandler);
 
-const server = app.listen(process.env.APP_PORT, () => {
+// Start App
+app.listen(process.env.APP_PORT, () => {
     console.log(`Server is running on port ${process.env.APP_PORT}`);
 });
