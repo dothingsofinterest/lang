@@ -7,4 +7,4 @@ Learning Language
 Windows 下使用 gulpfile.js
 Linux 下使用 run.sh
 
-Do what interests you
+[Do what interests you]
