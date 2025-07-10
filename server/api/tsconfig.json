@@ -12,8 +12,8 @@
         "noEmitOnError": true,								// 编译错误时 编译文存不会复制到编译目录
         "allowJs": true,									// 编译时，会处理和发布 js 文件
         "typeRoots": ["./node_modules/@types", "./src/types"], // 指定类型定义文件的路径
-        "lib": ["ES2021.String"]                               // 支持的 JS 版本
+        "lib": ["ES2021.String"]                               // JS 库版本
     },
-    "exclude": ["node_modules", "dist"],	        // 对要编译的源文件的进一步排除
-    "include": ["./src/**/*.ts"]							// 对要编译的源文件的进一步筛选
+    "exclude": ["node_modules", "dist"],	                // 编译时排除
+    "include": ["./src/**/*.ts"]							// 编译的源文件的进一步筛选
 }
