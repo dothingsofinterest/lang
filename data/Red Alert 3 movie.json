@@ -15,6 +15,7 @@
         "Brussels-布鲁塞尔"
     ],
     "vocabs": [
+        "adj.走了的;不在的, gone, /ɡɔːn/",
         "v.稍等, hold on, /a/",
         "n.噩梦, nightmare/nightmares, /ˈnaɪtmer/",
         "n.炸弹, bomb/bombs, /bɑːm/",
@@ -105,7 +106,7 @@
                 {
                     "key": "0-0",
                     "startTime": "00:00:11,758",
-                    "endTime": "00:00:13,355",
+                    "endTime": "00:00:13,086",
                     "texts": [
                         "The premier is gone.\n总理跑了。"
                     ]
@@ -121,7 +122,7 @@
             "sentences": [
                 {
                     "key": "1-0",
-                    "startTime": "00:00:13,365",
+                    "startTime": "00:00:13,186",
                     "endTime": "00:00:15,477",
                     "texts": [
                         "Yes, the coward has already fled.\n没错，这个懦夫已经逃走了。"

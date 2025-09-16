@@ -1,10 +1,11 @@
-# lang
+# 项目说明
+Learning any language
 
-Learning Language
+# 使用方法
+1. 编译 npm run build
+2. 启动 npm run start
 
-# 启动
-
-Windows 下使用 gulpfile.js
-Linux 下使用 run.sh
+# 技术架构
+Windows 下使用 gulpfile.js 构建项目
 
 [Do what interests you]

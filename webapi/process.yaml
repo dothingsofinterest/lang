@@ -1,0 +1,16 @@
+apps:
+	- script: 'dist/app.js'
+	name: 'lang-api'
+	exec_mode: 'cluster'
+	watch: false
+	instances: 1
+	ignoreWatch:
+	- 'node_modules'
+	instance_var: 'NODE_APP_INSTANCE'
+	max_size: 10M
+	max_file: 5
+	error_file: 'log/pm2/error.log'
+	out_file: 'log/pm2/out.log'
+	pid_file: 'log/pm2/pid.log'
+	env:
+	NODE_ENV: 'production'
