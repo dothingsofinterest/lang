@@ -19,7 +19,7 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="set" replace />,
+                element: <Navigate to="setting" replace />,
             },
             {
                 path: "setting",

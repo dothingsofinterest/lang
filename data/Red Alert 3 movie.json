@@ -15,6 +15,7 @@
         "Brussels-布鲁塞尔"
     ],
     "vocabs": [
+        "n.时空, space-time, /a/",
         "adj.走了的;不在的, gone, /ɡɔːn/",
         "v.稍等, hold on, /a/",
         "n.噩梦, nightmare/nightmares, /ˈnaɪtmer/",
@@ -182,7 +183,7 @@
                 {
                     "key": "4-0",
                     "startTime": "00:00:40,749",
-                    "endTime": "00:00:43,766",
+                    "endTime": "00:00:43,719",
                     "texts": [
                         "What is this? Some sort of escape route.\n这是什么？某种逃生路线。"
                     ]
@@ -198,7 +199,7 @@
             "sentences": [
                 {
                     "key": "5-0",
-                    "startTime": "00:00:43,776",
+                    "startTime": "00:00:43,819",
                     "endTime": "00:00:50,274",
                     "texts": [
                         "No sir, twelve months ago, I was put in charge of a top secret project.\n不，长官。十二个月前，我被任命负责一个绝密项目。"
@@ -396,7 +397,7 @@
                     "startTime": "00:02:48,863",
                     "endTime": "00:02:53,336",
                     "texts": [
-                        "We mustn't do anything to disrupt space time continue.\n我们不能做任何扰乱时空的事情。"
+                        "We mustn't do anything to disrupt space-time continue.\n我们不能做任何扰乱时空的事情。"
                     ]
                 }
             ]
@@ -811,7 +812,7 @@
                     "startTime": "00:05:16,692",
                     "endTime": "00:05:23,259",
                     "texts": [
-                        "Don't you understand? Without Einstein, there is no nuclear weapons because we have altered the space time continue.\n你不明白吗？没有爱因斯坦就没有核武器，因为我们已经改变了时空的延续。"
+                        "Don't you understand? Without Einstein, there is no nuclear weapons because we have altered the space-time continue.\n你不明白吗？没有爱因斯坦就没有核武器，因为我们已经改变了时空的延续。"
                     ]
                 },
                 {
