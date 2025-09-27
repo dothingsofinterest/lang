@@ -5,19 +5,23 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, BulbFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateActiveSentence, updateActiveVocab, updatePlayStop } from "../../stores/reducers/project";
-import { fnFloatToSRTTime, fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
+import { updateActiveSentence, updateActiveSentencePos, updateActiveVocab, updateActiveVocabPos, updatePlayStop } from "../../stores/reducers/project";
+import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import { ttsGen } from "../../api/requestAuth";
-import "./View.scss";
-import ScriptDOM from "./ScriptDOM";
-const View = () => {
-    console.log("----------Render|Script/View----------");
+import "./Index.scss";
+import Script from "./Script";
+
+const textareaPlaceholder = `Input sentences or vocabs.&#10;EX: wear,wears,wore,worn,wearing`;
+const Index = () => {
+    console.log("[rendered] play/index");
     const dispatch = useDispatch();
     const script = useSelector((state: RootState) => state.script.data);
     const dataArticle = useSelector((state: RootState) => state.script.dataArticle);
     const localOrigin = useSelector((state: RootState) => state.video.localOrigin);
     const activeSentence = useSelector((state: RootState) => state.project.activeSentence);
+    const activeSentencePos = useSelector((state: RootState) => state.project.activeSentencePos);
     const activeVocab = useSelector((state: RootState) => state.project.activeVocab);
+    const activeVocabPos = useSelector((state: RootState) => state.project.activeVocabPos);
     const playStop = useSelector((state: RootState) => state.project.playStop);
     const [sentences, setSentences] = useState<DataSentence[]>([]);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
@@ -26,6 +30,9 @@ const View = () => {
     const [dictationVocabsMode, setDictationVocabsMode] = useState<boolean>(true); // true-EN false-CN
     const articleRef = useRef<HTMLDivElement>(null);
     const [vocabs, setVocabs] = useState<string[]>([]);
+    const activeSentencePosRef = useRef<number>(activeSentencePos);
+    const activeVocabPosRef = useRef<number>(activeVocabPos);
+    const refScrollbar = useRef<Scrollbars>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refClosure = useRef({
@@ -53,6 +60,7 @@ const View = () => {
             if (cur !== undefined && fnIsSRTTime(cur.startTime)) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 refVideo.current?.play();
+                refScrollbar.current?.scrollTop(activeSentencePosRef.current);
                 setPlayButton(<PauseCircleOutlined />);
             }
         } else {
@@ -78,6 +86,7 @@ const View = () => {
                 dispatch(updateActiveSentence(prevIndex));
                 refVideo.current.currentTime = fnSRTTimeToFloat(prev.startTime);
                 refVideo.current?.play();
+                refScrollbar.current?.scrollTop(activeSentencePosRef.current);
                 setPlayButton(<PauseCircleOutlined />);
             }
         } else {
@@ -92,6 +101,7 @@ const View = () => {
                 dispatch(updateActiveSentence(nextIndex));
                 refVideo.current.currentTime = fnSRTTimeToFloat(next.startTime);
                 refVideo.current?.play();
+                refScrollbar.current?.scrollTop(activeSentencePosRef.current);
                 setPlayButton(<PauseCircleOutlined />);
             }
         } else {
@@ -115,8 +125,6 @@ const View = () => {
     };
     const handlersVideoTimeUpdate = (e: any) => {
         if (inputMode) {
-            // console.log("video current time:", `${fnFloatToSRTTime(e.target.currentTime)} / ${e.target.currentTime}`);
-            // console.log("active sentence:", activeSentence);
             const cur = sentences[activeSentence];
             if (cur !== undefined) {
                 fnSentenceHighlight(activeSentence);
@@ -161,13 +169,15 @@ const View = () => {
         if (event.code === "F8") {
             handlersEventPlayAgain();
         }
+        refScrollbar.current?.scrollTop(activeSentencePosRef.current);
     };
     const handlersTextInput = (value: string) => {
         setInputValue(value);
         if (sentences.length > 0) {
             if (inputMode) {
                 const answer = sentences[activeSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-                if (answer === value) {
+                const answerPure = answer.replace(/[\,\.\?\!]/g, "");
+                if (value === answer || value === answerPure) {
                     setInputValue("");
                     dispatch(updateActiveSentence(activeSentence + 1));
                     refVideo.current?.play();
@@ -185,22 +195,32 @@ const View = () => {
     };
     const handlersInputTips = () => {
         if (sentences.length > 0) {
-            if (!inputMode) {
-                const template = vocabs[activeVocab].split(", ")[1].replace(/\//g, ",");
-                let upStr = "";
-                let downStr = "";
-                for (let i = 0; i < template.length; i++) {
-                    upStr += template[i];
-                    if (inputValue[i] === template[i]) {
-                        downStr += inputValue[i];
-                    } else {
-                        downStr += "?";
-                        break;
-                    }
-                }
-                alert(`${upStr}\r\n${downStr}`);
+            let answerLine = ``;
+            let inputLine = ``;
+            if (inputMode) {
+                answerLine = sentences[activeSentence].texts.map((v) => v.split("\n")[0]).join("\n");
+            } else {
+                answerLine = vocabs[activeVocab].split(", ")[1].replace(/\//g, ",");
             }
+            for (let i = 0; i < answerLine.length; i++) {
+                if (inputValue[i] === answerLine[i]) {
+                    inputLine += inputValue[i];
+                } else {
+                    inputLine += "X";
+                    break;
+                }
+            }
+            alert(`${answerLine}\r\n${inputLine}`);
         }
+    };
+    const handlersRenderedCallback = (scrollTopPoint: number, scrollTopVocab: number) => {
+        const scrollTop = refScrollbar.current?.getScrollTop() || 0;
+        const scrollTopPointValue = scrollTop + scrollTopPoint;
+        const scrollTopVocabValue = scrollTop + scrollTopVocab;
+        dispatch(updateActiveSentencePos(scrollTop + scrollTopPoint));
+        dispatch(updateActiveVocabPos(scrollTopVocab + scrollTopPoint));
+        activeSentencePosRef.current = scrollTopPointValue;
+        activeVocabPosRef.current = scrollTopVocabValue;
     };
     // Event Handlers
     // Functions
@@ -246,22 +266,23 @@ const View = () => {
             });
             refVideo.current.load();
             refVideo.current.currentTime = sentences[activeSentence] !== undefined && fnIsSRTTime(sentences[activeSentence].startTime) ? fnSRTTimeToFloat(sentences[activeSentence].startTime) : 0;
+            refScrollbar.current?.scrollTop(activeSentencePosRef.current);
             setSentences(sentences);
             setVocabs(script.vocabs);
         }
     };
     // Lives Hook
     useEffect(() => {
-        console.log("----------Mounted | Script/View----------");
+        console.log("[mounted] play/index");
         livesHooksInit();
         window.addEventListener("keydown", handlersEventKeyboardOnDown);
         return () => {
-            console.log("----------Unmounted | Script/View----------");
+            console.log("[unmounted] play/index");
             window.removeEventListener("keydown", handlersEventKeyboardOnDown);
         };
     }, []);
     useEffect(() => {
-        console.log("----------Watch [refVideo,localOrigin,sentences,activeSentence] | Script/View----------");
+        console.log("[effected by refVideo, sentences, activeSentence] play/index");
         refClosure.current = {
             refVideo: refVideo,
             sentences: sentences,
@@ -269,53 +290,45 @@ const View = () => {
         };
     }, [refVideo, sentences, activeSentence]);
     return (
-        <>
-            <Layout id="script-view" className="main-inner">
-                <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 132px" }}>
-                    <section id="play-panel">
-                        <Button icon={<RedoOutlined />} onClick={handlersPanelPlayAgain} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
-                        <Button icon={<FastBackwardOutlined />} onClick={handlersPanelPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
-                        <Button icon={playButton} onClick={handlersPanelPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
-                        <Button icon={<FastForwardOutlined />} onClick={handlersPanelPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
-                        <div style={{ flex: 1, borderRadius: "0", display: "flex", justifyContent: "center", alignItems: "center", background: "#fff", backgroundColor: "#ccc" }}>
-                            <Switch checked={playStop} onChange={handlersPanelSwithStopMode} size="small" checkedChildren="停顿" unCheckedChildren="不停" />
+        <Layout id="play-index" className="main-inner">
+            <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 132px" }}>
+                <section id="play-panel">
+                    <Button icon={<RedoOutlined />} onClick={handlersPanelPlayAgain} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
+                    <Button icon={<FastBackwardOutlined />} onClick={handlersPanelPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
+                    <Button icon={playButton} onClick={handlersPanelPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
+                    <Button icon={<FastForwardOutlined />} onClick={handlersPanelPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
+                    <div style={{ flex: 1, borderRadius: "0", display: "flex", justifyContent: "center", alignItems: "center", background: "#fff", backgroundColor: "#ccc" }}>
+                        <Switch checked={playStop} onChange={handlersPanelSwithStopMode} size="small" checkedChildren="停顿" unCheckedChildren="不停" />
+                    </div>
+                </section>
+                <Scrollbars ref={refScrollbar}>
+                    <Script dataArticle={dataArticle} activeSentence={activeSentence} activeVocab={activeVocab} onRendered={handlersRenderedCallback} />
+                </Scrollbars>
+                <section id="input-panel">
+                    <div className="input-panel-bar">
+                        <div className="btn">
+                            <Switch checked={inputMode} onChange={handlersPanel2SwitchInputMode} size="small" checkedChildren="文章" unCheckedChildren="单词" />
                         </div>
-                    </section>
-                    <Scrollbars>
-                        <ScriptDOM dataArticle={dataArticle} activeSentence={activeSentence} activeVocab={activeVocab} />
-                    </Scrollbars>
-                    <section id="input-panel">
-                        <div className="input-panel-bar">
-                            <div className="btn">
-                                <Switch checked={inputMode} onChange={handlersPanel2SwitchInputMode} size="small" checkedChildren="文章" unCheckedChildren="单词" />
-                            </div>
-                            <div className="btn">
-                                <Switch checked={dictationVocabsMode} onChange={handlersPanel2SwitchDictationVocabsMode} size="small" checkedChildren="英" unCheckedChildren="中" />
-                            </div>
-                            <div className="btn">
-                                <Button icon={<BulbFilled />} onClick={handlersInputTips} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
-                            </div>
+                        <div className="btn">
+                            <Switch checked={dictationVocabsMode} onChange={handlersPanel2SwitchDictationVocabsMode} size="small" checkedChildren="英" unCheckedChildren="中" />
                         </div>
-                        <Input.TextArea
-                            className="input-panel-area"
-                            value={inputValue}
-                            onChange={(e) => handlersTextInput(e.target.value)}
-                            autoSize
-                            placeholder="Input sentences or vocabs.&#10;EX: wear,wears,wore,worn,wearing"
-                        />
-                    </section>
-                    <section id="hidden-elems">
-                        <audio ref={refAudio} loop></audio>
-                    </section>
-                </div>
-                <div className="main-inner-item-main" style={{ display: "flex" }}>
-                    <video controls style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
-                        <source src={localOrigin} type="video/mp4" /> Your browser does not support video tag.
-                    </video>
-                </div>
-            </Layout>
-        </>
+                        <div className="btn">
+                            <Button icon={<BulbFilled />} onClick={handlersInputTips} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}></Button>
+                        </div>
+                    </div>
+                    <Input.TextArea className="input-panel-area" value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} autoSize placeholder={textareaPlaceholder} />
+                </section>
+                <section id="hidden-elems">
+                    <audio ref={refAudio} loop></audio>
+                </section>
+            </div>
+            <div className="main-inner-item-main" style={{ display: "flex" }}>
+                <video controls style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
+                    <source src={localOrigin} type="video/mp4" /> Your browser does not support video tag.
+                </video>
+            </div>
+        </Layout>
     );
 };
 
-export default View;
+export default Index;

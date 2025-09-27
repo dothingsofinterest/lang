@@ -6,10 +6,10 @@ import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateParagraphsByInsert, updateParagraphsByDelete, updateParagraphsByCut, updateParagraphsByInsertSentence, updateParagraphsByDeleteSentence, updateName, updateRoles, updateScenes, updateVocabs, updateNotes, updateSentenceText, updateSentenceTime, updateParagraphScene, updateParagraphRole, updateTimeOffset } from "../../stores/reducers/script";
 import { fnParseVocabs, fnFloatToSRTTime, fnSRTTimeToFloat } from "../../utils/script";
-import "./Script.scss";
+import "./Data.scss";
 
-const Script = React.memo(() => {
-    console.log("----------Mounted | Script/Script----------");
+const Data = React.memo(() => {
+    console.log("[rendered] script/data");
     const dispatch = useDispatch();
     const script = useSelector((state: RootState) => state.script.data);
     const timeOffset = useSelector((state: RootState) => state.script.timeOffset);
@@ -155,17 +155,17 @@ const Script = React.memo(() => {
     };
     // Template Functions
     useEffect(() => {
-        console.log("----------Mounted | Script/Script----------");
+        console.log("[mounted] script/data");
         return () => {
-            console.log("----------Unmounted | Script/Script----------");
+            console.log("[unmounted] script/data");
         };
     }, []);
     useEffect(() => {
-        console.log("----------Watch renderVersion | Script/Script----------");
+        console.log("[effected by renderVersion] script/data");
         refScrollbar.current?.scrollTop(refScrollTop.current);
     }, [renderVersion]);
     return (
-        <Scrollbars id="script-script" key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
+        <Scrollbars id="script-data" key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
             <div ref={refPanel} style={{ width: "100%", marginBottom: "10px", height: "32px", display: "flex", justifyContent: "space-between" }}>
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubInsertParagraph} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }}>
                     P
@@ -235,4 +235,4 @@ const Script = React.memo(() => {
         </Scrollbars>
     );
 });
-export default Script;
+export default Data;

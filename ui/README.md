@@ -11,3 +11,6 @@ NodeJS 20.16.0
 1. 安装 npm install
 2. 调试 npm run dev
 3. 获得产物 npm run build 得到 /dist
+
+# TODO
+F8 -> reset scroll position

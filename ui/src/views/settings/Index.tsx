@@ -10,13 +10,13 @@ import { clearToken } from "../../stores/reducers/auth";
 import { createJson as fnCreateJson, validateJsonFile as fnValidateJsonFile } from "../../utils/script";
 import { videoUpload, videoCompress, scriptUpload } from "../../api/requestAuth";
 import printJS from "print-js";
-import ScriptDOM from "../script/ScriptDOM";
+import ScriptDOM from "../play/Script";
 import ReactDOMServer from "react-dom/server";
 import { useNavigate } from "react-router-dom";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("----------Rendered | Setting/Index Component----------");
+    console.log("[rendered] settings/index");
     const dispatch = useDispatch();
     const projectName = useSelector((state: RootState) => state.project.name);
     const script = useSelector((state: RootState) => state.script.data);
@@ -161,13 +161,13 @@ const Index = () => {
     // Event Handlers
     // Template Functions
     useEffect(() => {
-        console.log("----------Mounted | Setting/Index Component----------");
+        console.log("[mounted] settings/index");
         return () => {
-            console.log("----------Unmounted | Setting/Index Component----------");
+            console.log("[unmounted] settings/index");
         };
     }, []);
     return (
-        <Layout className="main-inner" id="setting-index">
+        <Layout className="main-inner" id="settings-index">
             <div className="main-inner-item-main">
                 <section className="sec upload">
                     <Upload beforeUpload={handlersImportScript} showUploadList={false}>

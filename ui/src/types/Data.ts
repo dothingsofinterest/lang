@@ -75,7 +75,9 @@ interface StateProject {
     name: string;
     processings: boolean[];
     activeSentence: number;
+    activeSentencePos: number;
     activeVocab: number;
+    activeVocabPos: number;
     playStop: boolean;
 }
 

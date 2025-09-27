@@ -2,14 +2,16 @@ import React, { useState, useRef, useEffect } from "react";
 import { ScriptArticle as DataScriptArticle, Scene as DataScene } from "../../types/Data";
 import { useDispatch } from "react-redux";
 import { updateActiveVocab } from "../../stores/reducers/project";
-interface ScriptDOMProps {
+
+interface ScriptProps {
     dataArticle: DataScriptArticle;
     activeSentence: number;
     activeVocab: number;
     boxID?: string;
+    onRendered?: (scrollTopPoint: number, scrollTopVocab: number) => void;
 }
-const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSentence, activeVocab, boxID = "article" }) => {
-    console.log("----------Render | Script/ScriptDOM----------");
+const Script: React.FC<ScriptProps> = React.memo(({ dataArticle, activeSentence, activeVocab, boxID = "article", onRendered }) => {
+    console.log("[rendered] play/script");
     const dispatch = useDispatch();
     const articleRef = useRef<HTMLDivElement>(null);
     // Event Handlers
@@ -18,30 +20,37 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
     };
     // Event Handlers
     // Functions
-    const fnHighlight = () => {
+    const fnRender = () => {
         if (articleRef.current) {
+            let scrollTopPoint = 0;
+            let scrollTopVocab = 0;
             const spans = articleRef.current.querySelectorAll(".point");
             spans.forEach((span: any, k) => {
                 span.className = activeSentence === k ? "point active" : "point";
+                if (activeSentence === k) scrollTopPoint = span.getBoundingClientRect().top - 150;
             });
             const vocabItems = articleRef.current.querySelectorAll(".vocab-item");
             vocabItems.forEach((span: any, k) => {
                 span.className = activeVocab === k ? "vocab-item active" : "vocab-item";
+                if (activeVocab === k) scrollTopVocab = span.getBoundingClientRect().top + 150;
             });
+            if (onRendered !== undefined) {
+                onRendered(scrollTopPoint, scrollTopVocab);
+            }
         }
     };
     // Functions
     // Lives Hook
     useEffect(() => {
-        console.log("----------Mounted | Script/ScriptDOM----------");
-        fnHighlight();
+        console.log("[mounted] play/script");
+        fnRender();
         return () => {
-            console.log("----------Unmounted | Script/ScriptDOM----------");
+            console.log("[unmounted] play/script");
         };
     }, []);
     useEffect(() => {
-        console.log("----------Watch activeIndex | Script/ScriptDOM----------");
-        fnHighlight();
+        console.log("[effected by activeSentence, activeVocab] play/script");
+        fnRender();
     }, [activeSentence, activeVocab]);
     return (
         <article id={boxID} ref={articleRef}>
@@ -158,4 +167,4 @@ const ScriptDOM: React.FC<ScriptDOMProps> = React.memo(({ dataArticle, activeSen
     );
 });
 
-export default ScriptDOM;
+export default Script;

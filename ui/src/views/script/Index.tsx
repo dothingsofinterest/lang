@@ -5,11 +5,11 @@ import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCir
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime } from "../../utils/script";
-import Script from "./Script";
-import "./Edit.scss";
+import Data from "./Data";
+import "./Index.scss";
 
-const Edit = () => {
-    console.log("----------Render | Script/Edit----------");
+const Index = () => {
+    console.log("[rendered] script/index");
     const localOriginCompress = useSelector((state: RootState) => state.video.localOriginCompress);
     const [current, setCurrent] = useState("00:00:00,000 / 0");
     const [waveScale, setWaveScale] = useState(0);
@@ -125,17 +125,16 @@ const Edit = () => {
     // Lives Hook
     // Template Functions
     useEffect(() => {
-        console.log("----------Mounted | Script/Edit----------");
+        console.log("[mounted] script/index");
         livesHookCreateWavesurfer();
-        // Unmounted
         return () => {
-            console.log("----------Unmounted | Script/Edit----------");
+            console.log("[unmounted] script/index");
         };
     }, []);
     return (
-        <Layout id="script-edit" className="main-inner" style={{ position: "relative", padding: "0 0 178px", margin: "0" }}>
+        <Layout id="script-index" className="main-inner" style={{ position: "relative", padding: "0 0 178px", margin: "0" }}>
             <div className="main-inner-item-aside">
-                <Script />
+                <Data />
             </div>
             <div className="main-inner-item-main" style={{ display: "flex", justifyContent: "flex-start" }}>
                 <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
@@ -155,4 +154,4 @@ const Edit = () => {
         </Layout>
     );
 };
-export default Edit;
+export default Index;
