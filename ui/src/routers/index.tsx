@@ -4,7 +4,8 @@ import NotFound from "../views/public/NotFound";
 import App from "../views/layout/App";
 import Settings from "../views/settings/Index";
 import Script from "../views/script/Index";
-import Play from "../views/play/Index";
+import Dictation from "../views/dictation/Index";
+import Speaking from "../views/speaking/Index";
 
 const routes = [
     {
@@ -28,8 +29,12 @@ const routes = [
                 element: <Script />,
             },
             {
-                path: "play",
-                element: <Play />,
+                path: "dictation",
+                element: <Dictation />,
+            },
+            {
+                path: "speaking",
+                element: <Speaking />,
             },
         ],
     },

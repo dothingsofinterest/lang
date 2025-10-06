@@ -1,0 +1,32 @@
+#dictation-index {
+    #dictation-panel {
+        width: 100%;
+        height: 32px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: #202024;
+        display: flex;
+        justify-content: space-between;
+        .btn {
+            flex: 1;
+            border-radius: 0;
+            background-color: #ccc;
+        }
+    }
+    #input-area {
+        width: 100%;
+        height: 132px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        .input-textarea {
+            min-height: 132px;
+            border-radius: 0;
+            color: #000;
+        }
+    }
+    #hidden-elems {
+        display: none;
+    }
+}

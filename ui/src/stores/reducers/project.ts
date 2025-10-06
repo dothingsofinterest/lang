@@ -3,12 +3,12 @@ import { StateProject, PayloadProject } from "../../types/Data";
 
 const initialState: StateProject = {
     name: "",
-    processings: [], // 0-Set/Index 1,2-Video/Subtitle 3-Audio/Index
+    processings: [], // 0:Set/Index 1,2:Video/Subtitle 3:Audio/Index
     activeSentence: 0,
     activeSentencePos: 0,
     activeVocab: 0,
     activeVocabPos: 0,
-    playStop: true,
+    playMode: 0, // 0:article 1:vocabs
 };
 
 const slice = createSlice({
@@ -35,12 +35,12 @@ const slice = createSlice({
         updateActiveVocabPos: (state, action: PayloadAction<number>) => {
             state.activeVocabPos = action.payload;
         },
-        updatePlayStop: (state, action: PayloadAction<boolean>) => {
-            state.playStop = action.payload;
+        updatePlayMode: (state, action: PayloadAction<number>) => {
+            state.playMode = action.payload;
         },
     },
 });
 
-export const { updateName, updateProcessings, updateActiveSentence, updateActiveSentencePos, updateActiveVocab, updateActiveVocabPos, updatePlayStop } = slice.actions;
+export const { updateName, updateProcessings, updateActiveSentence, updateActiveSentencePos, updateActiveVocab, updateActiveVocabPos, updatePlayMode } = slice.actions;
 
 export default slice.reducer;

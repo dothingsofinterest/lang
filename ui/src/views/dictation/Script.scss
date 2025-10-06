@@ -1,0 +1,113 @@
+#article {
+    h1 {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 900;
+        line-height: 40px;
+        color: #fff;
+        margin: 10px 16px;
+    }
+    .scene {
+        background: #666;
+        padding: 10px 0 0;
+        margin: 10px 0;
+        h2 {
+            text-align: center;
+            font-size: 14px;
+            font-style: italic;
+            line-height: 20px;
+            color: #ccc;
+            margin: 0px 10px;
+        }
+        p {
+            border-top: 1px dotted #ccc;
+            margin: 0;
+            padding: 6px 10px;
+            color: #fff;
+            font-size: 16px;
+            line-height: 28px;
+            &:first-of-type {
+                border-top: 0;
+            }
+            &.pure {
+                text-indent: 30px;
+            }
+            .role {
+                font-style: normal;
+                font-weight: 900;
+                color: #ccc;
+            }
+            .point {
+                padding: 0 4px;
+                &.activated {
+                    color: rgb(252, 221, 92);
+                }
+                &.active {
+                    color: rgb(252, 221, 92);
+                    font-weight: 900;
+                }
+                &:first-child {
+                    padding: 0;
+                }
+            }
+        }
+        ul {
+            border-top: 1px dotted #ccc;
+            margin: 0;
+            padding: 6px 10px;
+            color: #fff;
+            font-size: 14px;
+            line-height: 28px;
+            &.active {
+                color: rgb(252, 221, 92);
+            }
+            .role {
+                font-style: normal;
+                font-weight: 900;
+                color: #ccc;
+            }
+        }
+    }
+    footer {
+        height: 100%;
+        .vocabs,
+        .notes {
+            color: #fff;
+            padding: 10px 0 0;
+            margin: 10px 0;
+            background: #666;
+            .title {
+                text-align: center;
+                font-weight: 900;
+                font-size: 16px;
+                color: #fff;
+                margin: 0 10px;
+                line-height: 22px;
+            }
+            .vocab-item,
+            .note-item {
+                margin: 0;
+                padding: 6px 10px;
+                border-top: 1px dotted #ccc;
+                line-height: 26px;
+                &.activated {
+                    color: rgb(252, 221, 92);
+                }
+                &.active {
+                    font-weight: 900;
+                    color: rgb(252, 221, 92);
+                }
+                &:nth-child(2) {
+                    border-top: 0;
+                }
+                .item-index {
+                    font-weight: 900;
+                    margin-right: 4px;
+                }
+            }
+        }
+        .notes {
+            margin-bottom: 0;
+        }
+    }
+}

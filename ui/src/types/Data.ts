@@ -78,7 +78,7 @@ interface StateProject {
     activeSentencePos: number;
     activeVocab: number;
     activeVocabPos: number;
-    playStop: boolean;
+    playMode: number;
 }
 
 interface StateScript {
@@ -88,8 +88,8 @@ interface StateScript {
 }
 
 interface StateVideo {
-    localOrigin: string;
-    localOriginCompress: string;
+    URL: string;
+    URLCompressed: string;
 }
 
 interface PayloadScript {

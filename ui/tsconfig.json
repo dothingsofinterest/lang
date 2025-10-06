@@ -15,5 +15,5 @@
         "noEmit": true, // 编译文存不会复制到编译目录
         "jsx": "react-jsx" // 支持 react 的 JSX
     },
-    "include": ["src", "assets.d.ts"] // 对要编译的源文件进一步筛选
+    "include": ["src"] // 对要编译的源文件进一步筛选
 }

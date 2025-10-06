@@ -4,15 +4,14 @@ import { PlusCircleOutlined, UploadOutlined, PrinterOutlined, DownloadOutlined, 
 import store, { RootState } from "../../stores";
 import { useSelector, useDispatch, Provider } from "react-redux";
 import { updateName, updateActiveSentence, updateActiveVocab, updateProcessings } from "../../stores/reducers/project";
-import { updateLocalOrigin, updateLocalOriginCompress } from "../../stores/reducers/video";
+import { updateURL, updateURLCompressed } from "../../stores/reducers/video";
 import { updateData } from "../../stores/reducers/script";
 import { clearToken } from "../../stores/reducers/auth";
 import { createJson as fnCreateJson, validateJsonFile as fnValidateJsonFile } from "../../utils/script";
 import { videoUpload, videoCompress, scriptUpload } from "../../api/requestAuth";
 import printJS from "print-js";
-import ScriptDOM from "../play/Script";
+import ScriptDOM from "../dictation/Script";
 import ReactDOMServer from "react-dom/server";
-import { useNavigate } from "react-router-dom";
 import "./Index.scss";
 
 const Index = () => {
@@ -22,12 +21,9 @@ const Index = () => {
     const script = useSelector((state: RootState) => state.script.data);
     const dataArticle = useSelector((state: RootState) => state.script.dataArticle);
     const scriptTimeOffset = useSelector((state: RootState) => state.script.timeOffset);
-    const localOrigin = useSelector((state: RootState) => state.video.localOrigin);
-    const localOriginCompress = useSelector((state: RootState) => state.video.localOriginCompress);
+    const videoURL = useSelector((state: RootState) => state.video.URL);
+    const videoURLCompressed = useSelector((state: RootState) => state.video.URLCompressed);
     const processings = useSelector((state: RootState) => state.project.processings);
-    const [loadings, setLoadings] = useState<boolean[]>([]);
-    const navigate = useNavigate();
-    // Event Handlers
     const handlersUploadVideo = async (file: any) => {
         if (/^(.+?)\.(mp4|MP4)$/g.test(file.name) && file.type === "video/mp4") {
             dispatch(updateProcessings({ buttonID: 0, buttonStatus: true }));
@@ -42,12 +38,12 @@ const Index = () => {
                     dispatch(updateActiveSentence(0));
                     dispatch(updateActiveVocab(0));
                     // Create Local Video URL
-                    dispatch(updateLocalOrigin(URL.createObjectURL(file)));
+                    dispatch(updateURL(URL.createObjectURL(file)));
                     // Create Local Low Video URL
                     const resBlob = await videoCompress({ project: res.data.project });
                     const blob = new Blob([resBlob], { type: "video/mp4" });
                     const url = URL.createObjectURL(blob);
-                    dispatch(updateLocalOriginCompress(url));
+                    dispatch(updateURLCompressed(url));
                 } else {
                     alert(res.message);
                 }
@@ -126,24 +122,28 @@ const Index = () => {
             body { margin: 0; padding: 0; font-size: 14px; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
             ol, ul, li { list-style: none; }
             #article-print { width: 1000px; }
-            #article-print h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 50px; color: #000; margin: 10px 0; }
-            #article-print h2 { text-align: center; font-size: 14px; font-weight: 300; line-height: 20px; color: #000; margin: 10px 16px; }
-            #article-print .scene { background: #ccc; padding: 6px 0; margin: 12px 20px; }
-            #article-print .p { border: 1px dotted #000; margin: 12px 20px; padding: 2px 6px; color: #000; font-size: 14px; line-height: 28px; }
-            #article-print .p:nth-child(2) { margin-top: 0; }
-            #article-print .p .point { padding: 0 4px; }
-            #article-print .p .role { font-style: normal; font-weight: 900; padding-right: 2px; }
-            #article-print .p ul { font-style: normal; font-size: 12px; }
+            #article-print h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 40px; color: #000; margin: 10px 15px; }
+            #article-print .scene { background: #666; padding: 10px 0 0; margin: 10px 20px; border-radius: 4px; }
+            #article-print .scene h2 { text-align: center; font-size: 14px; font-weight: 300; font-style: italic; line-height: 20px; color: #ccc; margin: 0px 10px; }
+            #article-print .scene p { border-top: 1px dotted #ccc; margin: 0; padding: 6px 10px; color: #fff; font-size: 14px; line-height: 26px; }
+            #article-print .scene p.pure { text-indent: 30px; }
+            #article-print .scene p:first-of-type  { border-top: 0; }
+            #article-print .scene p .point { padding: 0 4px; }
+            #article-print .scene p .point:first-child { padding: 0; }
+            #article-print .scene p .role { font-style: normal; font-weight: 900; color: #ccc; }
+            #article-print .scene ul { border-top: 1px dotted #ccc; margin: 0; padding: 6px 10px; color: #fff; font-size: 14px; line-height: 26px; }
+            #article-print .scene ul .role { font-style: normal; font-weight: 900; color: #ccc; }
             #article-print footer { height: 100%; }
-            #article-print footer .vocabs { margin-bottom: 10px; }
             #article-print footer .vocabs,
-            #article-print footer .notes { color: #000; line-height: 28px; padding: 10px 20px; }
-            #article-print footer .vocabs .item-index,
-            #article-print footer .notes .item-index { font-weight: 900; margin-right: 4px; }
+            #article-print footer .notes { color: #fff; padding: 10px 0 0; margin: 20px; background: #666; border-radius: 4px; }
             #article-print footer .vocabs .title,
-            #article-print footer .notes .title { line-height: 36px; display: flex; align-items: center; text-align: center; justify-content: center; font-weight: 900; font-size: 14px; }
-            #article-print footer .title:before, 
-            #article-print footer .title:after { position: relative; width: 50%; border-block-start: 1px dotted #000; border-block-end: 0; transform: translateY(50%); content: ""; }`;
+            #article-print footer .notes .title { color: #fff; margin: 0 10px; line-height: 22px; text-align: center; font-weight: 900; font-size: 16px; }
+            #article-print footer .vocabs .vocab-item,
+            #article-print footer .notes .note-item { margin: 0; padding: 6px 10px; border-top: 1px dotted #ccc; line-height: 26px; }
+            #article-print footer .vocabs .vocab-item:nth-child(2),
+            #article-print footer .notes .note-item:nth-child(2) { border-top: 0; }
+            #article-print footer .vocabs .item-index,
+            #article-print footer .notes .item-index { font-weight: 900; margin-right: 4px; }`;
             const content = ReactDOMServer.renderToStaticMarkup(
                 <Provider store={store}>
                     <ScriptDOM dataArticle={dataArticle} activeSentence={0} activeVocab={0} boxID="article-print" />
@@ -156,10 +156,7 @@ const Index = () => {
     };
     const handlersLogout = () => {
         dispatch(clearToken());
-        //navigate("/#login");
     };
-    // Event Handlers
-    // Template Functions
     useEffect(() => {
         console.log("[mounted] settings/index");
         return () => {
@@ -196,10 +193,10 @@ const Index = () => {
                     <Input addonBefore="Project name: " value={projectName} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
                 <section className="sec">
-                    <Input addonBefore="Local video : " value={localOrigin} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                    <Input addonBefore="Local video : " value={videoURL} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
                 <section className="sec">
-                    <Input addonBefore="Local compressed video : " value={localOriginCompress} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
+                    <Input addonBefore="Local compressed video : " value={videoURLCompressed} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
                 <section style={{ display: "flex", justifyContent: "space-between" }}>
                     <Input addonBefore="Script Name: " value={script.name} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />

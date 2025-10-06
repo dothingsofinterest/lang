@@ -10,7 +10,7 @@ import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] script/index");
-    const localOriginCompress = useSelector((state: RootState) => state.video.localOriginCompress);
+    const videoURLCompressed = useSelector((state: RootState) => state.video.URLCompressed);
     const [current, setCurrent] = useState("00:00:00,000 / 0");
     const [waveScale, setWaveScale] = useState(0);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
@@ -19,7 +19,7 @@ const Index = () => {
     const refWavesurfer = useRef<WaveSurfer | null>(null);
     // Event Handlers
     const handlersVideoPlayBackward = async () => {
-        if (refVideo.current && localOriginCompress) {
+        if (refVideo.current && videoURLCompressed) {
             const pos = Math.max(0, refVideo.current.currentTime - 0.1);
             const SRTTime = fnFloatToSRTTime(pos);
             refVideo.current.currentTime = pos;
@@ -31,7 +31,7 @@ const Index = () => {
         }
     };
     const handlersVideoPlayForward = async () => {
-        if (refVideo.current && localOriginCompress) {
+        if (refVideo.current && videoURLCompressed) {
             const pos = refVideo.current.currentTime + 0.1;
             const SRTTime = fnFloatToSRTTime(pos);
             refVideo.current.currentTime = pos;
@@ -43,7 +43,7 @@ const Index = () => {
         }
     };
     const handlersVideoPlay = () => {
-        if (refVideo.current && localOriginCompress) {
+        if (refVideo.current && videoURLCompressed) {
             if (refVideo.current.paused) {
                 setPlayButton(<PauseCircleOutlined />);
                 refVideo.current
@@ -68,7 +68,7 @@ const Index = () => {
     };
     const handlersVideoCanPlayThrough = () => {
         if (refWavesurfer.current) {
-            refWavesurfer.current.load(localOriginCompress);
+            refWavesurfer.current.load(videoURLCompressed);
         }
     };
     const handlersVideoTagOnTimeUpdate = (e: any) => {
@@ -84,9 +84,8 @@ const Index = () => {
         await navigator.clipboard.writeText(SRTTime);
         setCurrent(`${SRTTime} / ${e.target.currentTime}`);
     };
-    // Lives Hook
     const livesHookCreateWavesurfer = () => {
-        if (refVideo.current && localOriginCompress) {
+        if (refVideo.current && videoURLCompressed) {
             refWavesurfer.current = WaveSurfer.create({
                 container: "#waver",
                 media: refVideo.current || undefined,
@@ -122,8 +121,6 @@ const Index = () => {
             refVideo.current?.load();
         }
     };
-    // Lives Hook
-    // Template Functions
     useEffect(() => {
         console.log("[mounted] script/index");
         livesHookCreateWavesurfer();
@@ -138,7 +135,7 @@ const Index = () => {
             </div>
             <div className="main-inner-item-main" style={{ display: "flex", justifyContent: "flex-start" }}>
                 <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
-                    <source src={localOriginCompress} type="video/mp4" /> Your browser does not support video tag.
+                    <source src={videoURLCompressed} type="video/mp4" /> Your browser does not support video tag.
                 </video>
             </div>
             <div className="main-inner-item-footer" style={{ height: "178px", position: "absolute", bottom: "0", left: "0" }}>

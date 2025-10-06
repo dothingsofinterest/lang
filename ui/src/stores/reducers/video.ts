@@ -2,23 +2,23 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StateVideo } from "../../types/Data";
 
 const initialState: StateVideo = {
-    localOrigin: "",
-    localOriginCompress: "",
+    URL: "",
+    URLCompressed: "",
 };
 
 const slice = createSlice({
     name: "video",
     initialState,
     reducers: {
-        updateLocalOrigin: (state, action: PayloadAction<string>) => {
-            state.localOrigin = action.payload;
+        updateURL: (state, action: PayloadAction<string>) => {
+            state.URL = action.payload;
         },
-        updateLocalOriginCompress: (state, action: PayloadAction<string>) => {
-            state.localOriginCompress = action.payload;
+        updateURLCompressed: (state, action: PayloadAction<string>) => {
+            state.URLCompressed = action.payload;
         },
     },
 });
 
-export const { updateLocalOrigin, updateLocalOriginCompress } = slice.actions;
+export const { updateURL, updateURLCompressed } = slice.actions;
 
 export default slice.reducer;

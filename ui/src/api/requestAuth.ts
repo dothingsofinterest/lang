@@ -143,3 +143,13 @@ export const scriptUpdateAss = (params: object, data: AssFormat): Promise<Respon
     });
 };
 // Script
+
+// Record
+export const recordUpload = (data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/record/upload`,
+        data: data,
+    });
+};
+// Record
