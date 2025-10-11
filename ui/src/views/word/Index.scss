@@ -1,0 +1,43 @@
+#word-index {
+    .main-inner-item-aside {
+        #word-list {
+            background: #666;
+            .line {
+                color: #fff;
+                margin: 0;
+                padding: 6px 10px;
+                border-top: 1px dotted #ccc;
+                line-height: 26px;
+                &.matched {
+                    font-weight: 900;
+                    color: rgb(252, 221, 92);
+                }
+                &:first-child {
+                    border-top: 0;
+                }
+            }
+        }
+    }
+    .main-inner-item-main {
+        #selector {
+            background: #000;
+            .line {
+                display: flex;
+                justify-content: space-between;
+                align-items: stretch;
+                .item {
+                    flex: 1;
+                    border: 1px solid #ccc;
+                    display: inline-block;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    img {
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

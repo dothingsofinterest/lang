@@ -8,20 +8,24 @@ export type { PlayLoopAudio };
 
 /* Script */
 interface Script {
-    name: string;
+    title: string;
     roles: string[];
     scenes: string[];
-    vocabs: string[];
-    notes: string[];
+    vocabs: Vocab[];
+    grammars: string[];
     paragraphs: Paragraph[];
-    assFormat: AssFormat;
 }
 
-interface ScriptArticle {
-    name: string;
-    vocabs: string[];
-    notes: string[];
+interface FormattedData {
+    title: string;
+    vocabs: Vocab[];
+    grammars: string[];
     scenes: Scene[];
+}
+
+interface Vocab {
+    text: string;
+    image: string[];
 }
 
 interface Paragraph {
@@ -43,27 +47,7 @@ interface Scene {
     paragraphs: Paragraph[];
 }
 
-interface AssFormat {
-    enFontSize: number;
-    enFontColor: string;
-    enFontColorInline: string;
-    enFontOutlineWidth: number;
-    enFontOutlineColor: string;
-    enAlignment: number;
-    enMarginLR: number;
-    enMarginV: number;
-    cnFontSize: number;
-    cnFontColor: string;
-    cnFontColorInline: string;
-    cnFontOutlineWidth: number;
-    cnFontOutlineColor: string;
-    cnAlignment: number;
-    cnMarginLR: number;
-    cnMarginV: number;
-    cnLineBreak: number;
-}
-
-export type { Script, ScriptArticle, Paragraph, Sentence, Scene, AssFormat };
+export type { Script, FormattedData, Vocab, Paragraph, Sentence, Scene };
 /* Script */
 
 /* Redux */
@@ -73,23 +57,21 @@ interface StateAuth {
 
 interface StateProject {
     name: string;
-    processings: boolean[];
+    videoURL: string;
+    videoCompressedURL: string;
+    script: StateScript;
     activeSentence: number;
     activeSentencePos: number;
     activeVocab: number;
     activeVocabPos: number;
     playMode: number;
+    processings: boolean[];
 }
 
 interface StateScript {
     data: Script;
-    dataArticle: ScriptArticle;
+    dataFormatted: FormattedData;
     timeOffset: number;
-}
-
-interface StateVideo {
-    URL: string;
-    URLCompressed: string;
 }
 
 interface PayloadScript {
@@ -104,5 +86,5 @@ interface PayloadProject {
     buttonStatus?: boolean;
 }
 
-export type { StateAuth, StateProject, StateScript, StateVideo, PayloadScript, PayloadProject };
+export type { StateAuth, StateProject, StateScript, PayloadScript, PayloadProject };
 /* Redux */

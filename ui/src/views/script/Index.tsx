@@ -1,23 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button, Upload, Checkbox } from "antd";
+import { useNavigate } from "react-router-dom";
 import WaveSurfer from "wavesurfer.js";
 import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime } from "../../utils/script";
 import Data from "./Data";
+
 import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] script/index");
-    const videoURLCompressed = useSelector((state: RootState) => state.video.URLCompressed);
+    const navigate = useNavigate();
+    const project = useSelector((state: RootState) => state.project);
+    const videoURLCompressed = useSelector((state: RootState) => state.project.videoCompressedURL);
     const [current, setCurrent] = useState("00:00:00,000 / 0");
     const [waveScale, setWaveScale] = useState(0);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refSlider = useRef<HTMLInputElement>(null);
     const refWavesurfer = useRef<WaveSurfer | null>(null);
-    // Event Handlers
     const handlersVideoPlayBackward = async () => {
         if (refVideo.current && videoURLCompressed) {
             const pos = Math.max(0, refVideo.current.currentTime - 0.1);
@@ -122,6 +125,10 @@ const Index = () => {
         }
     };
     useEffect(() => {
+        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
+            alert("Please create a project.");
+            navigate("/settings");
+        }
         console.log("[mounted] script/index");
         livesHookCreateWavesurfer();
         return () => {

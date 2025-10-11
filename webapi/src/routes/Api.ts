@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { conGenerate } from "../controller/TtsController";
-import { upload as videoUpload, stream as videoStream, compress as videoCompress, subtitle as videoSubtitle, subtitlePreview as videoSubtitlePreview, download as videoDownload } from "../controller/VideoController";
-import { upload as scriptUpload, updateAss as scriptUpdateAss } from "../controller/ScriptController";
-import { uploadFile as uploadFileMiddleware, uploadVideo as uploadVideoMiddleware } from "../middleware/Upload";
+import { conGenerate, importTts, streamTts } from "../controller/TtsController";
+import { importVideo, streamVideo, compressVideo } from "../controller/VideoController";
+import { importScript, importVocabImg, streamVocabImg, uploadVocabImg } from "../controller/ScriptController";
+import { uploadJson as uploadJsonMiddleware, uploadVideo as uploadVideoMiddleware, uploadZip as uploadZipMiddleware, uploadImg as uploadImgMiddleware } from "../middleware/Upload";
 
 const router = express.Router();
 
@@ -13,21 +13,22 @@ router.get("/", (res: Response) => {
 // Index
 
 // Video
-router.post("/video/upload", uploadVideoMiddleware, videoUpload);
-router.get("/video/download", videoDownload);
-router.get("/video/stream", videoStream);
-router.get("/video/compress", videoCompress);
-router.get("/video/subtitle", videoSubtitle);
-router.get("/video/subtitle-preview", videoSubtitlePreview);
+router.post("/video/importVideo", uploadVideoMiddleware, importVideo);
+router.get("/video/streamVideo", streamVideo);
+router.get("/video/compressVideo", compressVideo);
 // Video
 
 // Script
-router.post("/script/upload", uploadFileMiddleware, scriptUpload);
-router.post("/script/update-ass", scriptUpdateAss);
+router.get("/script/streamVocabImg", streamVocabImg);
+router.post("/script/importScript", uploadJsonMiddleware, importScript);
+router.post("/script/importVocabImg", uploadZipMiddleware, importVocabImg);
+router.post("/script/uploadVocabImg", uploadImgMiddleware, uploadVocabImg);
 // Script
 
 // TTS
 router.get("/tts/gen", conGenerate);
+router.get("/tts/streamTts", streamTts);
+router.post("/tts/importTts", uploadZipMiddleware, importTts);
 // TTS
 
 // User

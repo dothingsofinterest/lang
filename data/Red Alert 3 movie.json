@@ -15,82 +15,304 @@
         "Brussels-布鲁塞尔"
     ],
     "vocabs": [
-        "n.时空, space-time, /a/",
-        "adj.走了的;不在的, gone, /ɡɔːn/",
-        "v.稍等, hold on, /a/",
-        "n.噩梦, nightmare/nightmares, /ˈnaɪtmer/",
-        "n.炸弹, bomb/bombs, /bɑːm/",
-        "adj.原子的, atomic, /əˈtɑːmɪk/",
-        "v.消灭;歼灭, annihilate/annihilates/annihilated/annihilated/annihilating, /əˈnaɪəleɪt/",
-        "adj.你死我活的;不共戴天的, mortal, /ˈmɔːrtl/",
-        "n.旭日, rising sun, /ˈraɪzɪŋ/",
-        "v.登上;安排, mount/mounts/mounted/mounted/mounting, /maʊnt/",
-        "n.帝国, empire/empires, /ˈempaɪər/",
-        "n.总理, premier/premiers, /prɪˈmɪr/",
-        "n.鬼门关, death's door, /ˈdeθs dɔːr/",
-        "n.懦夫, coward/cowards, /ˈkaʊərd/",
-        "v.逃跑, flee/flees/fled/fled/fleeing, /fliː-fled/",
-        "n.苏联, USSR, /a/",
-        "n.死亡, death/deaths, /deθ/",
-        "n.同志, comrade/comrades, /ˈkɑːmræd/",
-        "v.上升;增长, rise/rises/rose/risen/rising, /raɪz/",
-        "v.快速行动, hurry, /ˈhɜːri/",
-        "n.医生;博士, doctor/doctors, /ˈdɑːktər/",
-        "v.恳求, beg/begs/begged/begged/begging, /beɡ/",
-        "n.类似 xxx 一样的东西, sort of something, /sɔːrt/",
-        "v.摆脱;逃逸, escape/escapes/escaped/escaped/escaping, /əˈskāp/",
-        "n.逃生路线, escape route, /a/",
-        "n.路线, route/routes, /ruːt/",
-        "n.十二, twelve, /twelv/",
-        "adj.秘密的, secret, /ˈsiːkrət/",
-        "n.项目, project/projects, /ˈprɑːdʒekt , prəˈdʒekt/",
-        "prep.负责, in charge of, /tʃɑːrdʒ/",
-        "prep.恕我直言, with respect, /rɪˈspekt/",
-        "n.将军, general/generals, /ˈdʒenrəl/",
-        "n.电梯, elevator/elevators, /ˈelɪveɪtər/",
-        "n.机器, machine/machines, /məˈʃiːn/",
-        "conj.是否, if, /ɪf/",
-        "n.坐标, coordinate/coordinates, /koʊˈɔːrdɪneɪt , koʊˈɔːrdɪnət/",
-        "v.等待, await/awaits/awaited/awaited/awaiting, /əˈweɪt/",
-        "v.打乱;使中断, disrupt/disrupts/disrupted/disrupted/disrupting, /dɪsˈrʌpt/",
-        "v.触碰, touch/touches/touched/touched/touching, /tʌtʃ/",
-        "n.布鲁塞尔, Brussels, /ˈbrʌsəlz/",
-        "n.研讨会, conference/conferences, /ˈkɑːnfərəns/",
-        "n.敌人, enemy/enemies, /ˈenəmi/",
-        "n.优势, superiority/superiorities, /suːˌpɪriˈɔːrəti/",
-        "adj.科技的, technological, /ˌteknəˈlɑːdʒɪkl/",
-        "adj.无敌的;不可战胜的, invincible, /ɪnˈvɪnsəbl/",
-        "v.改变, alter/alters/altered/altered/altering, /ˈɔːltər/",
-        "n.目前;礼物, present/presents, /ˈpreznt/",
-        "v.意思是, mean/means/meant/meant/meaning, /miːn/",
-        "n.欧洲, Europe, /ˈjʊrəp/",
-        "n.同盟国, ally/allies, /ˈælaɪ , əˈlaɪ/",
-        "adj.西部的, western, /ˈwestərn/",
-        "v.击败, defeat/defeats/defeated/defeated/defeating, /dɪˈfiːt/",
-        "v.接收, receive/receives/received/received/receiving, /rɪˈsiːv/",
-        "adj.紧急的, emergency, /iˈmɜːrdʒənsi/",
-        "n.电子信号播送, transmission/transmissions, /trænzˈmɪʃn/",
-        "adj.北方的, northern, /ˈnɔːrðərn/",
-        "v.撤离, evacuate/evacuates/evacuated/evacuated/evacuating, /ɪˈvækjueɪt/",
-        "v.攻击, attack/attacks/attacked/attacked/attacking, /əˈtæk/",
-        "v.听见, hear/hears/heard/heard/hearing, /hɪr/",
-        "adj.正在逃跑的, on the run, /a/",
-        "v.撒开;释放, unleash/unleashes/unleashed/unleashed/unleashing, /ʌnˈliːʃ/",
-        "adj.皇帝的;御用的, imperial, /ɪmˈpɪriəl/",
-        "v.挣扎, struggle/struggles/struggled/struggled/struggling, /ˈstrʌɡl/",
-        "adj.不可避免的, inevitable, /ɪnˈevɪtəbl/",
-        "v.阻碍, stand in the way of, /a/",
-        "adj.神圣的;天赐的, divine, /dɪˈvaɪn/",
-        "n.命运;使命, destiny/destinies, /ˈdestəni/",
-        "v.清扫, sweep/sweeps/swept/swept/sweeping, /swiːp/",
-        "n.前进;进发, march/marches, /mɑːrtʃ/",
-        "v.站立, stand/stands/stood/stood/standing, /stænd/",
-        "v.终止, cease/ceases/ceased/ceased/ceasing, /siːs/",
-        "v.臣服, bow/bows/bowed/bowed/bowing, /baʊ B/",
-        "v.袭击, assault/assaults, /əˈsɔːlt/",
-        "v.似乎;看来, appear/appears/appeared/appeared/appearing, /əˈpɪr/"
+        {
+            "text": "n.时空, space-time, /a/",
+            "image": []
+        },
+        {
+            "text": "adj.走了的;不在的, gone, /ɡɔːn/",
+            "image": []
+        },
+        {
+            "text": "v.稍等, hold on, /a/",
+            "image": []
+        },
+        {
+            "text": "n.噩梦, nightmare/nightmares, /ˈnaɪtmer/",
+            "image": []
+        },
+        {
+            "text": "n.炸弹, bomb/bombs, /bɑːm/",
+            "image": []
+        },
+        {
+            "text": "adj.原子的, atomic, /əˈtɑːmɪk/",
+            "image": []
+        },
+        {
+            "text": "v.消灭;歼灭, annihilate/annihilates/annihilated/annihilated/annihilating, /əˈnaɪəleɪt/",
+            "image": []
+        },
+        {
+            "text": "adj.你死我活的;不共戴天的, mortal, /ˈmɔːrtl/",
+            "image": []
+        },
+        {
+            "text": "n.旭日, rising sun, /ˈraɪzɪŋ/",
+            "image": []
+        },
+        {
+            "text": "v.登上;安排, mount/mounts/mounted/mounted/mounting, /maʊnt/",
+            "image": []
+        },
+        {
+            "text": "n.帝国, empire/empires, /ˈempaɪər/",
+            "image": []
+        },
+        {
+            "text": "n.总理, premier/premiers, /prɪˈmɪr/",
+            "image": []
+        },
+        {
+            "text": "n.鬼门关, death's door, /ˈdeθs dɔːr/",
+            "image": []
+        },
+        {
+            "text": "n.懦夫, coward/cowards, /ˈkaʊərd/",
+            "image": []
+        },
+        {
+            "text": "v.逃跑, flee/flees/fled/fled/fleeing, /fliː-fled/",
+            "image": []
+        },
+        {
+            "text": "n.苏联, USSR, /a/",
+            "image": []
+        },
+        {
+            "text": "n.死亡, death/deaths, /deθ/",
+            "image": []
+        },
+        {
+            "text": "n.同志, comrade/comrades, /ˈkɑːmræd/",
+            "image": []
+        },
+        {
+            "text": "v.上升;增长, rise/rises/rose/risen/rising, /raɪz/",
+            "image": []
+        },
+        {
+            "text": "v.快速行动, hurry, /ˈhɜːri/",
+            "image": []
+        },
+        {
+            "text": "n.医生;博士, doctor/doctors, /ˈdɑːktər/",
+            "image": []
+        },
+        {
+            "text": "v.恳求, beg/begs/begged/begged/begging, /beɡ/",
+            "image": []
+        },
+        {
+            "text": "n.类似 xxx 一样的东西, sort of something, /sɔːrt/",
+            "image": []
+        },
+        {
+            "text": "v.摆脱;逃逸, escape/escapes/escaped/escaped/escaping, /əˈskāp/",
+            "image": []
+        },
+        {
+            "text": "n.逃生路线, escape route, /a/",
+            "image": []
+        },
+        {
+            "text": "n.路线, route/routes, /ruːt/",
+            "image": []
+        },
+        {
+            "text": "n.十二, twelve, /twelv/",
+            "image": []
+        },
+        {
+            "text": "adj.秘密的, secret, /ˈsiːkrət/",
+            "image": []
+        },
+        {
+            "text": "n.项目, project/projects, /ˈprɑːdʒekt , prəˈdʒekt/",
+            "image": []
+        },
+        {
+            "text": "prep.负责, in charge of, /tʃɑːrdʒ/",
+            "image": []
+        },
+        {
+            "text": "prep.恕我直言, with respect, /rɪˈspekt/",
+            "image": []
+        },
+        {
+            "text": "n.将军, general/generals, /ˈdʒenrəl/",
+            "image": []
+        },
+        {
+            "text": "n.电梯, elevator/elevators, /ˈelɪveɪtər/",
+            "image": []
+        },
+        {
+            "text": "n.机器, machine/machines, /məˈʃiːn/",
+            "image": []
+        },
+        {
+            "text": "conj.是否, if, /ɪf/",
+            "image": []
+        },
+        {
+            "text": "n.坐标, coordinate/coordinates, /koʊˈɔːrdɪneɪt , koʊˈɔːrdɪnət/",
+            "image": []
+        },
+        {
+            "text": "v.等待, await/awaits/awaited/awaited/awaiting, /əˈweɪt/",
+            "image": []
+        },
+        {
+            "text": "v.打乱;使中断, disrupt/disrupts/disrupted/disrupted/disrupting, /dɪsˈrʌpt/",
+            "image": []
+        },
+        {
+            "text": "v.触碰, touch/touches/touched/touched/touching, /tʌtʃ/",
+            "image": []
+        },
+        {
+            "text": "n.布鲁塞尔, Brussels, /ˈbrʌsəlz/",
+            "image": []
+        },
+        {
+            "text": "n.研讨会, conference/conferences, /ˈkɑːnfərəns/",
+            "image": []
+        },
+        {
+            "text": "n.敌人, enemy/enemies, /ˈenəmi/",
+            "image": []
+        },
+        {
+            "text": "n.优势, superiority/superiorities, /suːˌpɪriˈɔːrəti/",
+            "image": []
+        },
+        {
+            "text": "adj.科技的, technological, /ˌteknəˈlɑːdʒɪkl/",
+            "image": []
+        },
+        {
+            "text": "adj.无敌的;不可战胜的, invincible, /ɪnˈvɪnsəbl/",
+            "image": []
+        },
+        {
+            "text": "v.改变, alter/alters/altered/altered/altering, /ˈɔːltər/",
+            "image": []
+        },
+        {
+            "text": "n.目前;礼物, present/presents, /ˈpreznt/",
+            "image": []
+        },
+        {
+            "text": "v.意思是, mean/means/meant/meant/meaning, /miːn/",
+            "image": []
+        },
+        {
+            "text": "n.欧洲, Europe, /ˈjʊrəp/",
+            "image": []
+        },
+        {
+            "text": "n.同盟国, ally/allies, /ˈælaɪ , əˈlaɪ/",
+            "image": []
+        },
+        {
+            "text": "adj.西部的, western, /ˈwestərn/",
+            "image": []
+        },
+        {
+            "text": "v.击败, defeat/defeats/defeated/defeated/defeating, /dɪˈfiːt/",
+            "image": []
+        },
+        {
+            "text": "v.接收, receive/receives/received/received/receiving, /rɪˈsiːv/",
+            "image": []
+        },
+        {
+            "text": "adj.紧急的, emergency, /iˈmɜːrdʒənsi/",
+            "image": []
+        },
+        {
+            "text": "n.电子信号播送, transmission/transmissions, /trænzˈmɪʃn/",
+            "image": []
+        },
+        {
+            "text": "adj.北方的, northern, /ˈnɔːrðərn/",
+            "image": []
+        },
+        {
+            "text": "v.撤离, evacuate/evacuates/evacuated/evacuated/evacuating, /ɪˈvækjueɪt/",
+            "image": []
+        },
+        {
+            "text": "v.攻击, attack/attacks/attacked/attacked/attacking, /əˈtæk/",
+            "image": []
+        },
+        {
+            "text": "v.听见, hear/hears/heard/heard/hearing, /hɪr/",
+            "image": []
+        },
+        {
+            "text": "adj.正在逃跑的, on the run, /a/",
+            "image": []
+        },
+        {
+            "text": "v.撒开;释放, unleash/unleashes/unleashed/unleashed/unleashing, /ʌnˈliːʃ/",
+            "image": []
+        },
+        {
+            "text": "adj.皇帝的;御用的, imperial, /ɪmˈpɪriəl/",
+            "image": []
+        },
+        {
+            "text": "v.挣扎, struggle/struggles/struggled/struggled/struggling, /ˈstrʌɡl/",
+            "image": []
+        },
+        {
+            "text": "adj.不可避免的, inevitable, /ɪnˈevɪtəbl/",
+            "image": []
+        },
+        {
+            "text": "v.阻碍, stand in the way of, /a/",
+            "image": []
+        },
+        {
+            "text": "adj.神圣的;天赐的, divine, /dɪˈvaɪn/",
+            "image": []
+        },
+        {
+            "text": "n.命运;使命, destiny/destinies, /ˈdestəni/",
+            "image": []
+        },
+        {
+            "text": "v.清扫, sweep/sweeps/swept/swept/sweeping, /swiːp/",
+            "image": []
+        },
+        {
+            "text": "n.前进;进发, march/marches, /mɑːrtʃ/",
+            "image": []
+        },
+        {
+            "text": "v.站立, stand/stands/stood/stood/standing, /stænd/",
+            "image": []
+        },
+        {
+            "text": "v.终止, cease/ceases/ceased/ceased/ceasing, /siːs/",
+            "image": []
+        },
+        {
+            "text": "v.臣服, bow/bows/bowed/bowed/bowing, /baʊ B/",
+            "image": []
+        },
+        {
+            "text": "v.袭击, assault/assaults, /əˈsɔːlt/",
+            "image": []
+        },
+        {
+            "text": "v.似乎;看来, appear/appears/appeared/appeared/appearing, /əˈpɪr/",
+            "image": []
+        }
     ],
-    "notes": [
+    "grammars": [
         "USSR - Union of Soviet Socialist Republics",
         "wait 自动词 await 及物动，且 await 更正式",
         "与“弓”相关的一律读 boʊ，与”鞠躬低头臣服“相关的一律读 baʊ",
@@ -827,24 +1049,5 @@
                 }
             ]
         }
-    ],
-    "assFormat": {
-        "enFontSize": 8,
-        "enFontColor": "H00FFFFFF",
-        "enFontColorInline": "H3517DC",
-        "enFontOutlineWidth": 6,
-        "enFontOutlineColor": "H00000000",
-        "enAlignment": 2,
-        "enMarginLR": 4,
-        "enMarginV": 40,
-        "cnFontSize": 6,
-        "cnFontColor": "H00FFFFFF",
-        "cnFontColorInline": "H3517DC",
-        "cnFontOutlineWidth": 6,
-        "cnFontOutlineColor": "H00000000",
-        "cnAlignment": 8,
-        "cnMarginLR": 5,
-        "cnMarginV": 40,
-        "cnLineBreak": 20
-    }
+    ]
 }

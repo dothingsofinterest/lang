@@ -41,3 +41,9 @@
     border-start-end-radius: 6px !important;
 }
 // table
+
+.ant-radio-group {
+    .ant-radio-button-wrapper {
+        border-radius: 0;
+    }
+}

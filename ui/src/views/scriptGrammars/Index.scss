@@ -1,0 +1,33 @@
+#script-grammars-index {
+    .main-inner-item-aside {
+        textarea {
+            border: 0;
+            &:focus {
+                border-color: 0;
+            }
+            &:hover {
+                border: 0;
+            }
+        }
+    }
+    .main-inner-item-main {
+        #grammars-preview {
+            color: #fff;
+            padding: 0;
+            background: #666;
+            .item {
+                margin: 0;
+                padding: 6px 10px;
+                border-top: 1px dotted #ccc;
+                line-height: 26px;
+                .index {
+                    font-weight: 900;
+                    margin-right: 4px;
+                }
+                &:first-child {
+                    border: 0;
+                }
+            }
+        }
+    }
+}

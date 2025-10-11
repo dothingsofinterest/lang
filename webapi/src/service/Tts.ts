@@ -6,7 +6,7 @@ const execPromise = util.promisify(exec);
 
 const generateAudio = async (content: string, type: number) => {
     try {
-        const file = `${process.env.UPLOAD_PATH}/tmp/${Date.now()}.wav`;
+        const file = `${process.env.UPLOAD_PATH}/tts/${Date.now()}.wav`;
         const filterContent = type === 1 ? content.replace(/[^a-zA-Z',\.]+/g, " ") : content.replace(/[^\u4e00-\u9fa5]+/g, ", ");
         await execPromise(`python ${process.cwd()}/scripts/english.py "${filterContent}" "${type}" "${file}"`);
         const binary = await fsPromise.readFile(file);

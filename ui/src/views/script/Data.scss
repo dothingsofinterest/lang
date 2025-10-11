@@ -1,4 +1,26 @@
 #script-data {
+    .panel {
+        width: 100%;
+        margin-bottom: 4px;
+        height: 32px;
+        display: flex;
+        justify-content: space-between;
+        .ant-btn,
+        .ant-input-number {
+            flex: 1;
+            border-radius: 0;
+            background-color: #ccc;
+        }
+    }
+    .script-meta {
+        width: 100%;
+        margin-bottom: 4px;
+        .ant-input {
+            border-radius: 0;
+            font-size: 12px;
+            border-bottom: 0;
+        }
+    }
     .ant-tree {
         border-radius: 0;
         background-color: rgb(32, 32, 36);

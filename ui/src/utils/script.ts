@@ -1,4 +1,4 @@
-import { Script as DataScript, ScriptArticle as DataScriptArticle, Paragraph as DataParagraph } from "../types/Data";
+import { Script as DataScript, FormattedData, Paragraph as DataParagraph } from "../types/Data";
 import Joi from "joi";
 
 export const createJson = (script: DataScript, scriptTimeOffset: number): DataScript => {
@@ -74,11 +74,11 @@ export const fnParseVocabs = (text: string): string => {
     return r;
 };
 
-export const fnGetArticleData = (script: DataScript): DataScriptArticle => {
-    const data: DataScriptArticle = {
-        name: script.name,
+export const fnGetFormattedData = (script: DataScript): FormattedData => {
+    const data: FormattedData = {
+        title: script.title,
         vocabs: script.vocabs,
-        notes: script.notes,
+        grammars: script.grammars,
         scenes: [],
     };
     const hasScene = script.paragraphs.find(({ scene }) => {
@@ -163,13 +163,12 @@ export const fnIsSRTTime = (value: string): boolean => {
 
 export const validateJsonFile = (data: any): boolean => {
     const schema = Joi.object({
-        name: Joi.string().required(),
+        title: Joi.string().required(),
         roles: Joi.array().items(Joi.string()).required(),
         scenes: Joi.array().items(Joi.string()).required(),
-        vocabs: Joi.array().items(Joi.string()).required(),
-        notes: Joi.array().items(Joi.string()).required(),
+        vocabs: Joi.array().items(Joi.object()).required(),
+        grammars: Joi.array().items(Joi.string()).required(),
         paragraphs: Joi.array().items(Joi.object()).required(),
-        assFormat: Joi.object(),
     });
     const { error, value } = schema.validate(data);
     if (error) {

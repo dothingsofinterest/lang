@@ -1,0 +1,60 @@
+#script-vocabs-index {
+    .main-inner-item-aside {
+        textarea {
+            border: 0;
+            &:focus {
+                border-color: 0;
+            }
+            &:hover {
+                border: 0;
+            }
+        }
+        #upload-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .ant-upload-wrapper {
+                display: inline-block;
+                line-height: 0 !important;
+                .ant-upload {
+                    width: 200px;
+                    height: 200px;
+                    display: inline-block;
+                    .upload-btn {
+                        max-width: 200px;
+                        background-color: #fff;
+                    }
+                }
+            }
+        }
+    }
+    .main-inner-item-main {
+        #vocabs-preview {
+            color: #fff;
+            background: #666;
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0;
+                padding: 6px 10px;
+                border-top: 1px dotted #ccc;
+                &.active {
+                    color: rgb(252, 221, 92);
+                }
+                &:first-child {
+                    border: 0;
+                }
+                .index {
+                    font-weight: 900;
+                    font-style: normal;
+                    margin-right: 4px;
+                }
+                img {
+                    width: 26px;
+                    height: 26px;
+                }
+            }
+        }
+    }
+}

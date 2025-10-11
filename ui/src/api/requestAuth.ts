@@ -1,7 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { APIPrefix } from "../settings.js";
 import { Response, RequestDataUpdatePassword, RequestParamsTts } from "../types/Http";
-import { AssFormat } from "../types/Data";
 import store from "../stores";
 import { clearToken } from "../stores/reducers/auth";
 
@@ -70,86 +69,73 @@ export const ttsGen = (params: RequestParamsTts): Promise<Response> => {
         params: params,
     });
 };
+export const importTts = (data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/tts/importTts`,
+        data: data,
+    });
+};
+export const streamTts = (params: object): Promise<Blob> => {
+    return requestInstance.request({
+        method: "get",
+        url: `/tts/streamTts`,
+        responseType: "blob",
+        params: params,
+    });
+};
 // TTS
 
 // Video
-export const videoUpload = (data: FormData): Promise<Response> => {
+export const importVideo = (data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/upload`,
+        url: `/video/importVideo`,
         data: data,
     });
 };
 
-export const videoDownload = (params: object): Promise<Response> => {
+export const compressVideo = (params: object): Promise<Blob> => {
     return requestInstance.request({
         method: "get",
-        url: `/video/download`,
-        params: params,
-    });
-};
-
-export const videoStream = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "get",
-        url: `/video/stream`,
+        url: `/video/compressVideo`,
         responseType: "blob",
-        params: params,
-    });
-};
-
-export const videoCompress = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "get",
-        url: `/video/compress`,
-        responseType: "blob",
-        params: params,
-    });
-};
-
-export const videoGenerateSubtitleVideo = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "get",
-        url: `/video/subtitle`,
-        responseType: "blob",
-        params: params,
-    });
-};
-
-export const videoGetSubtitleVideoPreview = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "get",
-        url: `/video/subtitle-preview`,
         params: params,
     });
 };
 // Video
 
 // Script
-export const scriptUpload = (data: FormData): Promise<Response> => {
+export const importScript = (params: object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/script/upload`,
+        url: `/script/importScript`,
         data: data,
+        params: params,
     });
 };
-
-export const scriptUpdateAss = (params: object, data: AssFormat): Promise<Response> => {
+export const importVocabImg = (params: object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/script/update-ass`,
+        url: `/script/importVocabImg`,
+        data: data,
+        params: params,
+    });
+};
+export const streamVocabImg = (params: object): Promise<Blob> => {
+    return requestInstance.request({
+        method: "get",
+        url: `/script/streamVocabImg`,
+        responseType: "blob",
+        params: params,
+    });
+};
+export const uploadVocabImg = (params: object, data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script/uploadVocabImg`,
         params: params,
         data: data,
     });
 };
 // Script
-
-// Record
-export const recordUpload = (data: FormData): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/record/upload`,
-        data: data,
-    });
-};
-// Record

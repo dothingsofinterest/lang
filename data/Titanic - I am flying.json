@@ -16,7 +16,7 @@
         "v.握住;抓牢, hold on, /hoʊld ɑːn/",
         "v.关闭;合上, close/closes/closed/closed/closing, /kloʊz B/"
     ],
-    "notes": [
+    "grammars": [
         "close 作动词时读音是 “克洛兹”，作形容词时读音是”克洛斯“",
         "a"
     ],
@@ -252,24 +252,5 @@
                 }
             ]
         }
-    ],
-    "assFormat": {
-        "enFontSize": 10,
-        "enFontColor": "H00FFFFFF",
-        "enFontColorInline": "H3517DC",
-        "enFontOutlineWidth": 6,
-        "enFontOutlineColor": "H00000000",
-        "enAlignment": 8,
-        "enMarginLR": 20,
-        "enMarginV": 230,
-        "cnFontSize": 8,
-        "cnFontColor": "H00FFFFFF",
-        "cnFontColorInline": "H3517DC",
-        "cnFontOutlineWidth": 6,
-        "cnFontOutlineColor": "H00000000",
-        "cnAlignment": 8,
-        "cnMarginLR": 4,
-        "cnMarginV": 30,
-        "cnLineBreak": 50
-    }
+    ]
 }

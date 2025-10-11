@@ -1,0 +1,70 @@
+#vocabs {
+    color: #fff;
+    padding: 10px 0 0;
+    background: #666;
+    margin-top: 10px;
+    .title {
+        text-align: center;
+        font-weight: 900;
+        font-size: 16px;
+        color: #fff;
+        margin: 0 10px;
+        line-height: 22px;
+    }
+    .item {
+        margin: 0;
+        padding: 6px 10px;
+        border-top: 1px dotted #ccc;
+        line-height: 26px;
+        &.activated {
+            color: rgb(252, 221, 92);
+        }
+        &.active {
+            font-weight: 900;
+            color: rgb(252, 221, 92);
+        }
+        &:nth-child(2) {
+            border-top: 0;
+        }
+        .index {
+            font-weight: 900;
+            font-style: normal;
+            margin-right: 4px;
+        }
+    }
+}
+
+#grammars {
+    color: #fff;
+    padding: 10px 0 0;
+    background: #666;
+    margin-top: 10px;
+    .title {
+        text-align: center;
+        font-weight: 900;
+        font-size: 16px;
+        color: #fff;
+        margin: 0 10px;
+        line-height: 22px;
+    }
+    .item {
+        margin: 0;
+        padding: 6px 10px;
+        border-top: 1px dotted #ccc;
+        line-height: 26px;
+        &.activated {
+            color: rgb(252, 221, 92);
+        }
+        &.active {
+            font-weight: 900;
+            color: rgb(252, 221, 92);
+        }
+        &:nth-child(2) {
+            border-top: 0;
+        }
+        .index {
+            font-weight: 900;
+            margin-right: 4px;
+        }
+    }
+}

@@ -68,7 +68,7 @@
         "v.接触, come in contact with, /a/",
         "n.密友, close friend, /kloʊs/"
     ],
-    "notes": [
+    "grammars": [
         "Kobe's family 强调家庭整体，所以用单数。如果强调家庭成员用复数更合适。",
         "would 表示说话者对动作发生的不确定，翻译成会，是一种谦虚地表达观点的用法。常出现在假设句（普通或虚拟）的主句部分或疑问句。\nIf it is 8 o'clock, I will call her. 如果8点了，我将给她打电话。（确定动作发生）\nIf it is 8 o'clock, I would call her. 如果8点了，我会给她打电话。（普通假设）\nIf it was 8 o'clock, I would call her. 如果8点了，我会给她打电话。（虚拟）\nIf you love something, if you have a strong passion for something,  you would go to the extreme... （普通假设）\nIf I had a million, I would buy a luxury car. （虚拟）\nIf I had got there earlier, I would have met her. （虚拟）\nThis kid had passion like (If you tried to understand,) you would never know. （虚拟）\n(If I followed my usual routine,) I would say good morning, but it’s afternoon. （虚拟。正常情况下，我每天说的是早上好，暗指与同事打招呼。）\nWould you like a cup of coffee? （疑问句。你会愿意。。。吗？）",
         "em dash（—）引导的句子用于补充说明前面的话，仍未完整句子的一部分。类似倒装句。\n你吃饭了吗？VS 饭吃了吗你？\nIt was a nuisance - if I can say that word – but that nuisance turned into love over a period of time.",
@@ -726,24 +726,5 @@
                 }
             ]
         }
-    ],
-    "assFormat": {
-        "enFontSize": 8,
-        "enFontColor": "H00FFFFFF",
-        "enFontColorInline": "H3517DC",
-        "enFontOutlineWidth": 6,
-        "enFontOutlineColor": "H00000000",
-        "enAlignment": 2,
-        "enMarginLR": 4,
-        "enMarginV": 40,
-        "cnFontSize": 6,
-        "cnFontColor": "H00FFFFFF",
-        "cnFontColorInline": "H3517DC",
-        "cnFontOutlineWidth": 6,
-        "cnFontOutlineColor": "H00000000",
-        "cnAlignment": 8,
-        "cnMarginLR": 4,
-        "cnMarginV": 40,
-        "cnLineBreak": 20
-    }
+    ]
 }

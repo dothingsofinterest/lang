@@ -4,8 +4,13 @@ import NotFound from "../views/public/NotFound";
 import App from "../views/layout/App";
 import Settings from "../views/settings/Index";
 import Script from "../views/script/Index";
-import Dictation from "../views/dictation/Index";
-import Speaking from "../views/speaking/Index";
+import ScriptGrammars from "../views/scriptGrammars/Index";
+import ScriptVocabs from "../views/scriptVocabs/Index";
+import Learn from "../views/learn/Index";
+import Meaning from "../views/meaning/Index";
+import Listen from "../views/listen/Index";
+import Word from "../views/word/Index";
+import Video from "../views/video/Index";
 
 const routes = [
     {
@@ -29,12 +34,32 @@ const routes = [
                 element: <Script />,
             },
             {
-                path: "dictation",
-                element: <Dictation />,
+                path: "script-grammars",
+                element: <ScriptGrammars />,
             },
             {
-                path: "speaking",
-                element: <Speaking />,
+                path: "script-vocabs",
+                element: <ScriptVocabs />,
+            },
+            {
+                path: "learn",
+                element: <Learn />,
+            },
+            {
+                path: "listen",
+                element: <Listen />,
+            },
+            {
+                path: "word",
+                element: <Word />,
+            },
+            {
+                path: "meaning",
+                element: <Meaning />,
+            },
+            {
+                path: "video",
+                element: <Video />,
             },
         ],
     },

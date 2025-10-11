@@ -5,91 +5,101 @@ import { LoggerSystem } from "../lib/Log";
 import { Request, Response, NextFunction } from "express";
 import { md5 } from "js-md5";
 
-const uploadFile = (req: Request, res: Response, next: NextFunction) => {
-    uploaderFile.single("file")(req, res, (err) => {
-        if (err instanceof multer.MulterError) {
-            console.error(`Failed to upload file: `, err.message);
-            return res.status(200).json({
-                code: 0,
-                message: err.message,
-            });
-        } else if (err) {
-            console.error(`Failed to upload file - 2: `, err.message);
-            LoggerSystem.error(err.message);
-            return res.status(200).json({
-                code: 0,
-                message: `Failed to upload file - 2.`,
-            });
-        }
-        next();
-    });
-};
+const basePath = process.env.UPLOAD_PATH;
 
 const uploadVideo = (req: Request, res: Response, next: NextFunction) => {
     uploaderVideo.single("video")(req, res, (err) => {
+        const errMsg = `Failed to upload the video.`;
         if (err instanceof multer.MulterError) {
-            console.error(`Failed to upload video: `, err.message);
+            console.error(errMsg, err.message);
             return res.status(200).json({
                 code: 0,
                 message: err.message,
             });
         } else if (err) {
-            console.error(`Failed to upload video - 2: `, err.message);
+            console.error(errMsg, err.message);
+            LoggerSystem.error(err.message);
+            return res.status(200).json({ code: 0, message: errMsg });
+        }
+        next();
+    });
+};
+
+const uploadJson = (req: Request, res: Response, next: NextFunction) => {
+    uploaderJson.single("file")(req, res, (err) => {
+        const errMsg = `Failed to upload the JSON file.`;
+        if (err instanceof multer.MulterError) {
+            console.error(errMsg, err.message);
+            return res.status(200).json({
+                code: 0,
+                message: err.message,
+            });
+        } else if (err) {
+            console.error(errMsg, err.message);
+            LoggerSystem.error(err.message);
+            return res.status(200).json({ code: 0, message: errMsg });
+        }
+        next();
+    });
+};
+
+const uploadZip = (req: Request, res: Response, next: NextFunction) => {
+    uploaderZip.single("zip")(req, res, (err) => {
+        const errMsg = `Failed to upload the zip file.`;
+        if (err instanceof multer.MulterError) {
+            console.error(errMsg, err.message);
+            return res.status(200).json({
+                code: 0,
+                message: err.message,
+            });
+        } else if (err) {
+            console.error(errMsg, err.message);
             LoggerSystem.error(err.message);
             return res.status(200).json({
                 code: 0,
-                message: `Failed to upload video - 2.`,
+                message: errMsg,
             });
         }
         next();
     });
 };
 
-const storageVideo = multer.diskStorage({
-    destination: (req, file, cb) => {
-        try {
-            const uploadPath = process.env.UPLOAD_PATH;
-            const project = md5(file.originalname.split(".")[0]).slice(25);
-            const dir = req.user?.id ? `${uploadPath}/user${req.user.id}/${project}` : `${uploadPath}/anonymous/${project}`;
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
-            }
-            cb(null, dir);
-        } catch (error: any) {
-            console.error(error.message);
-            LoggerSystem.error(error.message);
-            cb(null, "abcdefgh");
+const uploadImg = (req: Request, res: Response, next: NextFunction) => {
+    uploaderImg.single("img")(req, res, (err) => {
+        const errMsg = `Failed to upload the image.`;
+        if (err instanceof multer.MulterError) {
+            console.error(errMsg, err.message);
+            return res.status(200).json({ code: 0, message: err.message });
+        } else if (err) {
+            console.error(errMsg, err.message);
+            LoggerSystem.error(err.message);
+            return res.status(200).json({ code: 0, message: errMsg });
         }
-    },
-    filename: (req, file, cb) => {
-        cb(null, `origin.mp4`);
-    },
-});
-
-const storageFile = multer.diskStorage({
-    destination: (req, file, cb) => {
-        try {
-            const uploadPath = process.env.UPLOAD_PATH;
-            const project = md5(file.originalname.split(".")[0]).slice(25);
-            const dir = req.user?.id ? `${uploadPath}/user${req.user.id}/${project}` : `${uploadPath}/anonymous/${project}`;
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
-            }
-            cb(null, dir);
-        } catch (error: any) {
-            console.error(error.message);
-            LoggerSystem.error(error.message);
-            cb(null, "abcdefgh");
-        }
-    },
-    filename: (req, file, cb) => {
-        cb(null, `origin.json`);
-    },
-});
+        next();
+    });
+};
 
 const uploaderVideo = multer({
-    storage: storageVideo,
     limits: { fileSize: 1000 * 1024 * 1024 },
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            try {
+                const project = md5(file.originalname.split(".")[0]).slice(25);
+                const uploadDir = `${basePath}/${project}`;
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                cb(null, uploadDir);
+            } catch (error: any) {
+                console.error(error.message);
+                LoggerSystem.error(error.message);
+                cb(new Error(error.message), "");
+            }
+        },
+        filename: (req, file, cb) => {
+            cb(null, `origin.mp4`);
+        },
+    }),
     fileFilter: (req, file, cb) => {
         const allowedTypes = /mp4|MP4/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -97,14 +107,35 @@ const uploaderVideo = multer({
         if (extname && mimetype) {
             cb(null, true);
         } else {
-            cb(new Error("Video ext error."));
+            cb(new Error("File extensions not allowed."));
         }
     },
 });
 
-const uploaderFile = multer({
-    storage: storageFile,
+const uploaderJson = multer({
     limits: { fileSize: 1000 * 1024 * 1024 },
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            try {
+                const project = `${req.query.project}`;
+                if (project === "undefined" || !/^[a-zA-Z0-9]+$/g.test(project)) {
+                    throw new Error("Project not allowed.");
+                }
+                const uploadDir = `${basePath}/${project}`;
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                cb(null, uploadDir);
+            } catch (error: any) {
+                console.error(error.message);
+                LoggerSystem.error(error.message);
+                cb(new Error(error.message), "");
+            }
+        },
+        filename: (req, file, cb) => {
+            cb(null, `origin.json`);
+        },
+    }),
     fileFilter: (req, file, cb) => {
         const allowedTypes = /json|JSON/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -112,9 +143,91 @@ const uploaderFile = multer({
         if (extname && mimetype) {
             cb(null, true);
         } else {
-            cb(new Error("File ext error."));
+            cb(new Error("File extensions not allowed."));
         }
     },
 });
 
-export { uploadFile, uploadVideo };
+const uploaderZip = multer({
+    limits: { fileSize: 1000 * 1024 * 1024 },
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            try {
+                const uploadDir = `${basePath}`;
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                cb(null, uploadDir);
+            } catch (error: any) {
+                console.error(error.message);
+                LoggerSystem.error(error.message);
+                cb(new Error(error.message), "");
+            }
+        },
+        filename: (req, file, cb) => {
+            cb(null, `origin.zip`);
+        },
+    }),
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /zip|ZIP/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (extname && mimetype) {
+            cb(null, true);
+        } else {
+            cb(new Error("File extensions not allowed."));
+        }
+    },
+});
+
+const uploaderImg = multer({
+    limits: { fileSize: 1000 * 1024 * 1024 },
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            try {
+                const vocab = `${req.query.vocab}`;
+                const project = `${req.query.project}`;
+                if (vocab === "undefined" || !/^[a-zA-Z0-9_]+$/g.test(vocab)) {
+                    throw new Error("Vocab not allowed.");
+                }
+                if (project === "undefined" || !/^[a-zA-Z0-9]+$/g.test(project)) {
+                    throw new Error("Project not allowed.");
+                }
+                const uploadDir = path.join(`${basePath}`, project, "images");
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                cb(null, uploadDir);
+            } catch (error: any) {
+                console.error(error.message);
+                LoggerSystem.error(error.message);
+                cb(new Error(error.message), "");
+            }
+        },
+        filename: (req, file, cb) => {
+            try {
+                const vocab = `${req.query.vocab}`;
+                if (vocab === "undefined" || !/^[a-zA-Z0-9_]+$/g.test(vocab)) {
+                    throw new Error("Vocab not allowed.");
+                }
+                cb(null, `${vocab}.png`);
+            } catch (error: any) {
+                console.error(error.message);
+                LoggerSystem.error(error.message);
+                cb(new Error(error.message), "");
+            }
+        },
+    }),
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /png|jpg|jpeg/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (extname && mimetype) {
+            cb(null, true);
+        } else {
+            cb(new Error("File extensions or mimetype not allowed."));
+        }
+    },
+});
+
+export { uploadJson, uploadVideo, uploadZip, uploadImg };
