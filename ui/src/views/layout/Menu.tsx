@@ -31,14 +31,14 @@ const Menu = () => {
             <Link to="/learn">
                 <Button className={location.pathname + location.search === "/learn" ? `menu-item active` : `menu-item`} type="primary" icon={<ReadFilled />} />
             </Link>
-            <Link to="/listen">
-                <Button className={location.pathname + location.search === "/listen" ? `menu-item active` : `menu-item`} type="primary" icon={<CustomerServiceFilled />} />
-            </Link>
             <Link to="/word">
                 <Button className={location.pathname + location.search === "/word" ? `menu-item active` : `menu-item`} type="primary" icon={<EyeFilled />} />
             </Link>
             <Link to="/meaning">
                 <Button className={location.pathname + location.search === "/meaning" ? `menu-item active` : `menu-item`} type="primary" icon={<BulbFilled />} />
+            </Link>
+            <Link to="/listen">
+                <Button className={location.pathname + location.search === "/listen" ? `menu-item active` : `menu-item`} type="primary" icon={<CustomerServiceFilled />} />
             </Link>
             <Link to="/video">
                 <Button className={location.pathname + location.search === "/video" ? `menu-item active` : `menu-item`} type="primary" icon={<YoutubeFilled />} />

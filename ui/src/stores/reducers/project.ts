@@ -35,6 +35,7 @@ const initialState: StateProject = {
             vocabs: [],
             grammars: [],
             scenes: [],
+            sentences: [],
         },
         timeOffset: 0,
     },

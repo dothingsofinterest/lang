@@ -48,9 +48,10 @@ const Index = () => {
             navigate("/settings");
         }
         const vocabsGrouped = [];
-        for (let i = 0; i < dataFormatted.vocabs.length; i += 4) {
-            if (dataFormatted.vocabs[i].image.length > 0) {
-                vocabsGrouped.push(dataFormatted.vocabs.slice(i, i + 4));
+        const vocabsFiltered = dataFormatted.vocabs.filter((v: DataVocab) => v.image.length > 0);
+        for (let i = 0; i < vocabsFiltered.length; i += 4) {
+            if (vocabsFiltered[i].image.length > 0) {
+                vocabsGrouped.push(vocabsFiltered.slice(i, i + 4));
             }
         }
         setVocabsGrouped(vocabsGrouped);

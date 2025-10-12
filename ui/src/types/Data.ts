@@ -21,6 +21,7 @@ interface FormattedData {
     vocabs: Vocab[];
     grammars: string[];
     scenes: Scene[];
+    sentences: Sentence[];
 }
 
 interface Vocab {

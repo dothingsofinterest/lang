@@ -4,14 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Vocab as DataVocab } from "../../types/Data";
 import { fnShuffle } from "../../utils/util";
 import { RootState } from "../../stores";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { Domain } from "../../settings.js";
 import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] word/index");
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const project = useSelector((state: RootState) => state.project);
     const projectName = useSelector((state: RootState) => state.project.name);
@@ -58,13 +57,14 @@ const Index = () => {
                 <Scrollbars>
                     <div id="selector" ref={refShowcase}>
                         <div className="line">
-                            {fnShuffle(refVocabsFiltered.current[vocabActive].image).map((v: string) => {
-                                return (
-                                    <span className="item">
-                                        <img src={`${Domain}/uploads/${projectName}/images/${v}?${Date.now()}`} onClick={() => handlersClickSelection(v)} />
-                                    </span>
-                                );
-                            })}
+                            {refVocabsFiltered.current.length > 0 &&
+                                fnShuffle(refVocabsFiltered.current[vocabActive].image).map((v: string) => {
+                                    return (
+                                        <span className="item">
+                                            <img src={`${Domain}/uploads/${projectName}/images/${v}?${Date.now()}`} onClick={() => handlersClickSelection(v)} />
+                                        </span>
+                                    );
+                                })}
                         </div>
                     </div>
                     <section id="hidden-elems">

@@ -80,7 +80,11 @@ export const fnGetFormattedData = (script: DataScript): FormattedData => {
         vocabs: script.vocabs,
         grammars: script.grammars,
         scenes: [],
+        sentences: [],
     };
+    script.paragraphs.forEach((v: DataParagraph) => {
+        data.sentences.push(...v.sentences);
+    });
     const hasScene = script.paragraphs.find(({ scene }) => {
         return scene === "";
     });

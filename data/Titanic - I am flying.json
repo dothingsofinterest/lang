@@ -1,20 +1,47 @@
 {
-    "name": "Titanic - I am flying",
+    "title": "Titanic - I am flying",
     "roles": [
         "Jack-杰克",
         "Rose-罗丝"
     ],
     "scenes": [],
     "vocabs": [
-        "v.信任;相信, trust/trusts/trusted/trusted/trusting, /trʌst/",
-        "v.飞, fly/flies/flew/flown/flying, /flaɪ/",
-        "n.栏杆;围栏;轨道, rail/rails, /reɪl/",
-        "n.栏杆;围栏, railing/railings, /ˈreɪlɪŋ/",
-        "v.偷看, peek/peeks/peeked/peeked/peeking, /piːk/",
-        "v.迈上来, step up, /a/",
-        "n.主意, mind/minds, /maɪnd/",
-        "v.握住;抓牢, hold on, /hoʊld ɑːn/",
-        "v.关闭;合上, close/closes/closed/closed/closing, /kloʊz B/"
+        {
+            "text": "v.信任;相信, trust/trusts/trusted/trusted/trusting, /trʌst/",
+            "image": []
+        },
+        {
+            "text": "v.飞, fly/flies/flew/flown/flying, /flaɪ/",
+            "image": []
+        },
+        {
+            "text": "n.栏杆;围栏;轨道, rail/rails, /reɪl/",
+            "image": []
+        },
+        {
+            "text": "n.栏杆;围栏, railing/railings, /ˈreɪlɪŋ/",
+            "image": []
+        },
+        {
+            "text": "v.偷看, peek/peeks/peeked/peeked/peeking, /piːk/",
+            "image": []
+        },
+        {
+            "text": "v.迈上来, step up, /a/",
+            "image": []
+        },
+        {
+            "text": "n.主意, mind/minds, /maɪnd/",
+            "image": []
+        },
+        {
+            "text": "v.握住;抓牢, hold on, /hoʊld ɑːn/",
+            "image": []
+        },
+        {
+            "text": "v.关闭;合上, close/closes/closed/closed/closing, /kloʊz B/",
+            "image": []
+        }
     ],
     "grammars": [
         "close 作动词时读音是 “克洛兹”，作形容词时读音是”克洛斯“",

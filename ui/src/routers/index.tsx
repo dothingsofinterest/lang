@@ -46,16 +46,16 @@ const routes = [
                 element: <Learn />,
             },
             {
-                path: "listen",
-                element: <Listen />,
+                path: "meaning",
+                element: <Meaning />,
             },
             {
                 path: "word",
                 element: <Word />,
             },
             {
-                path: "meaning",
-                element: <Meaning />,
+                path: "listen",
+                element: <Listen />,
             },
             {
                 path: "video",

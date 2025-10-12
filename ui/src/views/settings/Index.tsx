@@ -90,21 +90,17 @@ const Index = () => {
     };
     const handlersExportScript = async () => {
         if (project.name && project.videoURL && project.videoCompressedURL) {
-            if (dataFormatted.title) {
-                try {
-                    const blob = new Blob([JSON.stringify(fnCreateJson(script, scriptTimeOffset), null, 4)], { type: "application/json" });
-                    const handle = await await (window as any).showSaveFilePicker({
-                        suggestedName: `${script.title.split("/")[0]}.json`,
-                        types: [{ description: script.title, accept: { "application/json": [".json"] } }],
-                    });
-                    const writable = await handle.createWritable();
-                    await writable.write(blob);
-                    await writable.close();
-                } catch (error) {
-                    console.error("save error: ", error);
-                }
-            } else {
-                alert(`Data not be set`);
+            try {
+                const blob = new Blob([JSON.stringify(fnCreateJson(script, scriptTimeOffset), null, 4)], { type: "application/json" });
+                const handle = await await (window as any).showSaveFilePicker({
+                    suggestedName: `${script.title.split("/")[0]}.json`,
+                    types: [{ description: script.title, accept: { "application/json": [".json"] } }],
+                });
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+            } catch (error) {
+                console.error("save error: ", error);
             }
         } else {
             alert("Please create a project.");
