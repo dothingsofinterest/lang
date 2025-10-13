@@ -4,12 +4,10 @@ import { useNavigate } from "react-router-dom";
 import WaveSurfer from "wavesurfer.js";
 import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { updateVideoCurrentTime, updateVideoAudioWaveZoom } from "../../stores/reducers/project";
-
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime } from "../../utils/script";
 import Data from "./Data";
-
 import "./Index.scss";
 
 const Index = () => {
@@ -74,9 +72,7 @@ const Index = () => {
         dispatch(updateVideoAudioWaveZoom(e.target.value));
     };
     const handlersVideoCanPlayThrough = () => {
-        if (refWavesurfer.current) {
-            refWavesurfer.current.load(videoURLCompressed);
-        }
+        console.log("Video Buffer Completed");
     };
     const handlersVideoTagOnTimeUpdate = (e: any) => {
         // console.log("video current time:", e.target.currentTime);
@@ -107,41 +103,43 @@ const Index = () => {
         };
         const videoElem = refVideo.current;
         if (videoElem) {
-            videoElem.currentTime = videoCurrentTime;
-            videoElem.load();
             setCurrent(`${fnFloatToSRTTime(videoCurrentTime)}`);
-            refWavesurfer.current = WaveSurfer.create({
-                container: "#waver",
-                media: refVideo.current || undefined,
-                waveColor: "rgb(200, 0, 200)",
-                progressColor: "rgb(100, 0, 100)",
-                interact: true,
-                height: 129,
-                cursorColor: "rgb(87, 87, 89)",
-                autoScroll: true,
-                dragToSeek: true,
-            });
-            refWavesurfer.current.on("click", async () => {
-                const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
-                const SRTTime = fnFloatToSRTTime(currentTime);
-                setCurrent(SRTTime);
-                await navigator.clipboard.writeText(SRTTime);
-            });
-            refWavesurfer.current.on("loading", (percent) => {
-                // console.log("Loading", percent + "%");
-            });
-            refWavesurfer.current.once("ready", (duration) => {
-                console.log("Ready", duration + "s");
-                if (refWavesurfer.current) {
-                    if (refWavesurfer.current.getDecodedData()) {
-                        refWavesurfer.current.zoom(videoAudioWaveZoom);
-                        refWavesurfer.current.seekTo(videoCurrentTime / refWavesurfer.current.getDuration());
+            if (!refWavesurfer.current) {
+                refWavesurfer.current = WaveSurfer.create({
+                    container: "#waver",
+                    media: refVideo.current || undefined,
+                    waveColor: "rgb(200, 0, 200)",
+                    progressColor: "rgb(100, 0, 100)",
+                    interact: true,
+                    height: 129,
+                    cursorColor: "rgb(87, 87, 89)",
+                    autoScroll: true,
+                    dragToSeek: true,
+                });
+                refWavesurfer.current.on("click", async () => {
+                    const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
+                    const SRTTime = fnFloatToSRTTime(currentTime);
+                    setCurrent(SRTTime);
+                    await navigator.clipboard.writeText(SRTTime);
+                });
+                refWavesurfer.current.on("loading", (percent) => {
+                    // console.log("Loading", percent + "%");
+                });
+                refWavesurfer.current.once("ready", (duration) => {
+                    console.log("Ready", duration + "s");
+                    if (refWavesurfer.current) {
+                        if (refWavesurfer.current.getDecodedData()) {
+                            refWavesurfer.current.zoom(videoAudioWaveZoom);
+                            refWavesurfer.current.seekTo(videoCurrentTime / refWavesurfer.current.getDuration());
+                        }
                     }
-                }
-            });
-            refWavesurfer.current.once("decode", () => {
-                refSlider.current?.addEventListener("input", sliderInputHandler);
-            });
+                });
+                refWavesurfer.current.once("decode", () => {
+                    refSlider.current?.addEventListener("input", sliderInputHandler);
+                });
+                videoElem.currentTime = videoCurrentTime;
+                videoElem.load();
+            }
         }
         return () => {
             console.log("[unmounted] script/index");
