@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button } from "antd";
-import { Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types/Data";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, BulbFilled, ClearOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
@@ -16,13 +15,11 @@ const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const project = useSelector((state: RootState) => state.project);
-    const script = useSelector((state: RootState) => state.project.script.data);
     const dataFormatted = useSelector((state: RootState) => state.project.script.dataFormatted);
     const videoURL = useSelector((state: RootState) => state.project.videoURL);
     const activeSentence = useSelector((state: RootState) => state.project.activeSentence);
     const activeSentencePos = useSelector((state: RootState) => state.project.activeSentencePos);
     const activeVocab = useSelector((state: RootState) => state.project.activeVocab);
-    // const [sentences, setSentences] = useState<DataSentence[]>([]);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [inputValue, setInputValue] = useState("");
     const refScrollbar = useRef<Scrollbars>(null);
@@ -132,11 +129,6 @@ const Index = () => {
             }
         }
     };
-    const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
-        if (event.code === "F8") {
-            handlersPanelPlayAgain();
-        }
-    };
     const handlersTextInput = (value: string) => {
         setInputValue(value);
         if (dataFormatted.sentences.length > 0) {
@@ -161,18 +153,8 @@ const Index = () => {
     const handlersRenderedCallback = (scrollTopPoint: number, scrollTopVocab: number) => {
         const scrollTop = refScrollbar.current?.getScrollTop() || 0;
         const scrollTopPointValue = scrollTop + scrollTopPoint;
-        const scrollTopVocabValue = scrollTop + scrollTopVocab;
         dispatch(updateActiveSentencePos(scrollTopPointValue));
         refScrollbar.current?.scrollTop(scrollTopPointValue);
-    };
-    const fnOnMounted = () => {
-        if (!script.title || !videoURL || !refVideo.current) {
-            console.log("Script or Video is required.");
-        } else {
-            refVideo.current.load();
-            refVideo.current.currentTime = dataFormatted.sentences[activeSentence] !== undefined && fnIsSRTTime(dataFormatted.sentences[activeSentence].startTime) ? fnSRTTimeToFloat(dataFormatted.sentences[activeSentence].startTime) : 0;
-            refScrollbar.current?.scrollTop(activeSentencePos);
-        }
     };
     useEffect(() => {
         if (!project.name || !project.videoURL || !project.videoCompressedURL) {
@@ -180,11 +162,26 @@ const Index = () => {
             navigate("/settings");
         }
         console.log("[mounted] video/index");
-        fnOnMounted();
-        window.addEventListener("keydown", handlersEventKeyboardOnDown);
+        const videoElem = refVideo.current;
+        const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {
+            if (event.code === "F8") {
+                handlersPanelPlayAgain();
+            }
+        };
+        if (videoElem) {
+            videoElem.load();
+            videoElem.currentTime = dataFormatted.sentences[activeSentence] !== undefined && fnIsSRTTime(dataFormatted.sentences[activeSentence].startTime) ? fnSRTTimeToFloat(dataFormatted.sentences[activeSentence].startTime) : 0;
+            refScrollbar.current?.scrollTop(activeSentencePos);
+        }
+        window.addEventListener("keydown", videoKeyboardOnDownHandler);
         return () => {
             console.log("[unmounted] video/index");
-            window.removeEventListener("keydown", handlersEventKeyboardOnDown);
+            window.removeEventListener("keydown", videoKeyboardOnDownHandler);
+            if (videoElem) {
+                videoElem.pause();
+                videoElem.removeAttribute("src");
+                videoElem.load();
+            }
         };
     }, []);
     useEffect(() => {

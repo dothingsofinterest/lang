@@ -58,7 +58,6 @@
             }
         }
         .point {
-            padding: 0 4px;
             &.activated {
                 color: rgb(252, 221, 92);
             }
@@ -69,6 +68,9 @@
             &:first-child {
                 padding: 0;
             }
+        }
+        span.point {
+            padding: 0 4px;
         }
     }
 }

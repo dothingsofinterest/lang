@@ -79,9 +79,9 @@ const Index = () => {
                         {vocabsGrouped.map((value, key) => {
                             return (
                                 <div key={key} className="line">
-                                    {value.map((v: DataVocab) => {
+                                    {value.map((v: DataVocab, k) => {
                                         return (
-                                            <span className="item">
+                                            <span className="item" key={k}>
                                                 <img src={`${Domain}/uploads/${projectName}/images/${v.image[0]}?${Date.now()}`} />
                                                 <i>{v.text.split(", ")[1]}</i>
                                             </span>

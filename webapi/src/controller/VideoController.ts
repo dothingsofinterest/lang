@@ -103,17 +103,13 @@ export const compressVideo = async (req: Request, res: Response, next: NextFunct
     }
     try {
         const outputVideo = path.join(`${projectPath}`, `origin_compress.mp4`);
-        const requireCompress: boolean = utilCompressVideoBefore(inputVideo);
-        if (requireCompress) {
-            await utilCompressVideo(inputVideo, outputVideo);
-        } else {
-            utilCopyVideo(inputVideo, outputVideo);
-        }
         if (!fs.existsSync(outputVideo)) {
-            return res.status(200).json({
-                code: 0,
-                message: `Output video does not exist.`,
-            });
+            const requireCompress: boolean = utilCompressVideoBefore(inputVideo);
+            if (requireCompress) {
+                await utilCompressVideo(inputVideo, outputVideo);
+            } else {
+                utilCopyVideo(inputVideo, outputVideo);
+            }
         }
         const stat = fs.statSync(outputVideo);
         const fileSize = stat.size;

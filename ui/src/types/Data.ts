@@ -60,6 +60,8 @@ interface StateProject {
     name: string;
     videoURL: string;
     videoCompressedURL: string;
+    videoCurrentTime: number;
+    videoAudioWaveZoom: number;
     script: StateScript;
     activeSentence: number;
     activeSentencePos: number;

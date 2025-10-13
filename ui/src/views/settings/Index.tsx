@@ -35,8 +35,7 @@ const Index = () => {
                     // Create Local Low Video URL
                     const resBlob = await compressVideo({ project: res.data.project });
                     const blob = new Blob([resBlob], { type: "video/mp4" });
-                    const url = URL.createObjectURL(blob);
-                    dispatch(updateVideoCompressedURL(url));
+                    dispatch(updateVideoCompressedURL(URL.createObjectURL(blob)));
                 } else {
                     alert(res.message);
                 }

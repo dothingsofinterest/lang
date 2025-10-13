@@ -23,7 +23,6 @@ const Data = React.memo(() => {
         if (value !== null && !isNaN(value)) {
             const firstStartTime = script.paragraphs[0].sentences[0].startTime;
             const firstStartTimeN = fnSRTTimeToFloat(firstStartTime) + value;
-            console.log(firstStartTimeN);
             if (firstStartTimeN > 0) {
                 dispatch(updateScriptTimeOffset(value));
                 setRenderVersion((prev) => prev + 1);

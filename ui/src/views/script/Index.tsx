@@ -3,6 +3,8 @@ import { Layout, Input, Button, Upload, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
 import WaveSurfer from "wavesurfer.js";
 import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { updateVideoCurrentTime, updateVideoAudioWaveZoom } from "../../stores/reducers/project";
+
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime } from "../../utils/script";
@@ -12,11 +14,13 @@ import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] script/index");
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const project = useSelector((state: RootState) => state.project);
     const videoURLCompressed = useSelector((state: RootState) => state.project.videoCompressedURL);
-    const [current, setCurrent] = useState("00:00:00,000 / 0");
-    const [waveScale, setWaveScale] = useState(0);
+    const videoCurrentTime = useSelector((state: RootState) => state.project.videoCurrentTime);
+    const videoAudioWaveZoom = useSelector((state: RootState) => state.project.videoAudioWaveZoom);
+    const [current, setCurrent] = useState("00:00:00,000");
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refSlider = useRef<HTMLInputElement>(null);
@@ -29,7 +33,7 @@ const Index = () => {
             if (refWavesurfer.current) {
                 refWavesurfer.current.seekTo(pos / refWavesurfer.current.getDuration());
             }
-            setCurrent(`${SRTTime} / ${pos}`);
+            setCurrent(SRTTime);
             await navigator.clipboard.writeText(SRTTime);
         }
     };
@@ -41,7 +45,7 @@ const Index = () => {
             if (refWavesurfer.current) {
                 refWavesurfer.current.seekTo(pos / refWavesurfer.current.getDuration());
             }
-            setCurrent(`${SRTTime} / ${pos}`);
+            setCurrent(SRTTime);
             await navigator.clipboard.writeText(SRTTime);
         }
     };
@@ -67,7 +71,7 @@ const Index = () => {
         }
     };
     const handlersVideoSlide = (e: any) => {
-        setWaveScale(e.target.value);
+        dispatch(updateVideoAudioWaveZoom(e.target.value));
     };
     const handlersVideoCanPlayThrough = () => {
         if (refWavesurfer.current) {
@@ -79,16 +83,33 @@ const Index = () => {
         // console.log("video current time SRC:", fnFloatToSRTTime(e.target.currentTime));
     };
     const handlersVideoTagOnEnded = () => {
-        setCurrent("00:00:00,000 / 0");
+        setCurrent("00:00:00,000");
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoTagOnPaused = async (e: any) => {
         const SRTTime = fnFloatToSRTTime(e.target.currentTime);
         await navigator.clipboard.writeText(SRTTime);
-        setCurrent(`${SRTTime} / ${e.target.currentTime}`);
+        setCurrent(SRTTime);
     };
-    const livesHookCreateWavesurfer = () => {
-        if (refVideo.current && videoURLCompressed) {
+    useEffect(() => {
+        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
+            alert("Please create a project.");
+            navigate("/settings");
+        }
+        console.log("[mounted] script/index");
+        const sliderElem = refSlider.current;
+        const sliderInputHandler = (e: any) => {
+            if (refWavesurfer.current?.getDecodedData()) {
+                refWavesurfer.current?.zoom(e.target?.valueAsNumber);
+            } else {
+                console.log("Audio is loading...");
+            }
+        };
+        const videoElem = refVideo.current;
+        if (videoElem) {
+            videoElem.currentTime = videoCurrentTime;
+            videoElem.load();
+            setCurrent(`${fnFloatToSRTTime(videoCurrentTime)}`);
             refWavesurfer.current = WaveSurfer.create({
                 container: "#waver",
                 media: refVideo.current || undefined,
@@ -103,36 +124,33 @@ const Index = () => {
             refWavesurfer.current.on("click", async () => {
                 const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
                 const SRTTime = fnFloatToSRTTime(currentTime);
-                setCurrent(`${SRTTime} / ${currentTime}`);
+                setCurrent(SRTTime);
                 await navigator.clipboard.writeText(SRTTime);
             });
             refWavesurfer.current.on("loading", (percent) => {
                 // console.log("Loading", percent + "%");
             });
-            refWavesurfer.current.on("ready", (duration) => {
+            refWavesurfer.current.once("ready", (duration) => {
                 console.log("Ready", duration + "s");
+                if (refWavesurfer.current) {
+                    if (refWavesurfer.current.getDecodedData()) {
+                        refWavesurfer.current.zoom(videoAudioWaveZoom);
+                        refWavesurfer.current.seekTo(videoCurrentTime / refWavesurfer.current.getDuration());
+                    }
+                }
             });
             refWavesurfer.current.once("decode", () => {
-                refSlider.current?.addEventListener("input", (e: any) => {
-                    if (refWavesurfer.current?.getDecodedData()) {
-                        refWavesurfer.current?.zoom(e.target?.valueAsNumber);
-                    } else {
-                        console.log("Audio is loading...");
-                    }
-                });
+                refSlider.current?.addEventListener("input", sliderInputHandler);
             });
-            refVideo.current?.load();
         }
-    };
-    useEffect(() => {
-        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
-            alert("Please create a project.");
-            navigate("/settings");
-        }
-        console.log("[mounted] script/index");
-        livesHookCreateWavesurfer();
         return () => {
             console.log("[unmounted] script/index");
+            if (sliderElem) {
+                sliderElem.removeEventListener("input", sliderInputHandler);
+            }
+            if (videoElem) {
+                dispatch(updateVideoCurrentTime(videoElem.currentTime));
+            }
         };
     }, []);
     return (
@@ -151,7 +169,7 @@ const Index = () => {
                     <Button icon={playButton} onClick={handlersVideoPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                     <Button icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                     <Input value={current} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    <input ref={refSlider} type="range" value={waveScale} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                    <input ref={refSlider} type="range" value={videoAudioWaveZoom} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
                 </div>
                 <div id="waver" style={{ height: "146px" }}></div>
             </div>

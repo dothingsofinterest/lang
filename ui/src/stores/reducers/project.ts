@@ -21,6 +21,8 @@ const initialState: StateProject = {
     name: "",
     videoURL: "",
     videoCompressedURL: "",
+    videoCurrentTime: 0,
+    videoAudioWaveZoom: 0,
     script: {
         data: {
             title: "",
@@ -75,10 +77,18 @@ const slice = createSlice({
             state.playMode = action.payload;
         },
         updateVideoURL: (state, action: PayloadAction<string>) => {
+            URL.revokeObjectURL(state.videoURL);
             state.videoURL = action.payload;
         },
         updateVideoCompressedURL: (state, action: PayloadAction<string>) => {
+            URL.revokeObjectURL(state.videoCompressedURL);
             state.videoCompressedURL = action.payload;
+        },
+        updateVideoCurrentTime: (state, action: PayloadAction<number>) => {
+            state.videoCurrentTime = action.payload;
+        },
+        updateVideoAudioWaveZoom: (state, action: PayloadAction<number>) => {
+            state.videoAudioWaveZoom = action.payload;
         },
         updateScriptData: (state, action: PayloadAction<DataScript>) => {
             state.script.data = action.payload;
@@ -295,6 +305,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateName, updateProcessings, updateActiveSentence, updateActiveSentencePos, updateActiveVocab, updateActiveVocabPos, updatePlayMode, updateVideoURL, updateVideoCompressedURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset } = slice.actions;
+export const { updateName, updateProcessings, updateActiveSentence, updateActiveSentencePos, updateActiveVocab, updateActiveVocabPos, updatePlayMode, updateVideoURL, updateVideoCompressedURL, updateVideoCurrentTime, updateVideoAudioWaveZoom, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset } = slice.actions;
 
 export default slice.reducer;
