@@ -1,0 +1,11 @@
+#script-grammar {
+    textarea {
+        border: 0;
+        &:focus {
+            border-color: 0;
+        }
+        &:hover {
+            border: 0;
+        }
+    }
+}

@@ -4,13 +4,12 @@ import NotFound from "../views/public/NotFound";
 import App from "../views/layout/App";
 import Settings from "../views/settings/Index";
 import Script from "../views/script/Index";
-import ScriptGrammars from "../views/scriptGrammars/Index";
-import ScriptVocabs from "../views/scriptVocabs/Index";
 import Learn from "../views/learn/Index";
 import Meaning from "../views/meaning/Index";
 import Listen from "../views/listen/Index";
 import Word from "../views/word/Index";
 import Video from "../views/video/Index";
+import Translate from "../views/translate/Index";
 
 const routes = [
     {
@@ -34,14 +33,6 @@ const routes = [
                 element: <Script />,
             },
             {
-                path: "script-grammars",
-                element: <ScriptGrammars />,
-            },
-            {
-                path: "script-vocabs",
-                element: <ScriptVocabs />,
-            },
-            {
                 path: "learn",
                 element: <Learn />,
             },
@@ -60,6 +51,10 @@ const routes = [
             {
                 path: "video",
                 element: <Video />,
+            },
+            {
+                path: "translate",
+                element: <Translate />,
             },
         ],
     },

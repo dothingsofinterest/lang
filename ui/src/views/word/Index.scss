@@ -12,6 +12,9 @@
                     font-weight: 900;
                     color: rgb(252, 221, 92);
                 }
+                &.matching {
+                    color: rgb(252, 221, 92);
+                }
                 &:first-child {
                     border-top: 0;
                 }

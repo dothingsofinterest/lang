@@ -13,8 +13,9 @@ const ffprobeBin = process.env.FFMPEG_FFPROBE_PATH;
  */
 export const compressVideo = (input: string, output: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        ffmpeg.setFfmpegPath(process.env.FFMPEG_PATH || "");
+        ffmpeg.setFfmpegPath(`${ffmepgBin}`);
         ffmpeg(input)
+            .inputOptions(["-analyzeduration 2147483647", "-probesize 2147483647"]) // 提高分析时长与探测缓冲，防止大文件或长视频探测失败，以提高对大文件或高码率文件的容错能力。
             .videoFilter("scale=600:-2") // -vf scale=600:-2
             .videoCodec("libx264") // -c:v libx264
             .videoBitrate("600k") // -b:v 600k
@@ -40,6 +41,55 @@ export const compressVideo = (input: string, output: string): Promise<void> => {
             })
             .on("error", (err) => {
                 console.error(`fluent-ffmpeg error: ${err.message}`);
+                LoggerSystem.error(err.message);
+                reject();
+            });
+    });
+};
+
+/*
+ * Original Command:
+ *
+ * ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -i input.mp4 \
+ * -ac 2 \
+ * -af "highpass=f=200, lowpass=f=3000, acompressor=threshold=-30dB:ratio=7:attack=5:release=200:makeup=12, equalizer=f=1000:t=q:w=1:g=6, loudnorm=I=-16:TP=-1.5:LRA=11" \
+ * -vn
+ * -c:a libmp3lame \
+ * -q:a 2 \
+ * output.mp3
+ *
+ * -analyzeduration -probesize --------- 提高分析时长与探测缓冲，防止大文件或长视频探测失败，以提高对大文件或高码率文件的容错能力。
+ * highpass=f=200 ---------------------- 去掉低频（如风声、隆隆声）
+ * lowpass=f=3000 ---------------------- 去掉高频嘶嘶声和背景噪音
+ * acompressor ------------------------- 压制大音量背景，让对白浮上来
+ * equalizer=f=1000:g=6	---------------- 强调 1kHz 附近的人声频率
+ * loudnorm	---------------------------- 最后平衡整体响度，防止爆音
+ * -vn --------------------------------- 禁用视频输出，只保留音频
+ * -c:a libmp3lame --------------------- 使用 libmp3lame 编码器，将音频转成 MP3 格式
+ * -q:a 2 ------------------------------ 设置音频质量（越小越高质量，范围 0–9，一般推荐 2）
+ */
+export const enhanceDialogueAndExtractMP3 = (input: string, output: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        ffmpeg.setFfmpegPath(`${ffmepgBin}`);
+        ffmpeg(input)
+            .inputOptions(["-analyzeduration", "2147483647", "-probesize", "2147483647"])
+            .audioChannels(2)
+            .audioFilters(["highpass=f=200", "lowpass=f=3000", "acompressor=threshold=-30dB:ratio=7:attack=5:release=200:makeup=12", "equalizer=f=1000:t=q:w=1:g=6", "loudnorm=I=-16:TP=-1.5:LRA=11"])
+            .noVideo()
+            .audioCodec("libmp3lame")
+            .audioQuality(2)
+            .save(output)
+            .on("start", (commandLine) => {
+                console.log("fluent-ffmpeg enhanceDialogueAndExtractMP3 command: ", commandLine);
+                LoggerSystem.info(commandLine);
+            })
+            .on("end", () => {
+                console.log("fluent-ffmpeg: succeed to enhanceDialogueAndExtractMP3.");
+                resolve();
+            })
+            .on("error", (err) => {
+                console.error(`fluent-ffmpeg error: ${err.message}`);
+                LoggerSystem.error(err.message);
                 reject();
             });
     });
@@ -148,7 +198,7 @@ export const compressVideoBefore = (input: string): boolean => {
  * Generate Subtitle for Video
  *
  * ffmpeg -y -i "input.mp4" -vf "ass='test.ass'" -c:a copy "output_ass.mp4"
- * ffmpeg -y -i "D:/Github/lang/server/api/uploads/1743851933073/origin_bg.mp4" -vf "ass='D\:/Github/lang/server/api/uploads/1743851933073/origin.ass'" -c:a copy "D:/Github/lang/server/api/uploads/1743851933073/origin_bg_ass.mp4"
+ * ffmpeg -y -i "D:/Github/lang/server/api/data/1743851933073/origin_bg.mp4" -vf "ass='D\:/Github/lang/server/api/data/1743851933073/origin.ass'" -c:a copy "D:/Github/lang/server/api/data/1743851933073/origin_bg_ass.mp4"
  */
 export const rasterizeSubtitleOnVideo = (inputVideo: string, inputASS: string, output: string): void => {
     try {

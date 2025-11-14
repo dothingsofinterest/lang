@@ -3,36 +3,36 @@ import { Layout, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Vocab as DataVocab } from "../../types/Data";
 import { RootState } from "../../stores";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { Domain } from "../../settings.js";
+import { updateMeaningMatchingVocab } from "../../stores/reducers/plan";
 import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] meaning/index");
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const project = useSelector((state: RootState) => state.project);
-    const projectName = useSelector((state: RootState) => state.project.name);
-    const refScrollbar = useRef<Scrollbars>(null);
-    const dataFormatted = useSelector((state: RootState) => state.project.script.dataFormatted);
-    const [vocabsGrouped, setVocabsGrouped] = useState<DataVocab[][]>([]);
-    const [activeVocab, setActiveVocab] = useState(0);
+    const plan = useSelector((state: RootState) => state.plan);
+    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
+    const matchingVocab = useSelector((state: RootState) => state.plan.meaningMatchingVocab);
+    const [vocabsFiltered, setVocabsFiltered] = useState<DataVocab[]>(dataFormatted.vocabs.filter((v: DataVocab) => v.image));
     const [textareaValue, setTextareaValue] = useState("");
     const refShowcase = useRef<HTMLDivElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
+    const refScrollbar = useRef<Scrollbars>(null);
     const handlersTypeVocab = (value: string) => {
         setTextareaValue(value);
-        if (dataFormatted.vocabs.length > 0) {
-            if (dataFormatted.vocabs[activeVocab].text.split(", ")[1] === value) {
+        if (vocabsFiltered.length > 0) {
+            if (vocabsFiltered[matchingVocab].text.split(", ")[1] === value) {
                 setTextareaValue("");
-                setActiveVocab(activeVocab + 1 >= dataFormatted.vocabs.length ? activeVocab : activeVocab + 1);
+                dispatch(updateMeaningMatchingVocab(matchingVocab + 1 >= vocabsFiltered.length ? 0 : matchingVocab + 1));
                 if (refAudio.current) {
                     refAudio.current.play();
                 }
                 if (refShowcase.current) {
                     refShowcase.current.querySelectorAll(".item").forEach((span: any, k) => {
-                        span.className = k > activeVocab ? "item" : "item matched";
-                        if (activeVocab === k) {
+                        span.className = k > matchingVocab ? "item" : "item matched";
+                        if (matchingVocab === k) {
                             const scrollTop = refScrollbar.current?.getScrollTop() || 0;
                             const scrollTopVocabValue = scrollTop + span.getBoundingClientRect().top - 50;
                             refScrollbar.current?.scrollTop(scrollTopVocabValue);
@@ -43,18 +43,10 @@ const Index = () => {
         }
     };
     useEffect(() => {
-        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
-            alert("Please create a project.");
+        if (!plan.videoHash || !plan.videoURL) {
+            alert("Please create a plan.");
             navigate("/settings");
         }
-        const vocabsGrouped = [];
-        const vocabsFiltered = dataFormatted.vocabs.filter((v: DataVocab) => v.image.length > 0);
-        for (let i = 0; i < vocabsFiltered.length; i += 4) {
-            if (vocabsFiltered[i].image.length > 0) {
-                vocabsGrouped.push(vocabsFiltered.slice(i, i + 4));
-            }
-        }
-        setVocabsGrouped(vocabsGrouped);
         console.log("[mounted] meaning/index");
         return () => {
             console.log("[unmounted] meaning/index");
@@ -76,17 +68,11 @@ const Index = () => {
             <div className="main-inner-item-main">
                 <Scrollbars ref={refScrollbar}>
                     <div id="showcase" ref={refShowcase}>
-                        {vocabsGrouped.map((value, key) => {
+                        {vocabsFiltered.map((value, key) => {
                             return (
-                                <div key={key} className="line">
-                                    {value.map((v: DataVocab, k) => {
-                                        return (
-                                            <span className="item" key={k}>
-                                                <img src={`${Domain}/uploads/${projectName}/images/${v.image[0]}?${Date.now()}`} />
-                                                <i>{v.text.split(", ")[1]}</i>
-                                            </span>
-                                        );
-                                    })}
+                                <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "item matched" : "item matching") : "item"}>
+                                    <img src={`${value.image}?${Date.now()}`} />
+                                    <i>{value.text.split(", ")[1]}</i>
                                 </div>
                             );
                         })}

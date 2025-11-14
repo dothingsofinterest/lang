@@ -1,40 +1,31 @@
 import express, { Request, Response } from "express";
-import { conGenerate, importTts, streamTts } from "../controller/TtsController";
-import { importVideo, streamVideo, compressVideo } from "../controller/VideoController";
-import { importScript, importVocabImg, streamVocabImg, uploadVocabImg } from "../controller/ScriptController";
-import { uploadJson as uploadJsonMiddleware, uploadVideo as uploadVideoMiddleware, uploadZip as uploadZipMiddleware, uploadImg as uploadImgMiddleware } from "../middleware/Upload";
+import { videoImport, waveformCreate } from "../controller/VideoController";
+import { dataImport, dataExport, scriptSync, vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../controller/DataController";
+import { upload } from "../middleware/Upload";
 
 const router = express.Router();
 
 // Index
-router.get("/", (res: Response) => {
-    res.json({ code: 1, message: "success" });
-});
-// Index
+router.get("/", (res: Response) => res.json({ code: 1, message: "success" }));
 
 // Video
-router.post("/video/importVideo", uploadVideoMiddleware, importVideo);
-router.get("/video/streamVideo", streamVideo);
-router.get("/video/compressVideo", compressVideo);
+router.post("/video/import", upload, videoImport);
+router.post("/video/waveformCreate", waveformCreate);
 // Video
 
-// Script
-router.get("/script/streamVocabImg", streamVocabImg);
-router.post("/script/importScript", uploadJsonMiddleware, importScript);
-router.post("/script/importVocabImg", uploadZipMiddleware, importVocabImg);
-router.post("/script/uploadVocabImg", uploadImgMiddleware, uploadVocabImg);
-// Script
-
-// TTS
-router.get("/tts/gen", conGenerate);
-router.get("/tts/streamTts", streamTts);
-router.post("/tts/importTts", uploadZipMiddleware, importTts);
-// TTS
+// Data
+router.post("/data/export", dataExport);
+router.post("/data/import", upload, dataImport);
+router.post("/data/script_sync", upload, scriptSync);
+router.post("/data/vocab_image_upload", upload, vocabImageUpload);
+router.post("/data/vocab_pronunciation_upload", upload, vocabPronunciationUpload);
+router.post("/data/vocab_pronunciation_generate", upload, vocabPronunciationGenerate);
+router.post("/data/vocab_image_pronunciation_move", upload, vocabImagePronunciationMove);
+router.post("/data/vocab_image_pronunciation_remove", upload, vocabImagePronunciationRemove);
+// Data
 
 // User
-router.post("/logout", (req: Request, res: Response) => {
-    res.json({ code: 1, message: "success" });
-});
+router.post("/logout", (req: Request, res: Response) => res.json({ code: 1, message: "success" }));
 // User
 
 export default router;

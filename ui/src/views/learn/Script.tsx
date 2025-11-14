@@ -5,13 +5,14 @@ import "./Script.scss";
 
 interface ScriptProps {
     dataFormatted: FormattedData;
-    activeSentence: number;
-    activeVocab: number;
+    encn?: number;
+    matchingSentence?: number;
+    matchingVocab?: number;
     showFooter?: boolean;
     onRendered?: (scrollTopPoint: number, scrollTopVocab: number) => void;
 }
 
-const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, activeSentence, activeVocab, showFooter = true, onRendered }) => {
+const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, matchingVocab = 0, showFooter = true, onRendered }) => {
     console.log("[rendered] learn/script");
     const articleRef = useRef<HTMLDivElement>(null);
     const fnRender = () => {
@@ -19,26 +20,26 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, activeSentenc
             let scrollTopPoint = 0;
             let scrollTopVocab = 0;
             articleRef.current.querySelectorAll(".point").forEach((span: any, k) => {
-                if (k < activeSentence) {
-                    span.className = "point activated";
-                } else if (activeSentence === k) {
-                    span.className = "point active";
+                if (k < matchingSentence) {
+                    span.className = "point matched";
+                } else if (matchingSentence === k) {
+                    span.className = "point matching";
                 } else {
                     span.className = "point";
                 }
-                if (activeSentence === k) scrollTopPoint = span.getBoundingClientRect().top - 150;
+                if (matchingSentence === k) scrollTopPoint = span.getBoundingClientRect().top - 150;
             });
             const vocabsArea = articleRef.current.querySelector("#vocabs");
             if (vocabsArea) {
                 vocabsArea.querySelectorAll(".item").forEach((span: any, k) => {
-                    if (k < activeVocab) {
-                        span.className = "item activated";
-                    } else if (activeVocab === k) {
-                        span.className = "item active";
+                    if (k < matchingVocab) {
+                        span.className = "item matched";
+                    } else if (matchingVocab === k) {
+                        span.className = "item matching";
                     } else {
                         span.className = "item";
                     }
-                    if (activeVocab === k) scrollTopVocab = span.getBoundingClientRect().top - 150;
+                    if (matchingVocab === k) scrollTopVocab = span.getBoundingClientRect().top - 150;
                 });
             }
             if (onRendered !== undefined) {
@@ -54,9 +55,9 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, activeSentenc
         };
     }, []);
     useEffect(() => {
-        console.log("[effected by activeSentence, activeVocab] learn/script");
+        console.log("[effected by matchingSentence, matchingVocab] learn/script");
         fnRender();
-    }, [activeSentence, activeVocab]);
+    }, [matchingSentence, matchingVocab]);
     return (
         <article ref={articleRef} id="script">
             <React.Fragment>
@@ -64,33 +65,37 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, activeSentenc
                 {dataFormatted.scenes.map((scene, index) => {
                     return (
                         <section className="scene" key={index}>
-                            {scene.name && <h2>{scene.name}</h2>}
+                            {scene.name && <h2>{encn === 0 ? scene.name.split("-")[0] : scene.name.split("-")[1]}</h2>}
                             {scene.paragraphs.map((paragraph) => {
                                 return paragraph.roles.length < 2 ? (
-                                    <p key={paragraph.key} className={paragraph.roles.length === 0 ? "pure" : undefined}>
-                                        {paragraph.roles.length > 0 && <i className="role">{paragraph.roles[0].split("-")[0]}: </i>}
-                                        {paragraph.sentences.map((v) => {
-                                            return (
-                                                <React.Fragment key={v.key}>
-                                                    <span className="point">{v.texts.length > 0 && v.texts[0].split("\n")[0]}</span>
-                                                </React.Fragment>
-                                            );
-                                        })}
-                                    </p>
+                                    <React.Fragment key={paragraph.key}>
+                                        <p key={paragraph.key} className={paragraph.roles.length === 0 ? "indent" : undefined}>
+                                            {paragraph.roles.length > 0 && <i className="role">{encn === 0 ? `${paragraph.roles[0].split("-")[0]}: ` : `${paragraph.roles[0].split("-")[1]}: `}</i>}
+                                            {paragraph.sentences.map((v) => {
+                                                return (
+                                                    <span className="point" key={v.key}>
+                                                        {encn === 0 ? v.texts.length > 0 && v.texts[0].split("\n")[0] : v.texts.length > 0 && v.texts[0].split("\n")[1]}
+                                                    </span>
+                                                );
+                                            })}
+                                        </p>
+                                    </React.Fragment>
                                 ) : (
                                     <React.Fragment key={paragraph.key}>
                                         {paragraph.sentences.map((sentence) => {
                                             return (
-                                                <ul className="point" key={sentence.key}>
-                                                    {sentence.texts.map((partOfSentence: any, n: number) => {
-                                                        return (
-                                                            <li key={n}>
-                                                                <i className="role">{paragraph.roles[n].split("-")[0]}: </i>
-                                                                <span>{partOfSentence.split("\n")[0]}</span>
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
+                                                <React.Fragment key={sentence.key}>
+                                                    <ul className="point" key={sentence.key}>
+                                                        {sentence.texts.map((partOfSentence: any, n: number) => {
+                                                            return (
+                                                                <li key={n}>
+                                                                    <i className="role">{encn === 0 ? `${paragraph.roles[n].split("-")[0]}: ` : `${paragraph.roles[n].split("-")[1]}: `}</i>
+                                                                    <span>{encn === 0 ? partOfSentence.split("\n")[0] : partOfSentence.split("\n")[1]}</span>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                </React.Fragment>
                                             );
                                         })}
                                     </React.Fragment>

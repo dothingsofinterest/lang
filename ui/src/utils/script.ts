@@ -1,7 +1,9 @@
-import { Script as DataScript, FormattedData, Paragraph as DataParagraph } from "../types/Data";
+import { Script as DataScript, FormattedData, Paragraph as DataParagraph, Sentence } from "../types/Data";
+import { scriptSync } from "../api/requestAuth";
+import { Domain } from "../settings.js";
 import Joi from "joi";
 
-export const createJson = (script: DataScript, scriptTimeOffset: number): DataScript => {
+export const fnCreateJson = (script: DataScript, scriptTimeOffset: number): DataScript => {
     const newParagraphs = script.paragraphs.map((value) => {
         const newSentences = value.sentences.map((v) => {
             let startTime = v.startTime;
@@ -74,14 +76,16 @@ export const fnParseVocabs = (text: string): string => {
     return r;
 };
 
-export const fnGetFormattedData = (script: DataScript): FormattedData => {
+export const fnGetFormattedData = (plan: string, script: DataScript): FormattedData => {
     const data: FormattedData = {
         title: script.title,
-        vocabs: script.vocabs,
+        vocabs: [],
         grammars: script.grammars,
         scenes: [],
         sentences: [],
     };
+    const staticPrefix = `${Domain}/data/${plan}`;
+    data.vocabs = script.vocabs.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
     script.paragraphs.forEach((v: DataParagraph) => {
         data.sentences.push(...v.sentences);
     });
@@ -95,13 +99,13 @@ export const fnGetFormattedData = (script: DataScript): FormattedData => {
             if (sceneKey) {
                 if (k === 0) {
                     data.scenes.push({
-                        name: sceneArr[0],
+                        name: v.scene,
                         paragraphs: [v],
                     });
                 } else {
                     if (v.scene !== a[k - 1].scene) {
                         data.scenes.push({
-                            name: sceneArr[0],
+                            name: v.scene,
                             paragraphs: [v],
                         });
                     } else {
@@ -156,7 +160,6 @@ export const fnFloatToASSTime = (floatSeconds: number): string => {
     return timeString;
 };
 
-// 辅助函数：补零以确保数字有指定的长度
 export const fnPadZero = (num: number, length: number = 2): string => {
     return num.toString().padStart(length, "0");
 };
@@ -165,7 +168,7 @@ export const fnIsSRTTime = (value: string): boolean => {
     return value.match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/) ? true : false;
 };
 
-export const validateJsonFile = (data: any): boolean => {
+export const fnValidateJsonFile = (data: any): boolean => {
     const schema = Joi.object({
         title: Joi.string().required(),
         roles: Joi.array().items(Joi.string()).required(),
@@ -180,4 +183,20 @@ export const validateJsonFile = (data: any): boolean => {
         return false;
     }
     return true;
+};
+
+export const fnGetMaxTimeFromSentences = (sentences: Sentence[]): number => {
+    const timeArr: number[] = [];
+    sentences.forEach((v) => {
+        timeArr.push(fnSRTTimeToFloat(v.startTime));
+        timeArr.push(fnSRTTimeToFloat(v.endTime));
+    });
+    return Math.max(...timeArr);
+};
+
+export const fnSyncScript = async (plan: string, script: DataScript, scriptTimeOffset: number) => {
+    const blob = new Blob([JSON.stringify(fnCreateJson(script, scriptTimeOffset), null, 4)], { type: "application/json" });
+    const formData = new FormData();
+    formData.append("file", blob, "script.json");
+    scriptSync({ plan }, formData);
 };

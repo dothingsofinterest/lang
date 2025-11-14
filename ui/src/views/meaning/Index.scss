@@ -17,36 +17,44 @@
     .main-inner-item-main {
         #showcase {
             background: #000;
-            .line {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            flex-wrap: wrap;
+            .item {
+                width: 25%;
+                height: 200px;
+                border: 1px solid #002a51;
                 display: flex;
-                justify-content: space-between;
-                align-items: stretch;
-                .item {
-                    flex: 1;
-                    border: 1px solid #ccc;
-                    display: inline-block;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    position: relative;
-                    img {
-                        max-width: 100%;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                background-color: #ccc;
+                box-sizing: border-box;
+                img {
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+                i {
+                    display: none;
+                }
+                &.matched {
+                    i {
+                        position: absolute;
+                        inset: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: rgba(0, 0, 0, 0.6);
+                        color: #fff;
+                        pointer-events: none;
+                        font-size: 16px;
+                        font-weight: 900;
                     }
+                }
+                &.matching {
                     i {
                         display: none;
-                    }
-                    &.matched {
-                        i {
-                            position: absolute;
-                            inset: 0;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            background-color: rgba(0, 0, 0, 0.6);
-                            color: #fff;
-                            pointer-events: none;
-                            font-size: 16px;
-                        }
                     }
                 }
             }

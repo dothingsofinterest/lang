@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Vocab } from "../../types/Data";
 import "./ScriptFooter.scss";
 
@@ -7,6 +7,20 @@ interface ScriptVocabsProps {
     grammars: string[];
 }
 const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars }) => {
+    const refAudio = useRef<HTMLAudioElement>(null);
+    const handlersPlayAudio = async (index: number) => {
+        if (vocabs.length > 0) {
+            const vocab = vocabs[index];
+            if (vocab && vocab.pronunciation) {
+                if (refAudio.current) {
+                    const audio = refAudio.current;
+                    audio.src = vocab.pronunciation;
+                    audio.load();
+                    audio.play();
+                }
+            }
+        }
+    };
     return (
         <React.Fragment>
             {vocabs.length > 0 && (
@@ -14,12 +28,15 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
                     <div className="title">Vocabs</div>
                     {vocabs.map((value, key) => {
                         return (
-                            <p key={key} className="item">
+                            <p key={key} className="item" onClick={() => handlersPlayAudio(key)}>
                                 <i className="index">[{key + 1}] </i>
                                 {value.text}
                             </p>
                         );
                     })}
+                    <section style={{ display: "hidden" }}>
+                        <audio ref={refAudio}></audio>
+                    </section>
                 </div>
             )}
             {grammars.length > 0 && (

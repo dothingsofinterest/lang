@@ -51,7 +51,6 @@ export const OAuthLogout = (): Promise<Response> => {
         url: "/logout",
     });
 };
-
 export const OAuthUpdatePassword = (data: RequestDataUpdatePassword): Promise<Response> => {
     return requestInstance.request({
         method: "put",
@@ -61,81 +60,83 @@ export const OAuthUpdatePassword = (data: RequestDataUpdatePassword): Promise<Re
 };
 // User
 
-// TTS
-export const ttsGen = (params: RequestParamsTts): Promise<Response> => {
-    return requestInstance.request({
-        method: "get",
-        url: "/tts/gen",
-        params: params,
-    });
-};
-export const importTts = (data: FormData): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/tts/importTts`,
-        data: data,
-    });
-};
-export const streamTts = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "get",
-        url: `/tts/streamTts`,
-        responseType: "blob",
-        params: params,
-    });
-};
-// TTS
-
 // Video
-export const importVideo = (data: FormData): Promise<Response> => {
+export const videoImport = (data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/importVideo`,
+        url: `/video/import`,
         data: data,
     });
 };
-
-export const compressVideo = (params: object): Promise<Blob> => {
+export const waveformCreate = (params: object): Promise<Response> => {
     return requestInstance.request({
-        method: "get",
-        url: `/video/compressVideo`,
-        responseType: "blob",
+        method: "post",
+        url: "/video/waveformCreate",
         params: params,
     });
 };
 // Video
 
-// Script
-export const importScript = (params: object, data: FormData): Promise<Response> => {
+// Data
+export const importData = (params: Object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/script/importScript`,
+        url: `/data/import`,
         data: data,
         params: params,
     });
 };
-export const importVocabImg = (params: object, data: FormData): Promise<Response> => {
+export const exportData = (params: object): Promise<Blob> => {
     return requestInstance.request({
         method: "post",
-        url: `/script/importVocabImg`,
-        data: data,
-        params: params,
-    });
-};
-export const streamVocabImg = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "get",
-        url: `/script/streamVocabImg`,
+        url: `/data/export`,
         responseType: "blob",
         params: params,
     });
 };
-export const uploadVocabImg = (params: object, data: FormData): Promise<Response> => {
+export const scriptSync = (params: Object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/script/uploadVocabImg`,
-        params: params,
+        url: `/data/script_sync`,
         data: data,
+        params: params,
     });
 };
-// Script
+export const vocabImageUpload = (params: object, data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/data/vocab_image_upload`,
+        data: data,
+        params: params,
+    });
+};
+export const vocabPronunciationUpload = (params: object, data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/data/vocab_pronunciation_upload`,
+        data: data,
+        params: params,
+    });
+};
+export const vocabPronunciationGenerate = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/data/vocab_pronunciation_generate`,
+        params: params,
+    });
+};
+export const vocabImagePronunciationMove = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/data/vocab_image_pronunciation_move`,
+        params: params,
+    });
+};
+export const vocabImagePronunciationRemove = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/data/vocab_image_pronunciation_remove`,
+        params: params,
+    });
+};
+// Data

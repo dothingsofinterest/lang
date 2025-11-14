@@ -1,12 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import auth from "./reducers/auth";
-import project from "./reducers/project";
+import plan from "./reducers/plan";
 
 const store = configureStore({
-    reducer: {
-        auth: auth,
-        project: project,
-    },
+    reducer: { auth, plan },
 });
 
 export default store;

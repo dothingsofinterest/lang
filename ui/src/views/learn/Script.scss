@@ -32,7 +32,7 @@
             &:first-of-type {
                 border-top: 0;
             }
-            &.pure {
+            &.indent {
                 text-indent: 30px;
             }
             .role {
@@ -48,7 +48,7 @@
             color: #fff;
             font-size: 14px;
             line-height: 28px;
-            &.active {
+            &.matching {
                 color: rgb(252, 221, 92);
             }
             .role {
@@ -58,12 +58,12 @@
             }
         }
         .point {
-            &.activated {
-                color: rgb(252, 221, 92);
-            }
-            &.active {
+            &.matched {
                 color: rgb(252, 221, 92);
                 font-weight: 900;
+            }
+            &.matching {
+                color: rgb(252, 221, 92);
             }
             &:first-child {
                 padding: 0;

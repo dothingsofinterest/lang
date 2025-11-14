@@ -1,0 +1,31 @@
+#script-vocab {
+    .vocab-list {
+        color: #000;
+        background: #ccc;
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0;
+            padding: 0px 10px;
+            border-top: 1px dotted #000;
+            font-size: 12px;
+            height: 36px;
+            &.active {
+                font-weight: 900;
+            }
+            &:first-child {
+                border: 0;
+            }
+            .index {
+                font-weight: 900;
+                font-style: normal;
+                margin-right: 4px;
+            }
+            img {
+                width: 26px;
+                height: 26px;
+            }
+        }
+    }
+}

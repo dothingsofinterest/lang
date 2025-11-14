@@ -26,6 +26,7 @@ export type { RequestDataLogin, RequestDataUpdatePassword };
 /* TTS */
 interface RequestParamsTts {
     id?: number;
+    hash: string;
     content: string;
     type: number;
 }

@@ -19,7 +19,7 @@ app.use(cors());
 app.use("/api/open", routes);
 app.use("/api", checkUnauthorized, routesAuth);
 // Static assets
-app.use("/uploads", express.static("uploads"));
+app.use("/data", express.static("data"));
 // Routes 404
 app.use(routeNotFound);
 // Exception

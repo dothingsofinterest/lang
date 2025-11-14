@@ -1,35 +1,23 @@
 import { exec } from "child_process";
-import fs, { promises as fsPromise } from "fs";
+import { promises as fsPromise } from "fs";
 import util from "util";
+import path from "path";
+import { LoggerSystem } from "../lib/Log";
 
 const execPromise = util.promisify(exec);
+const uploadRootPath = process.env.UPLOAD_PATH;
 
-const generateAudio = async (content: string, type: number) => {
+export const audioGenerate = async (content: string, filename: string) => {
     try {
-        const file = `${process.env.UPLOAD_PATH}/tts/${Date.now()}.wav`;
-        const filterContent = type === 1 ? content.replace(/[^a-zA-Z',\.]+/g, " ") : content.replace(/[^\u4e00-\u9fa5]+/g, ", ");
-        await execPromise(`python ${process.cwd()}/scripts/english.py "${filterContent}" "${type}" "${file}"`);
-        const binary = await fsPromise.readFile(file);
-        const base64 = Buffer.from(binary).toString("base64");
-        fsPromise.rm(file);
-        return base64;
-    } catch (err: any) {
-        throw new Error(err.message);
-    }
-};
-
-const searchAudio = async (fileName: string) => {
-    try {
-        const file = `${process.env.UPLOAD_PATH}/tts/${fileName}.wav`;
-        if (!fs.existsSync(file)) {
-            throw new Error(`${file} doesn't exist.`);
-        }
+        const file = path.join(`${uploadRootPath}`, `temp`, filename);
+        const filterContent = content.replace(/[^a-zA-Z',\.]+/g, " ");
+        await execPromise(`python ${process.cwd()}/scripts/english.py "${filterContent}" "1" "${file}"`);
         const binary = await fsPromise.readFile(file);
         const base64 = Buffer.from(binary).toString("base64");
         return base64;
-    } catch (err: any) {
-        throw new Error(err.message);
+    } catch (error: any) {
+        console.error(error);
+        LoggerSystem.error(error.message);
+        throw new Error(error.message);
     }
 };
-
-export { generateAudio, searchAudio };

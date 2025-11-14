@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "./stores";
 import router from "./routers";
 import "./styles/base.scss";
+import "./styles/ant.scss";
 
 const app = document.getElementById("app");
 if (!app) {

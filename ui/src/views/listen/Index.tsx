@@ -3,74 +3,67 @@ import { Layout, Input, Button } from "antd";
 import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../stores";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ttsGen } from "../../api/requestAuth";
+import { updateListenMatchingVocab } from "../../stores/reducers/plan";
 import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] listen/index");
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const project = useSelector((state: RootState) => state.project);
-    const dataFormatted = useSelector((state: RootState) => state.project.script.dataFormatted);
-    const [activeVocab, setActiveVocab] = useState(0);
+    const plan = useSelector((state: RootState) => state.plan);
+    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
+    const matchingVocab = useSelector((state: RootState) => state.plan.listenMatchingVocab);
     const [textareaValue, setTextareaValue] = useState("");
+    const refScrollbar = useRef<Scrollbars>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const handlersTypeVocab = (value: string) => {
         setTextareaValue(value);
         if (dataFormatted.vocabs.length > 0) {
-            if (dataFormatted.vocabs[activeVocab].text.split(", ")[1] === value) {
-                const activeVocabNext = activeVocab + 1 >= dataFormatted.vocabs.length ? activeVocab : activeVocab + 1;
+            if (dataFormatted.vocabs[matchingVocab].text.split(", ")[1] === value) {
+                const matchingVocabNext = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
                 setTextareaValue("");
-                setActiveVocab(activeVocabNext);
-                fnPlayAudio(activeVocabNext);
+                dispatch(updateListenMatchingVocab(matchingVocabNext));
+                fnPlayAudio(matchingVocabNext);
             }
         }
     };
     const handlersPlayBackward = () => {
-        const index = activeVocab - 1 <= 0 ? 0 : activeVocab - 1;
-        setActiveVocab(index);
+        const index = matchingVocab - 1 <= 0 ? 0 : matchingVocab - 1;
+        dispatch(updateListenMatchingVocab(index));
         fnPlayAudio(index);
     };
     const handlersPlayForward = () => {
-        const index = activeVocab + 1 >= dataFormatted.vocabs.length ? activeVocab : activeVocab + 1;
-        setActiveVocab(index);
+        const index = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
+        dispatch(updateListenMatchingVocab(index));
         fnPlayAudio(index);
     };
     const handlersPlayClear = () => {
         setTextareaValue("");
-        setActiveVocab(0);
+        dispatch(updateListenMatchingVocab(0));
         fnPlayAudio(0);
     };
     const fnPlayAudio = async (index: number) => {
         if (dataFormatted.vocabs.length > 0) {
-            const vocabsArr = dataFormatted.vocabs[index].text.split(", ");
-            const content = vocabsArr[1].replaceAll("/", ", ");
-            const type = / [A-Z]/.test(vocabsArr[2]) ? 3 : 1;
-            try {
-                const res = await ttsGen({ content: content, type: type });
-                if (res.code) {
-                    if (refAudio.current) {
-                        const audio = refAudio.current;
-                        audio.src = "data:audio/wav;base64," + res.data;
-                        audio.load();
-                        audio.play();
-                    }
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log(error);
+            const vocab = dataFormatted.vocabs[index];
+            if (vocab && vocab.pronunciation) {
+                if (refAudio.current) {
+                    const audio = refAudio.current;
+                    audio.src = vocab.pronunciation;
+                    audio.load();
+                    audio.play();
                 }
             }
         }
     };
     useEffect(() => {
-        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
-            alert("Please create a project.");
+        if (!plan.videoHash || !plan.videoURL) {
+            alert("Please create a plan.");
             navigate("/settings");
         }
-        fnPlayAudio(0);
         console.log("[mounted] listen/index");
+        fnPlayAudio(matchingVocab);
         return () => {
             console.log("[unmounted] listen/index");
             if (refAudio.current) {
@@ -93,6 +86,17 @@ const Index = () => {
                     <Button icon={<FastForwardOutlined />} onClick={handlersPlayForward} className="btn" />
                     <Button icon={<ClearOutlined />} onClick={handlersPlayClear} className="btn" />
                 </section>
+                <Scrollbars ref={refScrollbar}>
+                    <div id="word-list">
+                        {dataFormatted.vocabs.map((value, key) => {
+                            return (
+                                <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "line matched" : "line matching") : "line"}>
+                                    {value.text.split(", ")[1]}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </Scrollbars>
                 <section id="hidden-elems">
                     <audio ref={refAudio} loop></audio>
                 </section>

@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button, Upload, Radio } from "antd";
-import { AudioFilled, ClearOutlined, PrinterOutlined, FastBackwardOutlined, FastForwardOutlined } from "@ant-design/icons";
+import { Layout, Input, Button } from "antd";
+import { AudioFilled, PrinterOutlined } from "@ant-design/icons";
 import { Script as DataScript, Vocab as DataVocab, Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types/Data";
 import store, { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch, Provider } from "react-redux";
-import { updateActiveSentence, updateActiveSentencePos, updateActiveVocab, updateActiveVocabPos, updatePlayMode } from "../../stores/reducers/project";
+import { useSelector, Provider } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import ReactDOMServer from "react-dom/server";
 import printJS from "print-js";
@@ -14,55 +13,21 @@ import "./Index.scss";
 
 const Index = () => {
     console.log("[rendered] learn/index");
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const project = useSelector((state: RootState) => state.project);
-    const script = useSelector((state: RootState) => state.project.script.data);
-    const recognitionRef = useRef<any>(null);
+    const plan = useSelector((state: RootState) => state.plan);
+    const script = useSelector((state: RootState) => state.plan.script.data);
+    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
+    const [matchingSentence, setMatchingSentence] = useState(0);
+    const [matchingVocab, setMatchingVocab] = useState(0);
     const [listening, setListening] = useState(false);
     const [speech, setSpeech] = useState("");
-    const [matchInfo, setMatchInfo] = useState<React.ReactNode>(<b>Hello</b>);
-    const refScrollbar = useRef<Scrollbars>(null);
-    const dataFormatted = useSelector((state: RootState) => state.project.script.dataFormatted);
-    const activeSentence = useSelector((state: RootState) => state.project.activeSentence);
-    const activeSentencePos = useSelector((state: RootState) => state.project.activeSentencePos);
-    const activeVocab = useSelector((state: RootState) => state.project.activeVocab);
-    const activeVocabPos = useSelector((state: RootState) => state.project.activeVocabPos);
-    const playMode = useSelector((state: RootState) => state.project.playMode);
     const [sentences, setSentences] = useState<DataSentence[]>([]);
     const [vocabs, setVocabs] = useState<DataVocab[]>([]);
-    const refActiveSentence = useRef({ activeSentence, activeVocab, listening, playMode });
-    const handlersPanelSentenceBackward = () => {
-        const activeSentence = refActiveSentence.current.activeSentence;
-        const prevIndex = activeSentence <= 0 ? 0 : activeSentence - 1;
-        dispatch(updateActiveSentence(prevIndex));
-        dispatch(updatePlayMode(0));
-    };
-    const handlersPanelSentenceForward = () => {
-        const activeSentence = refActiveSentence.current.activeSentence;
-        const nextIndex = activeSentence === sentences.length - 1 ? activeSentence : activeSentence + 1;
-        dispatch(updateActiveSentence(nextIndex));
-        dispatch(updatePlayMode(0));
-    };
-    const handlersPanelActiveClear = () => {
-        dispatch(updateActiveSentence(0));
-        dispatch(updateActiveVocab(0));
-        dispatch(updatePlayMode(0));
-    };
-    const handlersPanelVocabsBackward = () => {
-        const activeVocab = refActiveSentence.current.activeVocab;
-        const index = activeVocab - 1 <= 0 ? 0 : activeVocab - 1;
-        dispatch(updateActiveVocab(index));
-        dispatch(updatePlayMode(1));
-    };
-    const handlersPanelVocabsForward = () => {
-        const activeVocab = refActiveSentence.current.activeVocab;
-        const index = activeVocab + 1 >= vocabs.length ? activeVocab : activeVocab + 1;
-        dispatch(updateActiveVocab(index));
-        dispatch(updatePlayMode(1));
-    };
+    const refListening = useRef({ listening });
+    const recognitionRef = useRef<any>(null);
+    const refScrollbar = useRef<Scrollbars>(null);
     const handlersPanelRecordStart = async () => {
-        const listening = refActiveSentence.current.listening;
+        const listening = refListening.current.listening;
         if (recognitionRef.current) {
             await recognitionRef.current.stop();
             if (listening === false) {
@@ -74,85 +39,49 @@ const Index = () => {
             }
         }
     };
-    const handlersRenderedCallback = (scrollTopPoint: number, scrollTopVocab: number) => {
-        const scrollTop = refScrollbar.current?.getScrollTop() || 0;
-        const scrollTopPointValue = scrollTop + scrollTopPoint;
-        const scrollTopVocabValue = scrollTop + scrollTopVocab;
-        dispatch(updateActiveSentencePos(scrollTop + scrollTopPoint));
-        dispatch(updateActiveVocabPos(scrollTopVocab + scrollTopPoint));
-        if (playMode === 0) {
-            refScrollbar.current?.scrollTop(scrollTopPointValue);
-        } else {
-            refScrollbar.current?.scrollTop(scrollTopVocabValue);
-        }
-    };
     const handlersMatch = () => {
         let answerText = ``;
         let inputText = ``;
-        let tipsHTML = <React.Fragment></React.Fragment>;
-        if (playMode === 0) {
-            if (sentences.length > 0) {
-                const answer = sentences[activeSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-                answerText = answer
-                    .replace(/[^a-zA-Z0-9\s]/g, "")
-                    .replace(/\s+/g, " ")
+        if (sentences.length > 0) {
+            for (let i = 0; i < sentences.length; i++) {
+                const answer = sentences[i].texts.map((v) => v.split("\n")[0]).join("\n");
+                const answerText = answer
+                    .replace(/[\,\.\?\!\-\'\s]/g, "")
+                    .toLowerCase()
+                    .trim();
+                const inputText = speech
+                    .toLowerCase()
+                    .replace(/[\,\.\?\!\-\'\s]/g, "")
+                    .toLowerCase()
+                    .trim();
+                if (speech === answer || inputText === answerText) {
+                    setMatchingSentence(i);
+                    break;
+                }
+            }
+        }
+        if (vocabs.length > 0) {
+            for (let i = 0; i < vocabs.length; i++) {
+                answerText = vocabs[i].text
+                    .split(", ")[1]
+                    .replace(/[\/\,\.\?\!\-\'\s]/g, "")
                     .toLowerCase()
                     .trim();
                 inputText = speech
-                    .replace(/[^a-zA-Z0-9\s]/g, "")
-                    .replace(/\s+/g, " ")
+                    .toLowerCase()
+                    .replace(/[\,\.\?\!\-\'\s]/g, "")
                     .toLowerCase()
                     .trim();
-                if (answer === speech || answerText === inputText) {
-                    dispatch(updateActiveSentence(activeSentence + 1 === sentences.length ? activeSentence : activeSentence + 1));
+                if (inputText === answerText) {
+                    setMatchingVocab(i);
+                    break;
                 }
             }
         }
-        if (playMode === 1) {
-            if (vocabs.length > 0) {
-                answerText = vocabs[activeVocab].text.split(", ")[1];
-                inputText = speech.toLowerCase().replaceAll(" ", "/").replace(/\s+/g, " ").trim();
-                if (answerText === inputText) {
-                    dispatch(updateActiveVocab(activeVocab + 1 === vocabs.length ? activeVocab : activeVocab + 1));
-                }
-            }
-        }
-        const index = answerText.indexOf(inputText);
-        if (index !== -1) {
-            tipsHTML = (
-                <React.Fragment>
-                    {answerText.slice(0, index)}
-                    <span className="matched">{inputText}</span>
-                    {answerText.slice(index + inputText.length)}
-                </React.Fragment>
-            );
-        } else {
-            tipsHTML = <React.Fragment>{answerText}</React.Fragment>;
-        }
-        setMatchInfo(tipsHTML);
     };
-    const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {
-        const playMode = refActiveSentence.current.playMode;
-        if (event.code === "ArrowLeft") {
-            if (playMode === 0) {
-                handlersPanelSentenceBackward();
-            } else {
-                handlersPanelVocabsBackward();
-            }
-        }
-        if (event.code === "ArrowRight") {
-            if (playMode === 0) {
-                handlersPanelSentenceForward();
-            } else {
-                handlersPanelVocabsForward();
-            }
-        }
-        if (event.code === "Space") {
-            handlersPanelRecordStart();
-        }
-    };
+    const handlersEventKeyboardOnDown = (event: KeyboardEvent) => {};
     const handlersPrint = () => {
-        if (project.name && project.videoURL && project.videoCompressedURL) {
+        if (plan.videoHash && plan.videoURL) {
             if (dataFormatted.title) {
                 const css = `
                 * { outline: none; }
@@ -184,7 +113,7 @@ const Index = () => {
                 article footer #grammars .index { font-weight: 900; margin-right: 4px; }`;
                 const content = ReactDOMServer.renderToStaticMarkup(
                     <Provider store={store}>
-                        <Script dataFormatted={dataFormatted} activeSentence={0} activeVocab={0} />
+                        <Script dataFormatted={dataFormatted} />
                     </Provider>,
                 );
                 printJS({ printable: `${content}`, type: "raw-html", style: css });
@@ -192,12 +121,12 @@ const Index = () => {
                 alert(`Data not be set`);
             }
         } else {
-            alert("Please create a project.");
+            alert("Please create a plan.");
         }
     };
     useEffect(() => {
-        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
-            alert("Please create a project.");
+        if (!plan.videoHash || !plan.videoURL) {
+            alert("Please create a plan.");
             navigate("/settings");
         }
         console.log("[mounted] learn/index");
@@ -208,12 +137,6 @@ const Index = () => {
         });
         setSentences(sentences);
         setVocabs(script.vocabs);
-        // Scroll Bar
-        if (playMode === 0) {
-            refScrollbar.current?.scrollTop(activeSentencePos);
-        } else {
-            refScrollbar.current?.scrollTop(activeVocabPos);
-        }
         // Speech Recognition
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (!SpeechRecognition) {
@@ -250,32 +173,23 @@ const Index = () => {
         handlersMatch();
     }, [speech]);
     useEffect(() => {
-        console.log("[effected by activeSentence] learn/index");
-        refActiveSentence.current = { activeSentence, activeVocab, listening, playMode };
-    }, [activeSentence, activeVocab, listening, playMode]);
+        console.log("[effected by listening] learn/index");
+        refListening.current = { listening };
+    }, [listening]);
     return (
         <Layout className="main-inner" id="learn-index">
             <div className="main-inner-item-aside">
-                <section className="type">
-                    <Input.TextArea autoSize style={{ minHeight: "200px", borderRadius: "0", color: "#000" }} />
-                </section>
                 <section className="speak">
                     <Button icon={<AudioFilled />} onClick={handlersPanelRecordStart} className={recognitionRef.current && listening === false ? `record-btn` : `record-btn started`}></Button>
-                    <div>{speech}</div>
-                    <div>{matchInfo}</div>
+                    <div style={{ fontSize: "30px" }}>{speech}</div>
                 </section>
             </div>
             <div className="main-inner-item-main" style={{ position: "relative", padding: "32px 0 0" }}>
                 <section className="article-panel">
-                    <Button icon={<FastBackwardOutlined />} onClick={handlersPanelSentenceBackward} className="btn" />
-                    <Button icon={<FastForwardOutlined />} onClick={handlersPanelSentenceForward} className="btn" />
-                    <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn" />
-                    <Button icon={<FastBackwardOutlined />} onClick={handlersPanelVocabsBackward} className="btn" />
-                    <Button icon={<FastForwardOutlined />} onClick={handlersPanelVocabsForward} className="btn" />
                     <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
                 </section>
                 <Scrollbars ref={refScrollbar}>
-                    <Script dataFormatted={dataFormatted} activeSentence={activeSentence} activeVocab={activeVocab} showFooter={true} onRendered={handlersRenderedCallback} />
+                    <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} matchingVocab={matchingVocab} showFooter={true} />
                 </Scrollbars>
             </div>
         </Layout>

@@ -33,18 +33,16 @@ export const login = async (req: Request, res: Response) => {
         }
         // const value = await redis.get(uuid);
         // if (value !== code) throw new ServiceError("captcha is wrong.");
-        console.log("value", value);
-  
+        // console.log("value", value);
         const user = findByUsername(value.username);
-        console.log("user", user);
+        // console.log("user", user);
         if (!user) {
             return res.status(200).json({
                 code: 0,
                 message: `username or password is wrong.`,
             });
         }
-  
-        console.log("user", user);
+        // console.log("user", user);
         const match: boolean = await checkString(value.password, user.password_hashed);
         if (!match) {
             return res.status(200).json({

@@ -2,7 +2,7 @@ import fs, { promises as fsPromise } from "fs";
 import path from "path";
 
 export const clear = () => {
-    const folderPath = path.join("./", "uploads", "videos");
+    const folderPath = path.join("./", "data", "videos");
     fs.readdir(folderPath, (err, files) => {
         if (!err) {
             files.forEach((file) => {

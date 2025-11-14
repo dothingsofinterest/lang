@@ -7,8 +7,6 @@ Learning any language's UI
 vite + react
 NodeJS 20.16.0
 
-# 注意：视频码率太高会导致 wavesurfer 卡顿
-
 # 启动方法
 
 1. 安装 npm install
@@ -24,7 +22,9 @@ NodeJS 20.16.0
    听英语单词写出来
    看含义图像写英语单词
    听英语视频写英语句子/听中文视频写英语句子
+   看汉语句子写出英语句子
 
 # 转化视频格式
 
 rmvb -> mp4: ffmpeg -i input.rmvb -c:v libx264 -c:a aac -strict -2 output.mp4
+mkv -> mp4: ffmpeg -i "input.mkv" -c:v libx264 -c:a aac -b:a 192k -movflags +faststart "output.mp4"

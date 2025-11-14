@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { EyeFilled, EditFilled, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, GoogleSquareFilled, YoutubeFilled, SoundFilled, FileWordFilled, BulbFilled } from "@ant-design/icons";
+import { EyeFilled, EditFilled, ControlFilled, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, GoogleSquareFilled, YoutubeFilled, SoundFilled, FileWordFilled, BulbFilled } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import "./Menu.scss";
@@ -22,12 +22,6 @@ const Menu = () => {
             <Link to="/script">
                 <Button className={location.pathname + location.search === "/script" ? `menu-item active` : `menu-item`} type="primary" icon={<ProfileFilled />} />
             </Link>
-            <Link to="/script-vocabs">
-                <Button className={location.pathname + location.search === "/script-vocabs" ? `menu-item active` : `menu-item`} type="primary" icon={<FileWordFilled />} />
-            </Link>
-            <Link to="/script-grammars">
-                <Button className={location.pathname + location.search === "/script-grammars" ? `menu-item active` : `menu-item`} type="primary" icon={<GoogleSquareFilled />} />
-            </Link>
             <Link to="/learn">
                 <Button className={location.pathname + location.search === "/learn" ? `menu-item active` : `menu-item`} type="primary" icon={<ReadFilled />} />
             </Link>
@@ -42,6 +36,9 @@ const Menu = () => {
             </Link>
             <Link to="/video">
                 <Button className={location.pathname + location.search === "/video" ? `menu-item active` : `menu-item`} type="primary" icon={<YoutubeFilled />} />
+            </Link>
+            <Link to="/translate">
+                <Button className={location.pathname + location.search === "/translate" ? `menu-item active` : `menu-item`} type="primary" icon={<ControlFilled />} />
             </Link>
         </aside>
     );

@@ -5,7 +5,7 @@ import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOut
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateActiveSentence, updateActiveSentencePos } from "../../stores/reducers/project";
+import { updateVideoMatchingSentence, updateVideoMatchingSentencePos } from "../../stores/reducers/plan";
 import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import Script from "../learn/Script";
 import "./Index.scss";
@@ -14,18 +14,17 @@ const Index = () => {
     console.log("[rendered] video/index");
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const project = useSelector((state: RootState) => state.project);
-    const dataFormatted = useSelector((state: RootState) => state.project.script.dataFormatted);
-    const videoURL = useSelector((state: RootState) => state.project.videoURL);
-    const activeSentence = useSelector((state: RootState) => state.project.activeSentence);
-    const activeSentencePos = useSelector((state: RootState) => state.project.activeSentencePos);
-    const activeVocab = useSelector((state: RootState) => state.project.activeVocab);
+    const plan = useSelector((state: RootState) => state.plan);
+    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
+    const videoURL = useSelector((state: RootState) => state.plan.videoURL);
+    const matchingSentence = useSelector((state: RootState) => state.plan.videoMatchingSentence);
+    const matchingSentencePos = useSelector((state: RootState) => state.plan.videoMatchingSentencePos);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [inputValue, setInputValue] = useState("");
     const refScrollbar = useRef<Scrollbars>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
-    const refActiveSentence = useRef({ activeSentence: activeSentence });
+    const refMatchingSentence = useRef({ matchingSentence });
     const handlersPanelPlay = () => {
         if (refVideo.current && videoURL) {
             if (refVideo.current.paused) {
@@ -41,8 +40,8 @@ const Index = () => {
     };
     const handlersPanelPlayAgain = () => {
         if (refVideo.current && videoURL) {
-            const activeSentence = refActiveSentence.current.activeSentence;
-            const cur = dataFormatted.sentences[activeSentence];
+            const matchingSentence = refMatchingSentence.current.matchingSentence;
+            const cur = dataFormatted.sentences[matchingSentence];
             if (cur !== undefined && fnIsSRTTime(cur.startTime)) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(cur.startTime);
                 refVideo.current?.play();
@@ -54,14 +53,17 @@ const Index = () => {
     };
     const handlersPanelPlayBackward = () => {
         if (refVideo.current && videoURL) {
-            const activeSentence = refActiveSentence.current.activeSentence;
-            const prevIndex = activeSentence <= 0 ? 0 : activeSentence - 1;
+            const matchingSentence = refMatchingSentence.current.matchingSentence;
+            const prevIndex = matchingSentence <= 0 ? 0 : matchingSentence - 1;
             const prev = dataFormatted.sentences[prevIndex];
             if (prev !== undefined && fnIsSRTTime(prev.startTime)) {
-                dispatch(updateActiveSentence(prevIndex));
+                dispatch(updateVideoMatchingSentence(prevIndex));
                 refVideo.current.currentTime = fnSRTTimeToFloat(prev.startTime);
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
+            } else {
+                const prevPrevIndex = prevIndex <= 0 ? 0 : prevIndex - 1;
+                dispatch(updateVideoMatchingSentence(prevPrevIndex));
             }
         } else {
             alert("Please upload video.");
@@ -69,34 +71,55 @@ const Index = () => {
     };
     const handlersPanelPlayForward = () => {
         if (refVideo.current && videoURL) {
-            const activeSentence = refActiveSentence.current.activeSentence;
-            const nextIndex = activeSentence === dataFormatted.sentences.length - 1 ? activeSentence : activeSentence + 1;
+            const matchingSentence = refMatchingSentence.current.matchingSentence;
+            const nextIndex = matchingSentence === dataFormatted.sentences.length - 1 ? matchingSentence : matchingSentence + 1;
             const next = dataFormatted.sentences[nextIndex];
             if (next !== undefined && fnIsSRTTime(next.startTime)) {
-                dispatch(updateActiveSentence(nextIndex));
+                dispatch(updateVideoMatchingSentence(nextIndex));
                 refVideo.current.currentTime = fnSRTTimeToFloat(next.startTime);
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
+            } else {
+                const nextNextIndex = nextIndex === dataFormatted.sentences.length - 1 ? nextIndex : nextIndex + 1;
+                dispatch(updateVideoMatchingSentence(nextNextIndex));
             }
         } else {
             alert("Please upload video.");
         }
     };
     const handlersInputTips = () => {
-        let answerLine = ``;
-        let inputLine = ``;
         if (dataFormatted.sentences.length > 0) {
-            answerLine = dataFormatted.sentences[activeSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-        }
-        for (let i = 0; i < answerLine.length; i++) {
-            if (inputValue[i] === answerLine[i]) {
-                inputLine += inputValue[i];
-            } else {
-                inputLine += "X";
-                break;
+            let tips1 = ``;
+            let tips2 = ``;
+            const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
+            const input = inputValue;
+            const answerText = answer
+                .replace(/[\,\.\?\!\-\'\s]/g, "")
+                .toLowerCase()
+                .trim();
+            const inputText = input
+                .toLowerCase()
+                .replace(/[\,\.\?\!\-\'\s]/g, "")
+                .toLowerCase()
+                .trim();
+            for (let i = 0; i < answer.length; i++) {
+                if (answer[i] === input[i]) {
+                    tips1 += answer[i];
+                } else {
+                    tips1 += "X";
+                    break;
+                }
             }
+            for (let i = 0; i < answerText.length; i++) {
+                if (answerText[i] === inputText[i]) {
+                    tips2 += answerText[i];
+                } else {
+                    tips2 += "X";
+                    break;
+                }
+            }
+            alert(`${answer}\r\n${tips1}\r\n---\r\n${answerText}\r\n${tips2}`);
         }
-        alert(`${answerLine}\r\n${inputLine}`);
     };
     const handlersPanelActiveClear = () => {
         if (refVideo.current && videoURL) {
@@ -104,11 +127,11 @@ const Index = () => {
             refVideo.current.pause();
             setPlayButton(<PlayCircleOutlined />);
         }
-        dispatch(updateActiveSentence(0));
+        dispatch(updateVideoMatchingSentence(0));
     };
     const handlersVideoEnded = () => {
         console.log("video ended");
-        dispatch(updateActiveSentence(0));
+        dispatch(updateVideoMatchingSentence(0));
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoPlay = async (e: any) => {
@@ -118,33 +141,36 @@ const Index = () => {
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoTimeUpdate = (e: any) => {
-        const cur = dataFormatted.sentences[activeSentence];
+        const cur = dataFormatted.sentences[matchingSentence];
         if (cur !== undefined) {
-            const endTime = fnSRTTimeToFloat(cur.endTime);
-            if (e.target.currentTime >= endTime) {
-                if (activeSentence <= dataFormatted.sentences.length - 1) {
-                    refVideo.current?.pause();
-                    setPlayButton(<PlayCircleOutlined />);
+            if (fnIsSRTTime(cur.endTime)) {
+                if (e.target.currentTime >= fnSRTTimeToFloat(cur.endTime)) {
+                    if (matchingSentence <= dataFormatted.sentences.length - 1) {
+                        refVideo.current?.pause();
+                        setPlayButton(<PlayCircleOutlined />);
+                    }
                 }
+            } else {
+                dispatch(updateVideoMatchingSentence(matchingSentence + 1));
             }
         }
     };
     const handlersTextInput = (value: string) => {
         setInputValue(value);
         if (dataFormatted.sentences.length > 0) {
-            const answer = dataFormatted.sentences[activeSentence].texts.map((v) => v.split("\n")[0]).join("\n");
+            const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
             const answerText = answer
-                .replace(/[\,\.\?\!\-]/g, "")
+                .replace(/[\,\.\?\!\-\'\s]/g, "")
                 .toLowerCase()
                 .trim();
             const inputText = value
                 .toLowerCase()
-                .replace(/[\,\.\?\!\-]/g, "")
+                .replace(/[\,\.\?\!\-\'\s]/g, "")
                 .toLowerCase()
                 .trim();
             if (value === answer || inputText === answerText) {
                 setInputValue("");
-                dispatch(updateActiveSentence(activeSentence + 1));
+                dispatch(updateVideoMatchingSentence(matchingSentence + 1));
                 refVideo.current?.play();
                 setPlayButton(<PauseCircleOutlined />);
             }
@@ -153,12 +179,12 @@ const Index = () => {
     const handlersRenderedCallback = (scrollTopPoint: number, scrollTopVocab: number) => {
         const scrollTop = refScrollbar.current?.getScrollTop() || 0;
         const scrollTopPointValue = scrollTop + scrollTopPoint;
-        dispatch(updateActiveSentencePos(scrollTopPointValue));
+        dispatch(updateVideoMatchingSentencePos(scrollTopPointValue));
         refScrollbar.current?.scrollTop(scrollTopPointValue);
     };
     useEffect(() => {
-        if (!project.name || !project.videoURL || !project.videoCompressedURL) {
-            alert("Please create a project.");
+        if (!plan.videoHash || !plan.videoURL) {
+            alert("Please create a plan.");
             navigate("/settings");
         }
         console.log("[mounted] video/index");
@@ -170,8 +196,8 @@ const Index = () => {
         };
         if (videoElem) {
             videoElem.load();
-            videoElem.currentTime = dataFormatted.sentences[activeSentence] !== undefined && fnIsSRTTime(dataFormatted.sentences[activeSentence].startTime) ? fnSRTTimeToFloat(dataFormatted.sentences[activeSentence].startTime) : 0;
-            refScrollbar.current?.scrollTop(activeSentencePos);
+            videoElem.currentTime = dataFormatted.sentences[matchingSentence] !== undefined && fnIsSRTTime(dataFormatted.sentences[matchingSentence].startTime) ? fnSRTTimeToFloat(dataFormatted.sentences[matchingSentence].startTime) : 0;
+            refScrollbar.current?.scrollTop(matchingSentencePos);
         }
         window.addEventListener("keydown", videoKeyboardOnDownHandler);
         return () => {
@@ -185,11 +211,9 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        console.log("[effected by activeSentence] video/index");
-        refActiveSentence.current = {
-            activeSentence: activeSentence,
-        };
-    }, [activeSentence]);
+        console.log("[effected by matchingSentence] video/index");
+        refMatchingSentence.current = { matchingSentence };
+    }, [matchingSentence]);
     return (
         <Layout id="video-index" className="main-inner">
             <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 132px" }}>
@@ -202,12 +226,12 @@ const Index = () => {
                     <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>
-                    <Script dataFormatted={dataFormatted} activeSentence={activeSentence} activeVocab={activeVocab} showFooter={false} onRendered={handlersRenderedCallback} />
+                    <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} showFooter={false} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
                 <section id="input-area">
                     <Input.TextArea className="input-textarea" value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} autoSize placeholder="Please Type Sentence" />
                 </section>
-                <section id="hidden-elems">
+                <section style={{ display: "none" }}>
                     <audio ref={refAudio} loop></audio>
                 </section>
             </div>

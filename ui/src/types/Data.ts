@@ -1,11 +1,3 @@
-/* TTS */
-interface PlayLoopAudio {
-    playing: null | boolean;
-    playingIndex: number;
-}
-export type { PlayLoopAudio };
-/* TTS */
-
 /* Script */
 interface Script {
     title: string;
@@ -26,7 +18,8 @@ interface FormattedData {
 
 interface Vocab {
     text: string;
-    image: string[];
+    image: string;
+    pronunciation: string;
 }
 
 interface Paragraph {
@@ -56,18 +49,19 @@ interface StateAuth {
     ACCESS_TOKEN: string | undefined;
 }
 
-interface StateProject {
-    name: string;
+interface StatePlan {
+    videoHash: string;
     videoURL: string;
-    videoCompressedURL: string;
-    videoCurrentTime: number;
-    videoAudioWaveZoom: number;
+    videoAudioWaveformURL: string;
     script: StateScript;
-    activeSentence: number;
-    activeSentencePos: number;
-    activeVocab: number;
-    activeVocabPos: number;
-    playMode: number;
+    scriptCurrentTime: number;
+    scriptWaveformZoom: number;
+    listenMatchingVocab: number;
+    meaningMatchingVocab: number;
+    videoMatchingSentence: number;
+    videoMatchingSentencePos: number;
+    translateMatchingSentence: number;
+    translateMatchingSentencePos: number;
     processings: boolean[];
 }
 
@@ -84,10 +78,10 @@ interface PayloadScript {
     text?: string;
 }
 
-interface PayloadProject {
+interface PayloadPlan {
     buttonID?: number;
     buttonStatus?: boolean;
 }
 
-export type { StateAuth, StateProject, StateScript, PayloadScript, PayloadProject };
+export type { StateAuth, StatePlan, StateScript, PayloadScript, PayloadPlan };
 /* Redux */

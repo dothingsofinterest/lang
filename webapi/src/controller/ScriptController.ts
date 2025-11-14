@@ -7,46 +7,39 @@ import path from "path";
 
 export const importScript = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) {
-        console.error("Failed to find the file.");
         return res.status(200).json({
             code: 0,
             message: `Failed to find the file.`,
         });
     }
-    res.status(200).json({ code: 1, message: `Import succeed.` });
+    res.status(200).json({
+        code: 1,
+        message: `Import succeed.`,
+    });
 };
 
 export const importVocabImg = async (req: Request, res: Response) => {
-    const schema = Joi.object({
-        project: Joi.string().required(),
-    });
-    const { error, value } = schema.validate(req.query);
-    if (error) {
-        console.error("Failed to validate params: ", error.message);
+    if (!req.file) {
         return res.status(200).json({
             code: 0,
-            message: error.message,
+            message: `Failed to find the vocabs img zip2`,
         });
-    }
-    if (!fs.existsSync(path.join(`${req.file?.destination}`, value.project))) {
-        return res.status(200).json({ code: 0, message: `Project does not exist.` });
-    }
-    if (!req.file) {
-        return res.status(200).json({ code: 0, message: `Failed to find the vocabs img zip` });
     }
     try {
         const zip = new AdmZip(req.file.path);
-        zip.extractAllTo(path.join(`${req.file.destination}`, value.project, `images`), true);
+        zip.extractAllTo(path.join(`${req.file.destination}`, `images`), true);
         fs.unlinkSync(req.file.path);
         res.status(200).json({
             code: 1,
             message: `Upload succeed.`,
-            data: ``,
         });
     } catch (error: any) {
         console.error(error.message, error);
         LoggerSystem.error(error.message);
-        return res.status(200).json({ code: 0, message: error.message });
+        return res.status(200).json({
+            code: 0,
+            message: error.message,
+        });
     }
 };
 
@@ -63,9 +56,10 @@ export const streamVocabImg = async (req: Request, res: Response) => {
         });
     }
     try {
+        const zipFolder = path.join(`${process.env.UPLOAD_PATH}`, value.project, `images`);
         const zipFile = path.join(`${process.env.UPLOAD_PATH}`, value.project, `images.zip`);
         const zip = new AdmZip();
-        zip.addLocalFolder(path.join(`${process.env.UPLOAD_PATH}`, value.project, `images`));
+        zip.addLocalFolder(zipFolder);
         zip.writeZip(zipFile);
         const stat = fs.statSync(zipFile);
         const fileSize = stat.size;
@@ -96,8 +90,10 @@ export const streamVocabImg = async (req: Request, res: Response) => {
 
 export const uploadVocabImg = async (req: Request, res: Response) => {
     if (!req.file) {
-        console.error("Failed to find the image.");
-        return res.status(200).json({ code: 0, message: `Failed to find the image.` });
+        return res.status(200).json({
+            code: 0,
+            message: `Failed to find the image.`,
+        });
     }
     res.status(200).json({
         code: 1,

@@ -1,19 +1,27 @@
 # 项目说明
+
 Learning any language's web api
 
 # 使用方法
+
 1. 编译：tsc
 2. 启动 WEB 服务：npm run start （node dist/app.js）
 3. 部署生产时，只需将 dist, node_modules 放到任何位置，然后启动 WEB 服务 node dist/app.js
 
 # 账号
+
 admin 123456
 
 # 技术架构
+
 NodeJS 20.16.0
 Express
+FFMPEG - video & audio
+pyttsx3 - text to speech
+BBC audiowaveform - audio waveform
 
 # 降低视频篇幅、码率。该命令生成的视频，以最小化浏览器播放后，再回来会出现画面与声音不同步的问题。
+
 ffmpeg -i a.mp4 -y -vf scale=600:-2 -c:v libx264 -b:v 600k -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart output.mp4
 
 【参数说明】

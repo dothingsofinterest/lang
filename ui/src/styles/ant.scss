@@ -42,8 +42,10 @@
 }
 // table
 
-.ant-radio-group {
-    .ant-radio-button-wrapper {
-        border-radius: 0;
-    }
+// button
+:where(.css-dev-only-do-not-override-xepvsj).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover,
+:where(.css-dev-only-do-not-override-xepvsj).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+    border: 1px solid #fff;
+    color: rgba(0, 0, 0, 0.88);
 }
+// button

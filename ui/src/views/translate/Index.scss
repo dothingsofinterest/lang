@@ -1,0 +1,32 @@
+#translate-index {
+    .main-inner-item-aside {
+        #panel {
+            width: 100%;
+            height: 32px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #202024;
+            display: flex;
+            justify-content: space-between;
+            .btn {
+                flex: 1;
+                border-radius: 0;
+                background-color: #ccc;
+            }
+        }
+        textarea {
+            border: 0;
+            font-size: 20px;
+            min-height: 100%;
+            border-radius: 0;
+            color: #000;
+            &:focus {
+                border-color: 0;
+            }
+            &:hover {
+                border: 0;
+            }
+        }
+    }
+}
