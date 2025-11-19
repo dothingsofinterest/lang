@@ -15,7 +15,6 @@ import Grammar from "./Grammar";
 import "./Data.scss";
 
 const Data = React.memo(() => {
-    console.log("[rendered] script/data");
     const dispatch = useDispatch();
     const plan = useSelector((state: RootState) => state.plan);
     const script = useSelector((state: RootState) => state.plan.script);
@@ -93,10 +92,10 @@ const Data = React.memo(() => {
         }
     };
     const handlersSubUpdateStartTime = (event: any, key: string) => {
-        if (event.target.value) {
-            const keyInfo = key.split("-");
-            dispatch(updateScriptSentenceTime({ pKey: parseInt(keyInfo[0]), sKey: parseInt(keyInfo[1]), type: 0, text: event.target.value.trim() }));
-        }
+        console.log(event.target.value);
+
+        const keyInfo = key.split("-");
+        dispatch(updateScriptSentenceTime({ pKey: parseInt(keyInfo[0]), sKey: parseInt(keyInfo[1]), type: 0, text: event.target.value.trim() }));
     };
     const handlersSubUpdateEndTime = (event: any, key: string) => {
         if (event.target.value) {
@@ -274,6 +273,7 @@ const Data = React.memo(() => {
         });
         dispatch(updateScriptParagraphs(newParagraphs));
         setRenderVersion((prev) => prev + 1);
+        alert("Succeed.");
     };
     const filterPlusOffset = (SRTTime: string): string => {
         if (timeOffset) {
@@ -287,13 +287,9 @@ const Data = React.memo(() => {
         return roles.length > 0 ? roles.map((v: string) => `@${v}`).join(" ") : "";
     };
     useEffect(() => {
-        console.log("[mounted] script/data");
-        return () => {
-            console.log("[unmounted] script/data");
-        };
+        return () => {};
     }, []);
     useEffect(() => {
-        console.log("[effected by renderVersion] script/data");
         refScrollbar.current?.scrollTop(refScrollTop.current);
     }, [renderVersion]);
     return (

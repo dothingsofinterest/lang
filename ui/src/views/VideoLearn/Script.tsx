@@ -13,7 +13,6 @@ interface ScriptProps {
 }
 
 const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, matchingVocab = 0, showFooter = true, onRendered }) => {
-    console.log("[rendered] learn/script");
     const articleRef = useRef<HTMLDivElement>(null);
     const fnRender = () => {
         if (articleRef.current) {
@@ -48,14 +47,10 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, mat
         }
     };
     useEffect(() => {
-        console.log("[mounted] learn/script");
         fnRender();
-        return () => {
-            console.log("[unmounted] learn/script");
-        };
+        return () => {};
     }, []);
     useEffect(() => {
-        console.log("[effected by matchingSentence, matchingVocab] learn/script");
         fnRender();
     }, [matchingSentence, matchingVocab]);
     return (

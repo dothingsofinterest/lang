@@ -44,6 +44,16 @@ interface Scene {
 export type { Script, FormattedData, Vocab, Paragraph, Sentence, Scene };
 /* Script */
 
+/* Diary */
+interface Diary {
+    title: string;
+    date: string;
+    content: string;
+}
+
+export type { Diary };
+/* Diary */
+
 /* Redux */
 interface StateAuth {
     ACCESS_TOKEN: string | undefined;
@@ -83,5 +93,10 @@ interface PayloadPlan {
     buttonStatus?: boolean;
 }
 
-export type { StateAuth, StatePlan, StateScript, PayloadScript, PayloadPlan };
+interface StateDiary {
+    data: Diary;
+    contentParsed: string[];
+}
+
+export type { StateAuth, StatePlan, StateScript, PayloadScript, PayloadPlan, StateDiary };
 /* Redux */

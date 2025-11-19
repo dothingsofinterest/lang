@@ -21,9 +21,12 @@
         left: 0;
         bottom: 0;
         .input-textarea {
-            min-height: 132px;
+            height: 132px;
+            overflow-x: hidden;
+            overflow-y: auto;
             border-radius: 0;
             color: #000;
+            resize: none;
         }
     }
 }

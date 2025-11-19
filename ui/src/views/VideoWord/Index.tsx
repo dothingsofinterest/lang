@@ -2,15 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Vocab as DataVocab } from "../../types/Data";
-import { fnShuffle } from "../../utils/util";
 import { RootState } from "../../stores";
 import { useSelector } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { Domain } from "../../settings.js";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] word/index");
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
     const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
@@ -51,12 +48,9 @@ const Index = () => {
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/settings");
+            navigate("/video/settings");
         }
-        console.log("[mounted] word/index");
-        return () => {
-            console.log("[unmounted] word/index");
-        };
+        return () => {};
     }, []);
     return (
         <Layout className="main-inner" id="word-index">
@@ -80,7 +74,7 @@ const Index = () => {
                             {refVocabsFiltered.current.length > 0 &&
                                 fnGetRandomNumbers().map((key) => {
                                     return (
-                                        <span className="item" onClick={() => handlersClickSelection(refVocabsFiltered.current[key].text)}>
+                                        <span key={key} className="item" onClick={() => handlersClickSelection(refVocabsFiltered.current[key].text)}>
                                             <img src={`${refVocabsFiltered.current[key].image}?${Date.now()}`} />
                                         </span>
                                     );

@@ -9,7 +9,6 @@ interface GrammarProps {
 }
 
 const Grammar: React.FC<GrammarProps> = ({ grammars }) => {
-    console.log("[rendered] script/grammar");
     const dispatch = useDispatch();
     const handlersUpdateGrammars = (value: string) => {
         if (value.trim() !== grammars.join("\n---\n")) {
@@ -17,10 +16,7 @@ const Grammar: React.FC<GrammarProps> = ({ grammars }) => {
         }
     };
     useEffect(() => {
-        console.log("[mounted] script/grammar");
-        return () => {
-            console.log("[unmounted] script/grammar");
-        };
+        return () => {};
     }, []);
     return (
         <div id="script-grammar">

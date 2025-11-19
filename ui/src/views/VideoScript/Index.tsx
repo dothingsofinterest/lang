@@ -12,7 +12,6 @@ import Data from "./Data";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] script/index");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
@@ -70,7 +69,6 @@ const Index = () => {
         dispatch(updateScriptWaveformZoom(e.target?.valueAsNumber));
     };
     const handlersVideoCanPlayThrough = () => {
-        console.log("Video Buffer Completed");
         setVideoCanPlay(true);
     };
     const handlersVideoTagOnTimeUpdate = (e: any) => {
@@ -137,13 +135,10 @@ const Index = () => {
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/settings");
+            navigate("/video/settings");
         }
-        console.log("[mounted] script/index");
         return () => {
-            console.log("[unmounted] script/index");
             if (refWavesurfer.current) {
-                console.log("Waver's been destroyed.");
                 refWavesurfer.current.destroy();
                 refWavesurfer.current = null;
             }

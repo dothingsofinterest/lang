@@ -8,7 +8,6 @@ interface VocabProps {
 }
 
 const Vocab: React.FC<VocabProps> = ({ vocabs, onRendered }) => {
-    console.log("[rendered] script/vocab");
     const [vocabActive, setVocabActive] = useState(0);
     const handlersClickVocab = (index: number) => {
         setVocabActive(index);
@@ -17,10 +16,7 @@ const Vocab: React.FC<VocabProps> = ({ vocabs, onRendered }) => {
         }
     };
     useEffect(() => {
-        console.log("[mounted] script/vocab");
-        return () => {
-            console.log("[unmounted] script/vocab");
-        };
+        return () => {};
     }, []);
     return (
         <div id="script-vocab">

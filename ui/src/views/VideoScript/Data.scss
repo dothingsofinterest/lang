@@ -11,6 +11,13 @@
             border-radius: 0;
             background-color: #ccc;
         }
+        &.fixed {
+            position: fixed;
+            left: 100;
+            top: 40px;
+            width: 800px !important;
+            z-index: 997;
+        }
     }
     .script-meta {
         width: 100%;
@@ -53,13 +60,6 @@
             padding: 0px 7px;
             height: 24px;
         }
-    }
-    .fixed {
-        position: fixed;
-        left: 100;
-        top: 0;
-        width: 800px !important;
-        z-index: 999;
     }
 }
 

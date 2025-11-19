@@ -9,7 +9,6 @@ import { updateListenMatchingVocab } from "../../stores/reducers/plan";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] listen/index");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
@@ -60,12 +59,10 @@ const Index = () => {
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/settings");
+            navigate("/video/settings");
         }
-        console.log("[mounted] listen/index");
         fnPlayAudio(matchingVocab);
         return () => {
-            console.log("[unmounted] listen/index");
             if (refAudio.current) {
                 refAudio.current.pause();
                 refAudio.current.currentTime = 0;

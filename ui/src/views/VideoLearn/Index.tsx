@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Layout, Input, Button } from "antd";
 import { AudioFilled, PrinterOutlined } from "@ant-design/icons";
 import { Script as DataScript, Vocab as DataVocab, Paragraph as DataParagraph, Sentence as DataSentence, Scene as DataScene } from "../../types/Data";
-import store, { RootState } from "../../stores";
+import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
-import { useSelector, Provider } from "react-redux";
+import { useSelector } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import ReactDOMServer from "react-dom/server";
 import printJS from "print-js";
@@ -12,7 +12,6 @@ import Script from "./Script";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] learn/index");
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
     const script = useSelector((state: RootState) => state.plan.script.data);
@@ -83,40 +82,41 @@ const Index = () => {
     const handlersPrint = () => {
         if (plan.videoHash && plan.videoURL) {
             if (dataFormatted.title) {
-                const css = `
-                * { outline: none; }
-                html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
-                body { margin: 0; padding: 0; font-size: 14px; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
-                ol, ul, li { list-style: none; }
-                article { width: 1000px; }
-                article h1 { text-align: center; font-size: 16px; font-weight: 900; line-height: 40px; color: #000; margin: 10px 15px; }
-                article .scene { background: #666; padding: 10px 0 0; margin: 10px 20px; border-radius: 4px; }
-                article .scene h2 { text-align: center; font-size: 14px; font-weight: 300; font-style: italic; line-height: 20px; color: #ccc; margin: 0px 10px; }
-                article .scene p { border-top: 1px dotted #ccc; margin: 0; padding: 6px 10px; color: #fff; font-size: 14px; line-height: 26px; }
-                article .scene p.pure { text-indent: 30px; }
-                article .scene p:first-of-type  { border-top: 0; }
-                article .scene p .point { padding: 0 4px; }
-                article .scene p .point:first-child { padding: 0; }
-                article .scene p .role { font-style: normal; font-weight: 900; color: #ccc; }
-                article .scene ul { border-top: 1px dotted #ccc; margin: 0; padding: 6px 10px; color: #fff; font-size: 14px; line-height: 26px; }
-                article .scene ul .role { font-style: normal; font-weight: 900; color: #ccc; }
-                article footer { height: 100%; }
-                article footer #vocabs,
-                article footer #grammars { color: #fff; padding: 10px 0 0; margin: 20px; background: #666; border-radius: 4px; }
-                article footer #vocabs .title,
-                article footer #grammars .title { color: #fff; margin: 0 10px; line-height: 22px; text-align: center; font-weight: 900; font-size: 16px; }
-                article footer #vocabs .item,
-                article footer #grammars .item { margin: 0; padding: 6px 10px; border-top: 1px dotted #ccc; line-height: 26px; }
-                article footer #vocabs .item:nth-child(2),
-                article footer #grammars .item:nth-child(2) { border-top: 0; }
-                article footer #vocabs .index,
-                article footer #grammars .index { font-weight: 900; margin-right: 4px; }`;
-                const content = ReactDOMServer.renderToStaticMarkup(
-                    <Provider store={store}>
-                        <Script dataFormatted={dataFormatted} />
-                    </Provider>,
-                );
-                printJS({ printable: `${content}`, type: "raw-html", style: css });
+                const style1 = `
+					@media print {
+						@page { margin: 1cm 0.4cm; }
+						* { outline: none; }
+						html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
+						body { margin: 0; padding: 0; font-size: 12pt; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+						ol, ul, li { list-style: none; }
+						article { width: 100%; }
+						article h1 { text-align: center; font-size: 14pt; font-weight: 900; line-height: 20pt; color: #000; margin: 2pt 8pt; }
+						article .scene { background: #fff; color: #000;  padding: 10px 0 0; margin: 10px 20px; border-radius: 2pt; }
+						article .scene h2 { text-align: center; font-size: 14pt; font-weight: 300; font-style: italic; line-height: 22pt; color: #000; margin: 0 6pt; }
+						article .scene p { margin: 4pt 0; padding: 0; color: #000; font-size: 14pt; line-height: 26pt; }
+						article .scene p.pure { text-indent: 26pt; }
+                        article .scene p.indent { text-indent: 26pt; }
+						article .scene p:first-of-type  { border-top: 0; }
+						article .scene p .point { padding: 0 2pt; }
+						article .scene p .point:first-child { padding: 0; }
+						article .scene p .role { font-style: normal; font-weight: 900; color: #000; }
+						article .scene ul { margin: 0; padding: 2pt 0; color: #000; font-size: 12pt; line-height: 22pt; }
+						article .scene ul .role { font-style: normal; font-weight: 900; color: #000; }
+						article footer { height: 100%; }
+						article footer #vocabs,
+						article footer #grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; border-radius: 2pt; }
+						article footer #vocabs .title,
+						article footer #grammars .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
+						article footer #vocabs .item,
+						article footer #grammars .item { margin: 0; padding: 0; border-top: 1px dotted #ccc; line-height: 32pt; }
+						article footer #vocabs .item:nth-child(2),
+						article footer #grammars .item:nth-child(2) { border-top: 0; }
+						article footer #vocabs .index,
+						article footer #grammars .index { font-weight: 900; margin-right: 1pt; font-style: normal; };
+					}
+				`;
+                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} />);
+                printJS({ printable: `${content}`, type: "raw-html", style: style1 });
             } else {
                 alert(`Data not be set`);
             }
@@ -127,9 +127,8 @@ const Index = () => {
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/settings");
+            navigate("/video/settings");
         }
-        console.log("[mounted] learn/index");
         // Sentences & Vocabs
         const sentences: DataSentence[] = [];
         script.paragraphs.forEach((v: DataParagraph) => {
@@ -164,16 +163,13 @@ const Index = () => {
         }
         window.addEventListener("keydown", handlersEventKeyboardOnDown);
         return () => {
-            console.log("[unmounted] learn/index");
             window.removeEventListener("keydown", handlersEventKeyboardOnDown);
         };
     }, []);
     useEffect(() => {
-        console.log("[effected by speech] learn/index");
         handlersMatch();
     }, [speech]);
     useEffect(() => {
-        console.log("[effected by listening] learn/index");
         refListening.current = { listening };
     }, [listening]);
     return (

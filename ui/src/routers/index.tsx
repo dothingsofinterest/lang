@@ -1,15 +1,16 @@
 import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react-router-dom";
-import Login from "../views/public/Login";
-import NotFound from "../views/public/NotFound";
-import App from "../views/layout/App";
-import Settings from "../views/settings/Index";
-import Script from "../views/script/Index";
-import Learn from "../views/learn/Index";
-import Meaning from "../views/meaning/Index";
-import Listen from "../views/listen/Index";
-import Word from "../views/word/Index";
-import Video from "../views/video/Index";
-import Translate from "../views/translate/Index";
+import Login from "../views/Public/Login";
+import App from "../views/Layout/App";
+import NotFound from "../views/Public/NotFound";
+import VideoSettings from "../views/VideoSettings/Index";
+import VideoScript from "../views/VideoScript/Index";
+import VideoLearn from "../views/VideoLearn/Index";
+import VideoMeaning from "../views/VideoMeaning/Index";
+import VideoListen from "../views/VideoListen/Index";
+import VideoWord from "../views/VideoWord/Index";
+import VideoPlay from "../views/VideoPlay/Index";
+import VideoTranslate from "../views/VideoTranslate/Index";
+import DiaryIndex from "../views/DiaryIndex/Index";
 
 const routes = [
     {
@@ -22,39 +23,43 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="settings" replace />,
+                element: <Navigate to="video/settings" replace />,
             },
             {
-                path: "settings",
-                element: <Settings />,
+                path: "video/settings",
+                element: <VideoSettings />,
             },
             {
-                path: "script",
-                element: <Script />,
+                path: "video/script",
+                element: <VideoScript />,
             },
             {
-                path: "learn",
-                element: <Learn />,
+                path: "video/learn",
+                element: <VideoLearn />,
             },
             {
-                path: "meaning",
-                element: <Meaning />,
+                path: "video/meaning",
+                element: <VideoMeaning />,
             },
             {
-                path: "word",
-                element: <Word />,
+                path: "video/word",
+                element: <VideoWord />,
             },
             {
-                path: "listen",
-                element: <Listen />,
+                path: "video/listen",
+                element: <VideoListen />,
             },
             {
-                path: "video",
-                element: <Video />,
+                path: "video/video",
+                element: <VideoPlay />,
             },
             {
-                path: "translate",
-                element: <Translate />,
+                path: "video/translate",
+                element: <VideoTranslate />,
+            },
+            {
+                path: "diary/index",
+                element: <DiaryIndex />,
             },
         ],
     },

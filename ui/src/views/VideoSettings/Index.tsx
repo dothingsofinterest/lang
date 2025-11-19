@@ -11,7 +11,6 @@ import { Domain } from "../../settings.js";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] settings/index");
     const dispatch = useDispatch();
     const plan = useSelector((state: RootState) => state.plan);
     const script = useSelector((state: RootState) => state.plan.script.data);
@@ -102,10 +101,7 @@ const Index = () => {
         dispatch(clearToken());
     };
     useEffect(() => {
-        console.log("[mounted] settings/index");
-        return () => {
-            console.log("[unmounted] settings/index");
-        };
+        return () => {};
     }, []);
     return (
         <Layout className="main-inner" id="settings-index">

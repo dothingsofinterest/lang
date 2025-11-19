@@ -9,7 +9,6 @@ import { updateMeaningMatchingVocab } from "../../stores/reducers/plan";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] meaning/index");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
@@ -45,12 +44,9 @@ const Index = () => {
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/settings");
+            navigate("/video/settings");
         }
-        console.log("[mounted] meaning/index");
-        return () => {
-            console.log("[unmounted] meaning/index");
-        };
+        return () => {};
     }, []);
     return (
         <Layout className="main-inner" id="meaning-index">

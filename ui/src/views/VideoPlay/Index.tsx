@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateVideoMatchingSentence, updateVideoMatchingSentencePos } from "../../stores/reducers/plan";
 import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
-import Script from "../learn/Script";
+import Script from "../VideoLearn/Script";
 import "./Index.scss";
 
 const Index = () => {
-    console.log("[rendered] video/index");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
@@ -130,7 +129,6 @@ const Index = () => {
         dispatch(updateVideoMatchingSentence(0));
     };
     const handlersVideoEnded = () => {
-        console.log("video ended");
         dispatch(updateVideoMatchingSentence(0));
         setPlayButton(<PlayCircleOutlined />);
     };
@@ -185,9 +183,8 @@ const Index = () => {
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/settings");
+            navigate("/video/settings");
         }
-        console.log("[mounted] video/index");
         const videoElem = refVideo.current;
         const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {
             if (event.code === "F8") {
@@ -201,7 +198,6 @@ const Index = () => {
         }
         window.addEventListener("keydown", videoKeyboardOnDownHandler);
         return () => {
-            console.log("[unmounted] video/index");
             window.removeEventListener("keydown", videoKeyboardOnDownHandler);
             if (videoElem) {
                 videoElem.pause();
@@ -211,7 +207,6 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        console.log("[effected by matchingSentence] video/index");
         refMatchingSentence.current = { matchingSentence };
     }, [matchingSentence]);
     return (
@@ -229,7 +224,7 @@ const Index = () => {
                     <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} showFooter={false} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
                 <section id="input-area">
-                    <Input.TextArea className="input-textarea" value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} autoSize placeholder="Please Type Sentence" />
+                    <Input.TextArea className="input-textarea" value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} placeholder="Please Type Sentence" />
                 </section>
                 <section style={{ display: "none" }}>
                     <audio ref={refAudio} loop></audio>
