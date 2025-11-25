@@ -10,7 +10,6 @@ interface RouteItem {
     icon: JSX.Element;
 }
 const routes = [
-    { prefix: "basic", menus: [] },
     {
         prefix: "video",
         children: [

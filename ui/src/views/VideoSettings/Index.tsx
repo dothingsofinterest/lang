@@ -104,19 +104,19 @@ const Index = () => {
         return () => {};
     }, []);
     return (
-        <Layout className="main-inner" id="settings-index">
+        <Layout className="main-inner" id="video-settings">
             <div className="main-inner-item-main">
                 <section className="sec upload">
-                    <Upload showUploadList={false} beforeUpload={handlersImportVideo} disabled={processings[0]}>
-                        <Button icon={<PlusCircleOutlined />} loading={processings[0]} style={{ borderRadius: "0", backgroundColor: "#ccc" }}>
+                    <Upload showUploadList={false} beforeUpload={handlersImportVideo} disabled={processings[0] || !!script.title}>
+                        <Button icon={<PlusCircleOutlined />} disabled={!!script.title} loading={processings[0]} style={{ borderRadius: "0", backgroundColor: "#ccc" }}>
                             Upload video to create a study plan
                         </Button>
                     </Upload>
                     <Input addonBefore="Plan" value={plan.videoHash} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} disabled />
                 </section>
                 <section className="sec upload">
-                    <Upload beforeUpload={handlersImportData} showUploadList={false}>
-                        <Button icon={<UploadOutlined />} style={{ flex: 1, borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
+                    <Upload beforeUpload={handlersImportData} showUploadList={false} disabled={!!script.title}>
+                        <Button icon={<UploadOutlined />} disabled={!!script.title} style={{ flex: 1, borderRadius: "0", width: "100%", backgroundColor: "#ccc" }}>
                             Import data
                         </Button>
                     </Upload>

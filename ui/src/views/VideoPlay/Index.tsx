@@ -24,6 +24,7 @@ const Index = () => {
     const refVideo = useRef<HTMLVideoElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refMatchingSentence = useRef({ matchingSentence });
+    const refInputValue = useRef({ inputValue });
     const handlersPanelPlay = () => {
         if (refVideo.current && videoURL) {
             if (refVideo.current.paused) {
@@ -187,8 +188,16 @@ const Index = () => {
         }
         const videoElem = refVideo.current;
         const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {
-            if (event.code === "F8") {
-                handlersPanelPlayAgain();
+            if (refInputValue.current.inputValue.length === 0) {
+                if (event.code === "Numpad0") {
+                    handlersPanelPlayAgain();
+                }
+                if (event.code === "ArrowLeft") {
+                    handlersPanelPlayBackward();
+                }
+                if (event.code === "ArrowRight") {
+                    handlersPanelPlayForward();
+                }
             }
         };
         if (videoElem) {
@@ -207,8 +216,9 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
+        refInputValue.current = { inputValue };
         refMatchingSentence.current = { matchingSentence };
-    }, [matchingSentence]);
+    }, [inputValue, matchingSentence]);
     return (
         <Layout id="video-index" className="main-inner">
             <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 132px" }}>

@@ -14,13 +14,12 @@ const Index = () => {
     const refShowcase = useRef<HTMLDivElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refScrollbar = useRef<Scrollbars>(null);
-    const refVocabsFiltered = useRef<DataVocab[]>(dataFormatted.vocabs.filter((v) => v.image));
     const [vocabActive, setVocabActive] = useState(0);
     const handlersClickSelection = (text: string) => {
-        const inputText = text.split(", ")[1];
-        const answerText = refVocabsFiltered.current[vocabActive].text.split(", ")[1];
+        const inputText = text.split(" | ")[0];
+        const answerText = dataFormatted.vocabs[vocabActive].text.split(" | ")[0];
         if (inputText === answerText) {
-            setVocabActive(vocabActive + 1 >= refVocabsFiltered.current.length ? 0 : vocabActive + 1);
+            setVocabActive(vocabActive + 1 >= dataFormatted.vocabs.length ? 0 : vocabActive + 1);
             if (refAudio.current) {
                 refAudio.current.play();
             }
@@ -28,9 +27,9 @@ const Index = () => {
     };
     const fnGetRandomNumbers = () => {
         let nums = [vocabActive];
-        if (refVocabsFiltered.current.length > 0) {
+        if (dataFormatted.vocabs.length > 0) {
             for (let i = 0; i < 9999; i++) {
-                const randomNum = Math.floor(Math.random() * 10) % refVocabsFiltered.current.length;
+                const randomNum = Math.floor(Math.random() * dataFormatted.vocabs.length);
                 if (!nums.includes(randomNum)) {
                     nums.push(randomNum);
                 }
@@ -57,10 +56,14 @@ const Index = () => {
             <div className="main-inner-item-aside">
                 <Scrollbars ref={refScrollbar}>
                     <div id="word-list" ref={refShowcase}>
-                        {refVocabsFiltered.current.map((value, key) => {
+                        {dataFormatted.vocabs.map((value, key) => {
                             return (
                                 <div key={key} className={vocabActive >= key ? (vocabActive > key ? "line matched" : "line matching") : "line"}>
-                                    {value.text.split(", ")[1]}
+                                    <span>
+                                        <i className="index">[{key}]</i>
+                                        {value.text.split(" | ")[0]}
+                                    </span>
+                                    <span>{value.text.split(" | ")[1]}</span>
                                 </div>
                             );
                         })}
@@ -71,11 +74,11 @@ const Index = () => {
                 <Scrollbars>
                     <div id="selector" ref={refShowcase}>
                         <div className="line">
-                            {refVocabsFiltered.current.length > 0 &&
+                            {dataFormatted.vocabs.length > 0 &&
                                 fnGetRandomNumbers().map((key) => {
                                     return (
-                                        <span key={key} className="item" onClick={() => handlersClickSelection(refVocabsFiltered.current[key].text)}>
-                                            <img src={`${refVocabsFiltered.current[key].image}?${Date.now()}`} />
+                                        <span key={key} className="item" onClick={() => handlersClickSelection(dataFormatted.vocabs[key].text)}>
+                                            {dataFormatted.vocabs[key].image ? <img src={`${dataFormatted.vocabs[key].image}?${Date.now()}`} /> : dataFormatted.vocabs[key].text.split(" | ")[2]}
                                         </span>
                                     );
                                 })}

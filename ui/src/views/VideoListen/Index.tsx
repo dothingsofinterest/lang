@@ -20,7 +20,7 @@ const Index = () => {
     const handlersTypeVocab = (value: string) => {
         setTextareaValue(value);
         if (dataFormatted.vocabs.length > 0) {
-            if (dataFormatted.vocabs[matchingVocab].text.split(", ")[1] === value) {
+            if (dataFormatted.vocabs[matchingVocab].text.split(" | ")[0] === value) {
                 const matchingVocabNext = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
                 setTextareaValue("");
                 dispatch(updateListenMatchingVocab(matchingVocabNext));
@@ -88,7 +88,8 @@ const Index = () => {
                         {dataFormatted.vocabs.map((value, key) => {
                             return (
                                 <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "line matched" : "line matching") : "line"}>
-                                    {value.text.split(", ")[1]}
+                                    <i className="index">[{key}]</i>
+                                    {value.text}
                                 </div>
                             );
                         })}

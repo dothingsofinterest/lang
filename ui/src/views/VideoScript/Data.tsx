@@ -130,8 +130,9 @@ const Data = React.memo(() => {
         if (vocab.text) {
             if (/^(.+?)\.(png|jpg)$/g.test(file.name) && (file.type === "image/png" || file.type === "image/jpeg")) {
                 try {
-                    const nameEN = vocab.text.split(", ")[1].replaceAll("/", "_").replaceAll(/\s+/g, "_");
-                    const nameCNHash = md5(vocab.text.split(", ")[0]).slice(25);
+                    const part = vocab.text.split(" | ");
+                    const nameEN = part[0].replaceAll(/[\s\,\/\:]+/g, "_");
+                    const nameCNHash = md5(part[2]).slice(25);
                     const name = `${nameEN}_${nameCNHash}.png`;
                     const formData = new FormData();
                     formData.append("file", file, name);
@@ -159,9 +160,10 @@ const Data = React.memo(() => {
     const handlersGenerateVocabPronunciation = async () => {
         if (vocab.text) {
             try {
-                const content = vocab.text.split(", ")[1].replaceAll("/", ", ");
-                const filenameEN = vocab.text.split(", ")[1].replaceAll("/", "_").replaceAll(/\s+/g, "_");
-                const filenameCNHash = md5(vocab.text.split(", ")[0]).slice(25);
+                const part = vocab.text.split(" | ");
+                const content = part[0].replaceAll("/", ", ");
+                const filenameEN = part[0].replaceAll(/[\s\,\/\:]+/g, "_");
+                const filenameCNHash = md5(part[2]).slice(25);
                 const filename = `${filenameEN}_${filenameCNHash}.wav`;
                 const res = await vocabPronunciationGenerate({ content, filename });
                 if (res.code) {
@@ -182,8 +184,8 @@ const Data = React.memo(() => {
         if (vocab.text) {
             if (/^(.+?)\.(wav)$/g.test(file.name) && file.type === "audio/wav") {
                 try {
-                    const nameEN = vocab.text.split(", ")[1].replaceAll("/", "_").replaceAll(/\s+/g, "_");
-                    const nameCNHash = md5(vocab.text.split(", ")[0]).slice(25);
+                    const nameEN = vocab.text.split(" | ")[0].replaceAll(/[\s\,\/]+/g, "_");
+                    const nameCNHash = md5(vocab.text.split(" | ")[2]).slice(25);
                     const name = `${nameEN}_${nameCNHash}.wav`;
                     const formData = new FormData();
                     formData.append("file", file, name);
@@ -357,7 +359,7 @@ const Data = React.memo(() => {
             <Drawer className="vocab-panel" title="Add a vocab" size="large" onClose={handlersSwitchVocabPanel} open={vocabPanel}>
                 <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />
                 <div className="text-image-btn">
-                    <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="n.读音;发音, pronunciation/pronunciations, /prəˌnʌnsiˈeɪʃn/" />
+                    <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="pronunciation/pronunciations | prəˌnʌnsiˈeɪʃn | n.读音;发音" />
                     <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}?${Date.now()}`} />}</div>
                     <Upload beforeUpload={handlersUpdateVocabImage} showUploadList={false}>
                         <Button icon={<PlusSquareOutlined />} />

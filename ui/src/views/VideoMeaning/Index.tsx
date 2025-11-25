@@ -14,17 +14,16 @@ const Index = () => {
     const plan = useSelector((state: RootState) => state.plan);
     const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
     const matchingVocab = useSelector((state: RootState) => state.plan.meaningMatchingVocab);
-    const [vocabsFiltered, setVocabsFiltered] = useState<DataVocab[]>(dataFormatted.vocabs.filter((v: DataVocab) => v.image));
     const [textareaValue, setTextareaValue] = useState("");
     const refShowcase = useRef<HTMLDivElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refScrollbar = useRef<Scrollbars>(null);
     const handlersTypeVocab = (value: string) => {
         setTextareaValue(value);
-        if (vocabsFiltered.length > 0) {
-            if (vocabsFiltered[matchingVocab].text.split(", ")[1] === value) {
+        if (dataFormatted.vocabs.length > 0) {
+            if (dataFormatted.vocabs[matchingVocab].text.split(" | ")[0] === value) {
                 setTextareaValue("");
-                dispatch(updateMeaningMatchingVocab(matchingVocab + 1 >= vocabsFiltered.length ? 0 : matchingVocab + 1));
+                dispatch(updateMeaningMatchingVocab(matchingVocab + 1 >= dataFormatted.vocabs.length ? 0 : matchingVocab + 1));
                 if (refAudio.current) {
                     refAudio.current.play();
                 }
@@ -64,11 +63,11 @@ const Index = () => {
             <div className="main-inner-item-main">
                 <Scrollbars ref={refScrollbar}>
                     <div id="showcase" ref={refShowcase}>
-                        {vocabsFiltered.map((value, key) => {
+                        {dataFormatted.vocabs.map((value, key) => {
                             return (
                                 <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "item matched" : "item matching") : "item"}>
-                                    <img src={`${value.image}?${Date.now()}`} />
-                                    <i>{value.text.split(", ")[1]}</i>
+                                    {value.image ? <img src={`${value.image}?${Date.now()}`} /> : <span>{value.text.split(" | ")[2]}</span>}
+                                    <i>{value.text.split(" | ")[0]}</i>
                                 </div>
                             );
                         })}

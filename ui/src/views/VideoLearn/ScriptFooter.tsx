@@ -29,8 +29,12 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
                     {vocabs.map((value, key) => {
                         return (
                             <p key={key} className="item" onClick={() => handlersPlayAudio(key)}>
-                                <i className="index">[{key + 1}] </i>
-                                {value.text}
+                                <span className="en">
+                                    <i className="index">[{key + 1}]</i>
+                                    {value.text.split(" | ")[0]}
+                                </span>
+                                <span className="pr">{value.text.split(" | ")[1]}</span>
+                                <span className="cn">{value.text.split(" | ")[2]}</span>
                             </p>
                         );
                     })}
@@ -45,8 +49,16 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
                     {grammars.map((value, key) => {
                         return (
                             <div key={key} className="item">
-                                <span className="index">[{key + 1}] </span>
-                                {value.split("\n").map((v, k) => (k === 0 ? <span key={k}>{v}</span> : <p key={k}>{v}</p>))}
+                                {value.split("\n").map((v, k) =>
+                                    k === 0 ? (
+                                        <span key={k}>
+                                            <i className="index">[{key + 1}]</i>
+                                            {v}
+                                        </span>
+                                    ) : (
+                                        <p key={k}>{v}</p>
+                                    ),
+                                )}
                             </div>
                         );
                     })}

@@ -37,7 +37,7 @@ const initialState: StatePlan = {
             scenes: [],
             vocabs: [],
             grammars: [],
-            paragraphs: [dataParagraph],
+            paragraphs: [],
         },
         dataFormatted: {
             title: "",

@@ -10,7 +10,7 @@ const uploadRootPath = process.env.UPLOAD_PATH;
 export const audioGenerate = async (content: string, filename: string) => {
     try {
         const file = path.join(`${uploadRootPath}`, `temp`, filename);
-        const filterContent = content.replace(/[^a-zA-Z',\.]+/g, " ");
+        const filterContent = content.replace(/[^a-zA-Z0-9\'\,\.]+/g, " ");
         await execPromise(`python ${process.cwd()}/scripts/english.py "${filterContent}" "1" "${file}"`);
         const binary = await fsPromise.readFile(file);
         const base64 = Buffer.from(binary).toString("base64");

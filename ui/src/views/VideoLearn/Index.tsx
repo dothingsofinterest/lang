@@ -62,7 +62,7 @@ const Index = () => {
         if (vocabs.length > 0) {
             for (let i = 0; i < vocabs.length; i++) {
                 answerText = vocabs[i].text
-                    .split(", ")[1]
+                    .split(" | ")[0]
                     .replace(/[\/\,\.\?\!\-\'\s]/g, "")
                     .toLowerCase()
                     .trim();
@@ -90,10 +90,10 @@ const Index = () => {
 						body { margin: 0; padding: 0; font-size: 12pt; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 						ol, ul, li { list-style: none; }
 						article { width: 100%; }
-						article h1 { text-align: center; font-size: 14pt; font-weight: 900; line-height: 20pt; color: #000; margin: 2pt 8pt; }
-						article .scene { background: #fff; color: #000;  padding: 10px 0 0; margin: 10px 20px; border-radius: 2pt; }
+						article h1 { text-align: center; font-size: 14pt; font-weight: 900; line-height: 22pt; color: #000; margin: 2pt; }
+						article .scene { background: #fff; color: #000;  padding: 10px 0 0; margin: 10px 20px; }
 						article .scene h2 { text-align: center; font-size: 14pt; font-weight: 300; font-style: italic; line-height: 22pt; color: #000; margin: 0 6pt; }
-						article .scene p { margin: 4pt 0; padding: 0; color: #000; font-size: 14pt; line-height: 26pt; }
+						article .scene p { margin: 4pt 0; padding: 0; color: #000; font-size: 12pt; line-height: 26pt; }
 						article .scene p.pure { text-indent: 26pt; }
                         article .scene p.indent { text-indent: 26pt; }
 						article .scene p:first-of-type  { border-top: 0; }
@@ -104,15 +104,19 @@ const Index = () => {
 						article .scene ul .role { font-style: normal; font-weight: 900; color: #000; }
 						article footer { height: 100%; }
 						article footer #vocabs,
-						article footer #grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; border-radius: 2pt; }
+						article footer #grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; }
 						article footer #vocabs .title,
 						article footer #grammars .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
 						article footer #vocabs .item,
-						article footer #grammars .item { margin: 0; padding: 0; border-top: 1px dotted #ccc; line-height: 32pt; }
-						article footer #vocabs .item:nth-child(2),
+						article footer #grammars .item { margin: 0; padding: 6pt 0; border-top: 1px dotted #ccc; line-height: 22pt; }
+						article footer #vocabs .item { display: flex; justify-content: space-between; }                              
+                        article footer #vocabs .item:nth-child(2),
 						article footer #grammars .item:nth-child(2) { border-top: 0; }
-						article footer #vocabs .index,
-						article footer #grammars .index { font-weight: 900; margin-right: 1pt; font-style: normal; };
+                        article footer #vocabs .item .en { flex: 1; } 
+                        article footer #vocabs .item .pr,  
+                        article footer #vocabs .item .cn { flex: 0.5; } 
+						article footer #vocabs .item .index,
+						article footer #grammars .item .index { font-weight: 900; margin-right: 1pt; font-style: normal; };
 					}
 				`;
                 const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} />);

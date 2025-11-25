@@ -32,8 +32,8 @@ export const fnParseVocabs = (text: string): string => {
             const matchCN = text.match(types[i]);
             if (matchCN && matchCN[2]) {
                 let str = "";
-                str += i === 1 ? `v.${matchCN[2]}, ` : `${matchCN[1]}.${matchCN[2]}, `; // 区分 v|vi|vt
-                const matchName = text.match(/^([a-zA-Z ]+)/); // 单词本身
+                // Part of EN
+                const matchName = text.match(/^([a-zA-Z ]+)/);
                 if (matchName && matchName[1]) {
                     str += matchName[1];
                     if (i === 0) {
@@ -64,10 +64,13 @@ export const fnParseVocabs = (text: string): string => {
                         }
                     }
                 }
+                // Part of pronounce
                 const matchPronounce = text.match(/\/(.*?)\//g);
                 if (matchPronounce && matchPronounce[1]) {
-                    str += `, ${matchPronounce[1]}`;
+                    str += ` | ${matchPronounce[1].replaceAll("/", "")}`;
                 }
+                // Part of CN
+                str += i === 1 ? ` | v.${matchCN[2]}` : ` | ${matchCN[1]}.${matchCN[2]}`; // 区分 v|vi|vt
                 res.push(str);
             }
         }

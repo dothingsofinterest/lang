@@ -11,9 +11,6 @@ const Menu = () => {
     }, []);
     return (
         <nav id="nav">
-            <Link to="/video" className="nav-item">
-                <span>Basic</span>
-            </Link>
             <Link to="/video/settings" className={URLPath[1] === "video" ? `nav-item active` : `nav-item`}>
                 <span>Video</span>
             </Link>

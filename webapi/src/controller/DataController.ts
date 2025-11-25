@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { promises as fsPromise } from "fs";
 import path from "path";
 import Joi from "joi";
 import AdmZip from "adm-zip";
@@ -78,12 +78,35 @@ export const dataExport = async (req: Request, res: Response) => {
     }
 };
 
-export const scriptSync = (req: Request, res: Response) => {
+export const scriptSync = async (req: Request, res: Response) => {
     if (!req.file) {
         return res.status(200).json({
             code: 0,
             message: `Failed.`,
         });
+    }
+    const scriptBinary = await fsPromise.readFile(req.file.path);
+    const scriptString = Buffer.from(scriptBinary).toString();
+    const scriptObject = JSON.parse(scriptString);
+    const vocabImages = scriptObject.vocabs.filter((v: any) => v.image).map((v: any) => v.image);
+    const vocabPronunciations = scriptObject.vocabs.map((v: any) => v.pronunciation);
+    if (vocabImages.length > 0) {
+        const pathVocabImages = path.join(req.file.destination, "vocab_images");
+        const filesVocabImages = await fsPromise.readdir(pathVocabImages);
+        for (const image of filesVocabImages) {
+            if (!vocabImages.includes(image)) {
+                fs.unlinkSync(path.join(pathVocabImages, image));
+            }
+        }
+    }
+    if (vocabPronunciations.length > 0) {
+        const pathVocabPronunciations = path.join(req.file.destination, "vocab_pronunciations");
+        const filesVocabPronunciations = await fsPromise.readdir(pathVocabPronunciations);
+        for (const pronunciation of filesVocabPronunciations) {
+            if (!vocabPronunciations.includes(pronunciation)) {
+                fs.unlinkSync(path.join(pathVocabPronunciations, pronunciation));
+            }
+        }
     }
     res.status(200).json({
         code: 1,

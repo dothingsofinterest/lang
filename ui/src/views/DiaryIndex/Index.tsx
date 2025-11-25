@@ -94,7 +94,19 @@ const Index = () => {
         return false;
     };
     useEffect(() => {
-        return () => {};
+        function handler(e: MouseEvent) {
+            const target = e.target as HTMLElement;
+            if (target.classList.contains("hl")) {
+                const text = target.innerText;
+                navigator.clipboard.writeText(`【${text}】`).then(() => {
+                    console.log("copied.");
+                });
+            }
+        }
+        document.addEventListener("click", handler);
+        return () => {
+            document.removeEventListener("click", handler);
+        };
     }, []);
     return (
         <Layout id="diary-index" className="main-inner">
@@ -123,9 +135,8 @@ const Index = () => {
                     <article id="diary">
                         {diary.data.title && <h1>{diary.data.title}</h1>}
                         {diary.data.date && <h2>{diary.data.date}</h2>}
-                        <div className="block" dangerouslySetInnerHTML={{ __html: diary.contentParsed[0] }}></div>
-                        <div className="block" dangerouslySetInnerHTML={{ __html: diary.contentParsed[1] }}></div>
-                        <div className="block tips" dangerouslySetInnerHTML={{ __html: diary.contentParsed[2] }}></div>
+                        <div className="main" dangerouslySetInnerHTML={{ __html: diary.contentParsed[0] }}></div>
+                        <div className="tips" dangerouslySetInnerHTML={{ __html: diary.contentParsed[1] }}></div>
                     </article>
                 </Scrollbars>
             </div>

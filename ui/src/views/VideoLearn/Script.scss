@@ -4,11 +4,13 @@
         font-size: 16px;
         font-weight: 900;
         line-height: 40px;
-        color: #fff;
-        margin: 10px 16px;
+        color: #ccc;
+        background: #000;
+        padding: 10px 16px;
     }
     .scene {
-        background: #666;
+        color: #000;
+        background: #ccc;
         padding: 10px 0 0;
         margin: 10px 0;
         &:last-of-type {
@@ -19,14 +21,14 @@
             font-size: 14px;
             font-style: italic;
             line-height: 20px;
-            color: #ccc;
+            color: #000;
             margin: 0px 10px;
         }
         p {
-            border-top: 1px dotted #ccc;
+            border-top: 1px dotted #000;
             margin: 0;
             padding: 6px 10px;
-            color: #fff;
+            color: #000;
             font-size: 16px;
             line-height: 28px;
             &:first-of-type {
@@ -38,32 +40,29 @@
             .role {
                 font-style: normal;
                 font-weight: 900;
-                color: #ccc;
+                color: #000;
             }
         }
         ul {
-            border-top: 1px dotted #ccc;
+            border-top: 1px dotted #000;
             margin: 0;
             padding: 6px 10px;
-            color: #fff;
+            color: #000;
             font-size: 14px;
             line-height: 28px;
-            &.matching {
-                color: rgb(252, 221, 92);
-            }
             .role {
                 font-style: normal;
                 font-weight: 900;
-                color: #ccc;
+                color: #000;
             }
         }
         .point {
             &.matched {
-                color: rgb(252, 221, 92);
                 font-weight: 900;
             }
             &.matching {
-                color: rgb(252, 221, 92);
+                font-weight: 900;
+                color: #499fe8;
             }
             &:first-child {
                 padding: 0;

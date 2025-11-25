@@ -63,7 +63,11 @@ interface StatePlan {
     videoHash: string;
     videoURL: string;
     videoAudioWaveformURL: string;
-    script: StateScript;
+    script: {
+        data: Script;
+        dataFormatted: FormattedData;
+        timeOffset: number;
+    };
     scriptCurrentTime: number;
     scriptWaveformZoom: number;
     listenMatchingVocab: number;
@@ -73,12 +77,6 @@ interface StatePlan {
     translateMatchingSentence: number;
     translateMatchingSentencePos: number;
     processings: boolean[];
-}
-
-interface StateScript {
-    data: Script;
-    dataFormatted: FormattedData;
-    timeOffset: number;
 }
 
 interface PayloadScript {
@@ -98,5 +96,5 @@ interface StateDiary {
     contentParsed: string[];
 }
 
-export type { StateAuth, StatePlan, StateScript, PayloadScript, PayloadPlan, StateDiary };
+export type { StateAuth, StatePlan, PayloadScript, PayloadPlan, StateDiary };
 /* Redux */

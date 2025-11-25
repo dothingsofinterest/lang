@@ -1,22 +1,30 @@
 #word-index {
     .main-inner-item-aside {
         #word-list {
-            background: #666;
+            color: #000;
+            background: #ccc;
             .line {
-                color: #fff;
+                color: #000;
                 margin: 0;
                 padding: 6px 10px;
-                border-top: 1px dotted #ccc;
+                border-top: 1px dotted #000;
                 line-height: 26px;
+                display: flex;
+                justify-content: space-between;
+                &.matching {
+                    font-weight: 900;
+                    color: #499fe8;
+                }
                 &.matched {
                     font-weight: 900;
-                    color: rgb(252, 221, 92);
-                }
-                &.matching {
-                    color: rgb(252, 221, 92);
                 }
                 &:first-child {
                     border-top: 0;
+                }
+                .index {
+                    font-weight: 900;
+                    font-style: normal;
+                    margin-right: 4px;
                 }
             }
         }
@@ -29,13 +37,14 @@
                 justify-content: space-between;
                 align-items: stretch;
                 .item {
+                    color: #fff;
                     flex: 1;
                     border: 1px solid #ccc;
-                    display: inline-block;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     position: relative;
+                    height: 300px;
                     img {
                         max-width: 100%;
                     }

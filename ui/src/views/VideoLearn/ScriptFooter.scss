@@ -1,27 +1,38 @@
 #vocabs {
-    color: #fff;
     padding: 10px 0 0;
-    background: #666;
+    color: #000;
+    background: #ccc;
     margin-top: 10px;
     .title {
         text-align: center;
         font-weight: 900;
         font-size: 16px;
-        color: #fff;
+        color: #000;
         margin: 0 10px;
         line-height: 22px;
     }
     .item {
         margin: 0;
         padding: 6px 10px;
-        border-top: 1px dotted #ccc;
+        border-top: 1px dotted #000;
         line-height: 26px;
+        display: flex;
+        justify-content: space-between;
+        .en {
+            flex: 1;
+        }
+        .pr {
+            flex: 0.5;
+        }
+        .cn {
+            flex: 0.5;
+        }
         &.matched {
             font-weight: 900;
-            color: rgb(252, 221, 92);
         }
         &.matching {
-            color: rgb(252, 221, 92);
+            font-weight: 900;
+            color: #499fe8;
         }
         &:nth-child(2) {
             border-top: 0;
@@ -35,35 +46,35 @@
 }
 
 #grammars {
-    color: #fff;
+    color: #000;
+    background: #ccc;
     padding: 10px 0 0;
-    background: #666;
     margin-top: 10px;
     .title {
         text-align: center;
         font-weight: 900;
         font-size: 16px;
-        color: #fff;
+        color: #000;
         margin: 0 10px;
         line-height: 22px;
     }
     .item {
         margin: 0;
         padding: 6px 10px;
-        border-top: 1px dotted #ccc;
+        border-top: 1px dotted #000;
         line-height: 26px;
         &.activated {
-            color: rgb(252, 221, 92);
+            font-style: italic;
         }
         &.active {
             font-weight: 900;
-            color: rgb(252, 221, 92);
         }
         &:nth-child(2) {
             border-top: 0;
         }
         .index {
             font-weight: 900;
+            font-style: normal;
             margin-right: 4px;
         }
     }

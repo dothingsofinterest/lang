@@ -101,8 +101,9 @@ const Index = () => {
                         cursorColor: "rgb(87, 87, 89)",
                         autoScroll: true,
                         dragToSeek: true,
-                        normalize: true, // 把整段音频的最大振幅“压”到满值，细微部分相对更明显。
+                        normalize: true, // 把整段音频的最大振幅“压”到满值，细微部分相对更明显
                         peaks: jsonData.data,
+                        minPxPerSec: 10,
                     });
                     refWavesurfer.current.on("click", async () => {
                         const currentTime = refWavesurfer.current?.getCurrentTime() || 0;

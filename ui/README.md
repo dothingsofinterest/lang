@@ -15,16 +15,14 @@ NodeJS 20.16.0
 
 # 使用方法
 
-1. 根据英文/中文视频编写台词、单词、语法
-2. 学习。看文稿学习单词和句子的发音、写法、含义、语法
-3. 测试。
-   看英语单词选含义
-   听英语单词写出来
-   看含义图像写英语单词
-   听英语视频写英语句子/听中文视频写英语句子
-   看汉语句子写出英语句子
+Listening and writing subtitles of video can practice the listening ability.
+Writing diaries can practice the speaking ability.
 
 # 转化视频格式
 
 rmvb -> mp4: ffmpeg -i input.rmvb -c:v libx264 -c:a aac -strict -2 output.mp4
 mkv -> mp4: ffmpeg -i "input.mkv" -c:v libx264 -c:a aac -b:a 192k -movflags +faststart "output.mp4"
+
+
+TODO 
+Design a public audio component
