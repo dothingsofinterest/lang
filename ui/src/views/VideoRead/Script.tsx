@@ -7,17 +7,15 @@ interface ScriptProps {
     dataFormatted: FormattedData;
     encn?: number;
     matchingSentence?: number;
-    matchingVocab?: number;
     showFooter?: boolean;
-    onRendered?: (scrollTopPoint: number, scrollTopVocab: number) => void;
+    onRendered?: (scrollTopPoint: number) => void;
 }
 
-const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, matchingVocab = 0, showFooter = true, onRendered }) => {
+const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, showFooter = true, onRendered }) => {
     const articleRef = useRef<HTMLDivElement>(null);
     const fnRender = () => {
         if (articleRef.current) {
             let scrollTopPoint = 0;
-            let scrollTopVocab = 0;
             articleRef.current.querySelectorAll(".point").forEach((span: any, k) => {
                 if (k < matchingSentence) {
                     span.className = "point matched";
@@ -28,21 +26,8 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, mat
                 }
                 if (matchingSentence === k) scrollTopPoint = span.getBoundingClientRect().top - 150;
             });
-            const vocabsArea = articleRef.current.querySelector("#vocabs");
-            if (vocabsArea) {
-                vocabsArea.querySelectorAll(".item").forEach((span: any, k) => {
-                    if (k < matchingVocab) {
-                        span.className = "item matched";
-                    } else if (matchingVocab === k) {
-                        span.className = "item matching";
-                    } else {
-                        span.className = "item";
-                    }
-                    if (matchingVocab === k) scrollTopVocab = span.getBoundingClientRect().top - 150;
-                });
-            }
             if (onRendered !== undefined) {
-                onRendered(scrollTopPoint, scrollTopVocab);
+                onRendered(scrollTopPoint);
             }
         }
     };
@@ -52,11 +37,11 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, mat
     }, []);
     useEffect(() => {
         fnRender();
-    }, [matchingSentence, matchingVocab]);
+    }, [matchingSentence]);
     return (
-        <article ref={articleRef} id="script">
+        <article ref={articleRef} id="script" className={encn === 0 ? "en" : "cn"}>
             <React.Fragment>
-                {dataFormatted.title && <h1>{dataFormatted.title.split("/")[0]}</h1>}
+                {dataFormatted.title && <h1>{encn === 0 ? dataFormatted.title.split("-")[0] : dataFormatted.title.split("-")[1]}</h1>}
                 {dataFormatted.scenes.map((scene, index) => {
                     return (
                         <section className="scene" key={index}>

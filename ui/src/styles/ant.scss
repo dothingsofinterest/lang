@@ -45,7 +45,7 @@
 // button
 :where(.css-dev-only-do-not-override-xepvsj).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover,
 :where(.css-dev-only-do-not-override-xepvsj).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
-    border: 1px solid #fff;
-    color: rgba(0, 0, 0, 0.88);
+    color: #eee;
+    border-color: inherit;
 }
 // button

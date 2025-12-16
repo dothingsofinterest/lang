@@ -150,13 +150,13 @@ const Index = () => {
     }, [plan]);
     return (
         <Layout id="script-index" className="main-inner" style={{ position: "relative", padding: "0 0 178px", margin: "0" }}>
-            <div className="main-inner-item-aside">
-                <Data />
-            </div>
-            <div className="main-inner-item-main" style={{ display: "flex", justifyContent: "flex-start" }}>
+            <div className="main-inner-item-aside" style={{ display: "flex", justifyContent: "flex-start" }}>
                 <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
                     <source src={plan.videoURL} type="video/mp4" /> Your browser does not support video tag.
                 </video>
+            </div>
+            <div className="main-inner-item-main">
+                <Data />
             </div>
             <div className="main-inner-item-footer" style={{ height: "178px", position: "absolute", bottom: "0", left: "0" }}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>

@@ -1,7 +1,8 @@
 import ffmpeg from "fluent-ffmpeg";
+import fs from "fs";
+import path from "path";
 import { LoggerSystem } from "../lib/Log";
 import { execSync } from "child_process";
-import path from "path";
 
 const ffmepgBin = process.env.FFMPEG_PATH;
 const ffprobeBin = process.env.FFMPEG_FFPROBE_PATH;
@@ -32,23 +33,52 @@ export const compressVideo = (input: string, output: string): Promise<void> => {
             ])
             .save(output)
             .on("start", (commandLine) => {
-                console.log("fluent-ffmpeg compress video command: ", commandLine);
-                LoggerSystem.info(commandLine);
+                LoggerSystem.info(`fluent-ffmpeg compress video command: ${commandLine}`);
             })
             .on("end", () => {
-                console.log("fluent-ffmpeg: succeed to compress video.");
+                LoggerSystem.info("fluent-ffmpeg compress video command succeed");
                 resolve();
             })
             .on("error", (err) => {
-                console.error(`fluent-ffmpeg error: ${err.message}`);
-                LoggerSystem.error(err.message);
+                LoggerSystem.error(`fluent-ffmpeg error: ${err.message}`);
                 reject();
             });
     });
 };
 
 /*
- * Original Command:
+ * Extract audio
+ *
+ * ffmpeg -i input.mp4 -vn -c:a libmp3lame -q:a 2 output.mp3
+ *
+ * -vn --------------------------------- 禁用视频输出，只保留音频
+ * -c:a libmp3lame --------------------- 使用 libmp3lame 编码器，将音频转成 MP3 格式
+ * -q:a 2 ------------------------------ 设置音频质量（越小越高质量，范围 0–9，一般推荐 2）
+ */
+export const extractAudio = (input: string, output: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        ffmpeg.setFfmpegPath(`${ffmepgBin}`);
+        ffmpeg(input)
+            .noVideo()
+            .audioCodec("libmp3lame")
+            .audioQuality(2)
+            .save(output)
+            .on("start", (commandLine) => {
+                LoggerSystem.info(`fluent-ffmpeg extractAudio command: ${commandLine}`);
+            })
+            .on("end", () => {
+                LoggerSystem.info(`fluent-ffmpeg extractAudio command succeed`);
+                resolve();
+            })
+            .on("error", (err) => {
+                LoggerSystem.error(`fluent-ffmpeg error: ${err.message}`);
+                reject();
+            });
+    });
+};
+
+/*
+ * Enhance Dialogue and Extract audio
  *
  * ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -i input.mp4 \
  * -ac 2 \
@@ -80,18 +110,73 @@ export const enhanceDialogueAndExtractMP3 = (input: string, output: string): Pro
             .audioQuality(2)
             .save(output)
             .on("start", (commandLine) => {
-                console.log("fluent-ffmpeg enhanceDialogueAndExtractMP3 command: ", commandLine);
-                LoggerSystem.info(commandLine);
+                LoggerSystem.info(`fluent-ffmpeg enhanceDialogueAndExtractMP3 command: ${commandLine}`);
             })
             .on("end", () => {
-                console.log("fluent-ffmpeg: succeed to enhanceDialogueAndExtractMP3.");
+                LoggerSystem.info(`fluent-ffmpeg enhanceDialogueAndExtractMP3 command succeed.`);
                 resolve();
             })
             .on("error", (err) => {
-                console.error(`fluent-ffmpeg error: ${err.message}`);
-                LoggerSystem.error(err.message);
+                LoggerSystem.error(`fluent-ffmpeg error: ${err.message}`);
                 reject();
             });
+    });
+};
+
+/*
+ * Concat audio
+ *
+ * ffmpeg -i audio.mp3 -i vocab_pronunciations/a_pair_of_c05803e.mp3 -filter_complex "[0:a][1:a]concat=n=2:v=0:a=1[a]" -map "[a]" -c:a libmp3lame -b:a 192k output.mp3
+ *
+ * [0:a][1:a]
+ * 0:a → 第 1 个文件的音频流
+ * 1:a → 第 2 个文件的音频流
+ *
+ * concat=n=2:v=0:a=1
+ * n=2 → 拼接 2 段音频
+ * v=0 → 没有视频
+ * a=1 → 输出一条音频流
+ *
+ * [a] 表示刚刚拼接出来的音频流 [a] 输出到最终文件
+ */
+export const concatAudio = (planFolder: string, output: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        if (fs.existsSync(planFolder)) {
+            const pronunciationsFolder = path.join(planFolder, "vocab_pronunciations");
+            const pronunciations = fs
+                .readdirSync(pronunciationsFolder)
+                .filter((f) => f.endsWith(".mp3"))
+                .map((f) => path.join(pronunciationsFolder, f));
+            if (pronunciations.length > 0) {
+                ffmpeg.setFfmpegPath(`${ffmepgBin}`);
+                const command = ffmpeg();
+                command.input(path.join(planFolder, "audio.mp3"));
+                pronunciations.forEach((p) => command.input(p));
+                command
+                    .noVideo()
+                    .complexFilter([
+                        {
+                            filter: "concat",
+                            options: { n: pronunciations.length, v: 0, a: 1 },
+                            inputs: pronunciations.map((_, i) => `${i}:a`),
+                            outputs: "a",
+                        },
+                    ])
+                    .outputOptions(["-map [a]", "-c:a libmp3lame", "-b:a 192k"])
+                    .save(output)
+                    .on("start", (commandLine) => {
+                        LoggerSystem.info(`fluent-ffmpeg concatAudio command: ${commandLine}`);
+                    })
+                    .on("end", () => {
+                        LoggerSystem.info("✅ fluent-ffmpeg concatAudio command succeed");
+                        resolve();
+                    })
+                    .on("error", (err) => {
+                        LoggerSystem.error(`fluent-ffmpeg error: ${err.message}`);
+                        reject();
+                    });
+            }
+        }
     });
 };
 

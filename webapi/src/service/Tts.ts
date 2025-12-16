@@ -7,11 +7,13 @@ import { LoggerSystem } from "../lib/Log";
 const execPromise = util.promisify(exec);
 const uploadRootPath = process.env.UPLOAD_PATH;
 
-export const audioGenerate = async (content: string, filename: string) => {
+export const audioGenerate = async (content: string, filename: string, voice: number = 1, speed: number = 150) => {
     try {
         const file = path.join(`${uploadRootPath}`, `temp`, filename);
         const filterContent = content.replace(/[^a-zA-Z0-9\'\,\.]+/g, " ");
-        await execPromise(`python ${process.cwd()}/scripts/english.py "${filterContent}" "1" "${file}"`);
+        const command = `python ${process.cwd()}/scripts/english.py "${filterContent}" "${voice}" "${speed}" "${file}"`;
+        await execPromise(command);
+        LoggerSystem.info(`✅ ${command}`);
         const binary = await fsPromise.readFile(file);
         const base64 = Buffer.from(binary).toString("base64");
         return base64;

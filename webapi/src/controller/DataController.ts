@@ -5,6 +5,7 @@ import AdmZip from "adm-zip";
 import { Request, Response } from "express";
 import { LoggerSystem } from "../lib/Log";
 import { audioGenerate } from "../service/Tts";
+import { concatAudio } from "../utils/FFmpeg";
 
 const basePath = process.env.UPLOAD_PATH;
 
@@ -146,6 +147,8 @@ export const vocabPronunciationGenerate = async (req: Request, res: Response) =>
     const schemaQuery = Joi.object({
         content: Joi.string().required(),
         filename: Joi.string().required(),
+        voice: Joi.number().required(),
+        speed: Joi.number().required(),
     });
     const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
     if (errorQuery) {
@@ -155,7 +158,7 @@ export const vocabPronunciationGenerate = async (req: Request, res: Response) =>
         });
     }
     try {
-        const base64Data = await audioGenerate(valueQuery.content, valueQuery.filename);
+        const base64Data = await audioGenerate(valueQuery.content, valueQuery.filename, valueQuery.voice, valueQuery.speed);
         return res.status(200).json({
             code: 1,
             message: `Succeed.`,
@@ -220,8 +223,8 @@ export const vocabImagePronunciationMove = (req: Request, res: Response) => {
 export const vocabImagePronunciationRemove = (req: Request, res: Response) => {
     const schema = Joi.object({
         plan: Joi.string().required(),
-        vocabImage: Joi.string().required(),
-        vocabPronunciation: Joi.string().required(),
+        vocabImage: Joi.string().allow(null, ""),
+        vocabPronunciation: Joi.string().allow(null, ""),
     });
     const { error, value } = schema.validate(req.query);
     if (error) {
@@ -239,17 +242,70 @@ export const vocabImagePronunciationRemove = (req: Request, res: Response) => {
                 message: `Plan does not exist.`,
             });
         }
-        const imageFile = path.join(planPath, "vocab_images", value.vocabImage);
-        if (fs.existsSync(imageFile)) {
-            fs.unlinkSync(imageFile);
+        if (value.vocabImage) {
+            const imageFile = path.join(planPath, "vocab_images", value.vocabImage);
+            if (fs.existsSync(imageFile)) {
+                fs.unlinkSync(imageFile);
+            }
         }
-        const pronunciationFile = path.join(planPath, "vocab_pronunciations", value.vocabPronunciation);
-        if (fs.existsSync(pronunciationFile)) {
-            fs.unlinkSync(pronunciationFile);
+        if (value.vocabPronunciation) {
+            const pronunciationFile = path.join(planPath, "vocab_pronunciations", value.vocabPronunciation);
+            if (fs.existsSync(pronunciationFile)) {
+                fs.unlinkSync(pronunciationFile);
+            }
         }
         res.status(200).json({
             code: 1,
             message: `Succeed.`,
+        });
+    } catch (error: any) {
+        console.error(error);
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed.`,
+        });
+    }
+};
+
+export const audioConcat = async (req: Request, res: Response) => {
+    const schema = Joi.object({
+        plan: Joi.string().required(),
+    });
+    const { error, value } = schema.validate(req.query);
+    if (error) {
+        console.error("Failed to validate params: ", error.message);
+        return res.status(200).json({
+            code: 0,
+            message: error.message,
+        });
+    }
+    const planPath = path.join(`${basePath}`, value.plan);
+    if (!fs.existsSync(planPath)) {
+        return res.status(200).json({
+            code: 0,
+            message: `Plan does not exist.`,
+        });
+    }
+    try {
+        const output = path.join(planPath, "concat.mp3");
+        await concatAudio(planPath, output);
+        const stat = fs.statSync(output);
+        const fileSize = stat.size;
+        res.setHeader("Content-Length", fileSize);
+        res.setHeader("Content-Type", "audio/mpeg");
+        const stream = fs.createReadStream(output);
+        stream.pipe(res);
+        res.on("finish", () => {
+            fs.unlinkSync(output);
+        });
+        stream.on("error", (err) => {
+            console.error(err);
+            LoggerSystem.error(err.message);
+            return res.status(200).json({
+                code: 0,
+                message: `Failed.`,
+            });
         });
     } catch (error: any) {
         console.error(error);

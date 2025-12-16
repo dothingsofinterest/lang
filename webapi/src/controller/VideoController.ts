@@ -2,14 +2,15 @@ import fs from "fs";
 import path from "path";
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
-import { enhanceDialogueAndExtractMP3 } from "../utils/FFmpeg";
+import { enhanceDialogueAndExtractMP3, extractAudio } from "../utils/FFmpeg";
 import { waveformCreate as waveformCreateService } from "../service/Audio";
 
-const videoFile = "video.mp4";
-const audioFile = "origin.mp3";
-const JsonFile = "audiowaveform.json";
-const scriptFile = "script.json";
 const basePath = process.env.UPLOAD_PATH;
+const fileNameVideoFile = "video.mp4";
+const fileNameAudioEnhanced = "audio_enhanced.mp3";
+const fileNameAudio = "audio.mp3";
+const fileNameAudiowaveform = "audiowaveform.json";
+const fileNameScript = "script.json";
 
 export const videoImport = (req: Request, res: Response) => {
     if (!req.file) {
@@ -18,28 +19,14 @@ export const videoImport = (req: Request, res: Response) => {
             message: `Failed.`,
         });
     }
-    const plan = path.basename(req.file?.destination);
-    const planPath = path.join(`${basePath}`, plan);
-    const vocabImagesFolder = path.join(planPath, "vocab_images");
-    if (!fs.existsSync(vocabImagesFolder)) {
-        fs.mkdirSync(vocabImagesFolder, { recursive: true });
-    }
-    const vocabPronunciationsFolder = path.join(planPath, "vocab_pronunciations");
-    if (!fs.existsSync(vocabPronunciationsFolder)) {
-        fs.mkdirSync(vocabPronunciationsFolder, { recursive: true });
-    }
-    const script = path.join(planPath, scriptFile);
-    if (!fs.existsSync(script)) {
-        fs.writeFileSync(script, "");
-    }
     res.status(200).json({
         code: 1,
         message: `Succeed.`,
-        data: { plan },
+        data: { plan: path.basename(req.file?.destination) },
     });
 };
 
-export const waveformCreate = async (req: Request, res: Response, next: NextFunction) => {
+export const videoDealWith = async (req: Request, res: Response, next: NextFunction) => {
     const schema = Joi.object({
         plan: Joi.string().required(),
     });
@@ -57,7 +44,7 @@ export const waveformCreate = async (req: Request, res: Response, next: NextFunc
             message: `Plan does not exist.`,
         });
     }
-    const inputVideo = path.join(planPath, videoFile);
+    const inputVideo = path.join(planPath, fileNameVideoFile);
     if (!fs.existsSync(inputVideo)) {
         return res.status(200).json({
             code: 0,
@@ -65,20 +52,42 @@ export const waveformCreate = async (req: Request, res: Response, next: NextFunc
         });
     }
     try {
-        const outputJson = path.join(planPath, JsonFile);
-        if (!fs.existsSync(outputJson)) {
-            const outputAudio = path.join(planPath, audioFile);
-            if (!fs.existsSync(outputAudio)) {
-                await enhanceDialogueAndExtractMP3(inputVideo, outputAudio);
-            }
-            await waveformCreateService(`${outputAudio}`, `${outputJson}`);
+        // Create folder vocab images
+        const vocabImagesFolder = path.join(planPath, "vocab_images");
+        if (!fs.existsSync(vocabImagesFolder)) {
+            fs.mkdirSync(vocabImagesFolder, { recursive: true });
+        }
+        // Create folder vocab pronunciations
+        const vocabPronunciationsFolder = path.join(planPath, "vocab_pronunciations");
+        if (!fs.existsSync(vocabPronunciationsFolder)) {
+            fs.mkdirSync(vocabPronunciationsFolder, { recursive: true });
+        }
+        // Create file script
+        const script = path.join(planPath, fileNameScript);
+        if (!fs.existsSync(script)) {
+            fs.writeFileSync(script, "");
+        }
+        // Create file waveform
+        const audiowaveform = path.join(planPath, fileNameAudiowaveform);
+        if (!fs.existsSync(audiowaveform)) {
+            const outputAudio = path.join(planPath, fileNameAudioEnhanced);
+            await enhanceDialogueAndExtractMP3(inputVideo, outputAudio);
+            await waveformCreateService(`${outputAudio}`, `${audiowaveform}`);
             fs.unlinkSync(outputAudio);
+        }
+        // Create file audio
+        const audio = path.join(planPath, fileNameAudio);
+        if (!fs.existsSync(audio)) {
+            await extractAudio(inputVideo, audio);
         }
         fs.unlinkSync(inputVideo);
         res.status(200).json({
             code: 1,
             message: `Succeed.`,
-            data: { filename: `${JsonFile}` },
+            data: {
+                audio: `${fileNameAudio}`,
+                audiowaveform: `${fileNameAudiowaveform}`,
+            },
         });
     } catch (error: any) {
         return res.status(200).json({

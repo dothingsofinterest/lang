@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Vocab } from "../../types/Data";
 import "./ScriptFooter.scss";
 
@@ -7,8 +7,9 @@ interface ScriptVocabsProps {
     grammars: string[];
 }
 const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars }) => {
+    const [vocabMatched, setVocabMatched] = useState(-1);
     const refAudio = useRef<HTMLAudioElement>(null);
-    const handlersPlayAudio = async (index: number) => {
+    const handlersVocabOnClick = async (index: number) => {
         if (vocabs.length > 0) {
             const vocab = vocabs[index];
             if (vocab && vocab.pronunciation) {
@@ -17,6 +18,7 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
                     audio.src = vocab.pronunciation;
                     audio.load();
                     audio.play();
+                    setVocabMatched(index);
                 }
             }
         }
@@ -28,7 +30,7 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
                     <div className="title">Vocabs</div>
                     {vocabs.map((value, key) => {
                         return (
-                            <p key={key} className="item" onClick={() => handlersPlayAudio(key)}>
+                            <p key={key} className={vocabMatched === key ? "item matched" : "item"} onClick={() => handlersVocabOnClick(key)}>
                                 <span className="en">
                                     <i className="index">[{key + 1}]</i>
                                     {value.text.split(" | ")[0]}

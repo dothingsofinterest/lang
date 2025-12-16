@@ -1,0 +1,22 @@
+#video-read {
+    #panel {
+        width: 100%;
+        height: 32px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: #202024;
+        display: flex;
+        justify-content: space-between;
+        .btn {
+            flex: 1;
+            border-top: 0;
+            border-left: 0;
+            border-radius: 0;
+            background-color: #888;
+            &.recording {
+                color: red;
+            }
+        }
+    }
+}

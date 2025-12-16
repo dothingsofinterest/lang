@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button } from "antd";
+import { Layout, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, BulbFilled, ClearOutlined } from "@ant-design/icons";
+import { RedoOutlined, FastBackwardOutlined, AudioFilled, PrinterOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateVideoMatchingSentence, updateVideoMatchingSentencePos } from "../../stores/reducers/plan";
 import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
-import Script from "../VideoLearn/Script";
+import ReactDOMServer from "react-dom/server";
+import Script from "./Script";
+import printJS from "print-js";
 import "./Index.scss";
 
 const Index = () => {
@@ -19,12 +21,11 @@ const Index = () => {
     const matchingSentence = useSelector((state: RootState) => state.plan.videoMatchingSentence);
     const matchingSentencePos = useSelector((state: RootState) => state.plan.videoMatchingSentencePos);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
-    const [inputValue, setInputValue] = useState("");
+    const [listening, setListening] = useState(false);
     const refScrollbar = useRef<Scrollbars>(null);
+    const recognitionRef = useRef<any>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
-    const refAudio = useRef<HTMLAudioElement>(null);
     const refMatchingSentence = useRef({ matchingSentence });
-    const refInputValue = useRef({ inputValue });
     const handlersPanelPlay = () => {
         if (refVideo.current && videoURL) {
             if (refVideo.current.paused) {
@@ -87,40 +88,6 @@ const Index = () => {
             alert("Please upload video.");
         }
     };
-    const handlersInputTips = () => {
-        if (dataFormatted.sentences.length > 0) {
-            let tips1 = ``;
-            let tips2 = ``;
-            const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-            const input = inputValue;
-            const answerText = answer
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
-                .toLowerCase()
-                .trim();
-            const inputText = input
-                .toLowerCase()
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
-                .toLowerCase()
-                .trim();
-            for (let i = 0; i < answer.length; i++) {
-                if (answer[i] === input[i]) {
-                    tips1 += answer[i];
-                } else {
-                    tips1 += "X";
-                    break;
-                }
-            }
-            for (let i = 0; i < answerText.length; i++) {
-                if (answerText[i] === inputText[i]) {
-                    tips2 += answerText[i];
-                } else {
-                    tips2 += "X";
-                    break;
-                }
-            }
-            alert(`${answer}\r\n${tips1}\r\n---\r\n${answerText}\r\n${tips2}`);
-        }
-    };
     const handlersPanelActiveClear = () => {
         if (refVideo.current && videoURL) {
             refVideo.current.currentTime = 0;
@@ -154,32 +121,72 @@ const Index = () => {
             }
         }
     };
-    const handlersTextInput = (value: string) => {
-        setInputValue(value);
-        if (dataFormatted.sentences.length > 0) {
-            const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-            const answerText = answer
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
-                .toLowerCase()
-                .trim();
-            const inputText = value
-                .toLowerCase()
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
-                .toLowerCase()
-                .trim();
-            if (value === answer || inputText === answerText) {
-                setInputValue("");
-                dispatch(updateVideoMatchingSentence(matchingSentence + 1));
-                refVideo.current?.play();
-                setPlayButton(<PauseCircleOutlined />);
-            }
-        }
-    };
-    const handlersRenderedCallback = (scrollTopPoint: number, scrollTopVocab: number) => {
+    const handlersRenderedCallback = (scrollTopPoint: number) => {
         const scrollTop = refScrollbar.current?.getScrollTop() || 0;
         const scrollTopPointValue = scrollTop + scrollTopPoint;
         dispatch(updateVideoMatchingSentencePos(scrollTopPointValue));
         refScrollbar.current?.scrollTop(scrollTopPointValue);
+    };
+    const handlersPrint = () => {
+        if (plan.videoHash && plan.videoURL) {
+            if (dataFormatted.title) {
+                const style1 = `
+					@media print {
+						@page { margin: 1cm 0.4cm; }
+						* { outline: none; }
+						html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
+						body { margin: 0; padding: 0; font-size: 12pt; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+						ol, ul, li { list-style: none; }
+						article { width: 100%; }
+						article h1 { text-align: center; font-size: 14pt; font-weight: 900; line-height: 22pt; color: #000; margin: 2pt; }
+						article .scene { background: #fff; color: #000;  padding: 10px 0 0; margin: 10px 20px; }
+						article .scene h2 { text-align: center; font-size: 14pt; font-weight: 300; font-style: italic; line-height: 22pt; color: #000; margin: 0 6pt; }
+						article .scene p { margin: 2pt 0; padding: 0; color: #000; font-size: 12pt; line-height: 24pt; }
+						article .scene p.pure { text-indent: 26pt; }
+                        article .scene p.indent { text-indent: 26pt; }
+						article .scene p:first-of-type  { border-top: 0; }
+						article .scene p .point { padding: 0 2pt; }
+						article .scene p .point:first-child { padding: 0; }
+						article .scene p .role { font-style: normal; font-weight: 900; color: #000; }
+						article .scene ul { margin: 0; padding: 2pt 0; color: #000; font-size: 10pt; line-height: 22pt; }
+						article .scene ul .role { font-style: normal; font-weight: 900; color: #000; }
+						article footer { height: 100%; }
+						article footer #vocabs,
+						article footer #grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; }
+						article footer #vocabs .title,
+						article footer #grammars .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
+						article footer #vocabs .item,
+						article footer #grammars .item { margin: 0; padding: 2pt 0; border-top: 1px dotted #ccc; font-size: 12pt; line-height: 24pt; }
+						article footer #vocabs .item { display: flex; justify-content: space-between; }                              
+                        article footer #vocabs .item:nth-child(2),
+						article footer #grammars .item:nth-child(2) { border-top: 0; }
+                        article footer #vocabs .item .en { flex: 1; } 
+                        article footer #vocabs .item .pr,  
+                        article footer #vocabs .item .cn { flex: 0.5; } 
+                        article footer #vocabs .item .cn { font-size: 10pt; } 
+						article footer #vocabs .item .index,
+						article footer #grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
+					}
+				`;
+                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} />);
+                printJS({ printable: `${content}`, type: "raw-html", style: style1 });
+            } else {
+                alert(`Data not be set`);
+            }
+        } else {
+            alert("Please create a plan.");
+        }
+    };
+    const handlersPanelRecordStart = async () => {
+        if (recognitionRef.current) {
+            await recognitionRef.current.stop();
+            if (listening === false) {
+                recognitionRef.current.start();
+                setListening(true);
+            } else {
+                setListening(false);
+            }
+        }
     };
     useEffect(() => {
         if (!plan.videoHash || !plan.videoURL) {
@@ -188,22 +195,45 @@ const Index = () => {
         }
         const videoElem = refVideo.current;
         const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {
-            if (refInputValue.current.inputValue.length === 0) {
-                if (event.code === "Numpad0") {
-                    handlersPanelPlayAgain();
-                }
-                if (event.code === "ArrowLeft") {
-                    handlersPanelPlayBackward();
-                }
-                if (event.code === "ArrowRight") {
-                    handlersPanelPlayForward();
-                }
+            if (event.code === "Numpad0") {
+                handlersPanelPlayAgain();
+            }
+            if (event.code === "ArrowLeft") {
+                handlersPanelPlayBackward();
+            }
+            if (event.code === "ArrowRight") {
+                handlersPanelPlayForward();
             }
         };
         if (videoElem) {
             videoElem.load();
             videoElem.currentTime = dataFormatted.sentences[matchingSentence] !== undefined && fnIsSRTTime(dataFormatted.sentences[matchingSentence].startTime) ? fnSRTTimeToFloat(dataFormatted.sentences[matchingSentence].startTime) : 0;
             refScrollbar.current?.scrollTop(matchingSentencePos);
+        }
+        // Speech Recognition
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Browser do not support Web Speech API.");
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.continuous = true; // 持续监听话筒
+            recognition.interimResults = false; // 防抖设置。false 表示只显示最终结果。
+            recognition.onresult = (event: any) => {
+                const lastResult = event.results[event.results.length - 1];
+                if (lastResult.isFinal) {
+                    const transcript = lastResult[0].transcript.trim();
+                    alert(transcript);
+                }
+            };
+            recognition.onerror = (event: any) => {
+                console.error("SpeechRecognition Error:", event.error);
+                setListening(false);
+            };
+            recognition.onend = () => {
+                setListening(false);
+            };
+            recognitionRef.current = recognition;
         }
         window.addEventListener("keydown", videoKeyboardOnDownHandler);
         return () => {
@@ -216,34 +246,28 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        refInputValue.current = { inputValue };
         refMatchingSentence.current = { matchingSentence };
-    }, [inputValue, matchingSentence]);
+    }, [matchingSentence]);
     return (
-        <Layout id="video-index" className="main-inner">
-            <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 132px" }}>
+        <Layout id="video-read" className="main-inner">
+            <div className="main-inner-item-aside" style={{ display: "flex" }}>
+                <video controls style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
+                    <source src={videoURL} type="video/mp4" /> Your browser does not support video tag.
+                </video>
+            </div>
+            <div className="main-inner-item-main" style={{ position: "relative", padding: "32px 0 0" }}>
                 <section id="panel">
                     <Button icon={<RedoOutlined />} onClick={handlersPanelPlayAgain} className="btn"></Button>
                     <Button icon={<FastBackwardOutlined />} onClick={handlersPanelPlayBackward} className="btn"></Button>
                     <Button icon={playButton} onClick={handlersPanelPlay} className="btn"></Button>
                     <Button icon={<FastForwardOutlined />} onClick={handlersPanelPlayForward} className="btn"></Button>
-                    <Button icon={<BulbFilled />} onClick={handlersInputTips} className="btn"></Button>
                     <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
+                    <Button icon={<AudioFilled />} onClick={handlersPanelRecordStart} className={recognitionRef.current && listening === true ? `btn recording` : `btn`}></Button>
+                    <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
                 </section>
                 <Scrollbars ref={refScrollbar}>
-                    <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} showFooter={false} onRendered={handlersRenderedCallback} />
+                    <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} showFooter={true} />
                 </Scrollbars>
-                <section id="input-area">
-                    <Input.TextArea className="input-textarea" value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} placeholder="Please Type Sentence" />
-                </section>
-                <section style={{ display: "none" }}>
-                    <audio ref={refAudio} loop></audio>
-                </section>
-            </div>
-            <div className="main-inner-item-main" style={{ display: "flex" }}>
-                <video controls style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
-                    <source src={videoURL} type="video/mp4" /> Your browser does not support video tag.
-                </video>
             </div>
         </Layout>
     );

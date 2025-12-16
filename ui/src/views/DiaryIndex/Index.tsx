@@ -56,14 +56,22 @@ const Index = () => {
     const handlersExport = async () => {
         if (diary.data.title && diary.data.date) {
             try {
-                const blob = new Blob([JSON.stringify(diary.data, null, 4)], { type: "application/json" });
-                const handle = await await (window as any).showSaveFilePicker({
-                    suggestedName: `${diary.data.date}-${diary.data.title}.json`,
-                    types: [{ description: diary.data.title, accept: { "application/json": [".json"] } }],
-                });
-                const writable = await handle.createWritable();
-                await writable.write(blob);
-                await writable.close();
+                const dateReg = /^on (January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}\, at \d{1,2}\:\d{1,2} [ap]\.m\.$/;
+                if (dateReg.test(diary.data.date)) {
+                    const m = diary.data.date.match(/(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}/g);
+                    if (m && m[0]) {
+                        const blob = new Blob([JSON.stringify(diary.data, null, 4)], { type: "application/json" });
+                        const handle = await await (window as any).showSaveFilePicker({
+                            suggestedName: `${new Date(m[0]).getTime()}-${m[0]}-${diary.data.title}.json`,
+                            types: [{ description: diary.data.title, accept: { "application/json": [".json"] } }],
+                        });
+                        const writable = await handle.createWritable();
+                        await writable.write(blob);
+                        await writable.close();
+                    }
+                } else {
+                    alert("Date formate is wrong.");
+                }
             } catch (error) {
                 console.error("save error: ", error);
             }
@@ -121,7 +129,7 @@ const Index = () => {
                 </section>
                 <section id="meta">
                     <Input value={diary.data.title} onChange={(e) => handlersTitle(e.target.value)} placeholder="Title" />
-                    <Input value={diary.data.date} onChange={(e) => handlersDate(e.target.value)} placeholder="Date" />
+                    <Input value={diary.data.date} onChange={(e) => handlersDate(e.target.value)} placeholder="on December 2, 2025, at 10:05 p.m." />
                 </section>
                 <Scrollbars>
                     <Input.TextArea value={diary.data.content} onChange={(e) => handlersContent(e.target.value)} placeholder="Just write what you are thinking about at this moment." />

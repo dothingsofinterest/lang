@@ -7,8 +7,9 @@ const audiowaveformBin = process.env.AUDIOWAVEFORM_PATH;
 
 export const waveformCreate = async (input: string, output: string): Promise<void> => {
     try {
-        await execPromise(`${audiowaveformBin} -i ${input} -o ${output} -b 8`);
-        console.log("Succeed to create audio waveform.");
+        const command = `${audiowaveformBin} -i ${input} -o ${output} -b 8`;
+        await execPromise(command);
+        LoggerSystem.info(`✅ ${command}`);
     } catch (error: any) {
         console.error(error.message);
         LoggerSystem.error(error.message);

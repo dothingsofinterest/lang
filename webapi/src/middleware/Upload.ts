@@ -62,6 +62,8 @@ const uploader = multer({
                 cb(null, `data.zip`);
             } else if (file.mimetype === "application/json") {
                 cb(null, `script.json`);
+            } else if (file.mimetype === "audio/mpeg") {
+                cb(null, `${file.originalname}`);
             } else if (file.mimetype === "audio/wav") {
                 cb(null, `${file.originalname}`);
             } else if (file.mimetype === "image/png") {
@@ -74,7 +76,7 @@ const uploader = multer({
         },
     }),
     fileFilter: (req, file, cb) => {
-        const allowedTypes = /mp4|zip|json|wav|png|jpg|jpeg/;
+        const allowedTypes = /mp4|zip|json|mp3|mpeg|wav|png|jpg|jpeg/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = allowedTypes.test(file.mimetype);
         if (extname && mimetype) {

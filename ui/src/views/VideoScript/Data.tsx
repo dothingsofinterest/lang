@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Space, Button, Tree, Select, InputNumber, Mentions, Drawer, Upload } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled, RedoOutlined } from "@ant-design/icons";
+import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined, DownCircleOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled, RedoOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { vocabImageUpload, vocabPronunciationUpload, vocabPronunciationGenerate, vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
@@ -19,7 +19,7 @@ const Data = React.memo(() => {
     const plan = useSelector((state: RootState) => state.plan);
     const script = useSelector((state: RootState) => state.plan.script);
     const timeOffset = useSelector((state: RootState) => state.plan.script.timeOffset);
-    const [vocab, setVocab] = useState<DataVocab>({ text: "", image: "", pronunciation: "" });
+    const [vocab, setVocab] = useState<DataVocab>({ text: "", image: "", voice: 0, speed: 150, pronunciation: "" });
     const [parsedVocabs, setParsedVocabs] = useState("");
     const [renderVersion, setRenderVersion] = useState(0);
     const [vocabPanel, setVocabPanel] = useState(false);
@@ -56,10 +56,13 @@ const Data = React.memo(() => {
         }
     };
     const handlersSubCutParagraph = () => {
-        if (refCurSentenceKey.current) {
-            const keyInfo = refCurSentenceKey.current.split("-");
-            dispatch(updateScriptParagraphsByCut({ pKey: parseInt(keyInfo[0]), sKey: parseInt(keyInfo[1]) }));
-            setRenderVersion((prev) => prev + 1);
+        const confirmed = window.confirm("Do you confirm to cut?");
+        if (confirmed) {
+            if (refCurSentenceKey.current) {
+                const keyInfo = refCurSentenceKey.current.split("-");
+                dispatch(updateScriptParagraphsByCut({ pKey: parseInt(keyInfo[0]), sKey: parseInt(keyInfo[1]) }));
+                setRenderVersion((prev) => prev + 1);
+            }
         }
     };
     const handlersSubInsertSentence = () => {
@@ -92,8 +95,6 @@ const Data = React.memo(() => {
         }
     };
     const handlersSubUpdateStartTime = (event: any, key: string) => {
-        console.log(event.target.value);
-
         const keyInfo = key.split("-");
         dispatch(updateScriptSentenceTime({ pKey: parseInt(keyInfo[0]), sKey: parseInt(keyInfo[1]), type: 0, text: event.target.value.trim() }));
     };
@@ -126,12 +127,18 @@ const Data = React.memo(() => {
     const handlersUpdateVocabText = (value: string) => {
         setVocab({ ...vocab, text: value });
     };
+    const handlersUpdateVocabPronounceVoice = (value: number) => {
+        setVocab({ ...vocab, voice: value });
+    };
+    const handlersUpdateVocabPronounceSpeed = (value: number) => {
+        setVocab({ ...vocab, speed: value });
+    };
     const handlersUpdateVocabImage = async (file: any) => {
         if (vocab.text) {
             if (/^(.+?)\.(png|jpg)$/g.test(file.name) && (file.type === "image/png" || file.type === "image/jpeg")) {
                 try {
                     const part = vocab.text.split(" | ");
-                    const nameEN = part[0].replaceAll(/[\s\,\/\:]+/g, "_");
+                    const nameEN = part[0].replaceAll(/[\s\,\/\:\?\.]+/g, "_");
                     const nameCNHash = md5(part[2]).slice(25);
                     const name = `${nameEN}_${nameCNHash}.png`;
                     const formData = new FormData();
@@ -162,10 +169,10 @@ const Data = React.memo(() => {
             try {
                 const part = vocab.text.split(" | ");
                 const content = part[0].replaceAll("/", ", ");
-                const filenameEN = part[0].replaceAll(/[\s\,\/\:]+/g, "_");
+                const filenameEN = part[0].replaceAll(/[\s\,\/\:\?\.]+/g, "_");
                 const filenameCNHash = md5(part[2]).slice(25);
-                const filename = `${filenameEN}_${filenameCNHash}.wav`;
-                const res = await vocabPronunciationGenerate({ content, filename });
+                const filename = `${filenameEN}_${filenameCNHash}.mp3`;
+                const res = await vocabPronunciationGenerate({ content, filename, voice: vocab.voice, speed: vocab.speed });
                 if (res.code) {
                     setVocab({ ...vocab, pronunciation: filename });
                     if (refAudio.current) {
@@ -182,11 +189,11 @@ const Data = React.memo(() => {
     };
     const handlersUpdateVocabPronunciation = async (file: any) => {
         if (vocab.text) {
-            if (/^(.+?)\.(wav)$/g.test(file.name) && file.type === "audio/wav") {
+            if (/^(.+?)\.(mp3)$/g.test(file.name) && file.type === "audio/mpeg") {
                 try {
-                    const nameEN = vocab.text.split(" | ")[0].replaceAll(/[\s\,\/]+/g, "_");
+                    const nameEN = vocab.text.split(" | ")[0].replaceAll(/[\s\,\/\:\?\.]+/g, "_");
                     const nameCNHash = md5(vocab.text.split(" | ")[2]).slice(25);
-                    const name = `${nameEN}_${nameCNHash}.wav`;
+                    const name = `${nameEN}_${nameCNHash}.mp3`;
                     const formData = new FormData();
                     formData.append("file", file, name);
                     const res = await vocabPronunciationUpload({}, formData);
@@ -214,7 +221,7 @@ const Data = React.memo(() => {
             const res = await vocabImagePronunciationMove({ plan: plan.videoHash, vocabImage: vocab.image ? vocab.image : "a.txt", vocabPronunciation: vocab.pronunciation });
             if (res.code === 1) {
                 dispatch(updateScriptVocabs(vocab));
-                setVocab({ text: "", image: "", pronunciation: "" });
+                setVocab({ text: "", image: "", voice: 0, speed: 150, pronunciation: "" });
                 setParsedVocabs("");
             }
         }
@@ -277,6 +284,12 @@ const Data = React.memo(() => {
         setRenderVersion((prev) => prev + 1);
         alert("Succeed.");
     };
+    const handlersDownToMiddle = () => {
+        const grammarElement = document.getElementById("script-grammar");
+        if (grammarElement && grammarElement.offsetTop) {
+            refScrollbar.current?.scrollTop(grammarElement.offsetTop - 200 || 0);
+        }
+    };
     const filterPlusOffset = (SRTTime: string): string => {
         if (timeOffset) {
             const res = fnSRTTimeToFloat(SRTTime) + timeOffset;
@@ -322,6 +335,7 @@ const Data = React.memo(() => {
                 <Button icon={<MinusSquareOutlined />} onClick={handlersRemoveVocab}>
                     Vocab
                 </Button>
+                <Button icon={<DownCircleOutlined />} onClick={handlersDownToMiddle} />
             </div>
             <div className="script-meta">
                 <Input defaultValue={script.data.title} onBlur={(e) => handlersSubUpdateName(e.target.value)} style={{ borderRadius: "0" }} placeholder="Script Title" />
@@ -360,12 +374,31 @@ const Data = React.memo(() => {
                 <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />
                 <div className="text-image-btn">
                     <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="pronunciation/pronunciations | prəˌnʌnsiˈeɪʃn | n.读音;发音" />
-                    <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}?${Date.now()}`} />}</div>
+                    <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}`} />}</div>
                     <Upload beforeUpload={handlersUpdateVocabImage} showUploadList={false}>
                         <Button icon={<PlusSquareOutlined />} />
                     </Upload>
                 </div>
                 <div className="audio-btn">
+                    <Select
+                        style={{ width: 120 }}
+                        defaultValue={0}
+                        onChange={handlersUpdateVocabPronounceVoice}
+                        options={[
+                            { value: 0, label: "Man-0" },
+                            { value: 1, label: "Woman-1" },
+                        ]}
+                    />
+                    <Select
+                        style={{ width: 120 }}
+                        defaultValue={150}
+                        onChange={handlersUpdateVocabPronounceSpeed}
+                        options={[
+                            { value: 150, label: "Normal" },
+                            { value: 120, label: "Slow" },
+                            { value: 100, label: "Very Slow" },
+                        ]}
+                    />
                     <Button className="play" onClick={handlersPlayVocabPronunciation}>
                         {vocab.pronunciation}
                     </Button>

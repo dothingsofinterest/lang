@@ -68,10 +68,10 @@ export const videoImport = (data: FormData): Promise<Response> => {
         data: data,
     });
 };
-export const waveformCreate = (params: object): Promise<Response> => {
+export const videoDealWith = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: "/video/waveformCreate",
+        url: "/video/dealWith",
         params: params,
     });
 };
@@ -139,4 +139,28 @@ export const vocabImagePronunciationRemove = (params: object): Promise<Response>
         params: params,
     });
 };
+export const concatAudio = (params: object): Promise<Blob> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/data/audio_concat`,
+        responseType: "blob",
+        params: params,
+    });
+};
 // Data
+
+// Plan
+export const planCountVocabs = (): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/plan/count_vocabs`,
+    });
+};
+export const planSearch = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/plan/search`,
+        params: params,
+    });
+};
+// Plan

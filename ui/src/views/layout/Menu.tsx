@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { EyeFilled, ControlFilled, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, YoutubeFilled, BulbFilled, EditFilled } from "@ant-design/icons";
+import { EyeFilled, TranslationOutlined, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, InteractionFilled, BulbFilled, EditFilled } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Menu.scss";
@@ -15,12 +15,11 @@ const routes = [
         children: [
             { url: "/video/settings", icon: <SettingFilled /> },
             { url: "/video/script", icon: <ProfileFilled /> },
-            { url: "/video/learn", icon: <ReadFilled /> },
+            { url: "/video/read", icon: <ReadFilled /> },
             { url: "/video/word", icon: <EyeFilled /> },
-            { url: "/video/meaning", icon: <BulbFilled /> },
             { url: "/video/listen", icon: <CustomerServiceFilled /> },
-            { url: "/video/video", icon: <YoutubeFilled /> },
-            { url: "/video/translate", icon: <ControlFilled /> },
+            { url: "/video/meaning", icon: <BulbFilled /> },
+            { url: "/video/translate", icon: <TranslationOutlined /> },
         ],
     },
     { prefix: "diary", children: [{ url: "/diary/index", icon: <EditFilled /> }] },

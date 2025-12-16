@@ -20,11 +20,13 @@ const dataParagraph = {
 const initialState: StatePlan = {
     videoHash: "",
     videoURL: "",
+    videoAudioURL: "",
     videoAudioWaveformURL: "",
     scriptCurrentTime: 0,
     scriptWaveformZoom: 0,
     listenMatchingVocab: 0,
     meaningMatchingVocab: 0,
+    wordMatchingVocab: 0,
     videoMatchingSentence: 0,
     videoMatchingSentencePos: 0,
     translateMatchingSentence: 0,
@@ -86,9 +88,15 @@ const slice = createSlice({
         updateMeaningMatchingVocab: (state, action: PayloadAction<number>) => {
             state.meaningMatchingVocab = action.payload;
         },
+        updateWordMatchingVocab: (state, action: PayloadAction<number>) => {
+            state.wordMatchingVocab = action.payload;
+        },
         updateVideoURL: (state, action: PayloadAction<string>) => {
             URL.revokeObjectURL(state.videoURL);
             state.videoURL = action.payload;
+        },
+        updateVideoAudioURL: (state, action: PayloadAction<string>) => {
+            state.videoAudioURL = action.payload;
         },
         updateVideoAudioWaverURL: (state, action: PayloadAction<string>) => {
             state.videoAudioWaveformURL = action.payload;
@@ -330,6 +338,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateVideoHash, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateTranslateMatchingSentence, updateTranslateMatchingSentencePos, updateScriptCurrentTime, updateScriptWaveformZoom, updateListenMatchingVocab, updateMeaningMatchingVocab, updateVideoURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset } = slice.actions;
+export const { updateVideoHash, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateTranslateMatchingSentence, updateTranslateMatchingSentencePos, updateScriptCurrentTime, updateScriptWaveformZoom, updateListenMatchingVocab, updateMeaningMatchingVocab, updateWordMatchingVocab, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset } = slice.actions;
 
 export default slice.reducer;

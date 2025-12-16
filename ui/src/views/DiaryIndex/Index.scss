@@ -46,7 +46,8 @@
         }
         textarea.ant-input {
             border: 0;
-            font-size: 20px;
+            font-size: 16px;
+            line-height: 30px;
             height: 100%;
             border-radius: 0;
             color: #000;
@@ -97,24 +98,23 @@
             .main {
                 color: #000;
                 background-color: #ccc;
-                padding: 10px 15px;
-                margin: 10px 0 0;
                 &:first-of-type {
                     margin-top: 0;
                 }
                 p {
-                    margin: 16px 0;
-                    padding: 0;
-                    line-height: 32px;
-                    font-size: 18px;
+                    border-top: 1px dotted #000;
+                    margin: 0;
+                    padding: 6px 10px;
+                    line-height: 30px;
+                    font-size: 16px;
                     word-wrap: break-word;
                     .hl {
                         cursor: pointer;
                         padding: 0 4px;
-                        border-radius: 4px;
                         position: relative;
-                        background-color: #3d4809;
-                        color: #fff;
+                        color: #dc1735;
+                        font-weight: 900;
+                        font-style: italic;
                     }
                 }
             }
@@ -124,10 +124,10 @@
                 margin-top: 10px;
                 p {
                     border-top: 1px dotted #000;
-                    font-size: 16px;
-                    word-wrap: break-word;
+                    font-size: 14px;
                     line-height: 28px;
-                    padding: 8px;
+                    padding: 6px;
+                    word-wrap: break-word;
                     &:first-of-type {
                         border-top: 0;
                     }

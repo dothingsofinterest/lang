@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Vocab as DataVocab } from "../../types/Data";
 import "./Vocab.scss";
 
@@ -9,10 +9,22 @@ interface VocabProps {
 
 const Vocab: React.FC<VocabProps> = ({ vocabs, onRendered }) => {
     const [vocabActive, setVocabActive] = useState(0);
+    const refAudio = useRef<HTMLAudioElement>(null);
     const handlersClickVocab = (index: number) => {
-        setVocabActive(index);
-        if (onRendered !== undefined) {
-            onRendered(index);
+        if (vocabs.length > 0) {
+            setVocabActive(index);
+            const vocab = vocabs[index];
+            if (vocab && vocab.pronunciation) {
+                if (refAudio.current) {
+                    const audio = refAudio.current;
+                    audio.src = vocab.pronunciation;
+                    audio.load();
+                    audio.play();
+                }
+            }
+            if (onRendered !== undefined) {
+                onRendered(index);
+            }
         }
     };
     useEffect(() => {
@@ -34,6 +46,9 @@ const Vocab: React.FC<VocabProps> = ({ vocabs, onRendered }) => {
                         );
                     })}
             </div>
+            <section style={{ display: "hidden" }}>
+                <audio ref={refAudio}></audio>
+            </section>
         </div>
     );
 };

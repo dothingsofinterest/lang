@@ -4,11 +4,10 @@ import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
 import VideoSettings from "../views/VideoSettings/Index";
 import VideoScript from "../views/VideoScript/Index";
-import VideoLearn from "../views/VideoLearn/Index";
+import VideoRead from "../views/VideoRead/Index";
 import VideoMeaning from "../views/VideoMeaning/Index";
 import VideoListen from "../views/VideoListen/Index";
 import VideoWord from "../views/VideoWord/Index";
-import VideoPlay from "../views/VideoPlay/Index";
 import VideoTranslate from "../views/VideoTranslate/Index";
 import DiaryIndex from "../views/DiaryIndex/Index";
 
@@ -34,8 +33,8 @@ const routes = [
                 element: <VideoScript />,
             },
             {
-                path: "video/learn",
-                element: <VideoLearn />,
+                path: "video/read",
+                element: <VideoRead />,
             },
             {
                 path: "video/meaning",
@@ -48,10 +47,6 @@ const routes = [
             {
                 path: "video/listen",
                 element: <VideoListen />,
-            },
-            {
-                path: "video/video",
-                element: <VideoPlay />,
             },
             {
                 path: "video/translate",

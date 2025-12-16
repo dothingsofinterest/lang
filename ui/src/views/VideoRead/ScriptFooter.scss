@@ -22,13 +22,14 @@
             flex: 1;
         }
         .pr {
-            flex: 0.5;
+            flex: 0.2;
         }
         .cn {
-            flex: 0.5;
+            flex: 0.6;
         }
         &.matched {
             font-weight: 900;
+            color: #499fe8;
         }
         &.matching {
             font-weight: 900;

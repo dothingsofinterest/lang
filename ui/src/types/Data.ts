@@ -19,6 +19,8 @@ interface FormattedData {
 interface Vocab {
     text: string;
     image: string;
+    voice: number;
+    speed: number;
     pronunciation: string;
 }
 
@@ -62,6 +64,7 @@ interface StateAuth {
 interface StatePlan {
     videoHash: string;
     videoURL: string;
+    videoAudioURL: string;
     videoAudioWaveformURL: string;
     script: {
         data: Script;
@@ -72,6 +75,7 @@ interface StatePlan {
     scriptWaveformZoom: number;
     listenMatchingVocab: number;
     meaningMatchingVocab: number;
+    wordMatchingVocab: number;
     videoMatchingSentence: number;
     videoMatchingSentencePos: number;
     translateMatchingSentence: number;
