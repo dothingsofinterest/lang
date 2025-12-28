@@ -19,4 +19,4 @@ Windows 下使用了 gulpfile.js 构建项目<br>
 
 # 界面截图
 
-![demo](assets/screenshot.png)
+![demo](assets/ui.png)
