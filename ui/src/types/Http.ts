@@ -19,17 +19,14 @@ interface RequestDataUpdatePassword {
     oldPassword: string;
     newPassword: string;
 }
-
 export type { RequestDataLogin, RequestDataUpdatePassword };
 /* AUTH */
 
 /* TTS */
-interface RequestParamsTts {
+export interface RequestParamsTts {
     id?: number;
     hash: string;
     content: string;
     type: number;
 }
-
-export type { RequestParamsTts };
 /* TTS */

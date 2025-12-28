@@ -9,46 +9,30 @@ interface RouteItem {
     url: string;
     icon: JSX.Element;
 }
-const routes = [
-    {
-        prefix: "video",
-        children: [
-            { url: "/video/settings", icon: <SettingFilled /> },
-            { url: "/video/script", icon: <ProfileFilled /> },
-            { url: "/video/read", icon: <ReadFilled /> },
-            { url: "/video/word", icon: <EyeFilled /> },
-            { url: "/video/listen", icon: <CustomerServiceFilled /> },
-            { url: "/video/meaning", icon: <BulbFilled /> },
-            { url: "/video/translate", icon: <TranslationOutlined /> },
-        ],
-    },
-    { prefix: "diary", children: [{ url: "/diary/index", icon: <EditFilled /> }] },
+const routes: RouteItem[] = [
+    { url: "/common/settings", icon: <SettingFilled /> },
+    { url: "/common/vocabs-watch", icon: <EyeFilled /> },
+    { url: "/common/vocabs-listen", icon: <CustomerServiceFilled /> },
+    { url: "/common/vocabs-meaning", icon: <BulbFilled /> },
+    { url: "/video/script", icon: <ProfileFilled /> },
+    { url: "/video/read", icon: <ReadFilled /> },
+    { url: "/video/translate", icon: <TranslationOutlined /> },
+    { url: "/diary/edit", icon: <EditFilled /> },
 ];
 const Menu = () => {
     const location = useLocation();
-    const URLPath = location.pathname.split("/");
-    const [currentRoutes, setCurrentRoutes] = useState<RouteItem[]>();
     useEffect(() => {
         return () => {};
     }, []);
-    useEffect(() => {
-        for (let i = 0; i < routes.length; i++) {
-            if (routes[i].prefix === URLPath[1]) {
-                setCurrentRoutes(routes[i].children);
-                break;
-            }
-        }
-    }, [location]);
     return (
         <aside id="menu">
-            {currentRoutes !== undefined &&
-                currentRoutes.map((value, key) => {
-                    return (
-                        <Link to={value.url} key={key}>
-                            <Button className={location.pathname + location.search === value.url ? `menu-item active` : `menu-item`} type="primary" icon={value.icon} />
-                        </Link>
-                    );
-                })}
+            {routes.map((value, key) => {
+                return (
+                    <Link to={value.url} key={key}>
+                        <Button className={location.pathname + location.search === value.url ? `menu-item active` : `menu-item`} type="primary" icon={value.icon} />
+                    </Link>
+                );
+            })}
         </aside>
     );
 };

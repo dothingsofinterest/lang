@@ -15,11 +15,27 @@ export const countVocabs = async (req: Request, res: Response) => {
             if (plan !== "temp") {
                 const scriptFile = path.join(`${basePath}`, plan, `script.json`);
                 if (fs.existsSync(scriptFile)) {
-                    const scriptBinary = await fsPromise.readFile(scriptFile);
-                    const scriptString = Buffer.from(scriptBinary).toString();
-                    const scriptObject = JSON.parse(scriptString);
-                    planVocabsCount += scriptObject.vocabs.length;
-                    planCount++;
+                    const fileBinary = await fsPromise.readFile(scriptFile);
+                    const fileString = Buffer.from(fileBinary).toString();
+                    if (fileString.length > 0) {
+                        const fileObject = JSON.parse(fileString);
+                        if (fileObject.hasOwnProperty("vocabs")) {
+                            planVocabsCount += fileObject.vocabs.length;
+                            planCount++;
+                        }
+                    }
+                }
+                const diaryFile = path.join(`${basePath}`, plan, `diary.json`);
+                if (fs.existsSync(diaryFile)) {
+                    const fileBinary = await fsPromise.readFile(diaryFile);
+                    const fileString = Buffer.from(fileBinary).toString();
+                    if (fileString.length > 0) {
+                        const fileObject = JSON.parse(fileString);
+                        if (fileObject.hasOwnProperty("vocabs")) {
+                            planVocabsCount += fileObject.vocabs.length;
+                            planCount++;
+                        }
+                    }
                 }
             }
         }
@@ -32,8 +48,7 @@ export const countVocabs = async (req: Request, res: Response) => {
             },
         });
     } catch (error: any) {
-        console.error(error.message, error);
-        LoggerSystem.error(error.message);
+        LoggerSystem.error(error);
         return res.status(200).json({
             code: 0,
             message: `Failed.`,

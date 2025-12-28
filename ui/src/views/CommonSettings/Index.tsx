@@ -3,32 +3,34 @@ import { Layout, Input, Button, Upload } from "antd";
 import { PlusCircleOutlined, UploadOutlined, DownloadOutlined, LineChartOutlined, SearchOutlined } from "@ant-design/icons";
 import store, { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateVideoHash, updateVideoMatchingSentence, updateTranslateMatchingSentence, updateProcessings, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData } from "../../stores/reducers/plan";
+import { updateHash, updateType, updateVideoMatchingSentence, updateVideoTranslateMatchingSentence, updateProcessings, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateDiaryData } from "../../stores/reducers/plan";
 import { clearToken } from "../../stores/reducers/auth";
-import { fnValidateJsonFile } from "../../utils/script";
-import { videoImport, videoDealWith, importData, exportData, planCountVocabs, planSearch, concatAudio } from "../../api/requestAuth";
+import { fnValidateVideoScript } from "../../utils/script";
+import { fnValidateDiary } from "../../utils/diary";
+import { videoImport, videoInit, importData, exportData, planCountVocabs, planSearch, concatAudio } from "../../api/requestAuth";
 import { Domain } from "../../settings.js";
 import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state: RootState) => state.plan);
-    const script = useSelector((state: RootState) => state.plan.script.data);
+    const script = useSelector((state: RootState) => state.plan.script);
+    const diary = useSelector((state: RootState) => state.plan.diary);
     const processings = useSelector((state: RootState) => state.plan.processings);
     const [keywords, setKeywords] = useState("");
     const handlersImportVideo = async (file: any) => {
-        if (/^(.+?)\.(mp4|MP4)$/g.test(file.name) && file.type === "video/mp4") {
+        if (/^(.+?)\.(mp4)$/g.test(file.name) && file.type === "video/mp4") {
             dispatch(updateProcessings({ buttonID: 0, buttonStatus: true }));
             try {
                 const formData = new FormData();
                 formData.append("file", file);
                 const res = await videoImport(formData);
                 if (res.code === 1) {
-                    dispatch(updateVideoHash(res.data.plan));
+                    dispatch(updateHash(res.data.plan));
                     dispatch(updateVideoMatchingSentence(0));
-                    dispatch(updateTranslateMatchingSentence(0));
+                    dispatch(updateVideoTranslateMatchingSentence(0));
                     dispatch(updateVideoURL(URL.createObjectURL(file)));
-                    const resWaveform = await videoDealWith({ plan: res.data.plan });
+                    const resWaveform = await videoInit({ plan: res.data.plan });
                     if (resWaveform.code === 1) {
                         dispatch(updateVideoAudioWaverURL(resWaveform.data.audiowaveform));
                         dispatch(updateVideoAudioURL(resWaveform.data.audio));
@@ -47,22 +49,31 @@ const Index = () => {
         return false;
     };
     const handlersImportData = async (file: any) => {
-        if (plan.videoHash && plan.videoURL) {
+        if (plan.hash && plan.videoURL) {
             if (/^(.+?)\.(zip|ZIP)$/g.test(file.name) && file.type === "application/x-zip-compressed") {
                 dispatch(updateProcessings({ buttonID: 1, buttonStatus: true }));
                 try {
                     const formData = new FormData();
                     formData.append("file", file);
-                    const res = await importData({ plan: plan.videoHash }, formData);
+                    const res = await importData({ plan: plan.hash }, formData);
                     if (res.code === 1) {
-                        const res = await fetch(`${Domain}/data/${plan.videoHash}/script.json?${Date.now()}`);
-                        const script = await res.json();
-                        if (fnValidateJsonFile(script)) {
+                        const resScript = await fetch(`${Domain}/data/${plan.hash}/script.json?${Date.now()}`);
+                        const script = await resScript.json();
+                        if (fnValidateVideoScript(script)) {
+                            dispatch(updateType(1));
                             dispatch(updateScriptData(script));
-                            document.title = script.title;
                         } else {
                             alert(`Script format is invalid.`);
                         }
+                        const resDiary = await fetch(`${Domain}/data/${plan.hash}/diary.json?${Date.now()}`);
+                        const diary = await resDiary.json();
+                        if (fnValidateDiary(diary)) {
+                            dispatch(updateType(2));
+                            dispatch(updateDiaryData(diary));
+                        } else {
+                            alert(`Diary format is invalid.`);
+                        }
+                        document.title = script.title || diary.title;
                     } else {
                         alert(res.message);
                     }
@@ -80,14 +91,14 @@ const Index = () => {
         return false;
     };
     const handlersExportData = async () => {
-        if (plan.videoHash && plan.videoURL) {
+        if (plan.hash && plan.videoURL && plan.data.title) {
             try {
                 const handle = await (window as any).showSaveFilePicker({
                     suggestedName: `data.zip`,
-                    types: [{ description: script.title, accept: { "application/zip": [".zip"] } }],
+                    types: [{ description: `data`, accept: { "application/zip": [".zip"] } }],
                 });
                 const writable = await handle.createWritable();
-                const resBlob = await exportData({ plan: plan.videoHash });
+                const resBlob = await exportData({ plan: plan.hash });
                 const blob = new Blob([resBlob], { type: "application/zip" });
                 await writable.write(blob);
                 await writable.close();
@@ -95,18 +106,18 @@ const Index = () => {
                 console.error("save error: ", error);
             }
         } else {
-            alert("Please create a plan.");
+            alert("Please create a plan or type a title.");
         }
     };
     const handlersExportAudio = async () => {
-        if (plan.videoHash && plan.videoURL) {
+        if (plan.hash && plan.videoURL) {
             try {
                 const handle = await await (window as any).showSaveFilePicker({
                     suggestedName: `${script.title}.mp3`,
                     types: [{ description: script.title, accept: { "audio/mpeg": [".mp3"] } }],
                 });
                 const writable = await handle.createWritable();
-                const resBlob = await concatAudio({ plan: plan.videoHash });
+                const resBlob = await concatAudio({ plan: plan.hash });
                 const blob = new Blob([resBlob], { type: "audio/mpeg" });
                 await writable.write(blob);
                 await writable.close();
@@ -140,18 +151,18 @@ const Index = () => {
         <Layout className="main-inner" id="video-settings">
             <div className="main-inner-item-main">
                 <section className="sec">
-                    <Upload className="sec-item" showUploadList={false} beforeUpload={handlersImportVideo} disabled={processings[0] || !!script.title}>
-                        <Button icon={<PlusCircleOutlined />} disabled={!!script.title} loading={processings[0]}>
-                            Upload video to create a study plan
+                    <Upload className="sec-item" showUploadList={false} beforeUpload={handlersImportVideo} disabled={processings[0] || !!plan.data.title}>
+                        <Button icon={<PlusCircleOutlined />} disabled={!!plan.data.title} loading={processings[0]}>
+                            Upload a video
                         </Button>
                     </Upload>
                     <div className="sec-item">
-                        <Input addonBefore="Plan" value={plan.videoHash} disabled />
+                        <Input addonBefore="Plan" value={plan.hash} disabled />
                     </div>
                 </section>
                 <section className="sec">
-                    <Upload className="sec-item" beforeUpload={handlersImportData} showUploadList={false} disabled={!!script.title}>
-                        <Button icon={<UploadOutlined />} disabled={!!script.title}>
+                    <Upload className="sec-item" beforeUpload={handlersImportData} showUploadList={false} disabled={!!plan.data.title}>
+                        <Button icon={<UploadOutlined />} disabled={!!plan.data.title}>
                             Import data
                         </Button>
                     </Upload>
@@ -182,8 +193,8 @@ const Index = () => {
                     </div>
                 </section>
                 <div className="tips">
-                    <p>【阅读】</p>
-                    <p>1. 阅读视频台词，理解单词意义、单词读法</p>
+                    <p>【语法 & 单词】</p>
+                    <p>1. 阅读视频台词，理解单词意义、读法</p>
                     <p>2. 阅读视频台词，深刻理解其中语法</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
@@ -194,8 +205,8 @@ const Index = () => {
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     <p>【口语】</p>
-                    <p>1. 每日写出视频台词中，汉语版的单词、短语、句子，以提高汉-英的词汇量</p>
-                    <p>2. 每日自言自语 + 写日记。</p>
+                    <p>1. 提高汉-英的词汇量。每日写出视频台词中，汉语版的单词、短语、句子</p>
+                    <p>2. 写日记。</p>
                 </div>
             </div>
         </Layout>

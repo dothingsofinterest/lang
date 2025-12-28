@@ -5,7 +5,7 @@ import { FastBackwardOutlined, FastForwardOutlined, BulbFilled, ClearOutlined, P
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateTranslateMatchingSentence, updateTranslateMatchingSentencePos } from "../../stores/reducers/plan";
+import { updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos } from "../../stores/reducers/plan";
 import Script from "../VideoRead/Script";
 import ReactDOMServer from "react-dom/server";
 import printJS from "print-js";
@@ -15,23 +15,23 @@ const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
-    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
-    const matchingSentence = useSelector((state: RootState) => state.plan.translateMatchingSentence);
+    const dataFormatted = useSelector((state: RootState) => state.plan.data);
+    const matchingSentence = useSelector((state: RootState) => state.plan.videoTranslateMatchingSentence);
     const [inputValue, setInputValue] = useState("");
     const refScrollbar = useRef<Scrollbars>(null);
     const refMatchingSentence = useRef({ matchingSentence: matchingSentence });
     const refAudio = useRef<HTMLAudioElement>(null);
     const handlersPlayBackward = () => {
         const index = matchingSentence - 1 <= 0 ? 0 : matchingSentence - 1;
-        dispatch(updateTranslateMatchingSentence(index));
+        dispatch(updateVideoTranslateMatchingSentence(index));
     };
     const handlersPlayForward = () => {
         const index = matchingSentence + 1 > dataFormatted.sentences.length ? matchingSentence : matchingSentence + 1;
-        dispatch(updateTranslateMatchingSentence(index));
+        dispatch(updateVideoTranslateMatchingSentence(index));
     };
     const handlersPanelActiveClear = () => {
         setInputValue("");
-        dispatch(updateTranslateMatchingSentence(0));
+        dispatch(updateVideoTranslateMatchingSentence(0));
     };
     const handlersTextInput = (value: string) => {
         setInputValue(value);
@@ -48,7 +48,7 @@ const Index = () => {
                 .trim();
             if (value === answer || inputText === answerText) {
                 setInputValue("");
-                dispatch(updateTranslateMatchingSentence(matchingSentence + 1));
+                dispatch(updateVideoTranslateMatchingSentence(matchingSentence + 1));
                 if (refAudio.current) {
                     refAudio.current.play();
                 }
@@ -57,46 +57,50 @@ const Index = () => {
     };
     const handlersInputTips = () => {
         if (dataFormatted.sentences.length > 0) {
-            let tips1 = ``;
-            let tips2 = ``;
-            const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-            const input = inputValue;
-            const answerText = answer
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
-                .toLowerCase()
-                .trim();
-            const inputText = input
-                .toLowerCase()
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
-                .toLowerCase()
-                .trim();
-            for (let i = 0; i < answer.length; i++) {
-                if (answer[i] === input[i]) {
-                    tips1 += answer[i];
-                } else {
-                    tips1 += "X";
-                    break;
+            if (dataFormatted.sentences[matchingSentence]) {
+                let tips1 = ``;
+                let tips2 = ``;
+                const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
+                const input = inputValue;
+                const answerText = answer
+                    .replace(/[\,\.\?\!\-\'\s]/g, "")
+                    .toLowerCase()
+                    .trim();
+                const inputText = input
+                    .toLowerCase()
+                    .replace(/[\,\.\?\!\-\'\s]/g, "")
+                    .toLowerCase()
+                    .trim();
+                for (let i = 0; i < answer.length; i++) {
+                    if (answer[i] === input[i]) {
+                        tips1 += answer[i];
+                    } else {
+                        tips1 += "X";
+                        break;
+                    }
                 }
-            }
-            for (let i = 0; i < answerText.length; i++) {
-                if (answerText[i] === inputText[i]) {
-                    tips2 += answerText[i];
-                } else {
-                    tips2 += "X";
-                    break;
+                for (let i = 0; i < answerText.length; i++) {
+                    if (answerText[i] === inputText[i]) {
+                        tips2 += answerText[i];
+                    } else {
+                        tips2 += "X";
+                        break;
+                    }
                 }
+                alert(`${answer}\r\n${tips1}\r\n---\r\n${answerText}\r\n${tips2}`);
+            } else {
+                alert(`Does not exist.`);
             }
-            alert(`${answer}\r\n${tips1}\r\n---\r\n${answerText}\r\n${tips2}`);
         }
     };
     const handlersRenderedCallback = (scrollTopPoint: number) => {
         const scrollTop = refScrollbar.current?.getScrollTop() || 0;
         const scrollTopPointValue = scrollTop + scrollTopPoint;
-        dispatch(updateTranslateMatchingSentencePos(scrollTopPointValue));
+        dispatch(updateVideoTranslateMatchingSentencePos(scrollTopPointValue));
         refScrollbar.current?.scrollTop(scrollTopPointValue);
     };
     const handlersPrint = () => {
-        if (plan.videoHash && plan.videoURL) {
+        if (plan.hash && plan.videoURL) {
             if (dataFormatted.title) {
                 const style1 = `
 					@media print {
@@ -145,9 +149,13 @@ const Index = () => {
         }
     };
     useEffect(() => {
-        if (!plan.videoHash || !plan.videoURL) {
+        if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/video/settings");
+            navigate("/common/settings");
+        }
+        if (plan.type !== 0 && plan.type !== 1) {
+            alert("This is not a video plan.");
+            navigate("/common/settings");
         }
         return () => {};
     }, []);
@@ -164,7 +172,9 @@ const Index = () => {
                     <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
                     <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
                 </section>
-                <Input.TextArea value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} autoSize placeholder="Please Translate to English" />
+                <Scrollbars>
+                    <Input.TextArea value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} autoSize placeholder="Please Translate to English" />
+                </Scrollbars>
                 <section style={{ display: "none" }}>
                     <audio ref={refAudio} src="/audio/paid.mp3"></audio>
                 </section>

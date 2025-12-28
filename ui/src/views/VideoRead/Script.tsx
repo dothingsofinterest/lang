@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FormattedData } from "../../types/Data";
+import { PlanData } from "../../types/Data";
 import ScriptFooter from "./ScriptFooter";
 import "./Script.scss";
 
 interface ScriptProps {
-    dataFormatted: FormattedData;
+    dataFormatted: PlanData;
     encn?: number;
     matchingSentence?: number;
     showFooter?: boolean;

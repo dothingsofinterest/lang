@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { updateListenMatchingVocab } from "../../stores/reducers/plan";
+import { updateVocabMatchListen } from "../../stores/reducers/plan";
 import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
-    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
-    const matchingVocab = useSelector((state: RootState) => state.plan.listenMatchingVocab);
+    const dataFormatted = useSelector((state: RootState) => state.plan.data);
+    const matchingVocab = useSelector((state: RootState) => state.plan.vocabMatchListen);
     const refScrollbar = useRef<Scrollbars>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refMatchingVocab = useRef({ matchingVocab });
@@ -24,7 +24,7 @@ const Index = () => {
             const answerText = dataFormatted.vocabs[matchingVocab].text.split(" | ")[0];
             if (inputText === answerText) {
                 const matchingVocabNext = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
-                dispatch(updateListenMatchingVocab(matchingVocabNext));
+                dispatch(updateVocabMatchListen(matchingVocabNext));
                 fnPlayAudio(matchingVocabNext);
                 if (refWordList.current) {
                     refWordList.current.querySelectorAll(".line").forEach((span: any, k) => {
@@ -41,17 +41,17 @@ const Index = () => {
     const handlersPlayBackward = () => {
         const matchingVocab = refMatchingVocab.current.matchingVocab;
         const index = matchingVocab - 1 <= 0 ? 0 : matchingVocab - 1;
-        dispatch(updateListenMatchingVocab(index));
+        dispatch(updateVocabMatchListen(index));
         fnPlayAudio(index);
     };
     const handlersPlayForward = () => {
         const matchingVocab = refMatchingVocab.current.matchingVocab;
         const index = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
-        dispatch(updateListenMatchingVocab(index));
+        dispatch(updateVocabMatchListen(index));
         fnPlayAudio(index);
     };
     const handlersPlayClear = () => {
-        dispatch(updateListenMatchingVocab(0));
+        dispatch(updateVocabMatchListen(0));
         fnPlayAudio(0);
         refScrollbar.current?.scrollTop(0);
     };
@@ -96,9 +96,9 @@ const Index = () => {
         return nums;
     };
     useEffect(() => {
-        if (!plan.videoHash || !plan.videoURL) {
+        if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/video/settings");
+            navigate("/common/settings");
         }
         fnPlayAudio(matchingVocab);
         const onKeyDownHandler = (event: KeyboardEvent) => {
@@ -140,9 +140,10 @@ const Index = () => {
                         {dataFormatted.vocabs.length > 0 &&
                             fnGetRandomNumbers().map((key) => {
                                 return (
-                                    <span key={key} className="item" onClick={() => handlersClickSelection(dataFormatted.vocabs[key].text)}>
-                                        {dataFormatted.vocabs[key].image ? <img src={dataFormatted.vocabs[key].image} /> : dataFormatted.vocabs[key].text.split(" | ")[2]}
-                                    </span>
+                                    <div key={key} className="item" onClick={() => handlersClickSelection(dataFormatted.vocabs[key].text)}>
+                                        {dataFormatted.vocabs[key].image && <img src={dataFormatted.vocabs[key].image} />}
+                                        <i className="cn">{dataFormatted.vocabs[key].text.split(" | ")[2]}</i>
+                                    </div>
                                 );
                             })}
                     </div>

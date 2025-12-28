@@ -5,7 +5,7 @@ import { BulbFilled, ClearOutlined, FastBackwardOutlined, FastForwardOutlined } 
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { updateMeaningMatchingVocab } from "../../stores/reducers/plan";
+import { updateVocabMatchMeaning } from "../../stores/reducers/plan";
 import debounce from "lodash.debounce";
 import "./Index.scss";
 
@@ -13,8 +13,8 @@ const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
-    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
-    const matchingVocab = useSelector((state: RootState) => state.plan.meaningMatchingVocab);
+    const dataFormatted = useSelector((state: RootState) => state.plan.data);
+    const matchingVocab = useSelector((state: RootState) => state.plan.vocabMatchMeaning);
     const [textareaValue, setTextareaValue] = useState("");
     const refShowcase = useRef<HTMLDivElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
@@ -27,12 +27,12 @@ const Index = () => {
     };
     const handlersPlayBackward = () => {
         const index = matchingVocab - 1 <= 0 ? 0 : matchingVocab - 1;
-        dispatch(updateMeaningMatchingVocab(index));
+        dispatch(updateVocabMatchMeaning(index));
         fnUpdateScroll();
     };
     const handlersPlayForward = () => {
         const index = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
-        dispatch(updateMeaningMatchingVocab(index));
+        dispatch(updateVocabMatchMeaning(index));
         fnUpdateScroll();
     };
     const handlersVocabTips = () => {
@@ -50,7 +50,7 @@ const Index = () => {
     };
     const handlersPlayClear = () => {
         setTextareaValue("");
-        dispatch(updateMeaningMatchingVocab(0));
+        dispatch(updateVocabMatchMeaning(0));
         fnUpdateScroll();
     };
     const fnDebouncedTypeVocab = useCallback(
@@ -59,7 +59,7 @@ const Index = () => {
             if (dataFormatted.vocabs.length > 0) {
                 if (dataFormatted.vocabs[matchingVocab].text.split(" | ")[0] === value) {
                     setTextareaValue("");
-                    dispatch(updateMeaningMatchingVocab(matchingVocab + 1 >= dataFormatted.vocabs.length ? 0 : matchingVocab + 1));
+                    dispatch(updateVocabMatchMeaning(matchingVocab + 1 >= dataFormatted.vocabs.length ? 0 : matchingVocab + 1));
                     if (refAudio.current) {
                         refAudio.current.play();
                     }
@@ -81,9 +81,9 @@ const Index = () => {
         }
     };
     useEffect(() => {
-        if (!plan.videoHash || !plan.videoURL) {
+        if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/video/settings");
+            navigate("/common/settings");
         }
         return () => {};
     }, []);
@@ -115,7 +115,7 @@ const Index = () => {
                                 <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "item matched" : "item matching") : "item"}>
                                     {value.image && <img src={value.image} />}
                                     <i className="cn">{value.text.split(" | ")[2]}</i>
-                                    <i className="en">{value.text.split(" | ")[0]}</i>
+                                    <i className="en">{value.text.split(" | ")[2]} - {value.text.split(" | ")[0]}</i>
                                 </div>
                             );
                         })}

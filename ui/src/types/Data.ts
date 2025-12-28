@@ -1,5 +1,51 @@
-/* Script */
-interface Script {
+/* Plan */
+export interface StateAuth {
+    ACCESS_TOKEN: string | undefined;
+}
+export interface StatePlan {
+    hash: string;
+    type: number;
+    videoURL: string;
+    videoAudioURL: string;
+    videoAudioWaveformURL: string;
+    videoScriptCurrentTime: number;
+    videoScriptWaveformZoom: number;
+    videoTranslateMatchingSentence: number;
+    videoTranslateMatchingSentencePos: number;
+    videoMatchingSentence: number;
+    videoMatchingSentencePos: number;
+    vocabMatchListen: number;
+    vocabMatchMeaning: number;
+    vocabMatchWatch: number;
+    scriptTimeOffset: number;
+    script: Script;
+    diary: Diary;
+    processings: boolean[];
+    data: PlanData;
+}
+export interface PayloadScript {
+    pKey?: number;
+    sKey?: number;
+    type?: number;
+    text?: string;
+}
+export interface PayloadPlan {
+    buttonID?: number;
+    buttonStatus?: boolean;
+}
+/* Plan */
+
+/* Data */
+export interface PlanData {
+    title: string;
+    vocabs: Vocab[];
+    grammars: string[];
+    date: string;
+    content: string;
+    scenes: Scene[];
+    sentences: Sentence[];
+}
+export interface Script {
     title: string;
     roles: string[];
     scenes: string[];
@@ -7,98 +53,34 @@ interface Script {
     grammars: string[];
     paragraphs: Paragraph[];
 }
-
-interface FormattedData {
-    title: string;
-    vocabs: Vocab[];
-    grammars: string[];
-    scenes: Scene[];
+export interface Paragraph {
+    key: string;
+    scene: string;
+    roles: string[];
     sentences: Sentence[];
 }
-
-interface Vocab {
+export interface Sentence {
+    key: string;
+    startTime: string;
+    endTime: string;
+    texts: string[];
+}
+export interface Scene {
+    name: string;
+    paragraphs: Paragraph[];
+}
+export interface Vocab {
     text: string;
     image: string;
     voice: number;
     speed: number;
     pronunciation: string;
 }
-
-interface Paragraph {
-    key: string;
-    scene: string;
-    roles: string[];
-    sentences: Sentence[];
-}
-
-interface Sentence {
-    key: string;
-    startTime: string;
-    endTime: string;
-    texts: string[];
-}
-
-interface Scene {
-    name: string;
-    paragraphs: Paragraph[];
-}
-
-export type { Script, FormattedData, Vocab, Paragraph, Sentence, Scene };
-/* Script */
-
-/* Diary */
-interface Diary {
+export interface Diary {
     title: string;
     date: string;
     content: string;
+    vocabs: Vocab[];
+    grammars: string[];
 }
-
-export type { Diary };
-/* Diary */
-
-/* Redux */
-interface StateAuth {
-    ACCESS_TOKEN: string | undefined;
-}
-
-interface StatePlan {
-    videoHash: string;
-    videoURL: string;
-    videoAudioURL: string;
-    videoAudioWaveformURL: string;
-    script: {
-        data: Script;
-        dataFormatted: FormattedData;
-        timeOffset: number;
-    };
-    scriptCurrentTime: number;
-    scriptWaveformZoom: number;
-    listenMatchingVocab: number;
-    meaningMatchingVocab: number;
-    wordMatchingVocab: number;
-    videoMatchingSentence: number;
-    videoMatchingSentencePos: number;
-    translateMatchingSentence: number;
-    translateMatchingSentencePos: number;
-    processings: boolean[];
-}
-
-interface PayloadScript {
-    pKey?: number;
-    sKey?: number;
-    type?: number;
-    text?: string;
-}
-
-interface PayloadPlan {
-    buttonID?: number;
-    buttonStatus?: boolean;
-}
-
-interface StateDiary {
-    data: Diary;
-    contentParsed: string[];
-}
-
-export type { StateAuth, StatePlan, PayloadScript, PayloadPlan, StateDiary };
-/* Redux */
+/* Data */

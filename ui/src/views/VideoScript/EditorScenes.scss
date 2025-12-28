@@ -1,0 +1,53 @@
+#video-script-editor-scenes {
+    .scene-temp {
+        display: flex;
+        height: 50px;
+        margin-bottom: 30px;
+        .ant-input {
+            flex: 1;
+            height: 100%;
+            border-radius: 0;
+            padding: 8px 10px;
+        }
+        .ant-btn {
+            height: 100%;
+            width: 80px;
+            border-radius: 0;
+            border-left: 0;
+        }
+    }
+    .scenes-item {
+        display: flex;
+        height: 40px;
+        .ant-input {
+            flex: 1;
+            height: 100%;
+            border-radius: 0;
+            padding: 8px 10px;
+        }
+        .ant-btn {
+            width: 80px;
+            height: 100%;
+            border-radius: 0;
+            border-left: 0;
+        }
+        & + .scenes-item {
+            .ant-input {
+                border-top: 0;
+            }
+            .ant-btn {
+                border-top: 0;
+            }
+        }
+    }
+    .scenes-submit {
+        display: flex;
+        margin-top: 30px;
+        button {
+            flex: 1;
+            padding: 20px 0;
+            border-radius: 0;
+            background-color: #ccc;
+        }
+    }
+}

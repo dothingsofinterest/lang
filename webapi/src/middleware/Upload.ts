@@ -27,27 +27,27 @@ const uploader = multer({
             try {
                 if (file.mimetype === "video/mp4") {
                     const plan = md5(file.originalname.split(".")[0]).slice(25);
-                    const uploadPath = path.join(`${basePath}`, `${plan}`);
-                    if (!fs.existsSync(uploadPath)) {
-                        fs.mkdirSync(uploadPath, { recursive: true });
+                    const planPath = path.join(`${basePath}`, `${plan}`);
+                    if (!fs.existsSync(planPath)) {
+                        fs.mkdirSync(planPath, { recursive: true });
                     }
-                    cb(null, uploadPath);
+                    cb(null, planPath);
                 } else if (file.mimetype === "application/x-zip-compressed" || file.mimetype === "application/json") {
                     const plan = `${req.query.plan}`;
                     if (plan === "undefined" || !/^[a-zA-Z0-9]+$/g.test(plan)) {
                         throw new Error("Plan parameter is missing.");
                     }
-                    const uploadPath = path.join(`${basePath}`, `${plan}`);
-                    if (!fs.existsSync(uploadPath)) {
+                    const planPath = path.join(`${basePath}`, `${plan}`);
+                    if (!fs.existsSync(planPath)) {
                         throw new Error("Plan does not exist.");
                     }
-                    cb(null, uploadPath);
+                    cb(null, planPath);
                 } else {
-                    const uploadPath = path.join(`${basePath}`, `temp`);
-                    if (!fs.existsSync(uploadPath)) {
-                        fs.mkdirSync(uploadPath, { recursive: true });
+                    const tempPath = path.join(`${basePath}`, `temp`);
+                    if (!fs.existsSync(tempPath)) {
+                        fs.mkdirSync(tempPath, { recursive: true });
                     }
-                    cb(null, uploadPath);
+                    cb(null, tempPath);
                 }
             } catch (error: any) {
                 console.error(error.message);
@@ -61,7 +61,7 @@ const uploader = multer({
             } else if (file.mimetype === "application/x-zip-compressed") {
                 cb(null, `data.zip`);
             } else if (file.mimetype === "application/json") {
-                cb(null, `script.json`);
+                cb(null, `${file.originalname}`);
             } else if (file.mimetype === "audio/mpeg") {
                 cb(null, `${file.originalname}`);
             } else if (file.mimetype === "audio/wav") {

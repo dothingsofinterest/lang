@@ -1,0 +1,111 @@
+#common-editor-vocabs-index {
+    textarea {
+        border-radius: 0;
+        border: 1px solid #ccc;
+        min-height: 100px !important;
+        resize: none;
+        &:focus {
+            border-color: 0;
+        }
+    }
+    .text-image-btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        .text {
+            flex: 1;
+        }
+        .image {
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            height: 32px;
+            width: 32px;
+        }
+        .ant-upload-wrapper {
+            .ant-btn {
+                border-radius: 0;
+                width: 32px;
+                height: 32px;
+                background-color: #ccc;
+                &:hover {
+                    border: 0;
+                    color: rgba(0, 0, 0, 0.88);
+                }
+            }
+        }
+    }
+    .audio-btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        .play {
+            flex: 1;
+            border-radius: 0;
+        }
+        .gen {
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+        }
+        .ant-upload-wrapper {
+            .ant-btn {
+                border-radius: 0;
+                width: 32px;
+                height: 32px;
+                background-color: #ccc;
+                &:hover {
+                    border: 0;
+                    color: rgba(0, 0, 0, 0.88);
+                }
+            }
+        }
+        .ant-select-selector {
+            border-radius: 0;
+            border-right: 0;
+            &:hover {
+                border-color: #ccc !important;
+            }
+        }
+    }
+    .btn {
+        display: flex;
+        button {
+            flex: 1;
+            padding: 20px 0;
+            border-radius: 0;
+            background-color: #ccc;
+        }
+    }
+    .vocab-list {
+        color: #000;
+        margin-top: 20px;
+        background: #ccc;
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0;
+            padding: 0px 10px;
+            border-top: 1px dotted #000;
+            font-size: 12px;
+            height: 36px;
+            &.active {
+                font-weight: 900;
+            }
+            &:first-child {
+                border: 0;
+            }
+            .index {
+                font-weight: 900;
+                font-style: normal;
+                margin-right: 4px;
+            }
+            img {
+                width: 26px;
+                height: 26px;
+            }
+        }
+    }
+}

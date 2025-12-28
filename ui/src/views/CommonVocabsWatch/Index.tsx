@@ -5,15 +5,15 @@ import { RootState } from "../../stores";
 import { BulbFilled, ClearOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { updateWordMatchingVocab } from "../../stores/reducers/plan";
+import { updateVocabMatchWatch } from "../../stores/reducers/plan";
 import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
-    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
-    const wordMatchingVocab = useSelector((state: RootState) => state.plan.wordMatchingVocab);
+    const dataFormatted = useSelector((state: RootState) => state.plan.data);
+    const wordMatchingVocab = useSelector((state: RootState) => state.plan.vocabMatchWatch);
     const refWordList = useRef<HTMLDivElement>(null);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refAudioTips = useRef<HTMLAudioElement>(null);
@@ -22,7 +22,7 @@ const Index = () => {
         const inputText = text.split(" | ")[0];
         const answerText = dataFormatted.vocabs[wordMatchingVocab].text.split(" | ")[0];
         if (inputText === answerText) {
-            dispatch(updateWordMatchingVocab(wordMatchingVocab + 1 >= dataFormatted.vocabs.length ? wordMatchingVocab : wordMatchingVocab + 1));
+            dispatch(updateVocabMatchWatch(wordMatchingVocab + 1 >= dataFormatted.vocabs.length ? wordMatchingVocab : wordMatchingVocab + 1));
             if (refAudio.current) {
                 refAudio.current.play();
             }
@@ -70,13 +70,13 @@ const Index = () => {
         }
     };
     const handlersPlayClear = () => {
-        dispatch(updateWordMatchingVocab(0));
+        dispatch(updateVocabMatchWatch(0));
         refScrollbar.current?.scrollTop(0);
     };
     useEffect(() => {
-        if (!plan.videoHash || !plan.videoURL) {
+        if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/video/settings");
+            navigate("/common/settings");
         }
         return () => {};
     }, []);

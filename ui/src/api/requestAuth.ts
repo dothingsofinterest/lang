@@ -60,28 +60,28 @@ export const OAuthUpdatePassword = (data: RequestDataUpdatePassword): Promise<Re
 };
 // User
 
-// Video
+// Plan Video
 export const videoImport = (data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/import`,
+        url: `/plan/video/import`,
         data: data,
     });
 };
-export const videoDealWith = (params: object): Promise<Response> => {
+export const videoInit = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: "/video/dealWith",
+        url: "/plan/video/init",
         params: params,
     });
 };
-// Video
+// Plan Video
 
-// Data
+// Plan Data
 export const importData = (params: Object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/import`,
+        url: `/plan/data/import`,
         data: data,
         params: params,
     });
@@ -89,15 +89,15 @@ export const importData = (params: Object, data: FormData): Promise<Response> =>
 export const exportData = (params: object): Promise<Blob> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/export`,
+        url: `/plan/data/export`,
         responseType: "blob",
         params: params,
     });
 };
-export const scriptSync = (params: Object, data: FormData): Promise<Response> => {
+export const dataSync = (params: Object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/script_sync`,
+        url: `plan/data/sync`,
         data: data,
         params: params,
     });
@@ -105,7 +105,7 @@ export const scriptSync = (params: Object, data: FormData): Promise<Response> =>
 export const vocabImageUpload = (params: object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/vocab_image_upload`,
+        url: `/plan/data/vocab_image_upload`,
         data: data,
         params: params,
     });
@@ -113,7 +113,7 @@ export const vocabImageUpload = (params: object, data: FormData): Promise<Respon
 export const vocabPronunciationUpload = (params: object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/vocab_pronunciation_upload`,
+        url: `/plan/data/vocab_pronunciation_upload`,
         data: data,
         params: params,
     });
@@ -121,46 +121,46 @@ export const vocabPronunciationUpload = (params: object, data: FormData): Promis
 export const vocabPronunciationGenerate = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/vocab_pronunciation_generate`,
+        url: `/plan/data/vocab_pronunciation_generate`,
         params: params,
     });
 };
 export const vocabImagePronunciationMove = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/vocab_image_pronunciation_move`,
+        url: `/plan/data/vocab_image_pronunciation_move`,
         params: params,
     });
 };
 export const vocabImagePronunciationRemove = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/vocab_image_pronunciation_remove`,
+        url: `/plan/data/vocab_image_pronunciation_remove`,
         params: params,
     });
 };
 export const concatAudio = (params: object): Promise<Blob> => {
     return requestInstance.request({
         method: "post",
-        url: `/data/audio_concat`,
+        url: `/plan/data/audio_concat`,
         responseType: "blob",
         params: params,
     });
 };
-// Data
+// Plan Data
 
-// Plan
+// Statistics
 export const planCountVocabs = (): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/plan/count_vocabs`,
+        url: `/statistics/count_vocabs`,
     });
 };
 export const planSearch = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/plan/search`,
+        url: `/statistics/search`,
         params: params,
     });
 };
-// Plan
+// Statistics

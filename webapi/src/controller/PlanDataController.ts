@@ -79,11 +79,17 @@ export const dataExport = async (req: Request, res: Response) => {
     }
 };
 
-export const scriptSync = async (req: Request, res: Response) => {
+export const dataSync = async (req: Request, res: Response) => {
     if (!req.file) {
         return res.status(200).json({
             code: 0,
             message: `Failed.`,
+        });
+    }
+    if (!fs.existsSync(req.file.path)) {
+        return res.status(200).json({
+            code: 0,
+            message: `Data file does not exist.`,
         });
     }
     const scriptBinary = await fsPromise.readFile(req.file.path);
@@ -175,7 +181,7 @@ export const vocabPronunciationGenerate = async (req: Request, res: Response) =>
 export const vocabImagePronunciationMove = (req: Request, res: Response) => {
     const schema = Joi.object({
         plan: Joi.string().required(),
-        vocabImage: Joi.string().required(),
+        vocabImage: Joi.string().allow(null, ""),
         vocabPronunciation: Joi.string().required(),
     });
     const { error, value } = schema.validate(req.query);
@@ -198,13 +204,15 @@ export const vocabImagePronunciationMove = (req: Request, res: Response) => {
         if (!fs.existsSync(tempPath)) {
             fs.mkdirSync(tempPath, { recursive: true });
         }
-        const imageTempFile = path.join(tempPath, value.vocabImage);
-        if (fs.existsSync(imageTempFile)) {
-            fs.renameSync(imageTempFile, path.join(planPath, "vocab_images", value.vocabImage));
-        }
         const pronunciationTempFile = path.join(tempPath, value.vocabPronunciation);
         if (fs.existsSync(pronunciationTempFile)) {
             fs.renameSync(pronunciationTempFile, path.join(planPath, "vocab_pronunciations", value.vocabPronunciation));
+        }
+        if (value.vocabImage) {
+            const imageTempFile = path.join(tempPath, value.vocabImage);
+            if (fs.existsSync(imageTempFile)) {
+                fs.renameSync(imageTempFile, path.join(planPath, "vocab_images", value.vocabImage));
+            }
         }
         res.status(200).json({
             code: 1,

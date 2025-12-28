@@ -3,7 +3,7 @@ import { Layout, Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import WaveSurfer from "wavesurfer.js";
 import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, RedoOutlined } from "@ant-design/icons";
-import { updateProcessings, updateScriptCurrentTime, updateScriptWaveformZoom } from "../../stores/reducers/plan";
+import { updateProcessings, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom } from "../../stores/reducers/plan";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime } from "../../utils/script";
@@ -16,8 +16,8 @@ const Index = () => {
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
     const processings = useSelector((state: RootState) => state.plan.processings);
-    const currentTime = useSelector((state: RootState) => state.plan.scriptCurrentTime);
-    const waveformZoom = useSelector((state: RootState) => state.plan.scriptWaveformZoom);
+    const currentTime = useSelector((state: RootState) => state.plan.videoScriptCurrentTime);
+    const waveformZoom = useSelector((state: RootState) => state.plan.videoScriptWaveformZoom);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [videoCanPlay, setVideoCanPlay] = useState(false);
     const refVideo = useRef<HTMLVideoElement>(null);
@@ -30,7 +30,7 @@ const Index = () => {
             const SRTTime = fnFloatToSRTTime(floatTime);
             refVideo.current.currentTime = floatTime;
             refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
-            dispatch(updateScriptCurrentTime(floatTime));
+            dispatch(updateVideoScriptCurrentTime(floatTime));
             await navigator.clipboard.writeText(SRTTime);
         }
     };
@@ -40,7 +40,7 @@ const Index = () => {
             const SRTTime = fnFloatToSRTTime(floatTime);
             refVideo.current.currentTime = floatTime;
             refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
-            dispatch(updateScriptCurrentTime(floatTime));
+            dispatch(updateVideoScriptCurrentTime(floatTime));
             await navigator.clipboard.writeText(SRTTime);
         }
     };
@@ -66,7 +66,7 @@ const Index = () => {
         }
     };
     const handlersVideoSlide = (e: any) => {
-        dispatch(updateScriptWaveformZoom(e.target?.valueAsNumber));
+        dispatch(updateVideoScriptWaveformZoom(e.target?.valueAsNumber));
     };
     const handlersVideoCanPlayThrough = () => {
         setVideoCanPlay(true);
@@ -76,19 +76,19 @@ const Index = () => {
         // console.log("video current time SRC:", fnFloatToSRTTime(e.target.currentTime));
     };
     const handlersVideoTagOnEnded = () => {
-        dispatch(updateScriptCurrentTime(0));
+        dispatch(updateVideoScriptCurrentTime(0));
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoTagOnPaused = async (e: any) => {
         const SRTTime = fnFloatToSRTTime(e.target.currentTime);
-        dispatch(updateScriptCurrentTime(e.target.currentTime));
+        dispatch(updateVideoScriptCurrentTime(e.target.currentTime));
         await navigator.clipboard.writeText(SRTTime);
     };
     const handlersCreateWaver = async () => {
         if (videoCanPlay === true) {
             if (!refWavesurfer.current) {
                 dispatch(updateProcessings({ buttonID: 4, buttonStatus: true }));
-                const res = await fetch(`${Domain}/data/${plan.videoHash}/${plan.videoAudioWaveformURL}?${Date.now()}`);
+                const res = await fetch(`${Domain}/data/${plan.hash}/${plan.videoAudioWaveformURL}?${Date.now()}`);
                 const jsonData = await res.json();
                 if (jsonData.data.length > 0) {
                     refWavesurfer.current = WaveSurfer.create({
@@ -108,7 +108,7 @@ const Index = () => {
                     refWavesurfer.current.on("click", async () => {
                         const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
                         const SRTTime = fnFloatToSRTTime(currentTime);
-                        dispatch(updateScriptCurrentTime(currentTime));
+                        dispatch(updateVideoScriptCurrentTime(currentTime));
                         await navigator.clipboard.writeText(SRTTime);
                     });
                     refWavesurfer.current.on("loading", (percent) => {
@@ -134,9 +134,13 @@ const Index = () => {
         }
     };
     useEffect(() => {
-        if (!plan.videoHash || !plan.videoURL) {
+        if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/video/settings");
+            navigate("/common/settings");
+        }
+        if (plan.type !== 0 && plan.type !== 1) {
+            alert("This is not a video plan.");
+            navigate("/common/settings");
         }
         return () => {
             if (refWavesurfer.current) {

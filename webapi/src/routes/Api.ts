@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import { videoImport, videoDealWith } from "../controller/VideoController";
-import { dataImport, dataExport, scriptSync, vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove, audioConcat } from "../controller/DataController";
 import { countVocabs, search } from "../controller/PlanController";
+import { videoImport, videoInit } from "../controller/PlanVideoController";
+import { dataImport, dataExport, dataSync, vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove, audioConcat } from "../controller/PlanDataController";
 import { upload } from "../middleware/Upload";
 
 const router = express.Router();
@@ -9,27 +9,27 @@ const router = express.Router();
 // Index
 router.get("/", (res: Response) => res.json({ code: 1, message: "success" }));
 
-// Video
-router.post("/video/import", upload, videoImport);
-router.post("/video/dealWith", videoDealWith);
-// Video
+// Plan Video
+router.post("/plan/video/import", upload, videoImport);
+router.post("/plan/video/init", videoInit);
+// Plan Video
 
-// Data
-router.post("/data/export", dataExport);
-router.post("/data/import", upload, dataImport);
-router.post("/data/script_sync", upload, scriptSync);
-router.post("/data/vocab_image_upload", upload, vocabImageUpload);
-router.post("/data/vocab_pronunciation_upload", upload, vocabPronunciationUpload);
-router.post("/data/vocab_pronunciation_generate", vocabPronunciationGenerate);
-router.post("/data/vocab_image_pronunciation_move", vocabImagePronunciationMove);
-router.post("/data/vocab_image_pronunciation_remove", vocabImagePronunciationRemove);
-router.post("/data/audio_concat", audioConcat);
-// Data
+// Plan Data
+router.post("/plan/data/import", upload, dataImport);
+router.post("/plan/data/export", dataExport);
+router.post("/plan/data/sync", upload, dataSync);
+router.post("/plan/data/vocab_image_upload", upload, vocabImageUpload);
+router.post("/plan/data/vocab_pronunciation_upload", upload, vocabPronunciationUpload);
+router.post("/plan/data/vocab_pronunciation_generate", vocabPronunciationGenerate);
+router.post("/plan/data/vocab_image_pronunciation_move", vocabImagePronunciationMove);
+router.post("/plan/data/vocab_image_pronunciation_remove", vocabImagePronunciationRemove);
+router.post("/plan/data/audio_concat", audioConcat);
+// Plan Data
 
-// Plan
-router.post("/plan/count_vocabs", countVocabs);
-router.post("/plan/search", search);
-// Plan
+// Statistics
+router.post("/statistics/count_vocabs", countVocabs);
+router.post("/statistics/search", search);
+// Statistics
 
 // User
 router.post("/logout", (req: Request, res: Response) => res.json({ code: 1, message: "success" }));

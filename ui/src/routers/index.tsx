@@ -2,14 +2,14 @@ import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react
 import Login from "../views/Public/Login";
 import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
-import VideoSettings from "../views/VideoSettings/Index";
+import CommonSettings from "../views/CommonSettings/Index";
+import CommonVocabsListen from "../views/CommonVocabsListen/Index";
+import CommonVocabsWatch from "../views/CommonVocabsWatch/Index";
+import CommonVocabsMeaning from "../views/CommonVocabsMeaning/Index";
 import VideoScript from "../views/VideoScript/Index";
 import VideoRead from "../views/VideoRead/Index";
-import VideoMeaning from "../views/VideoMeaning/Index";
-import VideoListen from "../views/VideoListen/Index";
-import VideoWord from "../views/VideoWord/Index";
 import VideoTranslate from "../views/VideoTranslate/Index";
-import DiaryIndex from "../views/DiaryIndex/Index";
+import DiaryEdit from "../views/DiaryEdit/Index";
 
 const routes = [
     {
@@ -22,11 +22,23 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="video/settings" replace />,
+                element: <Navigate to="common/settings" replace />,
             },
             {
-                path: "video/settings",
-                element: <VideoSettings />,
+                path: "common/settings",
+                element: <CommonSettings />,
+            },
+            {
+                path: "common/vocabs-listen",
+                element: <CommonVocabsListen />,
+            },
+            {
+                path: "common/vocabs-watch",
+                element: <CommonVocabsWatch />,
+            },
+            {
+                path: "common/vocabs-meaning",
+                element: <CommonVocabsMeaning />,
             },
             {
                 path: "video/script",
@@ -37,24 +49,12 @@ const routes = [
                 element: <VideoRead />,
             },
             {
-                path: "video/meaning",
-                element: <VideoMeaning />,
-            },
-            {
-                path: "video/word",
-                element: <VideoWord />,
-            },
-            {
-                path: "video/listen",
-                element: <VideoListen />,
-            },
-            {
                 path: "video/translate",
                 element: <VideoTranslate />,
             },
             {
-                path: "diary/index",
-                element: <DiaryIndex />,
+                path: "diary/edit",
+                element: <DiaryEdit />,
             },
         ],
     },

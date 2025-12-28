@@ -1,29 +1,29 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Input, Space, Button, Tree, Select, InputNumber, Mentions, Drawer, Upload } from "antd";
+import { Input, Space, Button, Tree, Select, InputNumber, Mentions } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, MinusCircleOutlined, PlusCircleOutlined, DownCircleOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled, RedoOutlined } from "@ant-design/icons";
+import { ScissorOutlined, FileWordOutlined, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { vocabImageUpload, vocabPronunciationUpload, vocabPronunciationGenerate, vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
-import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset, updateScriptVocabs, updateScriptVocabsByDelete } from "../../stores/reducers/plan";
-import { fnFloatToSRTTime, fnSRTTimeToFloat, fnGetMaxTimeFromSentences, fnParseVocabs } from "../../utils/script";
+import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
+import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptGrammars, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset, updateScriptVocabs, updateScriptVocabsByDelete } from "../../stores/reducers/plan";
+import { fnFloatToSRTTime, fnSRTTimeToFloat, fnGetMaxTimeFromSentences } from "../../utils/script";
 import { Vocab as DataVocab } from "../../types/Data";
-import { Domain } from "../../settings.js";
-import { md5 } from "js-md5";
-import Vocab from "./Vocab";
-import Grammar from "./Grammar";
+import EditorVocabs from "../CommonEditorVocabs/Index";
+import EditorGrammars from "../CommonEditorGrammars/Index";
+import EditorRoles from "./EditorRoles";
+import EditorScenes from "./EditorScenes";
 import "./Data.scss";
 
 const Data = React.memo(() => {
     const dispatch = useDispatch();
     const plan = useSelector((state: RootState) => state.plan);
     const script = useSelector((state: RootState) => state.plan.script);
-    const timeOffset = useSelector((state: RootState) => state.plan.script.timeOffset);
-    const [vocab, setVocab] = useState<DataVocab>({ text: "", image: "", voice: 0, speed: 150, pronunciation: "" });
-    const [parsedVocabs, setParsedVocabs] = useState("");
+    const timeOffset = useSelector((state: RootState) => state.plan.scriptTimeOffset);
     const [renderVersion, setRenderVersion] = useState(0);
-    const [vocabPanel, setVocabPanel] = useState(false);
-    const [vocabActive, setVocabActive] = useState(0);
+    const [vocabsEditor, setVocabsEditor] = useState(false);
+    const [sceneEditor, setSceneEditor] = useState(false);
+    const [rolesEditor, setRolesEditor] = useState(false);
+    const [grammarsEditor, setGrammarsEditor] = useState(false);
     const refScrollbar = useRef<Scrollbars>(null);
     const refPanel = useRef<HTMLDivElement>(null);
     const refCurSentenceKey = useRef("0-0");
@@ -32,7 +32,7 @@ const Data = React.memo(() => {
     // 使用方法：为已存在的字幕添加时间偏移，导出。再导入不再依赖偏移。
     const handlersSubUpdateTimeOffset = (value: number | null) => {
         if (value !== null && !isNaN(value)) {
-            const firstStartTime = script.data.paragraphs[0].sentences[0].startTime;
+            const firstStartTime = script.paragraphs[0].sentences[0].startTime;
             const firstStartTimeN = fnSRTTimeToFloat(firstStartTime) + value;
             if (firstStartTimeN > 0) {
                 dispatch(updateScriptTimeOffset(value));
@@ -84,16 +84,6 @@ const Data = React.memo(() => {
     const handlersSubUpdateName = (value: string) => {
         dispatch(updateScriptTitle({ text: value.trim() }));
     };
-    const handlersSubUpdateRoles = (value: string) => {
-        if (value.trim() !== script.data.roles.join("/")) {
-            dispatch(updateScriptRoles({ text: value.trim() }));
-        }
-    };
-    const handlersSubUpdateScenes = (value: string) => {
-        if (value.trim() !== script.data.scenes.join("/")) {
-            dispatch(updateScriptScenes({ text: value.trim() }));
-        }
-    };
     const handlersSubUpdateStartTime = (event: any, key: string) => {
         const keyInfo = key.split("-");
         dispatch(updateScriptSentenceTime({ pKey: parseInt(keyInfo[0]), sKey: parseInt(keyInfo[1]), type: 0, text: event.target.value.trim() }));
@@ -118,127 +108,53 @@ const Data = React.memo(() => {
     const handlersSubUpdateRole = (value: string, key: string) => {
         dispatch(updateScriptParagraphRole({ pKey: parseInt(key), text: value.trim() }));
     };
-    const handlersSwitchVocabPanel = () => {
-        setVocabPanel(!vocabPanel);
+    const handlersVocabsEditorOpen = () => {
+        setVocabsEditor(true);
     };
-    const handlersParseVocabs = (text: string) => {
-        setParsedVocabs(fnParseVocabs(text));
+    const handlersVocabsEditorClose = () => {
+        setVocabsEditor(false);
     };
-    const handlersUpdateVocabText = (value: string) => {
-        setVocab({ ...vocab, text: value });
-    };
-    const handlersUpdateVocabPronounceVoice = (value: number) => {
-        setVocab({ ...vocab, voice: value });
-    };
-    const handlersUpdateVocabPronounceSpeed = (value: number) => {
-        setVocab({ ...vocab, speed: value });
-    };
-    const handlersUpdateVocabImage = async (file: any) => {
-        if (vocab.text) {
-            if (/^(.+?)\.(png|jpg)$/g.test(file.name) && (file.type === "image/png" || file.type === "image/jpeg")) {
-                try {
-                    const part = vocab.text.split(" | ");
-                    const nameEN = part[0].replaceAll(/[\s\,\/\:\?\.]+/g, "_");
-                    const nameCNHash = md5(part[2]).slice(25);
-                    const name = `${nameEN}_${nameCNHash}.png`;
-                    const formData = new FormData();
-                    formData.append("file", file, name);
-                    const res = await vocabImageUpload({}, formData);
-                    if (res.code === 1) {
-                        setVocab({ ...vocab, image: res.data.filename });
-                    }
-                } catch (e: any) {
-                    alert(e.message);
-                }
-            } else {
-                alert("Please upload a png or jpg image.");
-            }
-        } else {
-            alert("Please type vocab text.");
-        }
-    };
-    const handlersPlayVocabPronunciation = async () => {
-        if (vocab.pronunciation) {
-            if (refAudio.current) {
-                refAudio.current.play();
-            }
-        }
-    };
-    const handlersGenerateVocabPronunciation = async () => {
-        if (vocab.text) {
-            try {
-                const part = vocab.text.split(" | ");
-                const content = part[0].replaceAll("/", ", ");
-                const filenameEN = part[0].replaceAll(/[\s\,\/\:\?\.]+/g, "_");
-                const filenameCNHash = md5(part[2]).slice(25);
-                const filename = `${filenameEN}_${filenameCNHash}.mp3`;
-                const res = await vocabPronunciationGenerate({ content, filename, voice: vocab.voice, speed: vocab.speed });
-                if (res.code) {
-                    setVocab({ ...vocab, pronunciation: filename });
-                    if (refAudio.current) {
-                        const audio = refAudio.current;
-                        audio.src = "data:audio/wav;base64," + res.data;
-                        audio.load();
-                        audio.play();
-                    }
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    };
-    const handlersUpdateVocabPronunciation = async (file: any) => {
-        if (vocab.text) {
-            if (/^(.+?)\.(mp3)$/g.test(file.name) && file.type === "audio/mpeg") {
-                try {
-                    const nameEN = vocab.text.split(" | ")[0].replaceAll(/[\s\,\/\:\?\.]+/g, "_");
-                    const nameCNHash = md5(vocab.text.split(" | ")[2]).slice(25);
-                    const name = `${nameEN}_${nameCNHash}.mp3`;
-                    const formData = new FormData();
-                    formData.append("file", file, name);
-                    const res = await vocabPronunciationUpload({}, formData);
-                    if (res.code === 1) {
-                        setVocab({ ...vocab, pronunciation: res.data.filename });
-                        if (refAudio.current) {
-                            const audio = refAudio.current;
-                            audio.src = `${Domain}/data/temp/${res.data.filename}`;
-                            audio.load();
-                            audio.play();
-                        }
-                    }
-                } catch (e: any) {
-                    alert(e.message);
-                }
-            } else {
-                alert("Please upload a wav format audio.");
-            }
-        } else {
-            alert("Please type vocab text.");
-        }
-    };
-    const handlersAddVocab = async () => {
+    const handlersVocabsEditorSubmit = async (vocab: DataVocab) => {
         if (vocab.text && vocab.pronunciation) {
-            const res = await vocabImagePronunciationMove({ plan: plan.videoHash, vocabImage: vocab.image ? vocab.image : "a.txt", vocabPronunciation: vocab.pronunciation });
+            const res = await vocabImagePronunciationMove({ plan: plan.hash, vocabImage: vocab.image ? vocab.image : "a.txt", vocabPronunciation: vocab.pronunciation });
             if (res.code === 1) {
                 dispatch(updateScriptVocabs(vocab));
-                setVocab({ text: "", image: "", voice: 0, speed: 150, pronunciation: "" });
-                setParsedVocabs("");
             }
         }
     };
-    const handlersRemoveVocab = async () => {
-        const confirmed = window.confirm("Do you confirm to delete?");
-        if (confirmed) {
-            dispatch(updateScriptVocabsByDelete({ pKey: vocabActive }));
-            setVocabActive(0);
-            const vocab = script.data.vocabs[vocabActive];
-            if (vocab && (vocab.image || vocab.pronunciation)) {
-                await vocabImagePronunciationRemove({ plan: plan.videoHash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
-            }
+    const handlersVocabsEditorRemove = async (index: number) => {
+        dispatch(updateScriptVocabsByDelete(index));
+        const vocab = script.vocabs[index];
+        if (vocab && (vocab.image || vocab.pronunciation)) {
+            await vocabImagePronunciationRemove({ plan: plan.hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
         }
     };
-    const handlersVocabOnRendered = (index: number) => {
-        setVocabActive(index);
+    const handlersScenesEditorOpen = () => {
+        setSceneEditor(true);
+    };
+    const handlersScenesEditorClose = () => {
+        setSceneEditor(false);
+    };
+    const handlersScenesEditorSubmit = async (scenes: string[]) => {
+        dispatch(updateScriptScenes(scenes));
+    };
+    const handlersGrammarsEditorOpen = () => {
+        setGrammarsEditor(true);
+    };
+    const handlersGrammarsEditorClose = () => {
+        setGrammarsEditor(false);
+    };
+    const handlersGrammarsEditorSubmit = async (grammars: string[]) => {
+        dispatch(updateScriptGrammars(grammars));
+    };
+    const handlersRolesEditorOpen = () => {
+        setRolesEditor(true);
+    };
+    const handlersRolesEditorClose = () => {
+        setRolesEditor(false);
+    };
+    const handlersRolesEditorSubmit = async (roles: string[]) => {
+        dispatch(updateScriptRoles(roles));
     };
     const handlersSubUpdateScene = (value: string, key: string) => {
         dispatch(updateScriptParagraphScene({ pKey: parseInt(key), text: value.trim() }));
@@ -257,7 +173,7 @@ const Data = React.memo(() => {
         }
     };
     const handlersResortData = () => {
-        const paragraphs = [...script.data.paragraphs];
+        const paragraphs = [...script.paragraphs];
         const n = paragraphs.length;
         for (let i = 0; i < n - 1; i++) {
             for (let j = 0; j < n - 1 - i; j++) {
@@ -284,12 +200,6 @@ const Data = React.memo(() => {
         setRenderVersion((prev) => prev + 1);
         alert("Succeed.");
     };
-    const handlersDownToMiddle = () => {
-        const grammarElement = document.getElementById("script-grammar");
-        if (grammarElement && grammarElement.offsetTop) {
-            refScrollbar.current?.scrollTop(grammarElement.offsetTop - 200 || 0);
-        }
-    };
     const filterPlusOffset = (SRTTime: string): string => {
         if (timeOffset) {
             const res = fnSRTTimeToFloat(SRTTime) + timeOffset;
@@ -308,7 +218,7 @@ const Data = React.memo(() => {
         refScrollbar.current?.scrollTop(refScrollTop.current);
     }, [renderVersion]);
     return (
-        <Scrollbars id="script" key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
+        <Scrollbars id="video-script-data" key={renderVersion} style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
             <div ref={refPanel} className="script-panel">
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubInsertParagraph}>
                     P
@@ -329,31 +239,35 @@ const Data = React.memo(() => {
                 <Button icon={<ToolFilled />} onClick={handlersResortData}>
                     Script
                 </Button>
-                <Button icon={<PlusSquareOutlined />} onClick={handlersSwitchVocabPanel}>
-                    Vocab
+                <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen}>
+                    Roles
                 </Button>
-                <Button icon={<MinusSquareOutlined />} onClick={handlersRemoveVocab}>
-                    Vocab
+                <Button icon={<DesktopOutlined />} onClick={handlersScenesEditorOpen}>
+                    Scenes
                 </Button>
-                <Button icon={<DownCircleOutlined />} onClick={handlersDownToMiddle} />
+                <Button icon={<FileWordOutlined />} onClick={handlersVocabsEditorOpen}>
+                    Vocabs
+                </Button>
+                <Button icon={<GoogleOutlined />} onClick={handlersGrammarsEditorOpen}>
+                    Grammars
+                </Button>
             </div>
             <div className="script-meta">
-                <Input defaultValue={script.data.title} onBlur={(e) => handlersSubUpdateName(e.target.value)} style={{ borderRadius: "0" }} placeholder="Script Title" />
-                <Input defaultValue={script.data.roles.join("/")} onBlur={(e) => handlersSubUpdateRoles(e.target.value)} placeholder="Role1-角色1/Role2-角色2" />
-                <Input defaultValue={script.data.scenes.join("/")} onBlur={(e) => handlersSubUpdateScenes(e.target.value)} placeholder="Scene1-场景1/Scene2-场景2" />
+                <Input defaultValue={script.title} onBlur={(e) => handlersSubUpdateName(e.target.value)} style={{ borderRadius: "0" }} placeholder="Script Title" />
             </div>
             <Tree
+                className="script-tree"
                 selectable={false}
                 style={{ height: "100%", borderRadius: "0" }}
                 fieldNames={{ key: "key", children: "sentences" }}
                 showLine
                 defaultExpandAll
-                treeData={script.data.paragraphs}
+                treeData={script.paragraphs}
                 titleRender={(item: any) => {
                     return item.roles ? (
-                        <div style={{ width: "100%", display: "flex" }}>
-                            <Select size="small" onChange={(v) => handlersSubUpdateScene(v, item.key)} defaultValue={item.scene} options={script.data.scenes.map((v) => ({ label: v, value: v }))} style={{ width: "426px", borderRadius: 0 }} />
-                            <Mentions autoSize onChange={(v) => handlersSubUpdateRole(v, item.key)} defaultValue={filterItemRoles(item.roles)} options={script.data.roles.map((v) => ({ label: v, value: v }))} style={{ fontSize: "12px", lineHeight: "22px", borderRadius: 0, marginLeft: "4px", height: "24px" }} placeholder="@Role1-角色1 @Role2-角色2" />
+                        <div className="tree-item-meta">
+                            <Select size="small" onChange={(v) => handlersSubUpdateScene(v, item.key)} defaultValue={item.scene} options={script.scenes.map((v) => ({ label: v, value: v }))} />
+                            <Mentions autoSize onChange={(v) => handlersSubUpdateRole(v, item.key)} defaultValue={filterItemRoles(item.roles)} options={script.roles.map((v) => ({ label: v, value: v }))} placeholder="@Role1-角色1 @Role2-角色2" />
                         </div>
                     ) : (
                         <div style={{ width: "100%" }}>
@@ -368,49 +282,10 @@ const Data = React.memo(() => {
                     );
                 }}
             />
-            <Grammar grammars={script.data.grammars} />
-            <Vocab vocabs={script.dataFormatted.vocabs} onRendered={handlersVocabOnRendered} />
-            <Drawer className="vocab-panel" title="Add a vocab" size="large" onClose={handlersSwitchVocabPanel} open={vocabPanel}>
-                <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />
-                <div className="text-image-btn">
-                    <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="pronunciation/pronunciations | prəˌnʌnsiˈeɪʃn | n.读音;发音" />
-                    <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}`} />}</div>
-                    <Upload beforeUpload={handlersUpdateVocabImage} showUploadList={false}>
-                        <Button icon={<PlusSquareOutlined />} />
-                    </Upload>
-                </div>
-                <div className="audio-btn">
-                    <Select
-                        style={{ width: 120 }}
-                        defaultValue={0}
-                        onChange={handlersUpdateVocabPronounceVoice}
-                        options={[
-                            { value: 0, label: "Man-0" },
-                            { value: 1, label: "Woman-1" },
-                        ]}
-                    />
-                    <Select
-                        style={{ width: 120 }}
-                        defaultValue={150}
-                        onChange={handlersUpdateVocabPronounceSpeed}
-                        options={[
-                            { value: 150, label: "Normal" },
-                            { value: 120, label: "Slow" },
-                            { value: 100, label: "Very Slow" },
-                        ]}
-                    />
-                    <Button className="play" onClick={handlersPlayVocabPronunciation}>
-                        {vocab.pronunciation}
-                    </Button>
-                    <Button className="gen" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
-                    <Upload beforeUpload={handlersUpdateVocabPronunciation} showUploadList={false}>
-                        <Button icon={<PlusSquareOutlined />} />
-                    </Upload>
-                </div>
-                <div className="btn">
-                    <Button icon={<PlusSquareOutlined />} onClick={handlersAddVocab} />
-                </div>
-            </Drawer>
+            <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
+            <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
+            <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} onRemove={handlersVocabsEditorRemove} />
+            <EditorGrammars grammars={script.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} onSubmit={handlersGrammarsEditorSubmit} />
             <section style={{ display: "none" }}>
                 <audio ref={refAudio}></audio>
             </section>

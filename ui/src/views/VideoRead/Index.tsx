@@ -16,7 +16,8 @@ const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
-    const dataFormatted = useSelector((state: RootState) => state.plan.script.dataFormatted);
+    console.log(plan);
+    const dataFormatted = useSelector((state: RootState) => state.plan.data);
     const videoURL = useSelector((state: RootState) => state.plan.videoURL);
     const matchingSentence = useSelector((state: RootState) => state.plan.videoMatchingSentence);
     const matchingSentencePos = useSelector((state: RootState) => state.plan.videoMatchingSentencePos);
@@ -128,7 +129,7 @@ const Index = () => {
         refScrollbar.current?.scrollTop(scrollTopPointValue);
     };
     const handlersPrint = () => {
-        if (plan.videoHash && plan.videoURL) {
+        if (plan.hash && plan.videoURL) {
             if (dataFormatted.title) {
                 const style1 = `
 					@media print {
@@ -189,9 +190,13 @@ const Index = () => {
         }
     };
     useEffect(() => {
-        if (!plan.videoHash || !plan.videoURL) {
+        if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
-            navigate("/video/settings");
+            navigate("/common/settings");
+        }
+        if (plan.type !== 0 && plan.type !== 1) {
+            alert("This is not a video plan.");
+            navigate("/common/settings");
         }
         const videoElem = refVideo.current;
         const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {

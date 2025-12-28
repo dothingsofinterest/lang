@@ -1,5 +1,5 @@
-import { Script as DataScript, FormattedData, Paragraph as DataParagraph, Sentence } from "../types/Data";
-import { scriptSync } from "../api/requestAuth";
+import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, PlanData } from "../types/Data";
+import { dataSync } from "../api/requestAuth";
 import { Domain } from "../settings.js";
 import Joi from "joi";
 
@@ -79,13 +79,15 @@ export const fnParseVocabs = (text: string): string => {
     return r;
 };
 
-export const fnGetFormattedData = (plan: string, script: DataScript): FormattedData => {
-    const data: FormattedData = {
+export const fnGetFormattedData = (plan: string, script: DataScript): PlanData => {
+    const data: PlanData = {
         title: script.title,
         vocabs: [],
         grammars: script.grammars,
         scenes: [],
         sentences: [],
+        date: "",
+        content: "",
     };
     const staticPrefix = `${Domain}/data/${plan}`;
     data.vocabs = script.vocabs.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
@@ -171,9 +173,9 @@ export const fnIsSRTTime = (value: string): boolean => {
     return value.match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/) ? true : false;
 };
 
-export const fnValidateJsonFile = (data: any): boolean => {
+export const fnValidateVideoScript = (data: any): boolean => {
     const schema = Joi.object({
-        title: Joi.string().required(),
+        title: Joi.string().required().allow(""),
         roles: Joi.array().items(Joi.string()).required(),
         scenes: Joi.array().items(Joi.string()).required(),
         vocabs: Joi.array().items(Joi.object()).required(),
@@ -182,7 +184,7 @@ export const fnValidateJsonFile = (data: any): boolean => {
     });
     const { error, value } = schema.validate(data);
     if (error) {
-        console.log("Json file validatation error:", error);
+        console.log("Json file validatation error:1", error);
         return false;
     }
     return true;
@@ -201,5 +203,5 @@ export const fnSyncScript = async (plan: string, script: DataScript, scriptTimeO
     const blob = new Blob([JSON.stringify(fnCreateJson(script, scriptTimeOffset), null, 4)], { type: "application/json" });
     const formData = new FormData();
     formData.append("file", blob, "script.json");
-    scriptSync({ plan }, formData);
+    dataSync({ plan }, formData);
 };
