@@ -11,7 +11,7 @@ interface ScriptProps {
     onRendered?: (scrollTopPoint: number) => void;
 }
 
-const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, showFooter = true, onRendered }) => {
+const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, showFooter = false, onRendered }) => {
     const articleRef = useRef<HTMLDivElement>(null);
     const fnRender = () => {
         if (articleRef.current) {

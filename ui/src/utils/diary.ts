@@ -36,8 +36,8 @@ export const fnSyncDiary = async (plan: string, diary: DataDiary) => {
 export const fnValidateDiary = (data: any): boolean => {
     const schema = Joi.object({
         title: Joi.string().required().allow(""),
-        date: Joi.string().required(),
-        content: Joi.string().required(),
+        date: Joi.string().required().allow(""),
+        content: Joi.string().required().allow(""),
         vocabs: Joi.array().items(Joi.object()).required(),
         grammars: Joi.array().items(Joi.string()).required(),
     });

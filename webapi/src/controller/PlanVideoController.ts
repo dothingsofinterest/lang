@@ -66,12 +66,39 @@ export const videoInit = async (req: Request, res: Response, next: NextFunction)
         // Create script file
         const dataScript = path.join(planPath, fileNameScript);
         if (!fs.existsSync(dataScript)) {
-            fs.writeFileSync(dataScript, "");
+            fs.writeFileSync(
+                dataScript,
+                JSON.stringify(
+                    {
+                        title: "",
+                        roles: [],
+                        scenes: [],
+                        vocabs: [],
+                        grammars: [],
+                        paragraphs: [],
+                    },
+                    null,
+                    4,
+                ),
+            );
         }
         // Create diary file
         const fileDiary = path.join(planPath, fileNameDiary);
         if (!fs.existsSync(fileDiary)) {
-            fs.writeFileSync(fileDiary, "");
+            fs.writeFileSync(
+                fileDiary,
+                JSON.stringify(
+                    {
+                        title: "",
+                        date: "",
+                        content: "",
+                        vocabs: [],
+                        grammars: [],
+                    },
+                    null,
+                    4,
+                ),
+            );
         }
         // Create file waveform
         const audiowaveform = path.join(planPath, fileNameAudiowaveform);

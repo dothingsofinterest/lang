@@ -173,29 +173,33 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
     }, []);
     return (
         <Drawer id="common-editor-vocabs-index" title="Edit Vocabs" size="large" onClose={handlersOnClose} open={open}>
-            <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />
-            <div className="text-image-btn">
-                <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="pronunciation/pronunciations | prəˌnʌnsiˈeɪʃn | n.读音;发音" />
-                <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}`} />}</div>
-                <Upload beforeUpload={handlersUpdateVocabImage} showUploadList={false}>
-                    <Button icon={<PlusSquareOutlined />} />
-                </Upload>
-            </div>
-            <div className="audio-btn">
-                <Select style={{ width: 120 }} value={vocab.voice} onChange={handlersUpdateVocabPronounceVoice} options={voiceOptions} />
-                <Select style={{ width: 120 }} value={vocab.speed} onChange={handlersUpdateVocabPronounceSpeed} options={speedOptions} />
-                <Button className="play" onClick={handlersPlayVocabPronunciation}>
-                    {vocab.pronunciation}
-                </Button>
-                <Button className="gen" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
-                <Upload beforeUpload={handlersUpdateVocabPronunciation} showUploadList={false}>
-                    <Button icon={<PlusSquareOutlined />} />
-                </Upload>
-            </div>
-            <div className="btn">
-                <Button icon={<MinusSquareOutlined />} onClick={handlersOnRemove} />
-                <Button icon={<PlusSquareOutlined />} onClick={handlersOnSubmit} />
-            </div>
+            {onSubmit && onRemove && (
+                <div className="vocab-panel">
+                    <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />
+                    <div className="text-image-btn">
+                        <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="pronunciation/pronunciations | prəˌnʌnsiˈeɪʃn | n.读音;发音" />
+                        <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}`} />}</div>
+                        <Upload beforeUpload={handlersUpdateVocabImage} showUploadList={false}>
+                            <Button icon={<PlusSquareOutlined />} />
+                        </Upload>
+                    </div>
+                    <div className="audio-btn">
+                        <Select style={{ width: 120 }} value={vocab.voice} onChange={handlersUpdateVocabPronounceVoice} options={voiceOptions} />
+                        <Select style={{ width: 120 }} value={vocab.speed} onChange={handlersUpdateVocabPronounceSpeed} options={speedOptions} />
+                        <Button className="play" onClick={handlersPlayVocabPronunciation}>
+                            {vocab.pronunciation}
+                        </Button>
+                        <Button className="gen" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
+                        <Upload beforeUpload={handlersUpdateVocabPronunciation} showUploadList={false}>
+                            <Button icon={<PlusSquareOutlined />} />
+                        </Upload>
+                    </div>
+                    <div className="btn">
+                        <Button icon={<MinusSquareOutlined />} onClick={handlersOnRemove} />
+                        <Button icon={<PlusSquareOutlined />} onClick={handlersOnSubmit} />
+                    </div>
+                </div>
+            )}
             <div className="vocab-list">
                 {vocabs.length > 0 &&
                     vocabs.map((value, key) => {

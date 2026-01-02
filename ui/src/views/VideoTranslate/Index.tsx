@@ -139,7 +139,7 @@ const Index = () => {
 						article footer #grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
 					}
 				`;
-                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} encn={1} showFooter={false} />);
+                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} encn={1} />);
                 printJS({ printable: `${content}`, type: "raw-html", style: style1 });
             } else {
                 alert(`Data not be set`);
@@ -181,7 +181,7 @@ const Index = () => {
             </div>
             <div className="main-inner-item-main">
                 <Scrollbars ref={refScrollbar}>
-                    <Script dataFormatted={dataFormatted} encn={1} matchingSentence={matchingSentence} showFooter={false} onRendered={handlersRenderedCallback} />
+                    <Script dataFormatted={dataFormatted} encn={1} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
             </div>
         </Layout>

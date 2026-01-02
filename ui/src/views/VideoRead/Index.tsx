@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { RedoOutlined, FastBackwardOutlined, AudioFilled, PrinterOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined } from "@ant-design/icons";
+import { RedoOutlined, FileWordOutlined, FastBackwardOutlined, AudioFilled, PrinterOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,19 +10,22 @@ import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import ReactDOMServer from "react-dom/server";
 import Script from "./Script";
 import printJS from "print-js";
+import EditorVocabs from "../CommonEditorVocabs/Index";
+import EditorGrammars from "../CommonEditorGrammars/Index";
 import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
-    console.log(plan);
     const dataFormatted = useSelector((state: RootState) => state.plan.data);
     const videoURL = useSelector((state: RootState) => state.plan.videoURL);
     const matchingSentence = useSelector((state: RootState) => state.plan.videoMatchingSentence);
     const matchingSentencePos = useSelector((state: RootState) => state.plan.videoMatchingSentencePos);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [listening, setListening] = useState(false);
+    const [vocabsEditor, setVocabsEditor] = useState(false);
+    const [grammarsEditor, setGrammarsEditor] = useState(false);
     const refScrollbar = useRef<Scrollbars>(null);
     const recognitionRef = useRef<any>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
@@ -169,7 +172,7 @@ const Index = () => {
 						article footer #grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
 					}
 				`;
-                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} />);
+                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} showFooter={true} />);
                 printJS({ printable: `${content}`, type: "raw-html", style: style1 });
             } else {
                 alert(`Data not be set`);
@@ -188,6 +191,18 @@ const Index = () => {
                 setListening(false);
             }
         }
+    };
+    const handlersVocabsEditorOpen = () => {
+        setVocabsEditor(true);
+    };
+    const handlersVocabsEditorClose = () => {
+        setVocabsEditor(false);
+    };
+    const handlersGrammarsEditorOpen = () => {
+        setGrammarsEditor(true);
+    };
+    const handlersGrammarsEditorClose = () => {
+        setGrammarsEditor(false);
     };
     useEffect(() => {
         if (!plan.hash || !plan.videoURL) {
@@ -268,11 +283,21 @@ const Index = () => {
                     <Button icon={<FastForwardOutlined />} onClick={handlersPanelPlayForward} className="btn"></Button>
                     <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
                     <Button icon={<AudioFilled />} onClick={handlersPanelRecordStart} className={recognitionRef.current && listening === true ? `btn recording` : `btn`}></Button>
-                    <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
+                    <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn">
+                        Print
+                    </Button>
+                    <Button icon={<FileWordOutlined />} onClick={handlersVocabsEditorOpen} className="btn">
+                        Vocabs
+                    </Button>
+                    <Button icon={<FileWordOutlined />} onClick={handlersGrammarsEditorOpen} className="btn">
+                        Grammars
+                    </Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>
-                    <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} showFooter={true} />
+                    <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
+                <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} />
+                <EditorGrammars grammars={plan.data.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} />
             </div>
         </Layout>
     );

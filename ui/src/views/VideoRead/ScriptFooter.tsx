@@ -6,6 +6,7 @@ interface ScriptVocabsProps {
     vocabs: Vocab[];
     grammars: string[];
 }
+
 const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars }) => {
     const [vocabMatched, setVocabMatched] = useState(-1);
     const refAudio = useRef<HTMLAudioElement>(null);
@@ -26,7 +27,7 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
     return (
         <React.Fragment>
             {vocabs.length > 0 && (
-                <div id="vocabs">
+                <div id="script-vocabs">
                     <div className="title">Vocabs</div>
                     {vocabs.map((value, key) => {
                         return (
@@ -46,7 +47,7 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
                 </div>
             )}
             {grammars.length > 0 && (
-                <div id="grammars">
+                <div id="script-grammars">
                     <div className="title">Grammars</div>
                     {grammars.map((value, key) => {
                         return (

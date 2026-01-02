@@ -1,22 +1,27 @@
-# 项目说明
+# What is this?
 
-Learning languages
+A tool for study languages through videos.
 
-# 使用方法
+# How to start?
 
-1. 编译 npm run build<br>
-2. 启动 npm run start<br>
+1. Install the dependencies<br>
+   -FFMPEG for video & audio<br>
+   -python
+   -pyttsx3 for text to speech<br>
+2. Compile: npm run build<br>
+3. Start: npm run start<br>
 
-# 技术架构
+# Dependencies
 
-vite + react<br>
-NodeJS 20.16.0<br>
+vite<br>
+React.js<br>
+Node.js 20.16.0<br>
 Express<br>
-FFMPEG - video & audio<br>
-pyttsx3 - text to speech<br>
-BBC audiowaveform - audio waveform<br>
-Windows 下使用了 gulpfile.js 构建项目<br>
+Ffmpeg for video & audio<br>
+pyttsx3 for text to speech<br>
+BBC audiowaveform for audio waveform<br>
+gulpfile.js <br>
 
-# 界面截图
+# Screenshots
 
 ![demo](assets/ui.png)

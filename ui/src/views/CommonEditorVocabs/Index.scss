@@ -1,87 +1,88 @@
 #common-editor-vocabs-index {
-    textarea {
-        border-radius: 0;
-        border: 1px solid #ccc;
-        min-height: 100px !important;
-        resize: none;
-        &:focus {
-            border-color: 0;
+    .vocab-panel {
+        margin-bottom: 20px;
+        textarea {
+            border-radius: 0;
+            border: 1px solid #ccc;
+            min-height: 100px !important;
+            resize: none;
+            &:focus {
+                border-color: 0;
+            }
         }
-    }
-    .text-image-btn {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-        .text {
-            flex: 1;
-        }
-        .image {
-            border-top: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            height: 32px;
-            width: 32px;
-        }
-        .ant-upload-wrapper {
-            .ant-btn {
-                border-radius: 0;
-                width: 32px;
+        .text-image-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            .text {
+                flex: 1;
+            }
+            .image {
+                border-top: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
                 height: 32px;
-                background-color: #ccc;
-                &:hover {
-                    border: 0;
-                    color: rgba(0, 0, 0, 0.88);
+                width: 32px;
+            }
+            .ant-upload-wrapper {
+                .ant-btn {
+                    border-radius: 0;
+                    width: 32px;
+                    height: 32px;
+                    background-color: #ccc;
+                    &:hover {
+                        border: 0;
+                        color: rgba(0, 0, 0, 0.88);
+                    }
                 }
             }
         }
-    }
-    .audio-btn {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-        .play {
-            flex: 1;
-            border-radius: 0;
-        }
-        .gen {
-            border-radius: 0;
-            border-left: 0;
-            border-right: 0;
-        }
-        .ant-upload-wrapper {
-            .ant-btn {
+        .audio-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            .play {
+                flex: 1;
                 border-radius: 0;
-                width: 32px;
-                height: 32px;
-                background-color: #ccc;
+            }
+            .gen {
+                border-radius: 0;
+                border-left: 0;
+                border-right: 0;
+            }
+            .ant-upload-wrapper {
+                .ant-btn {
+                    border-radius: 0;
+                    width: 32px;
+                    height: 32px;
+                    background-color: #ccc;
+                    &:hover {
+                        border: 0;
+                        color: rgba(0, 0, 0, 0.88);
+                    }
+                }
+            }
+            .ant-select-selector {
+                border-radius: 0;
+                border-right: 0;
                 &:hover {
-                    border: 0;
-                    color: rgba(0, 0, 0, 0.88);
+                    border-color: #ccc !important;
                 }
             }
         }
-        .ant-select-selector {
-            border-radius: 0;
-            border-right: 0;
-            &:hover {
-                border-color: #ccc !important;
+        .btn {
+            display: flex;
+            button {
+                flex: 1;
+                padding: 20px 0;
+                border-radius: 0;
+                background-color: #ccc;
             }
-        }
-    }
-    .btn {
-        display: flex;
-        button {
-            flex: 1;
-            padding: 20px 0;
-            border-radius: 0;
-            background-color: #ccc;
         }
     }
     .vocab-list {
         color: #000;
-        margin-top: 20px;
-        background: #ccc;
         .item {
             display: flex;
             justify-content: space-between;

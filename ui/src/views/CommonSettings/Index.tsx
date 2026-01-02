@@ -60,16 +60,20 @@ const Index = () => {
                         const resScript = await fetch(`${Domain}/data/${plan.hash}/script.json?${Date.now()}`);
                         const script = await resScript.json();
                         if (fnValidateVideoScript(script)) {
-                            dispatch(updateType(1));
-                            dispatch(updateScriptData(script));
+                            if (script.title) {
+                                dispatch(updateType(1));
+                                dispatch(updateScriptData(script));
+                            }
                         } else {
                             alert(`Script format is invalid.`);
                         }
                         const resDiary = await fetch(`${Domain}/data/${plan.hash}/diary.json?${Date.now()}`);
                         const diary = await resDiary.json();
                         if (fnValidateDiary(diary)) {
-                            dispatch(updateType(2));
-                            dispatch(updateDiaryData(diary));
+                            if (diary.title) {
+                                dispatch(updateType(2));
+                                dispatch(updateDiaryData(diary));
+                            }
                         } else {
                             alert(`Diary format is invalid.`);
                         }
@@ -193,9 +197,9 @@ const Index = () => {
                     </div>
                 </section>
                 <div className="tips">
-                    <p>【语法 & 单词】</p>
-                    <p>1. 阅读视频台词，理解单词意义、读法</p>
-                    <p>2. 阅读视频台词，深刻理解其中语法</p>
+                    <p>【基础】</p>
+                    <p>1. 深刻理解台词中的单词</p>
+                    <p>2. 深刻理解台词中的语法</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     <p>【听力】</p>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button, Drawer } from "antd";
-import { PlusSquareOutlined, MinusSquareOutlined, ReloadOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, ArrowUpOutlined, ArrowDownOutlined, MinusSquareOutlined, ReloadOutlined } from "@ant-design/icons";
 import "./EditorScenes.scss";
 
 interface EditorScenesProps {
@@ -48,6 +48,32 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
             onClose();
         }
     };
+    const handlersIndexPlus = (index: number) => {
+        const a = scenesList.slice(0, index);
+        const b = scenesList.slice(index);
+        const upOne = a.pop();
+        const theOne = b.shift();
+        if (theOne) {
+            a.push(theOne);
+        }
+        if (upOne) {
+            b.unshift(upOne);
+        }
+        setScenesList([...a, ...b]);
+    };
+    const handlersIndexMinus = (index: number) => {
+        const a = scenesList.slice(0, index);
+        const b = scenesList.slice(index);
+        const theOne = b.shift();
+        const downOne = b.shift();
+        if (theOne) {
+            b.unshift(theOne);
+        }
+        if (downOne) {
+            b.unshift(downOne);
+        }
+        setScenesList([...a, ...b]);
+    };
     useEffect(() => {
         return () => {};
     }, []);
@@ -63,6 +89,8 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
                         <div key={k} className="scenes-item">
                             <Input value={value} onChange={(e) => handlersUpdateSceneItem(k, e.target.value)} />
                             <Button icon={<MinusSquareOutlined />} onClick={(e) => handlersRemoveSceneItem(k)} />
+                            <Button icon={<ArrowUpOutlined />} onClick={(e) => handlersIndexPlus(k)} />
+                            <Button icon={<ArrowDownOutlined />} onClick={(e) => handlersIndexMinus(k)} />
                         </div>
                     );
                 })}
