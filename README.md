@@ -6,8 +6,9 @@ A tool for study languages through videos.
 
 1. Install the dependencies<br>
    -FFMPEG for video & audio<br>
-   -python
+   -python<br>
    -pyttsx3 for text to speech<br>
+   -Node.js 20.16.0<br>
 2. Compile: npm run build<br>
 3. Start: npm run start<br>
 
