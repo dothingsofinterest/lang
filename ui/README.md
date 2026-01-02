@@ -15,6 +15,6 @@ The UI of the project.
 
 # Dependencies
 
-vite
-react
-NodeJS 20.16.0
+vite<br>
+react<br>
+NodeJS 20.16.0<br>

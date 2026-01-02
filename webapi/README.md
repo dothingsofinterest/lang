@@ -15,11 +15,11 @@ The API of the project.
 
 # Dependencies
 
-NodeJS 20.16.0
-Express
-FFMPEG - video & audio
-pyttsx3 - text to speech
-BBC audiowaveform - audio waveform
+NodeJS 20.16.0<br>
+Express<br>
+FFMPEG - video & audio<br>
+pyttsx3 - text to speech<br>
+BBC audiowaveform - audio waveform<br>
 
 # username & pass
 
