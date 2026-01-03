@@ -5,12 +5,16 @@ A tool for study languages through videos.
 # How to start?
 
 1. Install the dependencies<br>
-   -FFMPEG for video & audio<br>
-   -python<br>
-   -pyttsx3 for text to speech<br>
-   -Node.js 20.16.0<br>
-2. Compile: npm run build<br>
-3. Start: npm run start<br>
+   -FFMPEG
+   -python
+   -pyttsx3
+   -Node.js 20.16.0
+2. Config<br>
+   replace AUDIOWAVEFORM_PATH, FFMPEG_PATH, APP_LOG_PATH, UPLOAD_PATH in /webapi/.env to your own paths
+3. Start <br>
+    1. cd /
+    2. npm run build
+    3. npm run start
 
 # Dependencies
 

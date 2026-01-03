@@ -1,20 +1,21 @@
 const gulp = require("gulp");
 const shell = require("gulp-shell");
-const rootPath = "D:/Github/lang";
+const path = require("path");
+const rootPath = __dirname;
 
-// Define task - Compile
-gulp.task("compile", shell.task([`cd ${rootPath}/webapi && tsc`, `cd ${rootPath}/webserver && tsc`, `cd ${rootPath}/ui && npm run build`]));
-// Define task - Copy
+// Compile
+gulp.task("compile", shell.task([`cd ${path.join(rootPath, "webapi")} && npm install && tsc`, `cd ${path.join(rootPath, "webserver")} && npm install && tsc`, `cd ${path.join(rootPath, "ui")} && npm install && npm run build`]));
+// Copy
 gulp.task("copy", () => {
-    return gulp.src(`${rootPath}/ui/dist/**/*`, { allowEmpty: true, encoding: false  }).pipe(gulp.dest(`${rootPath}/webserver/dist/views/`));
+    return gulp.src(path.join(rootPath, "ui", "dist", "**", "*"), { allowEmpty: true, encoding: false }).pipe(gulp.dest(path.join(rootPath, "webserver", "dist", "views")));
 });
-// Define task - RunWebapi
-gulp.task("webapi", shell.task([`cd ${rootPath}/webapi && node dist/app.js > output.log 2>&1 &`]));
-// Define task RunWebserver
-gulp.task("webserver", shell.task([`cd ${rootPath}/webserver && node dist/app.js > output.log 2>&1 &`]));
-// Define task - print entry URL
+// Run webapi
+gulp.task("webapi", shell.task([`cd ${path.join(rootPath, "webapi")} && node dist/app.js > output.log 2>&1 &`]));
+// Run webserver
+gulp.task("webserver", shell.task([`cd ${path.join(rootPath, "webserver")} && node dist/app.js > output.log 2>&1 &`]));
+// Print entry URL
 gulp.task("console", (done) => {
-	console.log('http://localhost:8080');
+    console.log("http://localhost:8080");
     done();
 });
 
