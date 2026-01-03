@@ -1,6 +1,6 @@
 # What is this?
 
-The API of the project.
+The API of this project.
 
 # How to run?
 

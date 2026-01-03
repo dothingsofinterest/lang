@@ -1,6 +1,6 @@
 # What is this?
 
-The UI of the project.
+The UI of this project.
 
 # How to run?
 
