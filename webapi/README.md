@@ -4,14 +4,14 @@ The API of this project.
 
 # How to run?
 
-1. tsc
-2. npm run start
+1. tsc<br>
+2. npm run start<br>
 
 # How to deploy?
 
-1. tsc
-2. Deploy the compiled output in the folders of "dist" & "node_modules" to a Node.js environment.
-3. Then start it: node dist/app.js
+1. tsc<br>
+2. Deploy the compiled output in the folders of "dist" & "node_modules" to a Node.js environment.<br>
+3. Then start it: node dist/app.js<br>
 
 # Dependencies
 
