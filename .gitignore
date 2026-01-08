@@ -41,7 +41,7 @@ yarn-error.log*
 *.sql
 
 # Media #
-*.mp3
+# *.mp3
 *.wav
 *.flac
 *.aac

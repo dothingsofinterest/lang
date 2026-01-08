@@ -177,7 +177,7 @@ export const fnValidateVideoScript = (data: any): boolean => {
     const schema = Joi.object({
         title: Joi.string().required().allow(""),
         roles: Joi.array().items(Joi.string()).required(),
-        scenes: Joi.array().items(Joi.string()).required(),
+        scenes: Joi.array().items(Joi.string().allow("")).required(),
         vocabs: Joi.array().items(Joi.object()).required(),
         grammars: Joi.array().items(Joi.string()).required(),
         paragraphs: Joi.array().items(Joi.object()).required(),

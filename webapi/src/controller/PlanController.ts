@@ -13,6 +13,7 @@ export const countVocabs = async (req: Request, res: Response) => {
         const plans = await fsPromise.readdir(`${basePath}`);
         for (const plan of plans) {
             if (plan !== "temp") {
+                planCount++;
                 const scriptFile = path.join(`${basePath}`, plan, `script.json`);
                 if (fs.existsSync(scriptFile)) {
                     const fileBinary = await fsPromise.readFile(scriptFile);
@@ -21,7 +22,6 @@ export const countVocabs = async (req: Request, res: Response) => {
                         const fileObject = JSON.parse(fileString);
                         if (fileObject.hasOwnProperty("vocabs")) {
                             planVocabsCount += fileObject.vocabs.length;
-                            planCount++;
                         }
                     }
                 }
@@ -33,7 +33,6 @@ export const countVocabs = async (req: Request, res: Response) => {
                         const fileObject = JSON.parse(fileString);
                         if (fileObject.hasOwnProperty("vocabs")) {
                             planVocabsCount += fileObject.vocabs.length;
-                            planCount++;
                         }
                     }
                 }
@@ -80,6 +79,16 @@ export const search = async (req: Request, res: Response) => {
                     if (res) {
                         const scriptObject = JSON.parse(scriptString);
                         titles.push(scriptObject.title);
+                    }
+                }
+                const diaryFile = path.join(`${basePath}`, plan, `diary.json`);
+                if (fs.existsSync(diaryFile)) {
+                    const diaryBinary = await fsPromise.readFile(diaryFile);
+                    const diaryString = Buffer.from(diaryBinary).toString();
+                    const res = diaryString.includes(`${value.keywords}`);
+                    if (res) {
+                        const diaryObject = JSON.parse(diaryString);
+                        titles.push(diaryObject.title);
                     }
                 }
             }

@@ -97,20 +97,35 @@ const Index = () => {
     const handlersExportData = async () => {
         if (plan.hash && plan.videoURL && plan.data.title) {
             try {
-                const handle = await (window as any).showSaveFilePicker({
-                    suggestedName: `data.zip`,
-                    types: [{ description: `data`, accept: { "application/zip": [".zip"] } }],
-                });
-                const writable = await handle.createWritable();
-                const resBlob = await exportData({ plan: plan.hash });
-                const blob = new Blob([resBlob], { type: "application/zip" });
-                await writable.write(blob);
-                await writable.close();
+                // const handle = await (window as any).showSaveFilePicker({
+                //     suggestedName: `data.zip`,
+                //     types: [{ description: `data`, accept: { "application/zip": [".zip"] } }],
+                // });
+                // const writable = await handle.createWritable();
+                // const resBlob = await exportData({ plan: plan.hash });
+                // const blob = new Blob([resBlob], { type: "application/zip" });
+                // await writable.write(blob);
+                // await writable.close();
+                // ---
+                const dirHandle = await (window as any).showDirectoryPicker();
+                const isValidDir = await fnValidateExportDir(plan.data.title, dirHandle);
+                if (isValidDir) {
+                    const fileHandle = await dirHandle.getFileHandle("data.zip", { create: true });
+                    const writable = await fileHandle.createWritable();
+                    const resBlob = await exportData({ plan: plan.hash });
+                    const blob = new Blob([resBlob], { type: "application/zip" });
+                    await writable.write(blob);
+                    await writable.close();
+                } else {
+                    alert("You selected a wrong place!");
+                    return;
+                }
             } catch (error) {
                 console.error("save error: ", error);
+                alert("Something wrong happened.");
             }
         } else {
-            alert("Please create a plan or type a title.");
+            alert("Please create a plan with a title.");
         }
     };
     const handlersExportAudio = async () => {
@@ -147,6 +162,17 @@ const Index = () => {
     };
     const handlersLogout = () => {
         dispatch(clearToken());
+    };
+    const fnValidateExportDir = async (name: string, dirHandle: FileSystemDirectoryHandle) => {
+        try {
+            const fileHandle = await dirHandle.getFileHandle(".data.json");
+            const file = await fileHandle.getFile();
+            const text = await file.text();
+            const fileObject = JSON.parse(text);
+            return fileObject.name === name;
+        } catch {
+            return false;
+        }
     };
     useEffect(() => {
         return () => {};
@@ -196,22 +222,6 @@ const Index = () => {
                         </Button>
                     </div>
                 </section>
-                <div className="tips">
-                    <p>【基础】</p>
-                    <p>1. 深刻理解台词中的单词</p>
-                    <p>2. 深刻理解台词中的语法</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>【听力】</p>
-                    <p>1. 每日大量朗读、背诵视频台词，听清并模仿其中连读、弱读</p>
-                    <p>2. 每日大量听视频台词中的单词、短语，并快速选出意思</p>
-                    <p>3. 每日少量精听，写下视频台词</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>【口语】</p>
-                    <p>1. 提高汉-英的词汇量。每日写出视频台词中，汉语版的单词、短语、句子</p>
-                    <p>2. 写日记。</p>
-                </div>
             </div>
         </Layout>
     );
