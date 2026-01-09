@@ -115,7 +115,7 @@ const Index = () => {
                                 <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "item matched" : "item matching") : "item"}>
                                     {value.image && <img src={value.image} />}
                                     <i className="cn">{value.text.split(" | ")[2]}</i>
-                                    <i className="en">{value.text.split(" | ")[2]} - {value.text.split(" | ")[0]}</i>
+                                    <i className="text">{value.text}</i>
                                 </div>
                             );
                         })}

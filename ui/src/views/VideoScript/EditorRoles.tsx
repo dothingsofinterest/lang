@@ -7,16 +7,16 @@ interface EditorRolesProps {
     roles: string[];
     open: boolean;
     onClose?: () => void;
-    onSubmit?: (scenes: string[]) => void;
+    onSubmit?: (roles: string[]) => void;
 }
 
 const EditorRoles: React.FC<EditorRolesProps> = ({ roles, open, onClose, onSubmit }) => {
     const [tempRole, setTempRole] = useState<string>("");
     const [rolesList, setRolesList] = useState<string[]>(roles);
-    const handlersUpdateTempScene = (value: string) => {
+    const handlersUpdateTempRole = (value: string) => {
         setTempRole(value);
     };
-    const handlersSubmitTempScene = () => {
+    const handlersSubmitTempRole = () => {
         if (tempRole) {
             const rolesListNew = [...rolesList];
             rolesListNew.unshift(`${tempRole}`);
@@ -54,8 +54,8 @@ const EditorRoles: React.FC<EditorRolesProps> = ({ roles, open, onClose, onSubmi
     return (
         <Drawer id="video-script-editor-roles" title="Edit Roles" size="large" onClose={handlersOnClose} open={open}>
             <div className="role-temp">
-                <Input value={tempRole} onChange={(e) => handlersUpdateTempScene(e.target.value)} placeholder="Role-角色" />
-                <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempScene} />
+                <Input value={tempRole} onChange={(e) => handlersUpdateTempRole(e.target.value)} placeholder="Role-角色" />
+                <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempRole} />
             </div>
             <div className="roles-list">
                 {rolesList.map((value, k) => {

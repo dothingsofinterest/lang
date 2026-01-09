@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Space, Button, Tree, Select, InputNumber, Mentions } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, FileWordOutlined, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled } from "@ant-design/icons";
+import { ScissorOutlined, ApiOutlined, FileWordOutlined, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
-import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptGrammars, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset, updateScriptVocabs, updateScriptVocabsByDelete } from "../../stores/reducers/plan";
+import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptGrammars, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptSentenceLinking } from "../../stores/reducers/plan";
 import { fnFloatToSRTTime, fnSRTTimeToFloat, fnGetMaxTimeFromSentences } from "../../utils/script";
 import { Vocab as DataVocab } from "../../types/Data";
+import EditorLinkings from "../CommonEditorLinkings/Index";
 import EditorVocabs from "../CommonEditorVocabs/Index";
 import EditorGrammars from "../CommonEditorGrammars/Index";
 import EditorRoles from "./EditorRoles";
@@ -19,6 +20,9 @@ const Data = React.memo(() => {
     const plan = useSelector((state: RootState) => state.plan);
     const script = useSelector((state: RootState) => state.plan.script);
     const timeOffset = useSelector((state: RootState) => state.plan.scriptTimeOffset);
+    const [linkings, setLinkings] = useState<string[]>([]);
+    const [linkingsEditor, setLinkingsEditor] = useState(false);
+    const [linkingsEditorVersion, setLinkingsEditorVersion] = useState(0);
     const [renderVersion, setRenderVersion] = useState(0);
     const [vocabsEditor, setVocabsEditor] = useState(false);
     const [sceneEditor, setSceneEditor] = useState(false);
@@ -162,6 +166,25 @@ const Data = React.memo(() => {
     const handlersSubSetCurSentence = (key: string) => {
         refCurSentenceKey.current = key;
     };
+    const handlersLinkingsEditorOpen = () => {
+        const key = refCurSentenceKey.current.split("-");
+        if (key[0] !== undefined && key[1] !== undefined) {
+            const paragraph = script.paragraphs[parseInt(key[0])];
+            const sentence = paragraph.sentences[parseInt(key[1])];
+            setLinkings(sentence.linkings ? sentence.linkings : []);
+            setLinkingsEditor(true);
+            setLinkingsEditorVersion(linkingsEditorVersion + 1);
+        }
+    };
+    const handlersLinkingsEditorClose = () => {
+        setLinkingsEditor(false);
+    };
+    const handlersLinkingsEditorSubmit = async (list: string[]) => {
+        const key = refCurSentenceKey.current.split("-");
+        if (key[0] !== undefined && key[1] !== undefined) {
+            dispatch(updateScriptSentenceLinking({ pKey: parseInt(key[0]), sKey: parseInt(key[1]), list: list }));
+        }
+    };
     const handlersScroll = (event: React.UIEvent<HTMLElement>) => {
         const target = event.currentTarget;
         if (refPanel.current) {
@@ -239,6 +262,9 @@ const Data = React.memo(() => {
                 <Button icon={<ToolFilled />} onClick={handlersResortData}>
                     Script
                 </Button>
+                <Button icon={<ApiOutlined />} onClick={handlersLinkingsEditorOpen}>
+                    Linkings
+                </Button>
                 <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen}>
                     Roles
                 </Button>
@@ -272,7 +298,7 @@ const Data = React.memo(() => {
                     ) : (
                         <div style={{ width: "100%" }}>
                             <div style={{ width: "100%", display: "flex" }}>
-                                <Space size="small" style={{ flex: "0 0 100px", rowGap: "4px", overflow: "hidden" }} direction="vertical" className="time-test">
+                                <Space size="small" style={{ flex: "0 0 94px", rowGap: "4px", overflow: "hidden" }} direction="vertical" className="time-test">
                                     <Input size="small" defaultValue={filterPlusOffset(item.startTime)} onBlur={(e) => handlersSubUpdateStartTime(e, item.key)} style={{ borderRadius: 0 }} placeholder="00:00:00,000" />
                                     <Input size="small" defaultValue={filterPlusOffset(item.endTime)} onBlur={(e) => handlersSubUpdateEndTime(e, item.key)} style={{ borderRadius: 0 }} placeholder="00:00:00,001" />
                                 </Space>
@@ -282,6 +308,7 @@ const Data = React.memo(() => {
                     );
                 }}
             />
+            <EditorLinkings linkings={linkings} open={linkingsEditor} onClose={handlersLinkingsEditorClose} onSubmit={handlersLinkingsEditorSubmit} key={linkingsEditorVersion} />
             <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
             <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
             <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} onRemove={handlersVocabsEditorRemove} />

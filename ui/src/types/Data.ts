@@ -28,6 +28,7 @@ export interface PayloadScript {
     sKey?: number;
     type?: number;
     text?: string;
+    list?: string[];
 }
 export interface PayloadPlan {
     buttonID?: number;
@@ -64,6 +65,7 @@ export interface Sentence {
     startTime: string;
     endTime: string;
     texts: string[];
+    linkings: string[];
 }
 export interface Scene {
     name: string;

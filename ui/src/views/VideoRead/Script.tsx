@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { PlanData } from "../../types/Data";
+import ScriptLinking from "./ScriptLinking";
 import ScriptFooter from "./ScriptFooter";
 import "./Script.scss";
 
@@ -51,10 +52,10 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, mat
                                     <React.Fragment key={paragraph.key}>
                                         <p key={paragraph.key} className={paragraph.roles.length === 0 ? "indent" : undefined}>
                                             {paragraph.roles.length > 0 && <i className="role">{encn === 0 ? `${paragraph.roles[0].split("-")[0]}: ` : `${paragraph.roles[0].split("-")[1]}: `}</i>}
-                                            {paragraph.sentences.map((v) => {
+                                            {paragraph.sentences.map((v, k) => {
                                                 return (
                                                     <span className="point" key={v.key}>
-                                                        {encn === 0 ? v.texts.length > 0 && v.texts[0].split("\n")[0] : v.texts.length > 0 && v.texts[0].split("\n")[1]}
+                                                        {encn === 0 ? v.texts.length > 0 && v.linkings ? <ScriptLinking text={v.texts[0].split("\n")[0]} linkings={v.linkings} /> : v.texts[0].split("\n")[0] : v.texts.length > 0 && v.texts[0].split("\n")[1]}
                                                     </span>
                                                 );
                                             })}

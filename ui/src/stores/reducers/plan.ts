@@ -9,6 +9,7 @@ const dataSentence = {
     startTime: "",
     endTime: "",
     texts: [],
+    linkings: [],
 };
 
 const dataParagraph = {
@@ -344,6 +345,25 @@ const slice = createSlice({
                 }
             }
         },
+        updateScriptSentenceLinking: (state, action: PayloadAction<PayloadScript>) => {
+            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined && action.payload.list !== undefined) {
+                const curParagraph = state.script.paragraphs[action.payload.pKey];
+                if (curParagraph !== undefined) {
+                    const curSentence = curParagraph.sentences[action.payload.sKey];
+                    if (curSentence !== undefined) {
+                        curParagraph.sentences = curParagraph.sentences.map((v) => {
+                            return v.key == curSentence.key ? { ...curSentence, linkings: action.payload.list ? action.payload.list : [] } : v;
+                        });
+                        const newParagraphs = state.script.paragraphs.map((v) => {
+                            return v.key == curParagraph.key ? curParagraph : v;
+                        });
+                        state.script = { ...state.script, paragraphs: newParagraphs };
+                        state.data = fnGetFormattedData(state.hash, state.script);
+                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                    }
+                }
+            }
+        },
         updateScriptTimeOffset: (state, action: PayloadAction<number>) => {
             state.scriptTimeOffset = action.payload;
         },
@@ -406,6 +426,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptTimeOffset, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
+export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptSentenceLinking, updateScriptTimeOffset, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
 
 export default slice.reducer;

@@ -296,8 +296,8 @@ const Index = () => {
                 <Scrollbars ref={refScrollbar}>
                     <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
-                <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} />
-                <EditorGrammars grammars={plan.data.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} />
+                <EditorVocabs vocabs={dataFormatted.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} />
+                <EditorGrammars grammars={dataFormatted.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} />
             </div>
         </Layout>
     );
