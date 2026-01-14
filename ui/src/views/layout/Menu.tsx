@@ -11,8 +11,8 @@ interface RouteItem {
 }
 const routes: RouteItem[] = [
     { url: "/common/settings", icon: <SettingFilled /> },
-    { url: "/common/vocabs-watch", icon: <EyeFilled /> },
     { url: "/common/vocabs-listen", icon: <CustomerServiceFilled /> },
+    { url: "/common/vocabs-watch", icon: <EyeFilled /> },
     { url: "/common/vocabs-meaning", icon: <BulbFilled /> },
     { url: "/video/script", icon: <ProfileFilled /> },
     { url: "/video/read", icon: <ReadFilled /> },

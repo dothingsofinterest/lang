@@ -6,6 +6,7 @@ import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { updateVocabMatchListen } from "../../stores/reducers/plan";
+import { fnShuffle } from "../../utils/util";
 import "./Index.scss";
 
 const Index = () => {
@@ -97,14 +98,14 @@ const Index = () => {
         let nums = [index];
         if (dataFormatted.vocabs.length > 0) {
             while (nums.length < capacity) {
-                let exceptIndices: number[] = [];
+                const exceptIndices: number[] = [];
                 dataFormatted.vocabs.forEach((v, i) => {
                     if (!nums.includes(i)) {
                         exceptIndices.push(i);
                     }
                 });
                 const randomNum = Math.floor(Math.random() * exceptIndices.length);
-                nums.push(exceptIndices[randomNum]);
+                nums.push(exceptIndices[randomNum] === undefined ? 0 : exceptIndices[randomNum]);
             }
             const randomNum = Math.floor(Math.random() * 10) % capacity;
             const a = nums.slice(0, randomNum);
@@ -138,10 +139,7 @@ const Index = () => {
                 }
             });
         });
-        const randomNum = Math.floor(Math.random() * 10) % resElems.length;
-        const a = resElems.slice(0, randomNum);
-        const b = resElems.slice(randomNum, resElems.length);
-        return [...b, ...a];
+        return fnShuffle(resElems);
     };
     const fnUpdateChunkAnswer = (chunks: number[]) => {
         const answerText = dataFormatted.vocabs[matchingVocab].text.split(" | ")[0];
@@ -198,7 +196,7 @@ const Index = () => {
                         {dataFormatted.vocabs.length > 0 &&
                             selectorVocabs.map((key, index) => {
                                 return (
-                                    <div key={key} className={`item${index === selectorVocabsActvie ? " active" : ""}`} onClick={() => handlersClickSelector(dataFormatted.vocabs[key].text, index)}>
+                                    <div key={index} className={`item${index === selectorVocabsActvie ? " active" : ""}`} onClick={() => handlersClickSelector(dataFormatted.vocabs[key].text, index)}>
                                         {dataFormatted.vocabs[key].image && <img src={dataFormatted.vocabs[key].image} />}
                                         <i className="cn">{dataFormatted.vocabs[key].text.split(" | ")[2]}</i>
                                     </div>

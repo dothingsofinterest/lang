@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Input, Button, Drawer } from "antd";
+import { Input, Button, Drawer, Typography } from "antd";
 import { PlusSquareOutlined, MinusSquareOutlined, ReloadOutlined } from "@ant-design/icons";
 import "./Index.scss";
+
+const { Paragraph } = Typography;
 
 interface CommonEditorLinkingsProps {
     open: boolean;
@@ -54,6 +56,20 @@ const CommonEditorLinkings: React.FC<CommonEditorLinkingsProps> = ({ linkings, o
     }, []);
     return (
         <Drawer id="common-editor-linkings-index" title="Edit Linkings" size="large" onClose={handlersOnClose} open={open}>
+            <div className="linking-symbols">
+                <div className="line">
+                    <Paragraph copyable={{ text: "tə" }}>to ➤ tə</Paragraph>
+                    <Paragraph copyable={{ text: "ðer" }}>their ➤ ðer</Paragraph>
+                    <Paragraph copyable={{ text: "ðə" }}>the ➤ ðə</Paragraph>
+                    <Paragraph copyable={{ text: "ɪf" }}>if ➤ ɪf</Paragraph>
+                </div>
+                <div className="line">
+                    <Paragraph copyable={{ text: "ðæt" }}>that ➤ ðæt</Paragraph>
+                    <Paragraph copyable={{ text: "ɪt" }}>it ➤ ɪt</Paragraph>
+                    <Paragraph copyable={{ text: "ɪz" }}>is ➤ ɪz</Paragraph>
+                    <Paragraph copyable={{ text: "wen" }}>wen ➤ wen</Paragraph>
+                </div>
+            </div>
             <div className="linking-temp">
                 <Input value={tempLinking} onChange={(e) => handlersUpdateTempLinking(e.target.value)} placeholder="to their -> təðer" />
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempLinking} />

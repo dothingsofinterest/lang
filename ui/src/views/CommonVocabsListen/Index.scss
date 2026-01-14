@@ -99,6 +99,8 @@
                     font-size: 26px;
                     line-height: 26px;
                     cursor: pointer;
+                    min-height: 44px;
+                    box-sizing: border-box;
                     &.selected {
                         color: #000;
                         background: #000;

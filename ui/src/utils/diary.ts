@@ -15,14 +15,6 @@ export const fnGetFormattedData = (plan: string, diary: DataDiary): PlanData => 
     };
     const staticPrefix = `${Domain}/data/${plan}`;
     data.vocabs = diary.vocabs.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
-    data.content = diary.content
-        .replaceAll(/[ ]{2}/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
-        .replaceAll(/\[/g, `<span class="hl">`)
-        .replaceAll(/\]/g, `</span>`)
-        .split("\n")
-        .map((v) => `<p>${v}</p>`)
-        .join("");
-
     return data;
 };
 

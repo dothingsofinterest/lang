@@ -10,6 +10,7 @@ import { updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocab
 import { Vocab as DataVocab } from "../../types/Data";
 import VocabsEditor from "../CommonEditorVocabs/Index";
 import EditorGrammars from "../CommonEditorGrammars/Index";
+import GrammarTips from "./GrammarTips";
 import printJS from "print-js";
 import ReactDOMServer from "react-dom/server";
 import "./Index.scss";
@@ -104,50 +105,18 @@ const Index = () => {
         }
         const elemDiary = refDiary.current;
         if (!elemDiary) return;
-        const elemTip = elemDiary.querySelector(".tip") as HTMLElement;
         function handlerClick(e: MouseEvent) {
             const target = e.target as HTMLElement;
             if (target.classList.contains("hl")) {
                 const text = target.innerText;
-                navigator.clipboard.writeText(`【${text}】`).then(() => {
+                navigator.clipboard.writeText(`[${text}]`).then(() => {
                     console.log("copied.");
                 });
             }
         }
-        const handleMouseOver = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (target.classList.contains("hl")) {
-                const text = target.innerHTML;
-                for (let i = 0; i < refPlan.current.plan.diary.grammars.length; i++) {
-                    const reg = new RegExp(`^【${text}】`);
-                    if (reg.test(refPlan.current.plan.diary.grammars[i])) {
-                        if (elemTip) {
-                            elemTip.innerHTML = refPlan.current.plan.diary.grammars[i]
-                                .split("\n")
-                                .map((v, k) => `<p key=${k}>${v}</p>`)
-                                .join("");
-                            elemTip.style.display = "block";
-                        }
-                        break;
-                    }
-                }
-            }
-        };
-        const handleMouseOut = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (target.classList.contains("hl")) {
-                if (elemTip) {
-                    elemTip.style.display = "none";
-                }
-            }
-        };
         elemDiary.addEventListener("click", handlerClick);
-        elemDiary.addEventListener("mouseover", handleMouseOver);
-        elemDiary.addEventListener("mouseout", handleMouseOut);
         return () => {
             elemDiary.removeEventListener("click", handlerClick);
-            elemDiary.removeEventListener("mouseover", handleMouseOver);
-            elemDiary.removeEventListener("mouseout", handleMouseOut);
         };
     }, []);
     useEffect(() => {
@@ -160,8 +129,9 @@ const Index = () => {
                     <article id="diary" ref={refDiary}>
                         {plan.data.title && <h1>{plan.data.title}</h1>}
                         {plan.data.date && <h2>{plan.data.date}</h2>}
-                        <div className="main" dangerouslySetInnerHTML={{ __html: plan.data.content }}></div>
-                        <div className="tip"></div>
+                        <div className="main">
+                            <GrammarTips content={plan.data.content} grammar={plan.data.grammars} />
+                        </div>
                     </article>
                 </Scrollbars>
             </div>

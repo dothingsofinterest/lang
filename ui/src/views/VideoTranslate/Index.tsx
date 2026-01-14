@@ -38,12 +38,12 @@ const Index = () => {
         if (dataFormatted.sentences.length > 0) {
             const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
             const answerText = answer
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
+                .replace(/[\,\.\?\!\-\'\"\s]/g, "")
                 .toLowerCase()
                 .trim();
             const inputText = value
                 .toLowerCase()
-                .replace(/[\,\.\?\!\-\'\s]/g, "")
+                .replace(/[\,\.\?\!\-\'\"\s]/g, "")
                 .toLowerCase()
                 .trim();
             if (value === answer || inputText === answerText) {
@@ -63,12 +63,12 @@ const Index = () => {
                 const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
                 const input = inputValue;
                 const answerText = answer
-                    .replace(/[\,\.\?\!\-\'\s]/g, "")
+                    .replace(/[\,\.\?\!\-\'\"\s]/g, "")
                     .toLowerCase()
                     .trim();
                 const inputText = input
                     .toLowerCase()
-                    .replace(/[\,\.\?\!\-\'\s]/g, "")
+                    .replace(/[\,\.\?\!\-\'\"\s]/g, "")
                     .toLowerCase()
                     .trim();
                 for (let i = 0; i < answer.length; i++) {

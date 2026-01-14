@@ -92,9 +92,10 @@ const Index = () => {
                         {dataFormatted.vocabs.length > 0 &&
                             fnGetRandomNumbers().map((key) => {
                                 return (
-                                    <span key={key} className="item" onClick={() => handlersClickSelection(dataFormatted.vocabs[key].text)}>
-                                        {dataFormatted.vocabs[key].image ? <img src={dataFormatted.vocabs[key].image} /> : dataFormatted.vocabs[key].text.split(" | ")[2]}
-                                    </span>
+                                    <div key={key} className="item" onClick={() => handlersClickSelection(dataFormatted.vocabs[key].text)}>
+                                        {dataFormatted.vocabs[key].image && <img src={dataFormatted.vocabs[key].image} />}
+                                        <i className="cn">{dataFormatted.vocabs[key].text.split(" | ")[2]}</i>
+                                    </div>
                                 );
                             })}
                     </div>

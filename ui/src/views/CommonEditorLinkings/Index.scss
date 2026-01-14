@@ -1,4 +1,10 @@
 #common-editor-linkings-index {
+    .linking-symbols {
+        .line {
+            display: flex;
+            justify-content: space-around;
+        }
+    }
     .linking-temp {
         display: flex;
         height: 50px;
