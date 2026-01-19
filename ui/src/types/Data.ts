@@ -17,7 +17,6 @@ export interface StatePlan {
     vocabMatchListen: number;
     vocabMatchMeaning: number;
     vocabMatchWatch: number;
-    scriptTimeOffset: number;
     script: Script;
     diary: Diary;
     processings: boolean[];
@@ -28,6 +27,7 @@ export interface PayloadScript {
     sKey?: number;
     type?: number;
     text?: string;
+    index?: number;
     list?: string[];
 }
 export interface PayloadPlan {
@@ -43,20 +43,20 @@ export interface PlanData {
     grammars: string[];
     date: string;
     content: string;
-    scenes: Scene[];
+    scenes: SceneBlock[];
     sentences: Sentence[];
 }
 export interface Script {
     title: string;
     roles: string[];
-    scenes: string[];
+    scenes: Scene[];
     vocabs: Vocab[];
     grammars: string[];
     paragraphs: Paragraph[];
 }
 export interface Paragraph {
     key: string;
-    scene: string;
+    scene: string | number; // temporary
     roles: string[];
     sentences: Sentence[];
 }
@@ -67,9 +67,13 @@ export interface Sentence {
     texts: string[];
     linkings: string[];
 }
-export interface Scene {
+export interface SceneBlock {
     name: string;
     paragraphs: Paragraph[];
+}
+export interface Scene {
+    index: number;
+    value: string;
 }
 export interface Vocab {
     text: string;

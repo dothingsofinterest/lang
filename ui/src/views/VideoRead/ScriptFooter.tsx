@@ -7,7 +7,7 @@ interface ScriptVocabsProps {
     grammars: string[];
 }
 
-const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars }) => {
+const ScriptFooter: React.FC<ScriptVocabsProps> = ({ vocabs, grammars }) => {
     const [vocabMatched, setVocabMatched] = useState(-1);
     const refAudio = useRef<HTMLAudioElement>(null);
     const handlersVocabOnClick = async (index: number) => {
@@ -69,6 +69,6 @@ const ScriptFooter: React.FC<ScriptVocabsProps> = React.memo(({ vocabs, grammars
             )}
         </React.Fragment>
     );
-});
+};
 
 export default ScriptFooter;

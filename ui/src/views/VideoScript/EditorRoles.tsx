@@ -12,34 +12,32 @@ interface EditorRolesProps {
 
 const EditorRoles: React.FC<EditorRolesProps> = ({ roles, open, onClose, onSubmit }) => {
     const [tempRole, setTempRole] = useState<string>("");
-    const [rolesList, setRolesList] = useState<string[]>(roles);
     const handlersUpdateTempRole = (value: string) => {
         setTempRole(value);
     };
     const handlersSubmitTempRole = () => {
         if (tempRole) {
-            const rolesListNew = [...rolesList];
-            rolesListNew.unshift(`${tempRole}`);
-            setRolesList(rolesListNew);
+            const newRoles = [...roles];
+            newRoles.unshift(`${tempRole}`);
+            if (onSubmit !== undefined) {
+                onSubmit(newRoles);
+                setTempRole("");
+            }
         }
     };
     const handlersUpdateRoleItem = (index: number, value: string) => {
-        const rolesListNew = rolesList.map((v, k) => (k === index ? value : v));
-        setRolesList(rolesListNew);
+        const newRoles = roles.map((v, k) => (k === index ? value : v));
+        if (onSubmit !== undefined) {
+            onSubmit(newRoles);
+        }
     };
     const handlersRemoveRoleItem = (index: number) => {
-        const a = rolesList.slice(0, index);
-        const b = rolesList.slice(index);
+        const newRoles = [...roles];
+        const a = newRoles.slice(0, index);
+        const b = newRoles.slice(index);
         b.shift();
-        setRolesList([...a, ...b]);
-    };
-    const handlersOnSubmit = async () => {
         if (onSubmit !== undefined) {
-            onSubmit(rolesList);
-        }
-        if (onClose !== undefined) {
-            setTempRole("");
-            onClose();
+            onSubmit([...a, ...b]);
         }
     };
     const handlersOnClose = () => {
@@ -58,17 +56,14 @@ const EditorRoles: React.FC<EditorRolesProps> = ({ roles, open, onClose, onSubmi
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempRole} />
             </div>
             <div className="roles-list">
-                {rolesList.map((value, k) => {
+                {roles.map((value, k) => {
                     return (
-                        <div key={k} className="roles-item">
-                            <Input value={value} onChange={(e) => handlersUpdateRoleItem(k, e.target.value)} />
+                        <div key={value} className="roles-item">
+                            <Input defaultValue={value} onBlur={(e) => handlersUpdateRoleItem(k, e.target.value)} />
                             <Button icon={<MinusSquareOutlined />} onClick={(e) => handlersRemoveRoleItem(k)} />
                         </div>
                     );
                 })}
-            </div>
-            <div className="roles-submit">
-                <Button icon={<ReloadOutlined />} onClick={handlersOnSubmit} />
             </div>
         </Drawer>
     );

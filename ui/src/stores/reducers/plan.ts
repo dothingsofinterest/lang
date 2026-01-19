@@ -1,23 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StatePlan, PayloadPlan, Paragraph } from "../../types/Data";
-import { Script as DataScript, Diary as DataDiary, PayloadScript, Vocab as DataVocab } from "../../types/Data";
-import { fnGetFormattedData, fnSRTTimeToFloat, fnIsSRTTime, fnSyncScript } from "../../utils/script";
+import { Script as DataScript, Diary as DataDiary, PayloadScript, Vocab as DataVocab, Scene as DataScene } from "../../types/Data";
+import { fnGetFormattedData, fnSyncScript } from "../../utils/script";
 import { fnGetFormattedData as fnGetFormattedDataDiary, fnSyncDiary } from "../../utils/diary";
-
-const dataSentence = {
-    key: "0-0",
-    startTime: "",
-    endTime: "",
-    texts: [],
-    linkings: [],
-};
-
-const dataParagraph = {
-    key: `0`,
-    scene: ``,
-    roles: [],
-    sentences: [dataSentence],
-};
 
 const initialState: StatePlan = {
     hash: "",
@@ -35,14 +20,28 @@ const initialState: StatePlan = {
     vocabMatchMeaning: 0,
     vocabMatchWatch: 0,
     processings: [], // 0:Video, 1:Upload TTS, 2:Upload Vocabulary Image, 3:Audio/Index, 4:Create Waver Button
-    scriptTimeOffset: 0,
     script: {
         title: "",
         roles: [],
         scenes: [],
         vocabs: [],
         grammars: [],
-        paragraphs: [],
+        paragraphs: [
+            {
+                key: `0`,
+                scene: ``,
+                roles: [],
+                sentences: [
+                    {
+                        key: "0-0",
+                        startTime: "",
+                        endTime: "",
+                        texts: [],
+                        linkings: [],
+                    },
+                ],
+            },
+        ],
     },
     diary: {
         title: "",
@@ -117,35 +116,40 @@ const slice = createSlice({
         updateScriptData: (state, action: PayloadAction<DataScript>) => {
             state.script = action.payload;
             state.data = fnGetFormattedData(state.hash, state.script);
-            fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+            fnSyncScript(state.hash, state.script);
         },
         updateScriptTitle: (state, action: PayloadAction<PayloadScript>) => {
             if (action.payload.text !== undefined) {
                 state.script = { ...state.script, title: action.payload.text };
                 state.data = fnGetFormattedData(state.hash, state.script);
-                fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                fnSyncScript(state.hash, state.script);
             }
         },
         updateScriptRoles: (state, action: PayloadAction<string[]>) => {
             if (action.payload !== undefined) {
                 state.script = { ...state.script, roles: action.payload };
                 state.data = fnGetFormattedData(state.hash, state.script);
-                fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                fnSyncScript(state.hash, state.script);
             }
         },
-        updateScriptScenes: (state, action: PayloadAction<string[]>) => {
+        updateScriptScenes: (state, action: PayloadAction<DataScene[]>) => {
             if (action.payload !== undefined) {
                 state.script = { ...state.script, scenes: action.payload };
                 state.data = fnGetFormattedData(state.hash, state.script);
-                fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                fnSyncScript(state.hash, state.script);
             }
+        },
+        updateScriptParagraphs: (state, action: PayloadAction<Paragraph[]>) => {
+            state.script = { ...state.script, paragraphs: action.payload };
+            state.data = fnGetFormattedData(state.hash, state.script);
+            fnSyncScript(state.hash, state.script);
         },
         updateScriptVocabs: (state, action: PayloadAction<DataVocab>) => {
             if (action.payload.text !== undefined) {
                 state.script.vocabs.unshift(action.payload);
                 state.script = { ...state.script, vocabs: state.script.vocabs };
                 state.data = fnGetFormattedData(state.hash, state.script);
-                fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                fnSyncScript(state.hash, state.script);
             }
         },
         updateScriptVocabsByDelete: (state, action: PayloadAction<number>) => {
@@ -157,7 +161,7 @@ const slice = createSlice({
                     const newVocabs = [...a, ...b];
                     state.script = { ...state.script, vocabs: newVocabs };
                     state.data = fnGetFormattedData(state.hash, state.script);
-                    fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                    fnSyncScript(state.hash, state.script);
                 }
             }
         },
@@ -165,207 +169,8 @@ const slice = createSlice({
             if (Array.isArray(action.payload)) {
                 state.script = { ...state.script, grammars: action.payload };
                 state.data = fnGetFormattedData(state.hash, state.script);
-                fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
+                fnSyncScript(state.hash, state.script);
             }
-        },
-        updateScriptParagraphs: (state, action: PayloadAction<Paragraph[]>) => {
-            state.script = { ...state.script, paragraphs: action.payload };
-            state.data = fnGetFormattedData(state.hash, state.script);
-            fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-        },
-        updateScriptParagraphsByInsert: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined) {
-                const a = state.script.paragraphs.slice(0, action.payload.pKey + 1);
-                a.push(dataParagraph);
-                const b = state.script.paragraphs.slice(action.payload.pKey + 1);
-                const newParagraphs = [...a, ...b].map((v, k) => {
-                    return { ...v, key: `${k}`, sentences: v.sentences.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
-                });
-                state.script = { ...state.script, paragraphs: newParagraphs };
-                state.data = fnGetFormattedData(state.hash, state.script);
-                fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-            }
-        },
-        updateScriptParagraphsByDelete: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    if (state.script.paragraphs.length > 1) {
-                        const a = state.script.paragraphs.slice(0, action.payload.pKey);
-                        const b = state.script.paragraphs.slice(action.payload.pKey + 1);
-                        const newParagraphs = [...a, ...b].map((v, k) => {
-                            return { ...v, key: `${k}`, sentences: v.sentences.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
-                        });
-                        state.script = { ...state.script, paragraphs: newParagraphs };
-                        state.data = fnGetFormattedData(state.hash, state.script);
-                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                    }
-                }
-            }
-        },
-        updateScriptParagraphsByCut: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    if (curParagraph.sentences.length > 1) {
-                        const curParagraphSentences = curParagraph.sentences.slice(0, action.payload.sKey);
-                        const newParagraphSentences = curParagraph.sentences.slice(action.payload.sKey);
-                        curParagraph.sentences = curParagraphSentences;
-                        const a = state.script.paragraphs.slice(0, action.payload.pKey + 1);
-                        a.push({ ...dataParagraph, sentences: newParagraphSentences });
-                        const b = state.script.paragraphs.slice(action.payload.pKey + 1);
-                        const newParagraphs = [...a, ...b].map((v, k) => {
-                            return { ...v, key: `${k}`, sentences: v.sentences.map((vv, kk) => ({ ...vv, key: `${k}-${kk}` })) };
-                        });
-                        state.script = { ...state.script, paragraphs: newParagraphs };
-                        state.data = fnGetFormattedData(state.hash, state.script);
-                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                    }
-                }
-            }
-        },
-        updateScriptParagraphsByInsertSentence: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    const a = curParagraph.sentences.slice(0, action.payload.sKey + 1);
-                    a.push(dataSentence);
-                    const b = curParagraph.sentences.slice(action.payload.sKey + 1);
-                    curParagraph.sentences = [...a, ...b].map((v, k) => ({ ...v, key: `${curParagraph.key}-${k}` }));
-                    state.data = fnGetFormattedData(state.hash, state.script);
-                    fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                }
-            }
-        },
-        updateScriptParagraphsByDeleteSentence: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    if (curParagraph.sentences.length > 1) {
-                        const a = curParagraph.sentences.slice(0, action.payload.sKey);
-                        const b = curParagraph.sentences.slice(action.payload.sKey);
-                        b.shift();
-                        curParagraph.sentences = [...a, ...b].map((v, k) => ({ ...v, key: `${curParagraph.key}-${k}` }));
-                        state.data = fnGetFormattedData(state.hash, state.script);
-                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                    }
-                }
-            }
-        },
-        updateScriptParagraphRole: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.text !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    const match = action.payload.text ? action.payload.text.match(/@[^@]+/g) : null;
-                    const res = match !== null ? match.map((v) => v.slice(1)) : [];
-                    const newParagraph = { ...curParagraph, roles: res };
-                    const newParagraphs = state.script.paragraphs.map((v) => {
-                        return v.key === newParagraph.key ? newParagraph : v;
-                    });
-                    state.script = { ...state.script, paragraphs: newParagraphs };
-                    state.data = fnGetFormattedData(state.hash, state.script);
-                    fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                }
-            }
-        },
-        updateScriptParagraphScene: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.text !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    const newParagraph = { ...curParagraph, scene: action.payload.text };
-                    const newParagraphs = state.script.paragraphs.map((v) => {
-                        return v.key === newParagraph.key ? newParagraph : v;
-                    });
-                    state.script = { ...state.script, paragraphs: newParagraphs };
-                    state.data = fnGetFormattedData(state.hash, state.script);
-                    fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                }
-            }
-        },
-        updateScriptSentenceText: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined && action.payload.text !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[action.payload.sKey];
-                    if (curSentence !== undefined) {
-                        if (action.payload.text !== curSentence?.texts.join("\n---\n")) {
-                            curParagraph.sentences = curParagraph.sentences.map((v) => {
-                                return v.key == curSentence.key ? { ...curSentence, texts: action.payload.text ? action.payload.text.split("\n---\n") : [] } : v;
-                            });
-                            const newParagraphs = state.script.paragraphs.map((v) => {
-                                return v.key == curParagraph.key ? curParagraph : v;
-                            });
-                            state.script = { ...state.script, paragraphs: newParagraphs };
-                            state.data = fnGetFormattedData(state.hash, state.script);
-                            fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                        }
-                    }
-                }
-            }
-        },
-        updateScriptSentenceTime: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined && action.payload.text !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[action.payload.sKey];
-                    if (curSentence !== undefined) {
-                        if (fnIsSRTTime(action.payload.text)) {
-                            if (action.payload.type === 0) {
-                                if (action.payload.text !== curSentence.startTime) {
-                                    if ((curSentence.endTime && fnSRTTimeToFloat(action.payload.text) < fnSRTTimeToFloat(curSentence.endTime)) || !curSentence.endTime) {
-                                        curParagraph.sentences = curParagraph.sentences.map((v) => {
-                                            return v.key == curSentence.key ? { ...curSentence, startTime: action.payload.text ? action.payload.text : "" } : v;
-                                        });
-                                        const newParagraphs = state.script.paragraphs.map((v) => {
-                                            return v.key == curParagraph.key ? curParagraph : v;
-                                        });
-                                        state.script = { ...state.script, paragraphs: newParagraphs };
-                                        state.data = fnGetFormattedData(state.hash, state.script);
-                                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                                    }
-                                }
-                            }
-                            if (action.payload.type === 1) {
-                                if (action.payload.text !== curSentence.endTime) {
-                                    if ((curSentence.startTime && fnSRTTimeToFloat(action.payload.text) > fnSRTTimeToFloat(curSentence.startTime)) || !curSentence.startTime) {
-                                        curParagraph.sentences = curParagraph.sentences.map((v) => {
-                                            return v.key == curSentence.key ? { ...curSentence, endTime: action.payload.text ? action.payload.text : "" } : v;
-                                        });
-                                        const newParagraphs = state.script.paragraphs.map((v) => {
-                                            return v.key == curParagraph.key ? curParagraph : v;
-                                        });
-                                        state.script = { ...state.script, paragraphs: newParagraphs };
-                                        state.data = fnGetFormattedData(state.hash, state.script);
-                                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        updateScriptSentenceLinking: (state, action: PayloadAction<PayloadScript>) => {
-            if (action.payload.pKey !== undefined && action.payload.sKey !== undefined && action.payload.list !== undefined) {
-                const curParagraph = state.script.paragraphs[action.payload.pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[action.payload.sKey];
-                    if (curSentence !== undefined) {
-                        curParagraph.sentences = curParagraph.sentences.map((v) => {
-                            return v.key == curSentence.key ? { ...curSentence, linkings: action.payload.list ? action.payload.list : [] } : v;
-                        });
-                        const newParagraphs = state.script.paragraphs.map((v) => {
-                            return v.key == curParagraph.key ? curParagraph : v;
-                        });
-                        state.script = { ...state.script, paragraphs: newParagraphs };
-                        state.data = fnGetFormattedData(state.hash, state.script);
-                        fnSyncScript(state.hash, state.script, state.scriptTimeOffset);
-                    }
-                }
-            }
-        },
-        updateScriptTimeOffset: (state, action: PayloadAction<number>) => {
-            state.scriptTimeOffset = action.payload;
         },
         updateDiaryData: (state, action: PayloadAction<DataDiary>) => {
             if (action.payload) {
@@ -426,6 +231,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateScriptParagraphsByInsert, updateScriptParagraphsByDelete, updateScriptParagraphsByCut, updateScriptParagraphsByInsertSentence, updateScriptParagraphsByDeleteSentence, updateScriptParagraphRole, updateScriptParagraphScene, updateScriptSentenceText, updateScriptSentenceTime, updateScriptSentenceLinking, updateScriptTimeOffset, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
+export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
 
 export default slice.reducer;

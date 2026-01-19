@@ -1,56 +1,56 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button, Drawer } from "antd";
 import { PlusSquareOutlined, ArrowUpOutlined, ArrowDownOutlined, MinusSquareOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Scene as DataScene } from "../../types/Data";
+import { fnRandom } from "../../utils/util";
 import "./EditorScenes.scss";
 
 interface EditorScenesProps {
-    scenes: string[];
+    scenes: DataScene[];
     open: boolean;
     onClose?: () => void;
-    onSubmit?: (scenes: string[]) => void;
+    onSubmit?: (scenes: DataScene[]) => void;
 }
 
 const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSubmit }) => {
-    const [tempScene, setTempScene] = useState<string>("");
-    const [scenesList, setScenesList] = useState<string[]>(scenes);
+    const [tempScene, setTempScene] = useState<DataScene | null>(null);
     const handlersUpdateTempScene = (value: string) => {
-        setTempScene(value);
+        const excluded = scenes.map((scene) => scene.index);
+        const index = fnRandom(0, 65535, excluded);
+        setTempScene({ index, value });
     };
     const handlersSubmitTempScene = () => {
-        if (tempScene) {
-            const scenesListNew = [...scenesList];
-            scenesListNew.unshift(`${tempScene}`);
-            setScenesList(scenesListNew);
+        if (tempScene?.index && tempScene?.value) {
+            const newScenes = [...scenes];
+            newScenes.unshift(tempScene);
+            if (onSubmit !== undefined) {
+                onSubmit(newScenes);
+                setTempScene(null);
+            }
         }
     };
     const handlersUpdateSceneItem = (index: number, value: string) => {
-        const scenesListNew = scenesList.map((v, k) => (k === index ? value : v));
-        setScenesList(scenesListNew);
+        const newScenes = scenes.map((scene) => (scene.index === index ? { ...scene, value: value } : scene));
+        if (onSubmit !== undefined) {
+            onSubmit(newScenes);
+        }
     };
     const handlersRemoveSceneItem = (index: number) => {
-        const a = scenesList.slice(0, index);
-        const b = scenesList.slice(index);
-        b.shift();
-        setScenesList([...a, ...b]);
-    };
-    const handlersOnSubmit = async () => {
+        const newScenes = scenes.filter((scene) => scene.index !== index);
         if (onSubmit !== undefined) {
-            onSubmit(scenesList);
-        }
-        if (onClose !== undefined) {
-            setTempScene("");
-            onClose();
+            onSubmit(newScenes);
         }
     };
     const handlersOnClose = () => {
         if (onClose !== undefined) {
-            setTempScene("");
+            setTempScene(null);
             onClose();
         }
     };
     const handlersIndexPlus = (index: number) => {
-        const a = scenesList.slice(0, index);
-        const b = scenesList.slice(index);
+        const newScenes = [...scenes];
+        const a = newScenes.slice(0, index);
+        const b = newScenes.slice(index);
         const upOne = a.pop();
         const theOne = b.shift();
         if (theOne) {
@@ -59,11 +59,14 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
         if (upOne) {
             b.unshift(upOne);
         }
-        setScenesList([...a, ...b]);
+        if (onSubmit !== undefined) {
+            onSubmit([...a, ...b]);
+        }
     };
     const handlersIndexMinus = (index: number) => {
-        const a = scenesList.slice(0, index);
-        const b = scenesList.slice(index);
+        const newScenes = [...scenes];
+        const a = newScenes.slice(0, index);
+        const b = newScenes.slice(index);
         const theOne = b.shift();
         const downOne = b.shift();
         if (theOne) {
@@ -72,7 +75,9 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
         if (downOne) {
             b.unshift(downOne);
         }
-        setScenesList([...a, ...b]);
+        if (onSubmit !== undefined) {
+            onSubmit([...a, ...b]);
+        }
     };
     useEffect(() => {
         return () => {};
@@ -80,23 +85,20 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
     return (
         <Drawer id="video-script-editor-scenes" title="Edit Scenes" size="large" onClose={handlersOnClose} open={open}>
             <div className="scene-temp">
-                <Input value={tempScene} onChange={(e) => handlersUpdateTempScene(e.target.value)} placeholder="Scene-场景" />
+                <Input value={tempScene?.value} onChange={(e) => handlersUpdateTempScene(e.target.value)} placeholder="Scene-场景" />
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempScene} />
             </div>
             <div className="scenes-list">
-                {scenesList.map((value, k) => {
+                {scenes.map((scene, k) => {
                     return (
-                        <div key={k} className="scenes-item">
-                            <Input value={value} onChange={(e) => handlersUpdateSceneItem(k, e.target.value)} />
-                            <Button icon={<MinusSquareOutlined />} onClick={(e) => handlersRemoveSceneItem(k)} />
+                        <div key={scene.index} className="scenes-item">
+                            <Input defaultValue={scene.value} onBlur={(e) => handlersUpdateSceneItem(scene.index, e.target.value)} />
+                            <Button icon={<MinusSquareOutlined />} onClick={(e) => handlersRemoveSceneItem(scene.index)} />
                             <Button icon={<ArrowUpOutlined />} onClick={(e) => handlersIndexPlus(k)} />
                             <Button icon={<ArrowDownOutlined />} onClick={(e) => handlersIndexMinus(k)} />
                         </div>
                     );
                 })}
-            </div>
-            <div className="scenes-submit">
-                <Button icon={<ReloadOutlined />} onClick={handlersOnSubmit} />
             </div>
         </Drawer>
     );

@@ -5,7 +5,7 @@ import store, { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateHash, updateType, updateVideoMatchingSentence, updateVideoTranslateMatchingSentence, updateProcessings, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateDiaryData } from "../../stores/reducers/plan";
 import { clearToken } from "../../stores/reducers/auth";
-import { fnValidateVideoScript } from "../../utils/script";
+import { fnValidateVideoScript, fnDealScenes, fnDealParagraphs } from "../../utils/script";
 import { fnValidateDiary } from "../../utils/diary";
 import { videoImport, videoInit, importData, exportData, planCountVocabs, planSearch, concatAudio } from "../../api/requestAuth";
 import { Domain } from "../../settings.js";
@@ -62,6 +62,9 @@ const Index = () => {
                         if (fnValidateVideoScript(script)) {
                             if (script.title) {
                                 dispatch(updateType(1));
+                                // temporary
+                                script.scenes = fnDealScenes(script);
+                                script.paragraphs = fnDealParagraphs(script);
                                 dispatch(updateScriptData(script));
                             }
                         } else {

@@ -116,29 +116,32 @@ const Index = () => {
     };
     const fnGetAssembleElements = (index: number, chunk = 3) => {
         const resElems: string[] = [];
-        const text = dataFormatted.vocabs[index].text.split(" | ")[0];
-        const slashes = text.match(/\//g);
-        if (slashes?.length) {
-            for (let i = 0; i < slashes?.length; i++) {
-                resElems.push("/");
-            }
-        }
-        text.split("/").forEach((phrase: string) => {
-            const spaces = phrase.match(/\s/g);
-            if (spaces?.length) {
-                for (let i = 0; i < spaces?.length; i++) {
-                    resElems.push(" ");
+        if (dataFormatted.vocabs[index]) {
+            const text = dataFormatted.vocabs[index].text.split(" | ")[0];
+            const slashes = text.match(/\//g);
+            if (slashes?.length) {
+                for (let i = 0; i < slashes?.length; i++) {
+                    resElems.push("/");
                 }
             }
-            phrase.split(" ").forEach((vocab) => {
-                const chunkLen = chunk >= vocab.length ? vocab.length : chunk;
-                const selectLen = Math.ceil(vocab.length / chunkLen);
-                for (let i = 0; i < selectLen; i++) {
-                    const a = vocab.slice(i * chunk, (i + 1) * chunk);
-                    resElems.push(a);
+            text.split("/").forEach((phrase: string) => {
+                const spaces = phrase.match(/\s/g);
+                if (spaces?.length) {
+                    for (let i = 0; i < spaces?.length; i++) {
+                        resElems.push(" ");
+                    }
                 }
+                phrase.split(" ").forEach((vocab) => {
+                    const chunkLen = chunk >= vocab.length ? vocab.length : chunk;
+                    const selectLen = Math.ceil(vocab.length / chunkLen);
+                    for (let i = 0; i < selectLen; i++) {
+                        const a = vocab.slice(i * chunk, (i + 1) * chunk);
+                        resElems.push(a);
+                    }
+                });
             });
-        });
+        }
+
         return fnShuffle(resElems);
     };
     const fnUpdateChunkAnswer = (chunks: number[]) => {

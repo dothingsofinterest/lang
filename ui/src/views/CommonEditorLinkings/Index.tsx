@@ -14,40 +14,37 @@ interface CommonEditorLinkingsProps {
 
 const CommonEditorLinkings: React.FC<CommonEditorLinkingsProps> = ({ linkings, open, onClose, onSubmit }) => {
     const [tempLinking, setTempLinking] = useState<string>("");
-    const [linkingList, setLinkingList] = useState<string[]>(linkings);
     const handlersUpdateTempLinking = (value: string) => {
         setTempLinking(value);
     };
     const handlersSubmitTempLinking = () => {
         const linking = tempLinking.split(" -> ");
         if (linking[0] && linking[1]) {
-            const linkingListNew = [...linkingList];
-            linkingListNew.unshift(`${tempLinking}`);
-            setTempLinking("");
-            setLinkingList(linkingListNew);
+            const newLinkings = [...linkings];
+            newLinkings.unshift(`${tempLinking}`);
+            if (onSubmit !== undefined) {
+                onSubmit(newLinkings);
+                setTempLinking("");
+            }
         }
     };
     const handlersUpdateLinkingItem = (index: number, value: string) => {
-        const linkingListNew = linkingList.map((v, k) => (k === index ? value : v));
-        setLinkingList(linkingListNew);
+        const newLinkings = linkings.map((linking, k) => (k === index ? value : linking));
+        if (onSubmit !== undefined) {
+            onSubmit(newLinkings);
+        }
     };
     const handlersRemoveLinkingItem = (index: number) => {
-        const a = linkingList.slice(0, index);
-        const b = linkingList.slice(index);
+        const newLinkings = [...linkings];
+        const a = newLinkings.slice(0, index);
+        const b = newLinkings.slice(index);
         b.shift();
-        setLinkingList([...a, ...b]);
+        if (onSubmit !== undefined) {
+            onSubmit([...a, ...b]);
+        }
     };
     const handlersOnClose = () => {
         if (onClose !== undefined) {
-            onClose();
-        }
-    };
-    const handlersOnSubmit = () => {
-        if (onSubmit !== undefined) {
-            onSubmit(linkingList);
-        }
-        if (onClose !== undefined) {
-            setTempLinking("");
             onClose();
         }
     };
@@ -67,7 +64,12 @@ const CommonEditorLinkings: React.FC<CommonEditorLinkingsProps> = ({ linkings, o
                     <Paragraph copyable={{ text: "ðæt" }}>that ➤ ðæt</Paragraph>
                     <Paragraph copyable={{ text: "ɪt" }}>it ➤ ɪt</Paragraph>
                     <Paragraph copyable={{ text: "ɪz" }}>is ➤ ɪz</Paragraph>
-                    <Paragraph copyable={{ text: "wen" }}>wen ➤ wen</Paragraph>
+                    <Paragraph copyable={{ text: "əv" }}>of ➤ əv</Paragraph>
+                </div>
+                <div className="line">
+                    <Paragraph copyable={{ text: "wen" }}>when ➤ wen</Paragraph>
+                    <Paragraph copyable={{ text: "ɪts" }}>its ➤ ɪts</Paragraph>
+                    <Paragraph copyable={{ text: "ɪn" }}>in ➤ ɪn</Paragraph>
                 </div>
             </div>
             <div className="linking-temp">
@@ -75,17 +77,14 @@ const CommonEditorLinkings: React.FC<CommonEditorLinkingsProps> = ({ linkings, o
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempLinking} />
             </div>
             <div className="linkings-list">
-                {linkingList.map((v, k) => {
+                {linkings.map((v, k) => {
                     return (
-                        <div key={k} className="linkings-item">
-                            <Input value={v} onChange={(e) => handlersUpdateLinkingItem(k, e.target.value)} />
+                        <div key={Math.random()} className="linkings-item">
+                            <Input defaultValue={v} onBlur={(e) => handlersUpdateLinkingItem(k, e.target.value)} />
                             <Button icon={<MinusSquareOutlined />} onClick={(e) => handlersRemoveLinkingItem(k)} />
                         </div>
                     );
                 })}
-            </div>
-            <div className="linkings-submit">
-                <Button icon={<ReloadOutlined />} onClick={handlersOnSubmit} />
             </div>
         </Drawer>
     );

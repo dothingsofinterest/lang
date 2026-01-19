@@ -1,0 +1,57 @@
+#video-script-paragraphs {
+    .paragraph {
+        margin-top: 4px;
+        .meta {
+            width: 100%;
+            display: flex;
+            margin-bottom: 4px;
+            .ant-select {
+                flex: 1;
+                border-radius: 0;
+            }
+            .ant-mentions {
+                flex: 1;
+                font-size: 12px;
+                line-height: 22px;
+                border-radius: 0;
+                border-left: 1px solid #fff;
+                height: 24px;
+                background: #ccc;
+            }
+            .ant-select-selector {
+                border-radius: 0;
+                font-size: 12px;
+                background: #ccc;
+            }
+        }
+        .sentence {
+            width: 100%;
+            display: flex;
+            margin-bottom: 4px;
+            .time {
+                flex: 0 0 94px;
+                row-gap: 4px;
+                overflow: hidden;
+                .time-input {
+                    border-radius: 0;
+                }
+            }
+            .text {
+                flex: 1;
+                font-size: 12px;
+                min-height: 52px;
+                margin-left: 4px;
+                border-radius: 0;
+                color: #000;
+                border-top: 0;
+            }
+        }
+    }
+}
+
+.ant-mentions {
+    .rc-textarea {
+        padding: 0px 7px;
+        height: 24px;
+    }
+}

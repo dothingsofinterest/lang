@@ -1,27 +1,8 @@
 import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, PlanData } from "../types/Data";
 import { dataSync } from "../api/requestAuth";
 import { Domain } from "../settings.js";
+import { fnRandom } from "./util";
 import Joi from "joi";
-
-export const fnCreateJson = (script: DataScript, scriptTimeOffset: number): DataScript => {
-    const newParagraphs = script.paragraphs.map((value) => {
-        const newSentences = value.sentences.map((v) => {
-            let startTime = v.startTime;
-            let endTime = v.endTime;
-            if (scriptTimeOffset && fnSRTTimeToFloat(script.paragraphs[0].sentences[0].startTime) + scriptTimeOffset > 0) {
-                startTime = fnFloatToSRTTime(fnSRTTimeToFloat(v.startTime) + scriptTimeOffset);
-                endTime = fnFloatToSRTTime(fnSRTTimeToFloat(v.endTime) + scriptTimeOffset);
-            }
-            return {
-                ...v,
-                startTime: startTime,
-                endTime: endTime,
-            };
-        });
-        return { ...value, sentences: newSentences };
-    });
-    return { ...script, paragraphs: newParagraphs };
-};
 
 export const fnParseVocabs = (text: string): string => {
     let r = ``;
@@ -94,36 +75,23 @@ export const fnGetFormattedData = (plan: string, script: DataScript): PlanData =
     script.paragraphs.forEach((v: DataParagraph) => {
         data.sentences.push(...v.sentences);
     });
-    const hasScene = script.paragraphs.find(({ scene }) => {
-        return scene === "";
-    });
-    if (hasScene === undefined) {
+    const emptyScene = script.paragraphs.find(({ scene }) => scene === "");
+    if (emptyScene === undefined) {
         script.paragraphs.forEach((v: DataParagraph, k: number, a: DataParagraph[]) => {
-            const sceneArr = v.scene.split("-");
-            const sceneKey = sceneArr[0].replaceAll(/[\s\'\,]/g, "");
-            if (sceneKey) {
-                if (k === 0) {
-                    data.scenes.push({
-                        name: v.scene,
-                        paragraphs: [v],
-                    });
+            const sceneItem = script.scenes.find(({ index }) => index === v.scene);
+            const sceneName = sceneItem ? sceneItem.value : `${v.scene}-${v.scene}`;
+            if (k === 0) {
+                data.scenes.push({ name: sceneName, paragraphs: [v] });
+            } else {
+                if (v.scene !== a[k - 1].scene) {
+                    data.scenes.push({ name: sceneName, paragraphs: [v] });
                 } else {
-                    if (v.scene !== a[k - 1].scene) {
-                        data.scenes.push({
-                            name: v.scene,
-                            paragraphs: [v],
-                        });
-                    } else {
-                        data.scenes[data.scenes.length - 1].paragraphs.push(v);
-                    }
+                    data.scenes[data.scenes.length - 1].paragraphs.push(v);
                 }
             }
         });
     } else {
-        data.scenes.push({
-            name: "",
-            paragraphs: [],
-        });
+        data.scenes.push({ name: "", paragraphs: [] });
         script.paragraphs.forEach((v: DataParagraph) => {
             data.scenes[0].paragraphs.push(v);
         });
@@ -177,7 +145,9 @@ export const fnValidateVideoScript = (data: any): boolean => {
     const schema = Joi.object({
         title: Joi.string().required().allow(""),
         roles: Joi.array().items(Joi.string()).required(),
-        scenes: Joi.array().items(Joi.string().allow("")).required(),
+        scenes: Joi.array()
+            .items(Joi.alternatives().try(Joi.object(), Joi.string().allow("")))
+            .required(),
         vocabs: Joi.array().items(Joi.object()).required(),
         grammars: Joi.array().items(Joi.string()).required(),
         paragraphs: Joi.array().items(Joi.object()).required(),
@@ -199,9 +169,37 @@ export const fnGetMaxTimeFromSentences = (sentences: Sentence[]): number => {
     return Math.max(...timeArr);
 };
 
-export const fnSyncScript = async (plan: string, script: DataScript, scriptTimeOffset: number) => {
-    const blob = new Blob([JSON.stringify(fnCreateJson(script, scriptTimeOffset), null, 4)], { type: "application/json" });
+export const fnSyncScript = async (plan: string, script: DataScript) => {
+    const blob = new Blob([JSON.stringify(script, null, 4)], { type: "application/json" });
     const formData = new FormData();
     formData.append("file", blob, "script.json");
     dataSync({ plan }, formData);
+};
+
+// Temporary
+export const fnDealScenes = (script: DataScript) => {
+    const min = 0,
+        max = 65535;
+    const excluded: number[] = [];
+    return script.scenes.map((scene) => {
+        if (typeof scene === "object") {
+            return scene;
+        } else {
+            const index = fnRandom(min, max, excluded);
+            excluded.push(index);
+            return { index: index, value: scene };
+        }
+    });
+};
+
+// Temporary
+export const fnDealParagraphs = (script: DataScript) => {
+    return script.paragraphs.map((p: DataParagraph) => {
+        if (typeof p === "number") {
+            return p;
+        } else {
+            const scene = script.scenes.find(({ value }) => p.scene === value);
+            return { ...p, scene: scene ? scene.index : p.scene };
+        }
+    });
 };

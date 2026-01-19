@@ -12,7 +12,7 @@ interface ScriptProps {
     onRendered?: (scrollTopPoint: number) => void;
 }
 
-const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, matchingSentence = 0, showFooter = false, onRendered }) => {
+const Script: React.FC<ScriptProps> = ({ dataFormatted, encn = 0, matchingSentence = 0, showFooter = false, onRendered }) => {
     const articleRef = useRef<HTMLDivElement>(null);
     const fnRender = () => {
         if (articleRef.current) {
@@ -55,7 +55,7 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, mat
                                             {paragraph.sentences.map((v, k) => {
                                                 return (
                                                     <span className="point" key={v.key}>
-                                                        {encn === 0 ? v.texts.length > 0 && v.linkings ? <ScriptLinking text={v.texts[0].split("\n")[0]} linkings={v.linkings} /> : v.texts[0].split("\n")[0] : v.texts.length > 0 && v.texts[0].split("\n")[1]}
+                                                        {v.texts.length > 0 && (encn === 0 ? v.linkings ? <ScriptLinking text={v.texts[0].split("\n")[0]} linkings={v.linkings} /> : v.texts[0].split("\n")[0] : v.texts[0].split("\n")[1])}
                                                     </span>
                                                 );
                                             })}
@@ -89,6 +89,6 @@ const Script: React.FC<ScriptProps> = React.memo(({ dataFormatted, encn = 0, mat
             <footer className="footer">{showFooter && <ScriptFooter vocabs={dataFormatted.vocabs} grammars={dataFormatted.grammars} />}</footer>
         </article>
     );
-});
+};
 
 export default Script;
