@@ -6,7 +6,7 @@ import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { updateVocabMatchListen } from "../../stores/reducers/plan";
-import { fnShuffle } from "../../utils/util";
+import { fnRandom, fnShuffle } from "../../utils/util";
 import "./Index.scss";
 
 const Index = () => {
@@ -24,9 +24,9 @@ const Index = () => {
     const refAudio = useRef<HTMLAudioElement>(null);
     const refMatchingVocab = useRef({ matchingVocab });
     const refWordList = useRef<HTMLDivElement>(null);
+    const refWordListArr = useRef<NodeListOf<HTMLDivElement> | null | undefined>(null);
     const refSelector = useRef<HTMLDivElement>(null);
     const handlersClickSelector = (text: string, index: number) => {
-        setSelectorVocabsActvie(index);
         if (dataFormatted.vocabs.length > 0) {
             const inputText = text.split(" | ")[0];
             const answerText = dataFormatted.vocabs[matchingVocab].text.split(" | ")[0];
@@ -35,16 +35,10 @@ const Index = () => {
                 dispatch(updateVocabMatchListen(matchingVocabNext));
                 setSelectorVocabsActvie(null);
                 setChunkAnswer([]);
+                fnScrollList(matchingVocab);
                 fnPlayAudio(matchingVocabNext);
-                if (refWordList.current) {
-                    refWordList.current.querySelectorAll(".line").forEach((span: any, k) => {
-                        if (matchingVocab === k) {
-                            const scrollTop = refScrollbar.current?.getScrollTop() || 0;
-                            const scrollTopVocabValue = scrollTop + span.getBoundingClientRect().top;
-                            refScrollbar.current?.scrollTop(scrollTopVocabValue);
-                        }
-                    });
-                }
+            } else {
+                setSelectorVocabsActvie(index);
             }
         }
     };
@@ -61,6 +55,7 @@ const Index = () => {
         const matchingVocab = refMatchingVocab.current.matchingVocab;
         const index = matchingVocab - 1 <= 0 ? 0 : matchingVocab - 1;
         dispatch(updateVocabMatchListen(index));
+        fnScrollList(index - 1);
         fnPlayAudio(index);
         fnClearChunk();
     };
@@ -68,6 +63,7 @@ const Index = () => {
         const matchingVocab = refMatchingVocab.current.matchingVocab;
         const index = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
         dispatch(updateVocabMatchListen(index));
+        fnScrollList(index - 1);
         fnPlayAudio(index);
         fnClearChunk();
     };
@@ -94,25 +90,16 @@ const Index = () => {
         setChunkAnswerAccomplished(false);
         setChunkAnswer([]);
     };
-    const fnGetRandomNumbers = (index: number, capacity = 4) => {
-        let nums = [index];
-        if (dataFormatted.vocabs.length > 0) {
-            while (nums.length < capacity) {
-                const exceptIndices: number[] = [];
-                dataFormatted.vocabs.forEach((v, i) => {
-                    if (!nums.includes(i)) {
-                        exceptIndices.push(i);
-                    }
-                });
-                const randomNum = Math.floor(Math.random() * exceptIndices.length);
-                nums.push(exceptIndices[randomNum] === undefined ? 0 : exceptIndices[randomNum]);
+    const fnGetRandomNumbers = (index: number) => {
+        const results: number[] = [index];
+        const vocabsLen = dataFormatted.vocabs.length;
+        if (vocabsLen > 0) {
+            for (let i = 0; i < 3; i++) {
+                const randomIndex = fnRandom(0, vocabsLen - 1, results);
+                results.push(randomIndex);
             }
-            const randomNum = Math.floor(Math.random() * 10) % capacity;
-            const a = nums.slice(0, randomNum);
-            const b = nums.slice(randomNum, nums.length);
-            nums = [...b, ...a];
         }
-        return nums;
+        return fnShuffle(results);
     };
     const fnGetAssembleElements = (index: number, chunk = 3) => {
         const resElems: string[] = [];
@@ -153,12 +140,19 @@ const Index = () => {
         setChunkAnswer(chunks);
         setChunkAnswerAccomplished(inputSpell === answerText);
     };
+    const fnScrollList = (index: number) => {
+        const list = refWordListArr.current;
+        if (list && list[index]) {
+            const scrollTop = refScrollbar.current?.getScrollTop() || 0;
+            const scrollTopVocabValue = scrollTop + list[index].getBoundingClientRect().top;
+            refScrollbar.current?.scrollTop(scrollTopVocabValue);
+        }
+    };
     useEffect(() => {
         if (!plan.hash || !plan.videoURL) {
             alert("Please create a plan.");
             navigate("/common/settings");
         }
-        fnPlayAudio(matchingVocab);
         const onKeyDownHandler = (event: KeyboardEvent) => {
             if (event.code === "ArrowLeft") {
                 handlersPlayBackward();
@@ -167,6 +161,8 @@ const Index = () => {
                 handlersPlayForward();
             }
         };
+        fnPlayAudio(matchingVocab);
+        refWordListArr.current = refWordList.current?.querySelectorAll(".line");
         window.addEventListener("keydown", onKeyDownHandler);
         return () => {
             window.removeEventListener("keydown", onKeyDownHandler);

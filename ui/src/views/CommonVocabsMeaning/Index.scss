@@ -1,20 +1,5 @@
 #meaning-index {
     .main-inner-item-aside {
-        textarea {
-            border: 0;
-            font-size: 20px;
-            min-height: 100%;
-            border-radius: 0;
-            color: #000;
-            &:focus {
-                border-color: 0;
-            }
-            &:hover {
-                border: 0;
-            }
-        }
-    }
-    .main-inner-item-main {
         #panel {
             width: 100%;
             height: 32px;
@@ -29,65 +14,82 @@
                 border-top: 0;
                 border-left: 0;
                 border-radius: 0;
-                background-color: #888;
                 background: linear-gradient(to bottom, #888, #bbb, #888);
             }
         }
-        #showcase {
-            background: #000;
+        #selector {
+            background: #734f2d;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
             align-items: stretch;
-            flex-wrap: wrap;
+            height: 100%;
             .item {
-                width: 25%;
-                height: 200px;
+                flex: 1;
                 color: #fff;
-                padding: 10px;
+                width: 100%;
                 border: 1px solid #ccc;
                 border-top: 0;
                 border-left: 0;
                 display: flex;
-                flex-direction: column;
-                justify-content: space-around;
                 align-items: center;
-                position: relative;
-                background-color: #734f2d;
-                box-sizing: border-box;
-                img {
-                    user-select: none;
-                    max-width: 100%;
-                    max-height: 80%;
-                    border-radius: 5px;
-                }
-                .cn {
-                    inset: 0;
-                    pointer-events: none;
-                    font-size: 14px;
-                    font-style: normal;
-                    word-break: break-all;
+                user-select: none;
+                .img {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    align-items: center;
+                    background: #c5a587;
+                    height: 100%;
+                    flex: 0 0 40%;
+                    img {
+                        border-radius: 5px;
+                        user-select: none;
+                        max-width: 98%;
+                        max-height: 98%;
+                    }
                 }
                 .text {
                     inset: 0;
-                    display: none;
                     pointer-events: none;
-                    color: #ccc;
-                    font-size: 14px;
+                    font-size: 16px;
                     font-style: normal;
                     word-break: break-all;
+                    padding: 10px 20px;
+                    flex: 0 0 60%;
+                    text-align: center;
                 }
-                &.matched {
-                    background-color: #000;
-                    .text {
-                        display: inline;
-                    }
-                    .cn {
-                        display: none;
-                    }
-                    img {
-                        opacity: 0.5;
-                    }
+                &.active {
+                    background: #402103;    
                 }
+            }
+        }
+    }
+    .main-inner-item-main {
+        .ant-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            .ant-progress-outer {
+                width: 100% !important;
+                .ant-progress-bg-inner {
+                    width: 100%;
+                    height: 32px !important;
+                    background-color: #52c41a;
+                }
+            }
+        }
+        textarea {
+            border: 0;
+            font-size: 20px;
+            min-height: 100%;
+            border-radius: 0;
+            color: #000;
+            &:focus {
+                border-color: 0;
+            }
+            &:hover {
+                border: 0;
             }
         }
     }

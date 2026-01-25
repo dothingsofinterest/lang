@@ -43,7 +43,7 @@ const Login = () => {
             const res = await OAuthLogin(data);
             if (res.code) {
                 dispatch(setToken(res));
-                navigate("/set");
+                navigate("/common/settings");
             } else {
                 alert(`${res.message}`);
             }
@@ -62,14 +62,14 @@ const Login = () => {
     useEffect(() => {
         const cookie = Cookies.get(`ACCESS_TOKEN`);
         if (cookie) {
-            navigate("/set");
+            navigate("/common/settings");
         }
         loadCaptcha();
     }, []);
     return (
         <Row id="login">
             <Col span={18} id="logo">
-                <div className="logo-inner">Learn a language</div>
+                <div className="logo-inner">Study Languages</div>
             </Col>
             <Col span={6} id="form">
                 <Card title="Please Login">
