@@ -125,14 +125,6 @@ export const vocabPronunciationGenerate = (params: object): Promise<Response> =>
         params: params,
     });
 };
-export const vocabPronunciationGenerateBase64 = (params: object, data: FormData): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/plan/data/vocab_pronunciation_generate_base64`,
-        data: data,
-        params: params,
-    });
-};
 export const vocabImagePronunciationMove = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",

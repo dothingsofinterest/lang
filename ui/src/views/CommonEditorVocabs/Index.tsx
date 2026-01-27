@@ -6,7 +6,7 @@ import { fnParseVocabs } from "../../utils/script";
 import { fnBase64ToBlob } from "../../utils/util";
 import { Domain } from "../../settings.js";
 import { md5 } from "js-md5";
-import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationGenerateBase64, vocabPronunciationUpload } from "../../api/requestAuth";
+import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload } from "../../api/requestAuth";
 import "./Index.scss";
 
 interface CommonEditorVocabsProps {
@@ -222,7 +222,7 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
                     <div className="audio-btn">
                         <Select style={{ width: 120 }} value={vocab.voice} onChange={handlersUpdateVocabPronounceVoice} options={voiceOptions} />
                         <Select style={{ width: 120 }} value={vocab.speed} onChange={handlersUpdateVocabPronounceSpeed} options={speedOptions} />
-                        <Input className="base64" onBlur={(e) => handlersUploadVocabPronunciationBase64(e.target.value)} />
+                        <Input className="base64" value={``} onChange={(e) => handlersUploadVocabPronunciationBase64(e.target.value)} />
                         <Button className="gen" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
                         <Upload beforeUpload={handlersUploadVocabPronunciation} showUploadList={false}>
                             <Button icon={<PlusSquareOutlined />} />
