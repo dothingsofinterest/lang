@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vocab as DataVocab } from "../../types/Data";
 import { Input, Button, Select, Drawer, Upload } from "antd";
-import { PlusSquareOutlined, MinusSquareOutlined, RedoOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, MinusSquareOutlined, RedoOutlined, BoldOutlined } from "@ant-design/icons";
 import { fnParseVocabs } from "../../utils/script";
+import { fnBase64ToBlob } from "../../utils/util";
 import { Domain } from "../../settings.js";
 import { md5 } from "js-md5";
-import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload } from "../../api/requestAuth";
+import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationGenerateBase64, vocabPronunciationUpload } from "../../api/requestAuth";
 import "./Index.scss";
 
 interface CommonEditorVocabsProps {
@@ -101,7 +102,7 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
             }
         }
     };
-    const handlersUpdateVocabPronunciation = async (file: any) => {
+    const handlersUploadVocabPronunciation = async (file: any) => {
         if (vocab.text) {
             if (/^(.+?)\.(mp3)$/g.test(file.name) && file.type === "audio/mpeg") {
                 try {
@@ -125,6 +126,38 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
                 }
             } else {
                 alert("Please upload a mp3 format audio.");
+            }
+        } else {
+            alert("Please type vocab text.");
+        }
+    };
+    const handlersUploadVocabPronunciationBase64 = async (base64: string) => {
+        if (vocab.text) {
+            const regGoogle = /\{\"translate\_tts\"\:\[\"(.+)\"\]\}/; // Google Translattion
+            const match = base64.match(regGoogle);
+            if (match && match[1]) {
+                try {
+                    const blob = fnBase64ToBlob(match[1], "audio/mpeg");
+                    const nameEN = vocab.text.split(" | ")[0].replaceAll(/[\s\,\/\:\?\.\%]+/g, "_");
+                    const nameCNHash = md5(vocab.text.split(" | ")[2]).slice(25);
+                    const name = `${nameEN}_${nameCNHash}.mp3`;
+                    const formData = new FormData();
+                    formData.append("file", blob, name);
+                    const res = await vocabPronunciationUpload({}, formData);
+                    if (res.code === 1) {
+                        setVocab({ ...vocab, pronunciation: res.data.filename });
+                        if (refAudio.current) {
+                            const audio = refAudio.current;
+                            audio.src = `${Domain}/data/temp/${res.data.filename}`;
+                            audio.load();
+                            audio.play();
+                        }
+                    }
+                } catch (e: any) {
+                    alert(e.message);
+                }
+            } else {
+                alert("Please input base64 string.");
             }
         } else {
             alert("Please type vocab text.");
@@ -183,14 +216,15 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
                             <Button icon={<PlusSquareOutlined />} />
                         </Upload>
                     </div>
+                    <div className="audio-player">
+                        <Button onClick={handlersPlayVocabPronunciation}>{vocab.pronunciation}</Button>
+                    </div>
                     <div className="audio-btn">
                         <Select style={{ width: 120 }} value={vocab.voice} onChange={handlersUpdateVocabPronounceVoice} options={voiceOptions} />
                         <Select style={{ width: 120 }} value={vocab.speed} onChange={handlersUpdateVocabPronounceSpeed} options={speedOptions} />
-                        <Button className="play" onClick={handlersPlayVocabPronunciation}>
-                            {vocab.pronunciation}
-                        </Button>
+                        <Input className="base64" onBlur={(e) => handlersUploadVocabPronunciationBase64(e.target.value)} />
                         <Button className="gen" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
-                        <Upload beforeUpload={handlersUpdateVocabPronunciation} showUploadList={false}>
+                        <Upload beforeUpload={handlersUploadVocabPronunciation} showUploadList={false}>
                             <Button icon={<PlusSquareOutlined />} />
                         </Upload>
                     </div>

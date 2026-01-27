@@ -16,25 +16,31 @@ export const fnParseVocabs = (text: string): string => {
                 // Part of EN
                 const matchName = text.match(/^([a-zA-Z ]+)/);
                 if (matchName && matchName[1]) {
+                    // Base
                     str += matchName[1];
+                    // Nouns
                     if (i === 0) {
                         const nameExt = [/复数(.*?)(\w+)/];
                         for (let k = 0; k < nameExt.length; k++) {
                             const matchNameExt = text.match(nameExt[k]);
                             if (matchNameExt && matchNameExt[2]) {
-                                str += `/${matchNameExt[2]}`;
+                                str += fnParseVocabsCheckNoun(matchName[1], matchNameExt[2]);
                             }
                         }
                     }
+                    // Verbs
                     if (i === 1) {
+                        const strArr = [];
                         const nameExt = [/第三人称单数(.*?)(\w+)/, /过去式(.*?)(\w+)/, /过去分词(.*?)(\w+)/, /现在进行时(.*?)(\w+)/];
                         for (let k = 0; k < nameExt.length; k++) {
                             const matchNameExt = text.match(nameExt[k]);
                             if (matchNameExt && matchNameExt[2]) {
-                                str += `/${matchNameExt[2]}`;
+                                strArr.push(matchNameExt[2]);
                             }
                         }
+                        str += fnParseVocabsCheckVerbs(matchName[1], strArr);
                     }
+                    // Adjective
                     if (i === 2) {
                         const nameExt = [/比较级(.*?)(\w+)/, /最高级(.*?)(\w+)/];
                         for (let k = 0; k < nameExt.length; k++) {
@@ -58,6 +64,51 @@ export const fnParseVocabs = (text: string): string => {
         r = res.join("\n");
     }
     return r;
+};
+
+export const fnParseVocabsCheckNoun = (base: string, plural: string): string => {
+    if (base && plural) {
+        const vs = new RegExp(`^${base}s`); // +s invents
+        const ves = new RegExp(`^${base}es`); // +es touches
+        const vies = new RegExp(`^${base.slice(0, base.length - 1)}ies`); // -y +ies studies
+        if (!vs.test(plural) && !ves.test(plural) && !vies.test(plural)) {
+            return `/${plural}`;
+        }
+    }
+    return "";
+};
+
+export const fnParseVocabsCheckVerbs = (base: string, variants: string[]): string => {
+    const [third, past, participle, gerund] = variants;
+    if (third) {
+        const vs = new RegExp(`^${base}s`); // +s invents
+        const ves = new RegExp(`^${base}es`); // +es touches
+        const vies = new RegExp(`^${base.slice(0, base.length - 1)}ies`); // -y +ies studies
+        if (!vs.test(third) && !ves.test(third) && !vies.test(third)) {
+            return `/${variants.join("/")}`;
+        }
+    }
+    if (past && participle) {
+        const vd = new RegExp(`^${base}d`); // +d tortured
+        const ved = new RegExp(`^${base}ed`); // +ed invented
+        const vied = new RegExp(`^${base.slice(0, base.length - 1)}ied`); // -y +ied carried
+        const vced = new RegExp(`^${base}${base.charAt(base.length - 1)}ed`); // +辅 +ed stopped
+        if (!vd.test(past) && !ved.test(past) && !vied.test(past) && !vced.test(past)) {
+            return `/${variants.join("/")}`;
+        }
+        if (!vd.test(participle) && !ved.test(participle) && !vied.test(participle) && !vced.test(participle)) {
+            return `/${variants.join("/")}`;
+        }
+    }
+    if (gerund) {
+        const ving = new RegExp(`^${base}ing`); // +ing inventing
+        const veing = new RegExp(`^${base.slice(0, base.length - 1)}ing`); // -e +ing whistling
+        const vcing = new RegExp(`^${base}${base.charAt(base.length - 1)}ing`); // +辅 +ing stopping
+        if (!ving.test(gerund) && !veing.test(gerund) && !vcing.test(gerund)) {
+            return variants.join("/");
+        }
+    }
+    return "";
 };
 
 export const fnGetFormattedData = (plan: string, script: DataScript): PlanData => {

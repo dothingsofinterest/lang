@@ -37,21 +37,35 @@
                 }
             }
         }
+        .audio-player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .ant-btn {
+                flex: 1;
+                text-align: left;
+                border-radius: 0;
+                overflow: hidden;
+                padding: 0 12px;
+                justify-content: flex-start;
+            }
+        }
         .audio-btn {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 10px 0;
-            .play {
-                flex: 1;
-                border-radius: 0;
-            }
             .gen {
+                flex: 0 0 32px;
                 border-radius: 0;
-                border-left: 0;
+                background-color: #ccc;
+            }
+            .base64 {
+                border-radius: 0;
                 border-right: 0;
             }
             .ant-upload-wrapper {
+                flex: 0 0 32px;
                 .ant-btn {
                     border-radius: 0;
                     width: 32px;
