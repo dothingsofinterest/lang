@@ -2,7 +2,9 @@
     .linking-symbols {
         .line {
             display: flex;
-            justify-content: space-around;
+            .ant-typography {
+                flex: 1;
+            }
         }
     }
     .linking-temp {

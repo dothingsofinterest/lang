@@ -76,6 +76,7 @@ const CommonEditorLinkings: React.FC<CommonEditorLinkingsProps> = ({ linkings, o
                     <Paragraph copyable={{ text: "ə" }}>a ➤ ə</Paragraph>
                     <Paragraph copyable={{ text: "ən" }}>an ➤ ən</Paragraph>
                     <Paragraph copyable={{ text: "ænd" }}>and ➤ ænd</Paragraph>
+                    <Paragraph copyable={{ text: "æt" }}>at ➤ æt</Paragraph>
                 </div>
             </div>
             <div className="linking-temp">
