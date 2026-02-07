@@ -8,6 +8,7 @@ import CommonVocabsWatch from "../views/CommonVocabsWatch/Index";
 import CommonVocabsMeaning from "../views/CommonVocabsMeaning/Index";
 import VideoScript from "../views/VideoScript/Index";
 import VideoRead from "../views/VideoRead/Index";
+import VideoAudioClips from "../views/VideoAudioClips/Index";
 import VideoTranslate from "../views/VideoTranslate/Index";
 import DiaryEdit from "../views/DiaryEdit/Index";
 
@@ -47,6 +48,10 @@ const routes = [
             {
                 path: "video/read",
                 element: <VideoRead />,
+            },
+            {
+                path: "video/audio-clips",
+                element: <VideoAudioClips />,
             },
             {
                 path: "video/translate",

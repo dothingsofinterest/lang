@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Input, Button, Drawer, Typography } from "antd";
-import { PlusSquareOutlined, MinusSquareOutlined, ReloadOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Input, Button, Drawer } from "antd";
+import { PlusSquareOutlined, MinusSquareOutlined } from "@ant-design/icons";
+import CommonPronunciationSymbols from "../Public/PronunciationSymbols";
 import "./Index.scss";
-
-const { Paragraph } = Typography;
 
 interface CommonEditorLinkingsProps {
     open: boolean;
@@ -53,32 +52,7 @@ const CommonEditorLinkings: React.FC<CommonEditorLinkingsProps> = ({ linkings, o
     }, []);
     return (
         <Drawer id="common-editor-linkings-index" title="Edit Linkings" size="large" onClose={handlersOnClose} open={open}>
-            <div className="linking-symbols">
-                <div className="line">
-                    <Paragraph copyable={{ text: "tə" }}>to ➤ tə</Paragraph>
-                    <Paragraph copyable={{ text: "ðer" }}>their ➤ ðer</Paragraph>
-                    <Paragraph copyable={{ text: "ðə" }}>the ➤ ðə</Paragraph>
-                    <Paragraph copyable={{ text: "ɪf" }}>if ➤ ɪf</Paragraph>
-                </div>
-                <div className="line">
-                    <Paragraph copyable={{ text: "ðæt" }}>that ➤ ðæt</Paragraph>
-                    <Paragraph copyable={{ text: "ɪt" }}>it ➤ ɪt</Paragraph>
-                    <Paragraph copyable={{ text: "ɪz" }}>is ➤ ɪz</Paragraph>
-                    <Paragraph copyable={{ text: "əv" }}>of ➤ əv</Paragraph>
-                </div>
-                <div className="line">
-                    <Paragraph copyable={{ text: "wen" }}>when ➤ wen</Paragraph>
-                    <Paragraph copyable={{ text: "ɪts" }}>its ➤ ɪts</Paragraph>
-                    <Paragraph copyable={{ text: "ɪn" }}>in ➤ ɪn</Paragraph>
-                    <Paragraph copyable={{ text: "æz" }}>as ➤ æz</Paragraph>
-                </div>
-                <div className="line">
-                    <Paragraph copyable={{ text: "ə" }}>a ➤ ə</Paragraph>
-                    <Paragraph copyable={{ text: "ən" }}>an ➤ ən</Paragraph>
-                    <Paragraph copyable={{ text: "ænd" }}>and ➤ ænd</Paragraph>
-                    <Paragraph copyable={{ text: "æt" }}>at ➤ æt</Paragraph>
-                </div>
-            </div>
+            <CommonPronunciationSymbols />
             <div className="linking-temp">
                 <Input value={tempLinking} onChange={(e) => handlersUpdateTempLinking(e.target.value)} placeholder="to their -> təðer" />
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempLinking} />

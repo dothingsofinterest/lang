@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, ApiOutlined, FileWordOutlined, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, ToolFilled } from "@ant-design/icons";
+import { ScissorOutlined, ApiOutlined, FileWordOutlined, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
-import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptGrammars, updateScriptVocabs, updateScriptVocabsByDelete } from "../../stores/reducers/plan";
+import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptGrammars, updateScriptVocabs, updateScriptVocabsByDelete } from "../../stores/reducers/plan";
 import { fnGetMaxTimeFromSentences } from "../../utils/script";
-import { Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagrap } from "../../types/Data";
+import { Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagrap, AudioClip as DataAudioClip } from "../../types/Data";
 import Paragraphs, { ParagraphsRef } from "./Paragraphs";
 import EditorVocabs from "../CommonEditorVocabs/Index";
 import EditorGrammars from "../CommonEditorGrammars/Index";
+import EditorAudioClip from "./EditorAudioClips";
 import EditorRoles from "./EditorRoles";
 import EditorScenes from "./EditorScenes";
 import "./Data.scss";
@@ -24,11 +25,11 @@ const Data = React.memo(() => {
     const [sceneEditor, setSceneEditor] = useState(false);
     const [rolesEditor, setRolesEditor] = useState(false);
     const [grammarsEditor, setGrammarsEditor] = useState(false);
+    const [audioClipsEditor, setAudioClipsEditor] = useState(false);
     const refScrollbar = useRef<Scrollbars>(null);
     const refParagraphs = useRef<ParagraphsRef>(null);
     const refPanel = useRef<HTMLDivElement>(null);
     const refScrollTop = useRef(0);
-    const refAudio = useRef<HTMLAudioElement>(null);
     const handlersScriptNameUpdate = (value: string) => {
         dispatch(updateScriptTitle({ text: value.trim() }));
     };
@@ -51,9 +52,12 @@ const Data = React.memo(() => {
         setRenderVersion((prev) => prev + 1);
     };
     const handlersParagraphDelete = () => {
-        refParagraphs.current?.deleteParagraph();
-        refScrollTop.current = refScrollbar.current?.getScrollTop() || 0;
-        setRenderVersion((prev) => prev + 1);
+        const confirmed = window.confirm("Do you confirm to delete?");
+        if (confirmed) {
+            refParagraphs.current?.deleteParagraph();
+            refScrollTop.current = refScrollbar.current?.getScrollTop() || 0;
+            setRenderVersion((prev) => prev + 1);
+        }
     };
     const handlersParagraphCut = () => {
         const confirmed = window.confirm("Do you confirm to cut?");
@@ -114,6 +118,15 @@ const Data = React.memo(() => {
     const handlersRolesEditorSubmit = async (roles: string[]) => {
         dispatch(updateScriptRoles(roles));
     };
+    const handlersClipsEditorOpen = () => {
+        setAudioClipsEditor(true);
+    };
+    const handlersAudioClipsEditorClose = () => {
+        setAudioClipsEditor(false);
+    };
+    const handlersAudioClipsEditorSubmit = async (audioClips: DataAudioClip[]) => {
+        dispatch(updateScriptAudioClips(audioClips));
+    };
     const handlersScroll = (event: React.UIEvent<HTMLElement>) => {
         const target = event.currentTarget;
         if (refPanel.current) {
@@ -124,6 +137,7 @@ const Data = React.memo(() => {
             }
         }
     };
+    // For the clear script button
     const handlersResortData = () => {
         const paragraphs = [...script.paragraphs];
         const n = paragraphs.length;
@@ -176,11 +190,11 @@ const Data = React.memo(() => {
                 <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete}>
                     S
                 </Button>
-                <Button icon={<ToolFilled />} onClick={handlersResortData}>
-                    Script
-                </Button>
                 <Button icon={<ApiOutlined />} onClick={handlersSentenceLinkingsEditorOpen}>
                     Linkings
+                </Button>
+                <Button icon={<CustomerServiceFilled />} onClick={handlersClipsEditorOpen}>
+                    Clips
                 </Button>
                 <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen}>
                     Roles
@@ -201,11 +215,9 @@ const Data = React.memo(() => {
             <Paragraphs paragraphs={script.paragraphs} scenes={script.scenes} roles={script.roles} onSubmit={handlersParagraphsSubmit} ref={refParagraphs} />
             <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
             <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
+            <EditorAudioClip list={script.audioClips ? script.audioClips : []} open={audioClipsEditor} onClose={handlersAudioClipsEditorClose} onSubmit={handlersAudioClipsEditorSubmit} plan={plan.hash} />
             <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} onRemove={handlersVocabsEditorRemove} />
             <EditorGrammars grammars={script.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} onSubmit={handlersGrammarsEditorSubmit} />
-            <section style={{ display: "none" }}>
-                <audio ref={refAudio}></audio>
-            </section>
         </Scrollbars>
     );
 });

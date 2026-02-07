@@ -5,7 +5,7 @@ import AdmZip from "adm-zip";
 import { Request, Response } from "express";
 import { LoggerSystem } from "../lib/Log";
 import { audioGenerate } from "../service/Tts";
-import { concatAudio } from "../utils/FFmpeg";
+import { concatAudio, clipAudio } from "../utils/FFmpeg";
 
 const basePath = process.env.UPLOAD_PATH;
 
@@ -97,6 +97,7 @@ export const dataSync = async (req: Request, res: Response) => {
     const scriptObject = JSON.parse(scriptString);
     const vocabImages = scriptObject.vocabs.filter((v: any) => v.image).map((v: any) => v.image);
     const vocabPronunciations = scriptObject.vocabs.map((v: any) => v.pronunciation);
+    const clipAudios = scriptObject.audioClips.map((v: any) => v.audio);
     if (vocabImages.length > 0) {
         const pathVocabImages = path.join(req.file.destination, "vocab_images");
         const filesVocabImages = await fsPromise.readdir(pathVocabImages);
@@ -112,6 +113,15 @@ export const dataSync = async (req: Request, res: Response) => {
         for (const pronunciation of filesVocabPronunciations) {
             if (!vocabPronunciations.includes(pronunciation)) {
                 fs.unlinkSync(path.join(pathVocabPronunciations, pronunciation));
+            }
+        }
+    }
+    if (clipAudios.length > 0) {
+        const pathAudioClips = path.join(req.file.destination, "audio_clips");
+        const filesAudioClips = await fsPromise.readdir(pathAudioClips);
+        for (const clip of filesAudioClips) {
+            if (!clipAudios.includes(clip)) {
+                fs.unlinkSync(path.join(pathAudioClips, clip));
             }
         }
     }
@@ -317,6 +327,127 @@ export const audioConcat = async (req: Request, res: Response) => {
         });
     } catch (error: any) {
         console.error(error);
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed.`,
+        });
+    }
+};
+
+export const audioClip = async (req: Request, res: Response) => {
+    const schema = Joi.object({
+        plan: Joi.string().required(),
+        name: Joi.string().required(),
+        start: Joi.number().required(),
+        end: Joi.number().required(),
+    });
+    const { error, value } = schema.validate(req.query);
+    if (error) {
+        console.error("Failed to validate params: ", error.message);
+        return res.status(200).json({
+            code: 0,
+            message: error.message,
+        });
+    }
+    const planPath = path.join(`${basePath}`, value.plan);
+    if (!fs.existsSync(planPath)) {
+        return res.status(200).json({
+            code: 0,
+            message: `Plan does not exist.`,
+        });
+    }
+    const audioPath = path.join(planPath, `audio.mp3`);
+    if (!fs.existsSync(audioPath)) {
+        return res.status(200).json({
+            code: 0,
+            message: `Audio does not exist.`,
+        });
+    }
+    try {
+        const outputPath = path.join(`${basePath}`, `temp`, `${value.name}.mp3`);
+        await clipAudio(audioPath, value.start, value.end, outputPath);
+        res.status(200).json({
+            code: 1,
+            message: `Succeed.`,
+        });
+    } catch (error: any) {
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed.`,
+        });
+    }
+};
+
+export const audioClipMove = (req: Request, res: Response) => {
+    const schema = Joi.object({
+        plan: Joi.string().required(),
+        clip: Joi.string().required(),
+    });
+    const { error, value } = schema.validate(req.query);
+    if (error) {
+        console.error("Failed to validate params: ", error.message);
+        return res.status(200).json({
+            code: 0,
+            message: error.message,
+        });
+    }
+    try {
+        const planPath = path.join(`${basePath}`, value.plan);
+        if (!fs.existsSync(planPath)) {
+            return res.status(200).json({
+                code: 0,
+                message: `Plan does not exist.`,
+            });
+        }
+        const clipTempFile = path.join(`${basePath}`, `temp`, value.clip);
+        if (fs.existsSync(clipTempFile)) {
+            fs.renameSync(clipTempFile, path.join(planPath, "audio_clips", value.clip));
+        }
+        res.status(200).json({
+            code: 1,
+            message: `Succeed.`,
+        });
+    } catch (error: any) {
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed.`,
+        });
+    }
+};
+
+export const audioClipRemove = (req: Request, res: Response) => {
+    const schema = Joi.object({
+        plan: Joi.string().required(),
+        clip: Joi.string().required(),
+    });
+    const { error, value } = schema.validate(req.query);
+    if (error) {
+        console.error("Failed to validate params: ", error.message);
+        return res.status(200).json({
+            code: 0,
+            message: error.message,
+        });
+    }
+    try {
+        const planPath = path.join(`${basePath}`, value.plan);
+        if (!fs.existsSync(planPath)) {
+            return res.status(200).json({
+                code: 0,
+                message: `Plan does not exist.`,
+            });
+        }
+        const clipFile = path.join(planPath, "audio_clips", value.clip);
+        if (fs.existsSync(clipFile)) {
+            fs.unlinkSync(clipFile);
+        }
+        res.status(200).json({
+            code: 1,
+            message: `Succeed.`,
+        });
+    } catch (error: any) {
         LoggerSystem.error(error.message);
         return res.status(200).json({
             code: 0,

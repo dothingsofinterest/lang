@@ -7,6 +7,9 @@ import { execSync } from "child_process";
 const ffmepgBin = process.env.FFMPEG_PATH;
 const ffprobeBin = process.env.FFMPEG_FFPROBE_PATH;
 
+// Set FFmpeg base path
+ffmpeg.setFfmpegPath(`${ffmepgBin}`);
+
 /*
  * Original Command:
  *
@@ -14,7 +17,6 @@ const ffprobeBin = process.env.FFMPEG_FFPROBE_PATH;
  */
 export const compressVideo = (input: string, output: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        ffmpeg.setFfmpegPath(`${ffmepgBin}`);
         ffmpeg(input)
             .inputOptions(["-analyzeduration 2147483647", "-probesize 2147483647"]) // 提高分析时长与探测缓冲，防止大文件或长视频探测失败，以提高对大文件或高码率文件的容错能力。
             .videoFilter("scale=600:-2") // -vf scale=600:-2
@@ -57,7 +59,6 @@ export const compressVideo = (input: string, output: string): Promise<void> => {
  */
 export const extractAudio = (input: string, output: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        ffmpeg.setFfmpegPath(`${ffmepgBin}`);
         ffmpeg(input)
             .noVideo()
             .audioCodec("libmp3lame")
@@ -68,6 +69,32 @@ export const extractAudio = (input: string, output: string): Promise<void> => {
             })
             .on("end", () => {
                 LoggerSystem.info(`fluent-ffmpeg extractAudio command succeed`);
+                resolve();
+            })
+            .on("error", (err) => {
+                LoggerSystem.error(`fluent-ffmpeg error: ${err.message}`);
+                reject();
+            });
+    });
+};
+
+/*
+ * Clip Audio
+ *
+ * ffmpeg -i audio.mp3 -ss 643.64 -to 644.21 output.mp3
+ */
+export const clipAudio = (input: string, startTime: number, endTime: number, output: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        ffmpeg(input)
+            .setStartTime(startTime)
+            .setDuration(endTime - startTime)
+            .audioCodec("libmp3lame") // recode
+            .save(output)
+            .on("start", (commandLine) => {
+                LoggerSystem.info(`✅ fluent-ffmpeg clip audio command: ${commandLine}`);
+            })
+            .on("end", () => {
+                LoggerSystem.info("✅ fluent-ffmpeg clip audio command succeed");
                 resolve();
             })
             .on("error", (err) => {
@@ -100,7 +127,6 @@ export const extractAudio = (input: string, output: string): Promise<void> => {
  */
 export const enhanceDialogueAndExtractMP3 = (input: string, output: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        ffmpeg.setFfmpegPath(`${ffmepgBin}`);
         ffmpeg(input)
             .inputOptions(["-analyzeduration", "2147483647", "-probesize", "2147483647"])
             .audioChannels(2)
@@ -148,7 +174,6 @@ export const concatAudio = (planFolder: string, output: string): Promise<void> =
                 .filter((f) => f.endsWith(".mp3"))
                 .map((f) => path.join(pronunciationsFolder, f));
             if (pronunciations.length > 0) {
-                ffmpeg.setFfmpegPath(`${ffmepgBin}`);
                 const command = ffmpeg();
                 command.input(path.join(planFolder, "audio.mp3"));
                 pronunciations.forEach((p) => command.input(p));

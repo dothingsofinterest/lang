@@ -1,2 +1,29 @@
-#script-edit {
+#script-index {
+    .main-inner-item-footer {
+        .panel {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            .item {
+                flex: 1;
+                border-radius: 0;
+                background-color: #ccc;
+                display: flex;
+                align-items: center;
+                .ant-input {
+                    flex: 1;
+                    border-radius: 0;
+                    background-color: #ccc;
+                }
+                .ant-btn {
+                    flex: 0 0 20%;
+                    border-radius: 0;
+                    background-color: #ccc;
+                }
+                .ant-switch {
+                    flex: 0 0 50px;
+                }
+            }
+        }
+    }
 }

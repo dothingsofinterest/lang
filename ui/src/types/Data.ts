@@ -14,6 +14,7 @@ export interface StatePlan {
     videoTranslateMatchingSentencePos: number;
     videoMatchingSentence: number;
     videoMatchingSentencePos: number;
+    videoAudioClipsMatching: number;
     vocabMatchListen: number;
     vocabMatchMeaning: number;
     vocabMatchWatch: number;
@@ -39,6 +40,7 @@ export interface PayloadPlan {
 /* Data */
 export interface PlanData {
     title: string;
+    audioClips: AudioClip[];
     vocabs: Vocab[];
     grammars: string[];
     date: string;
@@ -50,6 +52,7 @@ export interface Script {
     title: string;
     roles: string[];
     scenes: Scene[];
+    audioClips: AudioClip[];
     vocabs: Vocab[];
     grammars: string[];
     paragraphs: Paragraph[];
@@ -81,6 +84,10 @@ export interface Vocab {
     voice: number;
     speed: number;
     pronunciation: string;
+}
+export interface AudioClip {
+    text: string;
+    audio: string;
 }
 export interface Diary {
     title: string;

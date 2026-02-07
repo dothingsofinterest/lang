@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button } from "antd";
+import { Layout, Input, Button, Switch } from "antd";
 import { useNavigate } from "react-router-dom";
 import WaveSurfer from "wavesurfer.js";
-import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, RedoOutlined } from "@ant-design/icons";
+import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, RedoOutlined, CopyOutlined, CopyFilled } from "@ant-design/icons";
 import { updateProcessings, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom } from "../../stores/reducers/plan";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,28 +20,30 @@ const Index = () => {
     const waveformZoom = useSelector((state: RootState) => state.plan.videoScriptWaveformZoom);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [videoCanPlay, setVideoCanPlay] = useState(false);
+    const [timeCopyFormat, setTimeCopyFormat] = useState(true); // true: SRT, false: float
     const refVideo = useRef<HTMLVideoElement>(null);
     const refSlider = useRef<HTMLInputElement>(null);
     const refWavesurfer = useRef<WaveSurfer | null>(null);
-    const refPlan = useRef({ plan });
+    const refState = useRef({ timeCopyFormat });
+    const refAudio = useRef<HTMLAudioElement>(null);
     const handlersVideoPlayBackward = async () => {
         if (refVideo.current && plan.videoURL) {
             const floatTime = Math.max(0, refVideo.current.currentTime - 0.1);
-            const SRTTime = fnFloatToSRTTime(floatTime);
+            const time = timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
             refVideo.current.currentTime = floatTime;
             refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
             dispatch(updateVideoScriptCurrentTime(floatTime));
-            await navigator.clipboard.writeText(SRTTime);
+            await navigator.clipboard.writeText(`${time}`);
         }
     };
     const handlersVideoPlayForward = async () => {
         if (refVideo.current && plan.videoURL) {
             const floatTime = refVideo.current.currentTime + 0.1;
-            const SRTTime = fnFloatToSRTTime(floatTime);
+            const time = timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
             refVideo.current.currentTime = floatTime;
             refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
             dispatch(updateVideoScriptCurrentTime(floatTime));
-            await navigator.clipboard.writeText(SRTTime);
+            await navigator.clipboard.writeText(`${time}`);
         }
     };
     const handlersVideoPlay = () => {
@@ -65,6 +67,9 @@ const Index = () => {
             alert("Please upload video.");
         }
     };
+    const handlersTimeFormatSwitch = (checked: boolean) => {
+        setTimeCopyFormat(checked);
+    };
     const handlersVideoSlide = (e: any) => {
         dispatch(updateVideoScriptWaveformZoom(e.target?.valueAsNumber));
     };
@@ -80,9 +85,9 @@ const Index = () => {
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoTagOnPaused = async (e: any) => {
-        const SRTTime = fnFloatToSRTTime(e.target.currentTime);
+        const time = refState.current.timeCopyFormat ? fnFloatToSRTTime(e.target.currentTime) : e.target.currentTime;
         dispatch(updateVideoScriptCurrentTime(e.target.currentTime));
-        await navigator.clipboard.writeText(SRTTime);
+        await navigator.clipboard.writeText(time);
     };
     const handlersCreateWaver = async () => {
         if (videoCanPlay === true) {
@@ -107,9 +112,9 @@ const Index = () => {
                     });
                     refWavesurfer.current.on("click", async () => {
                         const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
-                        const SRTTime = fnFloatToSRTTime(currentTime);
+                        const time = refState.current.timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
                         dispatch(updateVideoScriptCurrentTime(currentTime));
-                        await navigator.clipboard.writeText(SRTTime);
+                        await navigator.clipboard.writeText(`${time}`);
                     });
                     refWavesurfer.current.on("loading", (percent) => {
                         // console.log("Loading", percent + "%");
@@ -150,8 +155,8 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        refPlan.current = { plan };
-    }, [plan]);
+        refState.current = { ...refState.current, timeCopyFormat };
+    }, [timeCopyFormat]);
     return (
         <Layout id="script-index" className="main-inner" style={{ position: "relative", padding: "0 0 178px", margin: "0" }}>
             <div className="main-inner-item-aside" style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -163,13 +168,19 @@ const Index = () => {
                 <Data />
             </div>
             <div className="main-inner-item-footer" style={{ height: "178px", position: "absolute", bottom: "0", left: "0" }}>
-                <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-                    <Button icon={<RedoOutlined />} onClick={handlersCreateWaver} loading={processings[4]} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    <Button icon={<FastBackwardOutlined />} onClick={handlersVideoPlayBackward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    <Button icon={playButton} onClick={handlersVideoPlay} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    <Button icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    <Input value={fnFloatToSRTTime(currentTime)} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
-                    <input ref={refSlider} type="range" value={waveformZoom} onInput={handlersVideoSlide} style={{ flex: 1, borderRadius: "0", backgroundColor: "#ccc" }} />
+                <div className="panel">
+                    <Button className="item" icon={<RedoOutlined />} onClick={handlersCreateWaver} loading={processings[4]} />
+                    <Button className="item" icon={<FastBackwardOutlined />} onClick={handlersVideoPlayBackward} />
+                    <Button className="item" icon={playButton} onClick={handlersVideoPlay} />
+                    <Button className="item" icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} />
+                    <div className="item">
+                        <Input className="item" value={timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime} />
+                        <Switch defaultChecked onChange={handlersTimeFormatSwitch} size="small" />
+                    </div>
+                    <input className="item" ref={refSlider} type="range" value={waveformZoom} onInput={handlersVideoSlide} />
+                    <section style={{ display: "none" }}>
+                        <audio ref={refAudio}></audio>
+                    </section>
                 </div>
                 <div id="waver" style={{ height: "146px" }}></div>
             </div>

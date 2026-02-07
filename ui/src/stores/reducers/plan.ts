@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StatePlan, PayloadPlan, Paragraph } from "../../types/Data";
-import { Script as DataScript, Diary as DataDiary, PayloadScript, Vocab as DataVocab, Scene as DataScene } from "../../types/Data";
+import { Script as DataScript, Diary as DataDiary, PayloadScript, Vocab as DataVocab, Scene as DataScene, AudioClip as DataAudioClip } from "../../types/Data";
 import { fnGetFormattedData, fnSyncScript } from "../../utils/script";
 import { fnGetFormattedData as fnGetFormattedDataDiary, fnSyncDiary } from "../../utils/diary";
 
@@ -16,6 +16,7 @@ const initialState: StatePlan = {
     videoScriptWaveformZoom: 0,
     videoMatchingSentence: 0,
     videoMatchingSentencePos: 0,
+    videoAudioClipsMatching: 0,
     vocabMatchListen: 0,
     vocabMatchMeaning: 0,
     vocabMatchWatch: 0,
@@ -24,6 +25,7 @@ const initialState: StatePlan = {
         title: "",
         roles: [],
         scenes: [],
+        audioClips: [],
         vocabs: [],
         grammars: [],
         paragraphs: [
@@ -52,6 +54,7 @@ const initialState: StatePlan = {
     },
     data: {
         title: "",
+        audioClips: [],
         vocabs: [],
         grammars: [],
         date: "",
@@ -94,6 +97,9 @@ const slice = createSlice({
         updateVideoScriptWaveformZoom: (state, action: PayloadAction<number>) => {
             state.videoScriptWaveformZoom = action.payload;
         },
+        updateVideoAudioClipsMatching: (state, action: PayloadAction<number>) => {
+            state.videoAudioClipsMatching = action.payload;
+        },
         updateVocabMatchListen: (state, action: PayloadAction<number>) => {
             state.vocabMatchListen = action.payload;
         },
@@ -135,6 +141,13 @@ const slice = createSlice({
         updateScriptScenes: (state, action: PayloadAction<DataScene[]>) => {
             if (action.payload !== undefined) {
                 state.script = { ...state.script, scenes: action.payload };
+                state.data = fnGetFormattedData(state.hash, state.script);
+                fnSyncScript(state.hash, state.script);
+            }
+        },
+        updateScriptAudioClips: (state, action: PayloadAction<DataAudioClip[]>) => {
+            if (action.payload !== undefined) {
+                state.script = { ...state.script, audioClips: action.payload };
                 state.data = fnGetFormattedData(state.hash, state.script);
                 fnSyncScript(state.hash, state.script);
             }
@@ -231,6 +244,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
+export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVideoAudioClipsMatching, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
 
 export default slice.reducer;
