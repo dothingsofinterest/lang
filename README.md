@@ -4,12 +4,12 @@ A tool for study languages through videos.
 
 # How to start?
 
-1. Install the dependencies<br>
-   FFMPEG<br>
+1. Install or Download the dependencies below<br>
+   FFMPEG for windows<br>
    python<br>
-   pyttsx3<br>
-   Node.js 20.16.0
+   python's pyttsx3<br>
    BBC audiowaveform <br>
+   Node.js 20.16.0 <br>
 2. Config<br>
    Replace AUDIOWAVEFORM_PATH, <br>
    FFMPEG_PATH, <br>
