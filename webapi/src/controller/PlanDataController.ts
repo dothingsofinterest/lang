@@ -97,7 +97,7 @@ export const dataSync = async (req: Request, res: Response) => {
     const scriptObject = JSON.parse(scriptString);
     const vocabImages = scriptObject.vocabs.filter((v: any) => v.image).map((v: any) => v.image);
     const vocabPronunciations = scriptObject.vocabs.map((v: any) => v.pronunciation);
-    const clipAudios = scriptObject.audioClips.map((v: any) => v.audio);
+    const clipAudios = scriptObject.hasOwnProperty("audioClips") ? scriptObject.audioClips.map((v: any) => v.audio) : [];
     if (vocabImages.length > 0) {
         const pathVocabImages = path.join(req.file.destination, "vocab_images");
         const filesVocabImages = await fsPromise.readdir(pathVocabImages);
