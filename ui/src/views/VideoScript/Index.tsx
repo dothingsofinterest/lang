@@ -140,7 +140,7 @@ const Index = () => {
     };
     useEffect(() => {
         if (!plan.hash || !plan.videoURL) {
-            alert("Please create a plan.");
+            alert("Please upload a video.");
             navigate("/common/settings");
         }
         if (plan.type !== 0 && plan.type !== 1) {

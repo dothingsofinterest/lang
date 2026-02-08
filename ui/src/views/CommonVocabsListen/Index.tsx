@@ -150,7 +150,7 @@ const Index = () => {
     };
     useEffect(() => {
         if (!plan.hash || !plan.videoURL) {
-            alert("Please create a plan.");
+            alert("Please upload a video.");
             navigate("/common/settings");
         }
         const onKeyDownHandler = (event: KeyboardEvent) => {

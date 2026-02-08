@@ -93,7 +93,7 @@ const Index = () => {
                 alert("Please upload a zip data file.");
             }
         } else {
-            alert("Please create a plan.");
+            alert("Please upload a video.");
         }
         return false;
     };
@@ -128,7 +128,7 @@ const Index = () => {
                 alert("Something wrong happened.");
             }
         } else {
-            alert("Please create a plan with a title.");
+            alert("Please upload a video with a title.");
         }
     };
     const handlersExportAudio = async () => {
@@ -147,7 +147,7 @@ const Index = () => {
                 console.error("save error: ", error);
             }
         } else {
-            alert("Please create a plan.");
+            alert("Please upload a video.");
         }
     };
     const handlersPlanCount = async () => {
@@ -182,7 +182,7 @@ const Index = () => {
     }, []);
     return (
         <Layout className="main-inner" id="video-settings">
-            <div className="main-inner-item-main">
+            <div className="main-inner-item-aside">
                 <section className="sec">
                     <Upload className="sec-item" showUploadList={false} beforeUpload={handlersImportVideo} disabled={processings[0] || !!plan.data.title}>
                         <Button icon={<PlusCircleOutlined />} disabled={!!plan.data.title} loading={processings[0]}>

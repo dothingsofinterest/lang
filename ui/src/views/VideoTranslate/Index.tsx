@@ -123,20 +123,20 @@ const Index = () => {
 						article .scene ul { margin: 0; padding: 2pt 0; color: #000; font-size: 10pt; line-height: 22pt; }
 						article .scene ul .role { font-style: normal; font-weight: 900; color: #000; }
 						article footer { height: 100%; }
-						article footer #vocabs,
-						article footer #grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; }
-						article footer #vocabs .title,
-						article footer #grammars .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
-						article footer #vocabs .item,
-						article footer #grammars .item { margin: 0; padding: 2pt 0; border-top: 1px dotted #ccc; font-size: 10pt; line-height: 22pt; }
-						article footer #vocabs .item { display: flex; justify-content: space-between; }                              
-                        article footer #vocabs .item:nth-child(2),
-						article footer #grammars .item:nth-child(2) { border-top: 0; }
-                        article footer #vocabs .item .en { flex: 1; } 
-                        article footer #vocabs .item .pr,  
-                        article footer #vocabs .item .cn { flex: 0.5; } 
-						article footer #vocabs .item .index,
-						article footer #grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
+						article footer #script-vocabs,
+						article footer #script-grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; }
+						article footer #script-vocabs .title,
+						article footer #script-grammars .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
+						article footer #script-vocabs .item,
+						article footer #script-grammars .item { margin: 0; padding: 2pt 0; border-top: 1px dotted #ccc; font-size: 10pt; line-height: 22pt; }
+						article footer #script-vocabs .item { display: flex; justify-content: space-between; }                              
+                        article footer #script-vocabs .item:nth-child(2),
+						article footer #script-grammars .item:nth-child(2) { border-top: 0; }
+                        article footer #script-vocabs .item .en { flex: 1; } 
+                        article footer #script-vocabs .item .pr,  
+                        article footer #script-vocabs .item .cn { flex: 0.5; } 
+						article footer #script-vocabs .item .index,
+						article footer #script-grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
 					}
 				`;
                 const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} encn={1} />);
@@ -145,12 +145,12 @@ const Index = () => {
                 alert(`Data not be set`);
             }
         } else {
-            alert("Please create a plan.");
+            alert("Please upload a video.");
         }
     };
     useEffect(() => {
         if (!plan.hash || !plan.videoURL) {
-            alert("Please create a plan.");
+            alert("Please upload a video.");
             navigate("/common/settings");
         }
         if (plan.type !== 0 && plan.type !== 1) {

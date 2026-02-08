@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, ApiOutlined, FileWordOutlined, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
+import { ScissorOutlined, ApiOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
@@ -190,24 +190,12 @@ const Data = React.memo(() => {
                 <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete}>
                     S
                 </Button>
-                <Button icon={<ApiOutlined />} onClick={handlersSentenceLinkingsEditorOpen}>
-                    Linkings
-                </Button>
-                <Button icon={<CustomerServiceFilled />} onClick={handlersClipsEditorOpen}>
-                    Clips
-                </Button>
-                <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen}>
-                    Roles
-                </Button>
-                <Button icon={<DesktopOutlined />} onClick={handlersScenesEditorOpen}>
-                    Scenes
-                </Button>
-                <Button icon={<FileWordOutlined />} onClick={handlersVocabsEditorOpen}>
-                    Vocabs
-                </Button>
-                <Button icon={<GoogleOutlined />} onClick={handlersGrammarsEditorOpen}>
-                    Grammars
-                </Button>
+                <Button icon={<ApiOutlined />} onClick={handlersSentenceLinkingsEditorOpen} />
+                <Button icon={<CustomerServiceFilled />} onClick={handlersClipsEditorOpen} />
+                <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen} />
+                <Button icon={<DesktopOutlined />} onClick={handlersScenesEditorOpen} />
+                <Button icon={<FileWordFilled />} onClick={handlersVocabsEditorOpen} />
+                <Button icon={<GoogleOutlined />} onClick={handlersGrammarsEditorOpen} />
             </div>
             <div className="script-meta">
                 <Input defaultValue={script.title} onBlur={(e) => handlersScriptNameUpdate(e.target.value)} placeholder="Script Title" />
