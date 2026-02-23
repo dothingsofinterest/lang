@@ -1,12 +1,5 @@
 #video-script-audioClips {
-    .clip-text {
-        margin-top: 10px;
-        .ant-input {
-            padding: 8px 10px;
-            border-radius: 0;
-        }
-    }
-    .clip-auto {
+    .pronunciation {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -21,7 +14,7 @@
             justify-content: flex-start;
         }
     }
-    .clip-auto-panel {
+    .clip-time {
         display: flex;
         margin-top: 10px;
         .ant-input {
@@ -43,31 +36,6 @@
             padding: 20px 0;
             border-radius: 0;
             background-color: #ccc;
-        }
-    }
-    .list {
-        color: #000;
-        margin-top: 20px;
-        .item {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin: 0;
-            padding: 0px 10px;
-            border-top: 1px dotted #000;
-            font-size: 12px;
-            height: 36px;
-            &.active {
-                font-weight: 900;
-            }
-            &:first-child {
-                border: 0;
-            }
-            .index {
-                font-weight: 900;
-                font-style: normal;
-                margin-right: 4px;
-            }
         }
     }
 }

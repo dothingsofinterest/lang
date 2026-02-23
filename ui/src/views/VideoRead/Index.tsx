@@ -10,7 +10,6 @@ import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import ReactDOMServer from "react-dom/server";
 import Script from "./Script";
 import printJS from "print-js";
-import EditorVocabs from "../CommonEditorVocabs/Index";
 import EditorGrammars from "../CommonEditorGrammars/Index";
 import "./Index.scss";
 
@@ -23,11 +22,8 @@ const Index = () => {
     const matchingSentence = useSelector((state: RootState) => state.plan.videoMatchingSentence);
     const matchingSentencePos = useSelector((state: RootState) => state.plan.videoMatchingSentencePos);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
-    const [listening, setListening] = useState(false);
-    const [vocabsEditor, setVocabsEditor] = useState(false);
     const [grammarsEditor, setGrammarsEditor] = useState(false);
     const refScrollbar = useRef<Scrollbars>(null);
-    const recognitionRef = useRef<any>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
     const refMatchingSentence = useRef({ matchingSentence });
     const handlersPanelPlay = () => {
@@ -181,23 +177,6 @@ const Index = () => {
             alert("Please upload a video.");
         }
     };
-    const handlersPanelRecordStart = async () => {
-        if (recognitionRef.current) {
-            await recognitionRef.current.stop();
-            if (listening === false) {
-                recognitionRef.current.start();
-                setListening(true);
-            } else {
-                setListening(false);
-            }
-        }
-    };
-    const handlersVocabsEditorOpen = () => {
-        setVocabsEditor(true);
-    };
-    const handlersVocabsEditorClose = () => {
-        setVocabsEditor(false);
-    };
     const handlersGrammarsEditorOpen = () => {
         setGrammarsEditor(true);
     };
@@ -230,31 +209,6 @@ const Index = () => {
             videoElem.currentTime = dataFormatted.sentences[matchingSentence] !== undefined && fnIsSRTTime(dataFormatted.sentences[matchingSentence].startTime) ? fnSRTTimeToFloat(dataFormatted.sentences[matchingSentence].startTime) : 0;
             refScrollbar.current?.scrollTop(matchingSentencePos);
         }
-        // Speech Recognition
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            alert("Browser do not support Web Speech API.");
-        } else {
-            const recognition = new SpeechRecognition();
-            recognition.lang = "en-US";
-            recognition.continuous = true; // 持续监听话筒
-            recognition.interimResults = false; // 防抖设置。false 表示只显示最终结果。
-            recognition.onresult = (event: any) => {
-                const lastResult = event.results[event.results.length - 1];
-                if (lastResult.isFinal) {
-                    const transcript = lastResult[0].transcript.trim();
-                    alert(transcript);
-                }
-            };
-            recognition.onerror = (event: any) => {
-                console.error("SpeechRecognition Error:", event.error);
-                setListening(false);
-            };
-            recognition.onend = () => {
-                setListening(false);
-            };
-            recognitionRef.current = recognition;
-        }
         window.addEventListener("keydown", videoKeyboardOnDownHandler);
         return () => {
             window.removeEventListener("keydown", videoKeyboardOnDownHandler);
@@ -282,15 +236,12 @@ const Index = () => {
                     <Button icon={playButton} onClick={handlersPanelPlay} className="btn"></Button>
                     <Button icon={<FastForwardOutlined />} onClick={handlersPanelPlayForward} className="btn"></Button>
                     <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
-                    <Button icon={<AudioFilled />} onClick={handlersPanelRecordStart} className={recognitionRef.current && listening === true ? `btn recording` : `btn`}></Button>
                     <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
-                    <Button icon={<FileWordFilled />} onClick={handlersVocabsEditorOpen} className="btn" />
                     <Button icon={<GoogleOutlined />} onClick={handlersGrammarsEditorOpen} className="btn" />
                 </section>
                 <Scrollbars ref={refScrollbar}>
                     <Script dataFormatted={dataFormatted} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
-                <EditorVocabs vocabs={dataFormatted.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} />
                 <EditorGrammars grammars={dataFormatted.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} />
             </div>
         </Layout>

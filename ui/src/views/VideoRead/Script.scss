@@ -65,9 +65,10 @@
             &:first-child {
                 padding: 0;
             }
-            .hl {
-                color: #dc1735;
-                font-style: italic;
+            .input-item {
+                color: #9b0900;
+                cursor: pointer;
+                font-weight: 500;
             }
         }
         span.point {

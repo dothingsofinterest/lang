@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { countVocabs, search } from "../controller/PlanController";
 import { videoImport, videoInit } from "../controller/PlanVideoController";
-import { dataImport, dataExport, dataSync, vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove, audioConcat, audioClip, audioClipMove, audioClipRemove } from "../controller/PlanDataController";
+import { dataImport, dataExport, dataSync, vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove, audioConcat, audioClip  } from "../controller/PlanDataController";
 import { upload } from "../middleware/Upload";
 
 const router = express.Router();
@@ -25,8 +25,6 @@ router.post("/plan/data/vocab_image_pronunciation_move", vocabImagePronunciation
 router.post("/plan/data/vocab_image_pronunciation_remove", vocabImagePronunciationRemove);
 router.post("/plan/data/audio_concat", audioConcat);
 router.post("/plan/data/audio_clip", audioClip);
-router.post("/plan/data/audio_clip_move", audioClipMove);
-router.post("/plan/data/audio_clip_remove", audioClipRemove);
 // Plan Data
 
 // Statistics

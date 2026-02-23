@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { PlanData } from "../../types/Data";
-import ScriptLinking from "./ScriptLinking";
+import Input from "./Input";
 import ScriptFooter from "./ScriptFooter";
 import "./Script.scss";
 
@@ -13,11 +13,25 @@ interface ScriptProps {
 }
 
 const Script: React.FC<ScriptProps> = ({ dataFormatted, encn = 0, matchingSentence = 0, showFooter = false, onRendered }) => {
-    const articleRef = useRef<HTMLDivElement>(null);
+    const refArticle = useRef<HTMLDivElement>(null);
+    const refAudio = useRef<HTMLAudioElement>(null);
+    const handlersPlayInput = (pronunciation: string) => {
+        const audio = refAudio.current;
+        if (audio && pronunciation) {
+            if (audio.paused) {
+                audio.src = pronunciation;
+                audio.play();
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.src = "";
+            }
+        }
+    };
     const fnRender = () => {
-        if (articleRef.current) {
+        if (refArticle.current) {
             let scrollTopPoint = 0;
-            articleRef.current.querySelectorAll(".point").forEach((span: any, k) => {
+            refArticle.current.querySelectorAll(".point").forEach((span: any, k) => {
                 if (k < matchingSentence) {
                     span.className = "point matched";
                 } else if (matchingSentence === k) {
@@ -34,13 +48,19 @@ const Script: React.FC<ScriptProps> = ({ dataFormatted, encn = 0, matchingSenten
     };
     useEffect(() => {
         fnRender();
-        return () => {};
+        return () => {
+            if (refAudio.current) {
+                refAudio.current.pause();
+                refAudio.current.currentTime = 0;
+                refAudio.current.src = "";
+            }
+        };
     }, []);
     useEffect(() => {
         fnRender();
     }, [matchingSentence]);
     return (
-        <article ref={articleRef} id="script" className={encn === 0 ? "en" : "cn"}>
+        <article ref={refArticle} id="script" className={encn === 0 ? "en" : "cn"}>
             <React.Fragment>
                 {dataFormatted.title && <h1>{encn === 0 ? dataFormatted.title.split("-")[0] : dataFormatted.title.split("-")[1]}</h1>}
                 {dataFormatted.scenes.map((scene, index) => {
@@ -55,7 +75,7 @@ const Script: React.FC<ScriptProps> = ({ dataFormatted, encn = 0, matchingSenten
                                             {paragraph.sentences.map((v, k) => {
                                                 return (
                                                     <span className="point" key={v.key}>
-                                                        {v.texts.length > 0 && (encn === 0 ? v.linkings ? <ScriptLinking text={v.texts[0].split("\n")[0]} linkings={v.linkings} /> : v.texts[0].split("\n")[0] : v.texts[0].split("\n")[1])}
+                                                        {v.texts.length > 0 && (encn === 0 ? v.linkings ? <Input input={v.texts[0].split("\n")[0]} inputs={dataFormatted.vocabs} onClick={handlersPlayInput} /> : v.texts[0].split("\n")[0] : v.texts[0].split("\n")[1])}
                                                     </span>
                                                 );
                                             })}
@@ -87,6 +107,9 @@ const Script: React.FC<ScriptProps> = ({ dataFormatted, encn = 0, matchingSenten
                 })}
             </React.Fragment>
             <footer className="footer">{showFooter && <ScriptFooter vocabs={dataFormatted.vocabs} grammars={dataFormatted.grammars} />}</footer>
+            <section style={{ display: "none" }}>
+                <audio ref={refAudio} loop></audio>
+            </section>
         </article>
     );
 };

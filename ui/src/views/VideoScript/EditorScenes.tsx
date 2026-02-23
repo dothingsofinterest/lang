@@ -83,7 +83,7 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
         return () => {};
     }, []);
     return (
-        <Drawer id="video-script-editor-scenes" title="Edit Scenes" size="large" onClose={handlersOnClose} open={open}>
+        <Drawer id="video-script-editor-scenes" title="Edit Scenes" width={800} onClose={handlersOnClose} open={open}>
             <div className="scene-temp">
                 <Input value={tempScene?.value} onChange={(e) => handlersUpdateTempScene(e.target.value)} placeholder="Scene-场景" />
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempScene} />

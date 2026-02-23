@@ -50,7 +50,7 @@ const EditorRoles: React.FC<EditorRolesProps> = ({ roles, open, onClose, onSubmi
         return () => {};
     }, []);
     return (
-        <Drawer id="video-script-editor-roles" title="Edit Roles" size="large" onClose={handlersOnClose} open={open}>
+        <Drawer id="video-script-editor-roles" title="Edit Roles" width={800} onClose={handlersOnClose} open={open}>
             <div className="role-temp">
                 <Input value={tempRole} onChange={(e) => handlersUpdateTempRole(e.target.value)} placeholder="Role-角色" />
                 <Button icon={<PlusSquareOutlined />} onClick={handlersSubmitTempRole} />

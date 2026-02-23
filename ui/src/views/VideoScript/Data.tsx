@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, ApiOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
+import { ScissorOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
@@ -42,9 +42,6 @@ const Data = React.memo(() => {
         refParagraphs.current?.deleteSentence();
         refScrollTop.current = refScrollbar.current?.getScrollTop() || 0;
         setRenderVersion((prev) => prev + 1);
-    };
-    const handlersSentenceLinkingsEditorOpen = () => {
-        refParagraphs.current?.openLinkingsEditor();
     };
     const handlersParagraphInsert = () => {
         refParagraphs.current?.insertParagraph();
@@ -190,7 +187,6 @@ const Data = React.memo(() => {
                 <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete}>
                     S
                 </Button>
-                <Button icon={<ApiOutlined />} onClick={handlersSentenceLinkingsEditorOpen} />
                 <Button icon={<CustomerServiceFilled />} onClick={handlersClipsEditorOpen} />
                 <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen} />
                 <Button icon={<DesktopOutlined />} onClick={handlersScenesEditorOpen} />
@@ -203,7 +199,7 @@ const Data = React.memo(() => {
             <Paragraphs paragraphs={script.paragraphs} scenes={script.scenes} roles={script.roles} onSubmit={handlersParagraphsSubmit} ref={refParagraphs} />
             <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
             <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
-            <EditorAudioClip list={script.audioClips ? script.audioClips : []} open={audioClipsEditor} onClose={handlersAudioClipsEditorClose} onSubmit={handlersAudioClipsEditorSubmit} plan={plan.hash} />
+            <EditorAudioClip open={audioClipsEditor} onClose={handlersAudioClipsEditorClose} plan={plan.hash} />
             <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} onRemove={handlersVocabsEditorRemove} />
             <EditorGrammars grammars={script.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} onSubmit={handlersGrammarsEditorSubmit} />
         </Scrollbars>

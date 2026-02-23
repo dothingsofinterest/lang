@@ -154,20 +154,6 @@ export const clipAudio = (params: object): Promise<Response> => {
         params: params,
     });
 };
-export const clipAudioMove = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/plan/data/audio_clip_move`,
-        params: params,
-    });
-};
-export const clipAudioRemove = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/plan/data/audio_clip_remove`,
-        params: params,
-    });
-};
 // Plan Data
 
 // Statistics
