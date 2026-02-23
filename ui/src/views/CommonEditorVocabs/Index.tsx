@@ -205,7 +205,7 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
         return () => {};
     }, []);
     return (
-        <Drawer id="common-editor-vocabs-index" title="Edit Vocabs" size="large" onClose={handlersOnClose} open={open}>
+        <Drawer id="common-editor-vocabs-index" title="Edit Vocabs" width={800} size="large" onClose={handlersOnClose} open={open}>
             {onSubmit && onRemove && (
                 <div className="vocab-panel">
                     <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />

@@ -27,7 +27,7 @@ const CommonEditorGrammars: React.FC<CommonEditorGrammarsProps> = ({ grammars, o
         return () => {};
     }, []);
     return (
-        <Drawer id="common-editor-grammars-index" title="Edit Grammars" width={1200} placement="right" onClose={handlersOnClose} open={open}>
+        <Drawer id="common-editor-grammars-index" title="Edit Grammars" width={800} placement="right" onClose={handlersOnClose} open={open}>
             {onSubmit && <Input.TextArea autoSize defaultValue={grammars && grammars.join("\n---\n")} onBlur={(e) => handlersUpdateGrammars(e.target.value)} placeholder="Each piece of grammar should be separated by ---" />}
             {!onSubmit && (
                 <div className="list">

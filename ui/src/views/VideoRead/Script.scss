@@ -6,16 +6,15 @@
         line-height: 40px;
         color: #ccc;
         background: #000;
-        padding: 10px 16px;
+        padding: 0 20px;
     }
     .scene {
         color: #000;
         background: #ccc;
-        padding: 16px 6px;
+        padding: 20px 0;
         border-top: 2px dotted;
-        // margin: 10px 0;
         &:nth-child(2) {
-            border: 0;
+            border-top: 0;
         }
         h2 {
             text-align: center;
@@ -23,11 +22,11 @@
             font-style: normal;
             line-height: 20px;
             color: #000;
-            margin: 0px 10px;
+            margin: 0 20px 10px;
         }
         p {
             margin: 0;
-            padding: 6px 10px;
+            padding: 4px 26px;
             color: #000;
             font-size: 16px;
             line-height: 30px;
@@ -39,26 +38,28 @@
             }
             .role {
                 font-style: normal;
+                font-weight: 700;
                 color: #000;
             }
         }
         ul {
             margin: 0;
-            padding: 6px 10px;
+            padding: 6px 26px;
             color: #000;
             font-size: 14px;
             line-height: 28px;
             .role {
                 font-style: normal;
+                font-weight: 700;
                 color: #000;
             }
         }
         .point {
             &.matched {
-                font-weight: 900;
+                font-weight: 500;
             }
             &.matching {
-                font-weight: 900;
+                font-weight: 700;
                 color: #499fe8;
             }
             &:first-child {
@@ -76,7 +77,7 @@
     &.cn {
         .scene {
             p {
-                padding: 4px 10px;
+                padding: 4px 26px;
                 font-size: 14px;
             }
         }
