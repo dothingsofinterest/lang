@@ -1,20 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vocab as DataVocab } from "../../types/Data";
 import { Input, Button, Select, Drawer, Upload } from "antd";
-import { PlusSquareOutlined, MinusSquareOutlined, RedoOutlined, BoldOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, ReloadOutlined, RedoOutlined, MinusOutlined, ClearOutlined } from "@ant-design/icons";
 import { fnParseVocabs } from "../../utils/script";
 import { fnBase64ToBlob } from "../../utils/util";
 import { Domain } from "../../settings.js";
 import { md5 } from "js-md5";
-import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload } from "../../api/requestAuth";
+import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
 import "./Index.scss";
 
 interface CommonEditorVocabsProps {
+    plan: string;
+    list: DataVocab[];
     open: boolean;
-    vocabs: DataVocab[];
     onClose?: () => void;
-    onSubmit?: (vocab: DataVocab) => void;
-    onRemove?: (index: number) => void;
+    onSubmit?: (list: DataVocab[]) => void;
 }
 
 const speedOptions = [
@@ -30,10 +30,10 @@ const voiceOptions = [
 
 const defaultVocab = { text: "", image: "", voice: 0, speed: 150, pronunciation: "" };
 
-const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, onClose, onSubmit, onRemove }) => {
+const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, open, onClose, onSubmit }) => {
     const [parsedVocabs, setParsedVocabs] = useState("");
     const [vocab, setVocab] = useState<DataVocab>(defaultVocab);
-    const [vocabActive, setVocabActive] = useState(0);
+    const [vocabActive, setVocabActive] = useState(-1);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refVocabAudio = useRef<HTMLAudioElement>(null);
     const handlersParseVocabs = (text: string) => {
@@ -163,37 +163,75 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
             alert("Please type vocab text.");
         }
     };
+    const handlersListUnshiftItem = async () => {
+        if (vocabActive === -1) {
+            if (vocab.text && vocab.pronunciation) {
+                const res = await vocabImagePronunciationMove({ plan: plan, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
+                if (res.code === 1) {
+                    const newList = [...list];
+                    newList.unshift(vocab);
+                    if (onSubmit !== undefined) {
+                        setVocab(defaultVocab);
+                        setParsedVocabs("");
+                        setVocabActive(-1);
+                        onSubmit(newList);
+                    }
+                }
+            }
+        }
+    };
+    const handlersListDeleteItem = async () => {
+        const confirmed = window.confirm("Are you confirmed to delete?");
+        if (confirmed) {
+            const curVocab = list[vocabActive];
+            if (curVocab !== undefined && curVocab.text && curVocab.pronunciation) {
+                const res = await vocabImagePronunciationRemove({ plan: plan, vocabImage: curVocab.image, vocabPronunciation: curVocab.pronunciation });
+                if (res.code === 1) {
+                    const a = list.slice(0, vocabActive);
+                    const b = list.slice(vocabActive + 1);
+                    const newList = [...a, ...b];
+                    if (onSubmit !== undefined) {
+                        setVocab(defaultVocab);
+                        setParsedVocabs("");
+                        setVocabActive(-1);
+                        onSubmit(newList);
+                    }
+                }
+            }
+        }
+    };
+    const handlersListUpdateItem = () => {
+        if (vocabActive !== -1) {
+            if (vocab.text) {
+                const newList = list.map((item, index) => (index === vocabActive ? { ...item, text: vocab.text } : item));
+                if (onSubmit !== undefined) {
+                    setVocab(defaultVocab);
+                    setParsedVocabs("");
+                    setVocabActive(-1);
+                    onSubmit(newList);
+                }
+            }
+        }
+    };
     const handlersClickVocab = (index: number) => {
-        if (vocabs.length > 0) {
+        if (list.length > 0) {
             setVocabActive(index);
-            const vocab = vocabs[index];
-            if (vocab && vocab.pronunciation) {
+            const vocab = list[index];
+            if (vocab && vocab.text && vocab.pronunciation) {
+                setVocab({ ...defaultVocab, text: vocab.text });
                 if (refVocabAudio.current) {
                     const audio = refVocabAudio.current;
-                    audio.src = vocab.pronunciation;
+                    audio.src = `${Domain}/data/${plan}/vocab_pronunciations/${vocab.pronunciation}`;
                     audio.load();
                     audio.play();
                 }
             }
         }
     };
-    const handlersOnSubmit = async () => {
-        if (vocab.text && vocab.pronunciation) {
-            if (onSubmit !== undefined) {
-                onSubmit({ ...vocab });
-                setVocab(defaultVocab);
-                setParsedVocabs("");
-            }
-        }
-    };
-    const handlersOnRemove = async () => {
-        const confirmed = window.confirm("Do you confirm to delete?");
-        if (confirmed) {
-            if (onRemove !== undefined) {
-                onRemove(vocabActive);
-                setVocab(defaultVocab);
-                setVocabActive(0);
-            }
+    const handlersClearTemp = () => {
+        if (list.length > 0) {
+            setVocabActive(-1);
+            setVocab(defaultVocab);
         }
     };
     const handlersOnClose = () => {
@@ -206,11 +244,11 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
     }, []);
     return (
         <Drawer id="common-editor-vocabs-index" title="Edit Vocabs" width={800} size="large" onClose={handlersOnClose} open={open}>
-            {onSubmit && onRemove && (
+            {onSubmit && (
                 <div className="vocab-panel">
-                    <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} placeholder="Paste Vocabs" />
+                    <Input.TextArea autoSize value={parsedVocabs} onChange={(e) => handlersParseVocabs(e.target.value)} />
                     <div className="text-image-btn">
-                        <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} placeholder="pronunciation/pronunciations | prəˌnʌnsiˈeɪʃn | n.读音;发音" />
+                        <Input className="text" value={vocab.text} onChange={(e) => handlersUpdateVocabText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} />
                         <div className="image">{vocab.image && <img src={`${Domain}/data/temp/${vocab.image}`} />}</div>
                         <Upload beforeUpload={handlersUpdateVocabImage} showUploadList={false}>
                             <Button icon={<PlusSquareOutlined />} />
@@ -229,21 +267,23 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ open, vocabs, o
                         </Upload>
                     </div>
                     <div className="btn">
-                        <Button icon={<MinusSquareOutlined />} onClick={handlersOnRemove} />
-                        <Button icon={<PlusSquareOutlined />} onClick={handlersOnSubmit} />
+                        <Button icon={<ReloadOutlined />} onClick={handlersListUpdateItem} />
+                        <Button icon={<ClearOutlined />} onClick={handlersClearTemp} />
+                        <Button icon={<MinusOutlined />} onClick={handlersListDeleteItem} />
+                        <Button icon={<PlusSquareOutlined />} onClick={handlersListUnshiftItem} />
                     </div>
                 </div>
             )}
             <div className="vocab-list">
-                {vocabs.length > 0 &&
-                    vocabs.map((value, key) => {
+                {list.length > 0 &&
+                    list.map((value, key) => {
                         return (
                             <div key={key} className={vocabActive === key ? "item active" : "item"} onClick={() => handlersClickVocab(key)}>
                                 <span className="text">
                                     <i className="index">[{key + 1}] </i>
                                     {value.text}
                                 </span>
-                                <span className="img">{value.image && <img src={value.image} />}</span>
+                                <span className="img">{value.image && <img src={`${Domain}/data/${plan}/vocab_images/${value.image}`} />}</span>
                             </div>
                         );
                     })}

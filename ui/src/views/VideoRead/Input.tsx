@@ -4,13 +4,13 @@ import { Vocab } from "../../types/Data";
 import "./Input.scss";
 
 interface InputProps {
-    input: string;
+    text: string;
     inputs: Vocab[];
     onClick?: (pronunciation: string) => void;
 }
 
-const Input: React.FC<InputProps> = ({ input, inputs, onClick }) => {
-    if (!inputs) return <>{input}</>;
+const Input: React.FC<InputProps> = ({ text, inputs, onClick }) => {
+    if (!inputs) return <>{text}</>;
     const handlersPlay = (pronunciation: string) => {
         if (onClick !== undefined) {
             onClick(pronunciation);
@@ -22,7 +22,7 @@ const Input: React.FC<InputProps> = ({ input, inputs, onClick }) => {
         if (next) {
             let res: any[] = [];
             const inputParts = next.text.split(" | ");
-            const inputReg = new RegExp(`${inputParts[0]}`, "");
+            const inputReg = new RegExp(`${inputParts[0].toLocaleLowerCase()}`, "");
             const inputMatch = text.match(inputReg);
             const halfs = [];
             if (inputMatch && inputMatch.index !== undefined) {
@@ -50,7 +50,7 @@ const Input: React.FC<InputProps> = ({ input, inputs, onClick }) => {
             return [text];
         }
     };
-    const parts: any[] = fnRecurHalf(input, inputs);
+    const parts: any[] = fnRecurHalf(text, inputs);
     return (
         <>
             {parts.map((part, i) => (

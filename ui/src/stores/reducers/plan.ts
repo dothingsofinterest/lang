@@ -157,25 +157,11 @@ const slice = createSlice({
             state.data = fnGetFormattedData(state.hash, state.script);
             fnSyncScript(state.hash, state.script);
         },
-        updateScriptVocabs: (state, action: PayloadAction<DataVocab>) => {
-            if (action.payload.text !== undefined) {
-                state.script.vocabs.unshift(action.payload);
-                state.script = { ...state.script, vocabs: state.script.vocabs };
+        updateScriptVocabs: (state, action: PayloadAction<DataVocab[]>) => {
+            if (action.payload !== undefined) {
+                state.script = { ...state.script, vocabs: action.payload };
                 state.data = fnGetFormattedData(state.hash, state.script);
                 fnSyncScript(state.hash, state.script);
-            }
-        },
-        updateScriptVocabsByDelete: (state, action: PayloadAction<number>) => {
-            if (action.payload !== undefined) {
-                const curVocab = state.script.vocabs[action.payload];
-                if (curVocab !== undefined) {
-                    const a = state.script.vocabs.slice(0, action.payload);
-                    const b = state.script.vocabs.slice(action.payload + 1);
-                    const newVocabs = [...a, ...b];
-                    state.script = { ...state.script, vocabs: newVocabs };
-                    state.data = fnGetFormattedData(state.hash, state.script);
-                    fnSyncScript(state.hash, state.script);
-                }
             }
         },
         updateScriptGrammars: (state, action: PayloadAction<string[]>) => {
@@ -213,25 +199,11 @@ const slice = createSlice({
                 fnSyncDiary(state.hash, state.diary);
             }
         },
-        updateDiaryVocabs: (state, action: PayloadAction<DataVocab>) => {
-            if (action.payload.text !== undefined) {
-                state.diary.vocabs.unshift(action.payload);
-                state.diary = { ...state.diary, vocabs: state.diary.vocabs };
+        updateDiaryVocabs: (state, action: PayloadAction<DataVocab[]>) => {
+            if (action.payload !== undefined) {
+                state.diary = { ...state.diary, vocabs: action.payload };
                 state.data = fnGetFormattedDataDiary(state.hash, state.diary);
                 fnSyncDiary(state.hash, state.diary);
-            }
-        },
-        updateDiaryVocabsByDelete: (state, action: PayloadAction<number>) => {
-            if (action.payload !== undefined) {
-                const curVocab = state.diary.vocabs[action.payload];
-                if (curVocab !== undefined) {
-                    const a = state.diary.vocabs.slice(0, action.payload);
-                    const b = state.diary.vocabs.slice(action.payload + 1);
-                    const newVocabs = [...a, ...b];
-                    state.diary = { ...state.diary, vocabs: newVocabs };
-                    state.data = fnGetFormattedDataDiary(state.hash, state.diary);
-                    fnSyncDiary(state.hash, state.diary);
-                }
             }
         },
         updateDiaryGrammars: (state, action: PayloadAction<string[]>) => {
@@ -244,6 +216,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVideoAudioClipsMatching, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptVocabs, updateScriptVocabsByDelete, updateScriptGrammars, updateScriptParagraphs, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryVocabsByDelete, updateDiaryGrammars } = slice.actions;
+export const { updateHash, updateType, updateProcessings, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVideoAudioClipsMatching, updateVocabMatchMeaning, updateVocabMatchWatch, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptVocabs, updateScriptGrammars, updateScriptParagraphs, updateDiaryData, updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryGrammars } = slice.actions;
 
 export default slice.reducer;

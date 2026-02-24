@@ -49,9 +49,11 @@ const GrammarTips: React.FC<GrammarTipsProps> = ({ content, grammar }) => {
     return (
         <>
             {chunks.map((chunk, i) => (
-                <React.Fragment key={i}>
-                    <p>{chunk}</p>
-                </React.Fragment>
+                <p key={i}>
+                    {chunk.map((span: string, k: number) => (
+                        <React.Fragment key={k}>{span}</React.Fragment>
+                    ))}
+                </p>
             ))}
         </>
     );

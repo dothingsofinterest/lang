@@ -5,8 +5,7 @@ import { PrinterOutlined, FileWordOutlined, GoogleOutlined } from "@ant-design/i
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
-import { updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryGrammars, updateDiaryVocabsByDelete } from "../../stores/reducers/plan";
+import { updateDiaryTitle, updateDiaryDate, updateDiaryContent, updateDiaryVocabs, updateDiaryGrammars } from "../../stores/reducers/plan";
 import { Vocab as DataVocab } from "../../types/Data";
 import VocabsEditor from "../CommonEditorVocabs/Index";
 import EditorGrammars from "../CommonEditorGrammars/Index";
@@ -18,6 +17,7 @@ import "./Index.scss";
 const Index = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const script = useSelector((state: RootState) => state.plan.script);
     const plan = useSelector((state: RootState) => state.plan);
     const [vocabsEditor, setVocabsEditor] = useState(false);
     const [grammarsEditor, setGrammarsEditor] = useState(false);
@@ -38,20 +38,8 @@ const Index = () => {
     const handlersVocabsEditorClose = () => {
         setVocabsEditor(false);
     };
-    const handlersVocabsEditorSubmit = async (vocab: DataVocab) => {
-        if (vocab.text && vocab.pronunciation) {
-            const res = await vocabImagePronunciationMove({ plan: plan.hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
-            if (res.code === 1) {
-                dispatch(updateDiaryVocabs(vocab));
-            }
-        }
-    };
-    const handlersVocabsEditorRemove = async (index: number) => {
-        dispatch(updateDiaryVocabsByDelete(index));
-        const vocab = plan.diary.vocabs[index];
-        if (vocab && (vocab.image || vocab.pronunciation)) {
-            await vocabImagePronunciationRemove({ plan: plan.hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
-        }
+    const handlersVocabsEditorSubmit = async (vocabs: DataVocab[]) => {
+        dispatch(updateDiaryVocabs(vocabs));
     };
     const handlersGrammarsEditorOpen = () => {
         setGrammarsEditor(true);
@@ -152,7 +140,7 @@ const Index = () => {
                 <Scrollbars>
                     <Input.TextArea value={plan.diary.content} onChange={(e) => handlersContent(e.target.value)} placeholder="Just write what you are thinking about at this moment." />
                 </Scrollbars>
-                <VocabsEditor vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} onRemove={handlersVocabsEditorRemove} />
+                <VocabsEditor plan={plan.hash} list={script.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} />
                 <EditorGrammars grammars={plan.diary.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} onSubmit={handlersGrammarsEditorSubmit} />
             </div>
         </Layout>

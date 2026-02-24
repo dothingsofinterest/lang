@@ -75,7 +75,7 @@ const Script: React.FC<ScriptProps> = ({ dataFormatted, encn = 0, matchingSenten
                                             {paragraph.sentences.map((v, k) => {
                                                 return (
                                                     <span className="point" key={v.key}>
-                                                        {v.texts.length > 0 && (encn === 0 ? v.linkings ? <Input input={v.texts[0].split("\n")[0]} inputs={dataFormatted.vocabs} onClick={handlersPlayInput} /> : v.texts[0].split("\n")[0] : v.texts[0].split("\n")[1])}
+                                                        {v.texts.length > 0 && (encn === 0 ? v.linkings ? <Input text={v.texts[0].split("\n")[0]} inputs={dataFormatted.vocabs} onClick={handlersPlayInput} /> : v.texts[0].split("\n")[0] : v.texts[0].split("\n")[1])}
                                                     </span>
                                                 );
                                             })}

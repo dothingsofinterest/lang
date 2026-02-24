@@ -4,8 +4,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { ScissorOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
-import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptGrammars, updateScriptVocabs, updateScriptVocabsByDelete } from "../../stores/reducers/plan";
+import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptGrammars, updateScriptVocabs } from "../../stores/reducers/plan";
 import { fnGetMaxTimeFromSentences } from "../../utils/script";
 import { Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagrap, AudioClip as DataAudioClip } from "../../types/Data";
 import Paragraphs, { ParagraphsRef } from "./Paragraphs";
@@ -73,20 +72,8 @@ const Data = React.memo(() => {
     const handlersVocabsEditorClose = () => {
         setVocabsEditor(false);
     };
-    const handlersVocabsEditorSubmit = async (vocab: DataVocab) => {
-        if (vocab.text && vocab.pronunciation) {
-            const res = await vocabImagePronunciationMove({ plan: plan.hash, vocabImage: vocab.image ? vocab.image : "a.txt", vocabPronunciation: vocab.pronunciation });
-            if (res.code === 1) {
-                dispatch(updateScriptVocabs(vocab));
-            }
-        }
-    };
-    const handlersVocabsEditorRemove = async (index: number) => {
-        dispatch(updateScriptVocabsByDelete(index));
-        const vocab = script.vocabs[index];
-        if (vocab && (vocab.image || vocab.pronunciation)) {
-            await vocabImagePronunciationRemove({ plan: plan.hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
-        }
+    const handlersVocabsEditorSubmit = async (vocabs: DataVocab[]) => {
+        dispatch(updateScriptVocabs(vocabs));
     };
     const handlersScenesEditorOpen = () => {
         setSceneEditor(true);
@@ -200,7 +187,7 @@ const Data = React.memo(() => {
             <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
             <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
             <EditorAudioClip open={audioClipsEditor} onClose={handlersAudioClipsEditorClose} plan={plan.hash} />
-            <EditorVocabs vocabs={plan.data.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} onRemove={handlersVocabsEditorRemove} />
+            <EditorVocabs plan={plan.hash} list={script.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} />
             <EditorGrammars grammars={script.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} onSubmit={handlersGrammarsEditorSubmit} />
         </Scrollbars>
     );
