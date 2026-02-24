@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vocab as DataVocab } from "../../types/Data";
 import { Input, Button, Select, Drawer, Upload } from "antd";
-import { PlusSquareOutlined, ReloadOutlined, RedoOutlined, MinusOutlined, ClearOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, ReloadOutlined, RedoOutlined, MinusOutlined, ClearOutlined, ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { fnParseVocabs } from "../../utils/script";
 import { fnBase64ToBlob } from "../../utils/util";
 import { Domain } from "../../settings.js";
@@ -213,6 +213,44 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, ope
             }
         }
     };
+    const handlersListUpItem = () => {
+        if (vocabActive !== -1) {
+            const newList = [...list];
+            const a = newList.slice(0, vocabActive);
+            const b = newList.slice(vocabActive);
+            const upOne = a.pop();
+            const theOne = b.shift();
+            if (theOne) {
+                a.push(theOne);
+            }
+            if (upOne) {
+                b.unshift(upOne);
+            }
+            if (onSubmit !== undefined) {
+                onSubmit([...a, ...b]);
+            }
+            setVocabActive(vocabActive - 1 < 0 ? 0 : vocabActive - 1);
+        }
+    };
+    const handlersListDownItem = () => {
+        if (vocabActive !== -1) {
+            const newList = [...list];
+            const a = newList.slice(0, vocabActive);
+            const b = newList.slice(vocabActive);
+            const theOne = b.shift();
+            const downOne = b.shift();
+            if (theOne) {
+                b.unshift(theOne);
+            }
+            if (downOne) {
+                b.unshift(downOne);
+            }
+            if (onSubmit !== undefined) {
+                onSubmit([...a, ...b]);
+            }
+            setVocabActive(vocabActive + 1 === list.length ? vocabActive : vocabActive + 1);
+        }
+    };
     const handlersClickVocab = (index: number) => {
         if (list.length > 0) {
             setVocabActive(index);
@@ -268,6 +306,8 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, ope
                     </div>
                     <div className="btn">
                         <Button icon={<ReloadOutlined />} onClick={handlersListUpdateItem} />
+                        <Button icon={<ArrowUpOutlined />} onClick={handlersListUpItem} />
+                        <Button icon={<ArrowDownOutlined />} onClick={handlersListDownItem} />
                         <Button icon={<ClearOutlined />} onClick={handlersClearTemp} />
                         <Button icon={<MinusOutlined />} onClick={handlersListDeleteItem} />
                         <Button icon={<PlusSquareOutlined />} onClick={handlersListUnshiftItem} />

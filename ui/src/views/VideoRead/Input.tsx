@@ -22,13 +22,14 @@ const Input: React.FC<InputProps> = ({ text, inputs, onClick }) => {
         if (next) {
             let res: any[] = [];
             const inputParts = next.text.split(" | ");
-            const inputReg = new RegExp(`${inputParts[0].toLocaleLowerCase()}`, "");
+            const inputReg = new RegExp(`(^| )${inputParts[0]}`, "");
             const inputMatch = text.match(inputReg);
             const halfs = [];
             if (inputMatch && inputMatch.index !== undefined) {
-                const ha = text.slice(0, inputMatch.index);
+                const index = inputMatch.index;
+                const ha = text.slice(0, index);
                 const hav = ha && ha.length > 0 ? ha : "";
-                const hb = text.slice(inputMatch.index + inputParts[0].length);
+                const hb = text.slice(index + inputMatch[0].length);
                 const hbv = hb && hb.length > 0 ? hb : "";
                 halfs.push(hav);
                 halfs.push(hbv);
@@ -40,7 +41,7 @@ const Input: React.FC<InputProps> = ({ text, inputs, onClick }) => {
                 if (halfs.length === 2 && k === 0) {
                     res.push(
                         <Tooltip className="input-item" title={next.text}>
-                            <span onClick={() => handlersPlay(next.pronunciation)}>{inputParts[0]}</span>
+                            <span onClick={() => handlersPlay(next.pronunciation)}>{inputMatch ? inputMatch[0] : inputParts[0]}</span>
                         </Tooltip>,
                     );
                 }

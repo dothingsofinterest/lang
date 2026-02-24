@@ -116,6 +116,12 @@ const Index = () => {
                         dispatch(updateVideoScriptCurrentTime(currentTime));
                         await navigator.clipboard.writeText(`${time}`);
                     });
+                    // refWavesurfer.current.on("drag", async (relativeX) => {
+                    //     const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
+                    //     const time = refState.current.timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
+                    //     dispatch(updateVideoScriptCurrentTime(currentTime));
+                    //     await navigator.clipboard.writeText(`${time}`);
+                    // });
                     refWavesurfer.current.on("loading", (percent) => {
                         // console.log("Loading", percent + "%");
                     });
