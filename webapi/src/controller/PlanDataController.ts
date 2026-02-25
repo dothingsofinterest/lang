@@ -116,15 +116,6 @@ export const dataSync = async (req: Request, res: Response) => {
             }
         }
     }
-    if (clipAudios.length > 0) {
-        const pathAudioClips = path.join(req.file.destination, "audio_clips");
-        const filesAudioClips = await fsPromise.readdir(pathAudioClips);
-        for (const clip of filesAudioClips) {
-            if (!clipAudios.includes(clip)) {
-                fs.unlinkSync(path.join(pathAudioClips, clip));
-            }
-        }
-    }
     res.status(200).json({
         code: 1,
         message: `Succeed.`,

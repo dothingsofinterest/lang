@@ -63,11 +63,6 @@ export const videoInit = async (req: Request, res: Response, next: NextFunction)
         if (!fs.existsSync(vocabPronunciationsFolder)) {
             fs.mkdirSync(vocabPronunciationsFolder, { recursive: true });
         }
-        // Create folder audio clips
-        const audioClipsFolder = path.join(planPath, "audio_clips");
-        if (!fs.existsSync(audioClipsFolder)) {
-            fs.mkdirSync(audioClipsFolder, { recursive: true });
-        }
         // Create script file
         const dataScript = path.join(planPath, fileNameScript);
         if (!fs.existsSync(dataScript)) {
@@ -78,7 +73,6 @@ export const videoInit = async (req: Request, res: Response, next: NextFunction)
                         title: "",
                         roles: [],
                         scenes: [],
-                        audio_clips: [],
                         vocabs: [],
                         grammars: [],
                         paragraphs: [],

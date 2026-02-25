@@ -6,7 +6,7 @@ import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCir
 import { updateProcessings, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom } from "../../stores/reducers/plan";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { fnFloatToSRTTime } from "../../utils/script";
+import { fnFloatToSRTTime, fnSRTTimeToFloat, fnIsSRTTime } from "../../utils/script";
 import { Domain } from "../../settings.js";
 import Data from "./Data";
 import "./Index.scss";
@@ -72,6 +72,16 @@ const Index = () => {
     };
     const handlersVideoSlide = (e: any) => {
         dispatch(updateVideoScriptWaveformZoom(e.target?.valueAsNumber));
+    };
+    const handlersCurrentTime = async (v: any) => {
+        const floatTime = fnIsSRTTime(v) ? fnSRTTimeToFloat(v) : Number(v);
+        if (typeof floatTime === "number" && !isNaN(floatTime)) {
+            if (refVideo.current && plan.videoURL) {
+                refVideo.current.currentTime = floatTime;
+                refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
+                dispatch(updateVideoScriptCurrentTime(floatTime));
+            }
+        }
     };
     const handlersVideoCanPlayThrough = () => {
         setVideoCanPlay(true);
@@ -180,7 +190,7 @@ const Index = () => {
                     <Button className="item" icon={playButton} onClick={handlersVideoPlay} />
                     <Button className="item" icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} />
                     <div className="item">
-                        <Input className="item" value={timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime} />
+                        <Input className="item" value={timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime} onChange={(e) => handlersCurrentTime(e.target.value)} />
                         <Switch defaultChecked onChange={handlersTimeFormatSwitch} size="small" />
                     </div>
                     <input className="item" ref={refSlider} type="range" value={waveformZoom} onInput={handlersVideoSlide} />
