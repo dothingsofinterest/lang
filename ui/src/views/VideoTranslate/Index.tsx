@@ -1,14 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button } from "antd";
-import { Scrollbars } from "react-custom-scrollbars-2";
-import { FastBackwardOutlined, FastForwardOutlined, BulbFilled, ClearOutlined, PrinterOutlined } from "@ant-design/icons";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Layout, Input, Button, Progress } from "antd";
+import { FastBackwardOutlined, FastForwardOutlined, BulbFilled, ClearOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateVideoTranslateMatchingSentence, updateVideoTranslateMatchingSentencePos } from "../../stores/reducers/plan";
-import Script from "../VideoRead/Script";
-import ReactDOMServer from "react-dom/server";
-import printJS from "print-js";
+import { updateVideoExampleMatching } from "../../stores/reducers/plan";
+import debounce from "lodash.debounce";
 import "./Index.scss";
 
 const Index = () => {
@@ -16,51 +13,36 @@ const Index = () => {
     const navigate = useNavigate();
     const plan = useSelector((state: RootState) => state.plan);
     const dataFormatted = useSelector((state: RootState) => state.plan.data);
-    const matchingSentence = useSelector((state: RootState) => state.plan.videoTranslateMatchingSentence);
+    const exampleMatching = useSelector((state: RootState) => state.plan.videoExampleMatching);
     const [inputValue, setInputValue] = useState("");
-    const refScrollbar = useRef<Scrollbars>(null);
-    const refMatchingSentence = useRef({ matchingSentence: matchingSentence });
+    const [progressValue, setProgressValue] = useState<number>(0);
     const refAudio = useRef<HTMLAudioElement>(null);
+    const refState = useRef({ exampleMatching });
     const handlersPlayBackward = () => {
-        const index = matchingSentence - 1 <= 0 ? 0 : matchingSentence - 1;
-        dispatch(updateVideoTranslateMatchingSentence(index));
+        const exampleMatching = refState.current.exampleMatching;
+        const index = exampleMatching - 1 <= 0 ? 0 : exampleMatching - 1;
+        dispatch(updateVideoExampleMatching(index));
     };
     const handlersPlayForward = () => {
-        const index = matchingSentence + 1 > dataFormatted.sentences.length ? matchingSentence : matchingSentence + 1;
-        dispatch(updateVideoTranslateMatchingSentence(index));
+        const exampleMatching = refState.current.exampleMatching;
+        const index = exampleMatching + 1 === dataFormatted.examples.length ? exampleMatching : exampleMatching + 1;
+        dispatch(updateVideoExampleMatching(index));
     };
     const handlersPanelActiveClear = () => {
         setInputValue("");
-        dispatch(updateVideoTranslateMatchingSentence(0));
+        dispatch(updateVideoExampleMatching(0));
     };
     const handlersTextInput = (value: string) => {
         setInputValue(value);
-        if (dataFormatted.sentences.length > 0) {
-            const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
-            const answerText = answer
-                .replace(/[\,\.\?\!\-\'\"\s]/g, "")
-                .toLowerCase()
-                .trim();
-            const inputText = value
-                .toLowerCase()
-                .replace(/[\,\.\?\!\-\'\"\s]/g, "")
-                .toLowerCase()
-                .trim();
-            if (value === answer || inputText === answerText) {
-                setInputValue("");
-                dispatch(updateVideoTranslateMatchingSentence(matchingSentence + 1));
-                if (refAudio.current) {
-                    refAudio.current.play();
-                }
-            }
-        }
+        fnDebouncedTypeVocab(value);
     };
     const handlersInputTips = () => {
-        if (dataFormatted.sentences.length > 0) {
-            if (dataFormatted.sentences[matchingSentence]) {
+        if (dataFormatted.examples.length > 0) {
+            const matchingSentence = refState.current.exampleMatching;
+            if (dataFormatted.examples[matchingSentence]) {
                 let tips1 = ``;
                 let tips2 = ``;
-                const answer = dataFormatted.sentences[matchingSentence].texts.map((v) => v.split("\n")[0]).join("\n");
+                const answer = dataFormatted.examples[exampleMatching].text.split("\n")[1];
                 const input = inputValue;
                 const answerText = answer
                     .replace(/[\,\.\?\!\-\'\"\s]/g, "")
@@ -93,61 +75,32 @@ const Index = () => {
             }
         }
     };
-    const handlersRenderedCallback = (scrollTopPoint: number) => {
-        const scrollTop = refScrollbar.current?.getScrollTop() || 0;
-        const scrollTopPointValue = scrollTop + scrollTopPoint;
-        dispatch(updateVideoTranslateMatchingSentencePos(scrollTopPointValue));
-        refScrollbar.current?.scrollTop(scrollTopPointValue);
-    };
-    const handlersPrint = () => {
-        if (plan.hash && plan.videoURL) {
-            if (dataFormatted.title) {
-                const style1 = `
-					@media print {
-						@page { margin: 1cm 0.4cm; }
-						* { outline: none; }
-						html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
-						body { margin: 0; padding: 0; font-size: 12pt; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
-						ol, ul, li { list-style: none; }
-						article { width: 100%; }
-						article h1 { text-align: center; font-size: 14pt; font-weight: 900; line-height: 22pt; color: #000; margin: 2pt; }
-						article .scene { background: #fff; color: #000;  padding: 10px 0 0; margin: 10px 20px; }
-						article .scene h2 { text-align: center; font-size: 12pt; font-weight: 300; font-style: italic; line-height: 22pt; color: #000; margin: 0 6pt; }
-						article .scene p { margin: 2pt 0; padding: 0; color: #000; font-size: 10pt; line-height: 22pt; }
-						article .scene p.pure { text-indent: 26pt; }
-                        article .scene p.indent { text-indent: 26pt; }
-						article .scene p:first-of-type  { border-top: 0; }
-						article .scene p .point { padding: 0 2pt; }
-						article .scene p .point:first-child { padding: 0; }
-						article .scene p .role { font-style: normal; font-weight: 900; color: #000; }
-						article .scene ul { margin: 0; padding: 2pt 0; color: #000; font-size: 10pt; line-height: 22pt; }
-						article .scene ul .role { font-style: normal; font-weight: 900; color: #000; }
-						article footer { height: 100%; }
-						article footer #script-vocabs,
-						article footer #script-grammars { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; }
-						article footer #script-vocabs .title,
-						article footer #script-grammars .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
-						article footer #script-vocabs .item,
-						article footer #script-grammars .item { margin: 0; padding: 2pt 0; border-top: 1px dotted #ccc; font-size: 10pt; line-height: 22pt; }
-						article footer #script-vocabs .item { display: flex; justify-content: space-between; }                              
-                        article footer #script-vocabs .item:nth-child(2),
-						article footer #script-grammars .item:nth-child(2) { border-top: 0; }
-                        article footer #script-vocabs .item .en { flex: 1; } 
-                        article footer #script-vocabs .item .pr,  
-                        article footer #script-vocabs .item .cn { flex: 0.5; } 
-						article footer #script-vocabs .item .index,
-						article footer #script-grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
-					}
-				`;
-                const content = ReactDOMServer.renderToStaticMarkup(<Script dataFormatted={dataFormatted} encn={1} />);
-                printJS({ printable: `${content}`, type: "raw-html", style: style1 });
-            } else {
-                alert(`Data not be set`);
+    const fnDebouncedTypeVocab = useCallback(
+        debounce((value) => {
+            if (dataFormatted.examples.length > 0) {
+                const exampleMatching = refState.current.exampleMatching;
+                const answer = dataFormatted.examples[exampleMatching].text.split("\n")[1];
+                const answerText = answer
+                    .replace(/[\,\.\?\!\-\'\"\s]/g, "")
+                    .toLowerCase()
+                    .trim();
+                const inputText = value
+                    .toLowerCase()
+                    .replace(/[\,\.\?\!\-\'\"\s]/g, "")
+                    .toLowerCase()
+                    .trim();
+                if (value === answer || inputText === answerText) {
+                    const index = exampleMatching + 1 === dataFormatted.examples.length ? exampleMatching : exampleMatching + 1;
+                    setInputValue("");
+                    dispatch(updateVideoExampleMatching(index));
+                    if (refAudio.current) {
+                        refAudio.current.play();
+                    }
+                }
             }
-        } else {
-            alert("Please upload a video.");
-        }
-    };
+        }, 100),
+        [],
+    );
     useEffect(() => {
         if (!plan.hash || !plan.videoURL) {
             alert("Please upload a video.");
@@ -157,33 +110,59 @@ const Index = () => {
             alert("This is not a video plan.");
             navigate("/common/settings");
         }
-        return () => {};
+        const onKeyDownHandler = (event: KeyboardEvent) => {
+            if (event.code === "ArrowDown") {
+                handlersPlayBackward();
+            }
+            if (event.code === "ArrowUp") {
+                handlersPlayForward();
+            }
+        };
+        window.addEventListener("keydown", onKeyDownHandler);
+        return () => {
+            window.removeEventListener("keydown", onKeyDownHandler);
+            if (refAudio.current) {
+                refAudio.current.pause();
+                refAudio.current.currentTime = 0;
+                refAudio.current.src = "";
+            }
+        };
     }, []);
     useEffect(() => {
-        refMatchingSentence.current = { matchingSentence };
-    }, [matchingSentence]);
+        refState.current = { exampleMatching };
+        setProgressValue(Math.ceil(((exampleMatching === 0 ? 0 : exampleMatching + 1) / dataFormatted.examples.length) * 100));
+    }, [exampleMatching]);
     return (
         <Layout id="translate-index" className="main-inner">
-            <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 0" }}>
+            <div className="main-inner-item-aside"></div>
+            <div className="main-inner-item-main" style={{ position: "relative", padding: "64px 0 120px" }}>
                 <section id="panel">
-                    <Button icon={<FastBackwardOutlined />} onClick={handlersPlayBackward} className="btn" />
-                    <Button icon={<FastForwardOutlined />} onClick={handlersPlayForward} className="btn" />
-                    <Button icon={<BulbFilled />} onClick={handlersInputTips} className="btn"></Button>
-                    <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
-                    <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
+                    <div className="buttons">
+                        <Button icon={<FastBackwardOutlined />} onClick={handlersPlayBackward} className="btn" />
+                        <Button icon={<BulbFilled />} onClick={handlersInputTips} className="btn"></Button>
+                        <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
+                        <Button icon={<FastForwardOutlined />} onClick={handlersPlayForward} className="btn" />
+                    </div>
+                    <div className="progress">
+                        <Progress percent={progressValue} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
+                    </div>
                 </section>
-                <Scrollbars>
-                    <Input.TextArea value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} autoSize placeholder="Please Translate to English" />
-                </Scrollbars>
-                <section style={{ display: "none" }}>
+                <section id="display">
+                    {dataFormatted.examples.length > 0 && (
+                        <>
+                            <div className="cate">{dataFormatted.examples[exampleMatching].cate}</div>
+                            <div className="text">{dataFormatted.examples[exampleMatching].text.split("\n")[0]}</div>
+                        </>
+                    )}
+                </section>
+                <section id="input">
+                    <Input.TextArea value={inputValue} onChange={(e) => handlersTextInput(e.target.value)} />
+                </section>
+                <section id="hidden-elems">
                     <audio ref={refAudio} src="/audio/paid.mp3"></audio>
                 </section>
             </div>
-            <div className="main-inner-item-main">
-                <Scrollbars ref={refScrollbar}>
-                    <Script dataFormatted={dataFormatted} encn={1} matchingSentence={matchingSentence} onRendered={handlersRenderedCallback} />
-                </Scrollbars>
-            </div>
+            <div className="main-inner-item-aside"></div>
         </Layout>
     );
 };

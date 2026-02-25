@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { EyeFilled, TranslationOutlined, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, BulbFilled, EditFilled, SoundFilled } from "@ant-design/icons";
+import { EyeFilled, TranslationOutlined, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, BulbFilled, EditFilled } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Menu.scss";
@@ -17,7 +17,6 @@ const routes: RouteItem[] = [
     { url: "/video/script", icon: <ProfileFilled /> },
     { url: "/video/read", icon: <ReadFilled /> },
     { url: "/video/translate", icon: <TranslationOutlined /> },
-    { url: "/video/audio-clips", icon: <SoundFilled /> },
     { url: "/diary/edit", icon: <EditFilled /> },
 ];
 const Menu = () => {

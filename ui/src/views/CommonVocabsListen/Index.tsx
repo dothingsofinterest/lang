@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Button } from "antd";
-import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined } from "@ant-design/icons";
+import { Layout, Button, Progress } from "antd";
+import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { Scrollbars } from "react-custom-scrollbars-2";
 import { updateVocabMatchListen } from "../../stores/reducers/plan";
-import { fnRandom, fnShuffle } from "../../utils/util";
 import "./Index.scss";
 
 const Index = () => {
@@ -15,137 +13,60 @@ const Index = () => {
     const plan = useSelector((state: RootState) => state.plan);
     const dataFormatted = useSelector((state: RootState) => state.plan.data);
     const matchingVocab = useSelector((state: RootState) => state.plan.vocabMatchListen);
-    const [matchingVocabChunks, setMatchingVocabChunks] = useState<string[]>([]);
-    const [selectorVocabs, setSelectorVocabs] = useState<number[]>([]);
-    const [selectorVocabsActvie, setSelectorVocabsActvie] = useState<number | null>(null);
-    const [chunkAnswer, setChunkAnswer] = useState<number[]>([]);
-    const [chunkAnswerAccomplished, setChunkAnswerAccomplished] = useState<boolean>(false);
-    const refScrollbar = useRef<Scrollbars>(null);
+    const [playSpeed, setPlaySpeed] = useState<number>(1);
+    const [progressValue, setProgressValue] = useState<number>(0);
     const refAudio = useRef<HTMLAudioElement>(null);
-    const refMatchingVocab = useRef({ matchingVocab });
-    const refWordList = useRef<HTMLDivElement>(null);
-    const refWordListArr = useRef<NodeListOf<HTMLDivElement> | null | undefined>(null);
-    const refSelector = useRef<HTMLDivElement>(null);
-    const handlersClickSelector = (text: string, index: number) => {
-        if (dataFormatted.vocabs.length > 0) {
-            const inputText = text.split(" | ")[0];
-            const answerText = dataFormatted.vocabs[matchingVocab].text.split(" | ")[0];
-            if (inputText === answerText) {
-                const matchingVocabNext = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
-                dispatch(updateVocabMatchListen(matchingVocabNext));
-                setSelectorVocabsActvie(null);
-                setChunkAnswer([]);
-                fnScrollList(matchingVocab);
-                fnPlayAudio(matchingVocabNext);
-            } else {
-                setSelectorVocabsActvie(index);
-            }
-        }
-    };
-    const handlersClickChunk = (index: number) => {
-        if (!chunkAnswer.includes(index)) {
-            fnUpdateChunkAnswer([...chunkAnswer, index]);
-        }
-    };
-    const handlersClickAnswer = (index: number) => {
-        const chunkAnswerNew = chunkAnswer.filter((v) => v !== index);
-        fnUpdateChunkAnswer(chunkAnswerNew);
-    };
+    const refState = useRef({ matchingVocab, playSpeed });
     const handlersPlayBackward = () => {
-        const matchingVocab = refMatchingVocab.current.matchingVocab;
+        const matchingVocab = refState.current.matchingVocab;
+        const playSpeed = refState.current.playSpeed;
         const index = matchingVocab - 1 <= 0 ? 0 : matchingVocab - 1;
         dispatch(updateVocabMatchListen(index));
-        fnScrollList(index - 1);
-        fnPlayAudio(index);
-        fnClearChunk();
+        fnPlayAudio(index, playSpeed);
     };
     const handlersPlayForward = () => {
-        const matchingVocab = refMatchingVocab.current.matchingVocab;
+        const matchingVocab = refState.current.matchingVocab;
+        const playSpeed = refState.current.playSpeed;
         const index = matchingVocab + 1 >= dataFormatted.vocabs.length ? matchingVocab : matchingVocab + 1;
         dispatch(updateVocabMatchListen(index));
-        fnScrollList(index - 1);
-        fnPlayAudio(index);
-        fnClearChunk();
+        fnPlayAudio(index, playSpeed);
+    };
+    const handlersPlaySpeedUp = () => {
+        if (refAudio.current) {
+            const matchingVocab = refState.current.matchingVocab;
+            const playSpeed = refState.current.playSpeed;
+            const valueComputed = playSpeed + 0.5;
+            const value = valueComputed > 3 ? 3 : valueComputed;
+            setPlaySpeed(value);
+            fnPlayAudio(matchingVocab, value);
+        }
+    };
+    const handlersPlaySpeedDown = () => {
+        if (refAudio.current) {
+            const matchingVocab = refState.current.matchingVocab;
+            const playSpeed = refState.current.playSpeed;
+            const valueComputed = playSpeed - 0.5;
+            const value = valueComputed === 0 ? 0.5 : valueComputed;
+            setPlaySpeed(value);
+            fnPlayAudio(matchingVocab, value);
+        }
     };
     const handlersPlayClear = () => {
         dispatch(updateVocabMatchListen(0));
-        fnPlayAudio(0);
-        fnClearChunk();
-        refScrollbar.current?.scrollTop(0);
+        setPlaySpeed(1);
+        fnPlayAudio(0, 1);
     };
-    const fnPlayAudio = async (index: number) => {
+    const fnPlayAudio = async (index: number, speed: number = 1) => {
         if (dataFormatted.vocabs.length > 0) {
             const vocab = dataFormatted.vocabs[index];
             if (vocab && vocab.pronunciation) {
                 if (refAudio.current) {
                     const audio = refAudio.current;
                     audio.src = vocab.pronunciation;
-                    audio.load();
+                    audio.playbackRate = speed;
                     audio.play();
                 }
             }
-        }
-    };
-    const fnClearChunk = async () => {
-        setChunkAnswerAccomplished(false);
-        setChunkAnswer([]);
-    };
-    const fnGetRandomNumbers = (index: number) => {
-        const results: number[] = [index];
-        const vocabsLen = dataFormatted.vocabs.length;
-        if (vocabsLen > 0) {
-            for (let i = 0; i < 3; i++) {
-                const randomIndex = fnRandom(0, vocabsLen - 1, results);
-                results.push(randomIndex);
-            }
-        }
-        return fnShuffle(results);
-    };
-    const fnGetAssembleElements = (index: number, chunk = 3) => {
-        const resElems: string[] = [];
-        if (dataFormatted.vocabs[index]) {
-            const text = dataFormatted.vocabs[index].text.split(" | ")[0];
-            const slashes = text.match(/\//g);
-            if (slashes?.length) {
-                for (let i = 0; i < slashes?.length; i++) {
-                    resElems.push("/");
-                }
-            }
-            text.split("/").forEach((phrase: string) => {
-                const spaces = phrase.match(/\s/g);
-                if (spaces?.length) {
-                    for (let i = 0; i < spaces?.length; i++) {
-                        resElems.push(" ");
-                    }
-                }
-                phrase.split(" ").forEach((vocab) => {
-                    const chunkLen = chunk >= vocab.length ? vocab.length : chunk;
-                    const selectLen = Math.ceil(vocab.length / chunkLen);
-                    for (let i = 0; i < selectLen; i++) {
-                        const a = vocab.slice(i * chunk, (i + 1) * chunk);
-                        resElems.push(a);
-                    }
-                });
-            });
-        }
-
-        return fnShuffle(resElems);
-    };
-    const fnUpdateChunkAnswer = (chunks: number[]) => {
-        const answerText = dataFormatted.vocabs[matchingVocab].text.split(" | ")[0];
-        let inputSpell = ``;
-        chunks.forEach((answer) => {
-            inputSpell += matchingVocabChunks[answer];
-        });
-        setChunkAnswer(chunks);
-        setChunkAnswerAccomplished(inputSpell === answerText);
-    };
-    const fnScrollList = (index: number) => {
-        const list = refWordListArr.current;
-        if (list && list[index]) {
-            const scrollTop = refScrollbar.current?.getScrollTop() || 0;
-            const scrollTopVocabValue = scrollTop + list[index].getBoundingClientRect().top;
-            refScrollbar.current?.scrollTop(scrollTopVocabValue);
         }
     };
     useEffect(() => {
@@ -160,9 +81,14 @@ const Index = () => {
             if (event.code === "ArrowRight") {
                 handlersPlayForward();
             }
+            if (event.code === "ArrowUp") {
+                handlersPlaySpeedUp();
+            }
+            if (event.code === "ArrowDown") {
+                handlersPlaySpeedDown();
+            }
         };
         fnPlayAudio(matchingVocab);
-        refWordListArr.current = refWordList.current?.querySelectorAll(".line");
         window.addEventListener("keydown", onKeyDownHandler);
         return () => {
             window.removeEventListener("keydown", onKeyDownHandler);
@@ -174,73 +100,44 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        refMatchingVocab.current = { matchingVocab };
-        setSelectorVocabs(fnGetRandomNumbers(matchingVocab));
-        setMatchingVocabChunks(fnGetAssembleElements(matchingVocab));
-    }, [matchingVocab]);
+        refState.current = { matchingVocab, playSpeed };
+        setProgressValue(Math.ceil(((matchingVocab === 0 ? 0 : matchingVocab + 1) / dataFormatted.vocabs.length) * 100));
+    }, [matchingVocab, playSpeed]);
     return (
         <Layout className="main-inner" id="listen-index">
-            <div className="main-inner-item-aside" style={{ position: "relative", padding: "32px 0 0" }}>
+            <div className="main-inner-item-aside"></div>
+            <div className="main-inner-item-main" style={{ position: "relative", padding: "64px 0 0" }}>
                 <section id="panel">
-                    <Button icon={<FastBackwardOutlined />} onClick={handlersPlayBackward} className="btn">
-                        Click or Press Left
-                    </Button>
-                    <Button icon={<ClearOutlined />} onClick={handlersPlayClear} className="btn" />
-                    <Button icon={<FastForwardOutlined />} onClick={handlersPlayForward} className="btn">
-                        Click or Press Right
-                    </Button>
+                    <div className="buttons">
+                        <Button icon={<FastBackwardOutlined />} onClick={handlersPlayBackward} className="btn">
+                            Click or Press Left
+                        </Button>
+                        <Button icon={<CaretUpOutlined />} onClick={handlersPlaySpeedUp} className="btn" />
+                        <Button icon={<ClearOutlined />} onClick={handlersPlayClear} className="btn" />
+                        <Button icon={<CaretDownOutlined />} onClick={handlersPlaySpeedDown} className="btn">
+                            {playSpeed}
+                        </Button>
+                        <Button icon={<FastForwardOutlined />} onClick={handlersPlayForward} className="btn">
+                            Click or Press Right
+                        </Button>
+                    </div>
+                    <div className="progress">
+                        <Progress percent={progressValue} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
+                    </div>
                 </section>
-                <Scrollbars>
-                    <div id="selector" ref={refSelector}>
-                        {dataFormatted.vocabs.length > 0 &&
-                            selectorVocabs.map((key, index) => {
-                                return (
-                                    <div key={index} className={`item${index === selectorVocabsActvie ? " active" : ""}`} onClick={() => handlersClickSelector(dataFormatted.vocabs[key].text, index)}>
-                                        {dataFormatted.vocabs[key].image && <img src={dataFormatted.vocabs[key].image} />}
-                                        <i className="cn">{dataFormatted.vocabs[key].text.split(" | ")[2]}</i>
-                                    </div>
-                                );
-                            })}
-                    </div>
-                    <div id="assemble">
-                        <div className={`answer${chunkAnswerAccomplished ? " succeeded" : ""}`}>
-                            {chunkAnswer.map((v, k) => {
-                                return (
-                                    <div key={k} className="chunk" onClick={() => handlersClickAnswer(v)}>
-                                        {matchingVocabChunks[v]}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <div className="chunks">
-                            {matchingVocabChunks.map((v, k) => {
-                                return (
-                                    <div key={k} className={`chunk${chunkAnswer.includes(k) ? " selected" : ""}`} onClick={() => handlersClickChunk(k)}>
-                                        {v}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                    <section id="hidden-elems">
-                        <audio ref={refAudio} loop></audio>
-                    </section>
-                </Scrollbars>
+                <section id="display">
+                    {dataFormatted.vocabs.length > 0 && (
+                        <>
+                            <div className="img">{dataFormatted.vocabs[matchingVocab].image && <img src={dataFormatted.vocabs[matchingVocab].image} />}</div>
+                            <div className="text">{dataFormatted.vocabs[matchingVocab].text}</div>
+                        </>
+                    )}
+                </section>
+                <section id="hidden-elems">
+                    <audio ref={refAudio} loop></audio>
+                </section>
             </div>
-            <div className="main-inner-item-main">
-                <Scrollbars ref={refScrollbar}>
-                    <div id="word-list" ref={refWordList}>
-                        {dataFormatted.vocabs.map((value, key) => {
-                            return (
-                                <div key={key} className={matchingVocab >= key ? (matchingVocab > key ? "line matched" : "line matching") : "line"}>
-                                    <i className="index">[{key}]</i>
-                                    {value.text}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </Scrollbars>
-            </div>
+            <div className="main-inner-item-aside"></div>
         </Layout>
     );
 };

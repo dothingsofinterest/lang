@@ -224,7 +224,7 @@ const Index = () => {
     }, [matchingSentence]);
     return (
         <Layout id="video-read" className="main-inner">
-            <div className="main-inner-item-aside" style={{ display: "flex" }}>
+            <div className="main-inner-item-aside">
                 <video controls style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
                     <source src={videoURL} type="video/mp4" /> Your browser does not support video tag.
                 </video>

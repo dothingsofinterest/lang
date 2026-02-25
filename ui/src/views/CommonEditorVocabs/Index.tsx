@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vocab as DataVocab } from "../../types/Data";
 import { Input, Button, Select, Drawer, Upload } from "antd";
-import { PlusSquareOutlined, ReloadOutlined, RedoOutlined, MinusOutlined, ClearOutlined, ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, ReloadOutlined, RedoOutlined, MinusOutlined, ClearOutlined, ArrowUpOutlined, ArrowDownOutlined, LinkOutlined } from "@ant-design/icons";
 import { fnParseVocabs } from "../../utils/script";
 import { fnBase64ToBlob } from "../../utils/util";
 import { Domain } from "../../settings.js";
 import { md5 } from "js-md5";
+import { clipAudio } from "../../api/requestAuth";
 import { vocabImageUpload, vocabPronunciationGenerate, vocabPronunciationUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
 import "./Index.scss";
 
@@ -24,8 +25,8 @@ const speedOptions = [
 ];
 
 const voiceOptions = [
-    { value: 0, label: "Man-0" },
-    { value: 1, label: "Woman-1" },
+    { value: 0, label: "Man" },
+    { value: 1, label: "Woman" },
 ];
 
 const defaultVocab = { text: "", image: "", voice: 0, speed: 150, pronunciation: "" };
@@ -34,6 +35,9 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, ope
     const [parsedVocabs, setParsedVocabs] = useState("");
     const [vocab, setVocab] = useState<DataVocab>(defaultVocab);
     const [vocabActive, setVocabActive] = useState(-1);
+    const [clipTemp, setClipTemp] = useState("");
+    const [clipTimeStart, setClipTimeStart] = useState(`0`);
+    const [clipTimeEnd, setClipTimeEnd] = useState(`0`);
     const refAudio = useRef<HTMLAudioElement>(null);
     const refVocabAudio = useRef<HTMLAudioElement>(null);
     const handlersParseVocabs = (text: string) => {
@@ -72,7 +76,10 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, ope
     const handlersUpdateVocabPronounceSpeed = (value: number) => {
         setVocab({ ...vocab, speed: value });
     };
-    const handlersPlayVocabPronunciation = async () => {
+    const handlersPronunciationClick = async () => {
+        if (vocab.pronunciation) {
+            window.open(`${Domain}/data/temp/${vocab.pronunciation}`, "_blank");
+        }
         if (vocab.pronunciation) {
             if (refAudio.current) {
                 refAudio.current.play();
@@ -272,6 +279,29 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, ope
             setVocab(defaultVocab);
         }
     };
+    const handlersClipGenerate = async () => {
+        const start = Number(clipTimeStart);
+        const end = Number(clipTimeEnd);
+        if (end > start) {
+            const nameText = `${Date.now()}`;
+            const name = `${md5(nameText).slice(25)}`;
+            const res = await clipAudio({ plan, name, start, end });
+            if (res.code === 1) {
+                setClipTemp(`${name}.mp3`);
+                if (refAudio.current) {
+                    const audio = refAudio.current;
+                    audio.src = `${Domain}/data/temp/${name}.mp3`;
+                    audio.load();
+                    audio.play();
+                }
+            }
+        }
+    };
+    const handlersClipClick = () => {
+        if (clipTemp) {
+            window.open(`${Domain}/data/temp/${clipTemp}`, "_blank");
+        }
+    };
     const handlersOnClose = () => {
         if (onClose !== undefined) {
             onClose();
@@ -292,17 +322,22 @@ const CommonEditorVocabs: React.FC<CommonEditorVocabsProps> = ({ plan, list, ope
                             <Button icon={<PlusSquareOutlined />} />
                         </Upload>
                     </div>
-                    <div className="audio-player">
-                        <Button onClick={handlersPlayVocabPronunciation}>{vocab.pronunciation}</Button>
-                    </div>
-                    <div className="audio-btn">
+                    <div className="panel-audio">
                         <Select style={{ width: 120 }} value={vocab.voice} onChange={handlersUpdateVocabPronounceVoice} options={voiceOptions} />
                         <Select style={{ width: 120 }} value={vocab.speed} onChange={handlersUpdateVocabPronounceSpeed} options={speedOptions} />
                         <Input className="base64" value={``} onChange={(e) => handlersUploadVocabPronunciationBase64(e.target.value)} />
-                        <Button className="gen" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
-                        <Upload beforeUpload={handlersUploadVocabPronunciation} showUploadList={false}>
+                        <Button className="pa-btn" onClick={handlersPronunciationClick} icon={<LinkOutlined />} />
+                        <Button className="pa-btn" icon={<RedoOutlined />} onClick={handlersGenerateVocabPronunciation} />
+                        <Upload className="pa-btn" beforeUpload={handlersUploadVocabPronunciation} showUploadList={false}>
                             <Button icon={<PlusSquareOutlined />} />
                         </Upload>
+                    </div>
+                    <div className="panel-clip">
+                        <Input value={clipTimeStart} onChange={(e) => setClipTimeStart(e.target.value)} />
+                        <MinusOutlined />
+                        <Input value={clipTimeEnd} onChange={(e) => setClipTimeEnd(e.target.value)} />
+                        <Button className="pc-btn" onClick={handlersClipClick} icon={<LinkOutlined />} />
+                        <Button className="pc-btn" icon={<ReloadOutlined />} onClick={handlersClipGenerate} />
                     </div>
                     <div className="btn">
                         <Button icon={<ReloadOutlined />} onClick={handlersListUpdateItem} />

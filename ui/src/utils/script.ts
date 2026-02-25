@@ -114,7 +114,7 @@ export const fnParseVocabsCheckVerbs = (base: string, variants: string[]): strin
 export const fnGetFormattedData = (plan: string, script: DataScript): PlanData => {
     const data: PlanData = {
         title: script.title,
-        audioClips: [],
+        examples: [],
         vocabs: [],
         grammars: script.grammars,
         scenes: [],
@@ -124,7 +124,12 @@ export const fnGetFormattedData = (plan: string, script: DataScript): PlanData =
     };
     const staticPrefix = `${Domain}/data/${plan}`;
     data.vocabs = script.vocabs.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
-    data.audioClips = script.audioClips ? script.audioClips.map((v) => ({ ...v, audio: `${staticPrefix}/audio_clips/${v.audio}` })) : [];
+    data.examples = script.examples
+        ? script.examples.map((v) => {
+              const scene = script.scenes.find(({ index }) => index === Number(v.cate));
+              return { ...v, cate: scene ? scene.value : v.cate };
+          })
+        : [];
     script.paragraphs.forEach((v: DataParagraph) => {
         data.sentences.push(...v.sentences);
     });
@@ -202,7 +207,7 @@ export const fnValidateVideoScript = (data: any): boolean => {
             .items(Joi.alternatives().try(Joi.object(), Joi.string().allow("")))
             .required(),
         vocabs: Joi.array().items(Joi.object()).required(),
-        audioClips: Joi.array().items(Joi.object()),
+        examples: Joi.array().items(Joi.object()),
         grammars: Joi.array().items(Joi.string()).required(),
         paragraphs: Joi.array().items(Joi.object()).required(),
     });

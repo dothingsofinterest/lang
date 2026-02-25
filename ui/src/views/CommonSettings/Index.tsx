@@ -3,7 +3,7 @@ import { Layout, Input, Button, Upload } from "antd";
 import { PlusCircleOutlined, UploadOutlined, DownloadOutlined, LineChartOutlined, SearchOutlined } from "@ant-design/icons";
 import store, { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateHash, updateType, updateVideoMatchingSentence, updateVideoTranslateMatchingSentence, updateProcessings, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateDiaryData } from "../../stores/reducers/plan";
+import { updateHash, updateType, updateVideoMatchingSentence, updateProcessings, updateVideoURL, updateVideoAudioURL, updateVideoAudioWaverURL, updateScriptData, updateDiaryData } from "../../stores/reducers/plan";
 import { clearToken } from "../../stores/reducers/auth";
 import { fnValidateVideoScript, fnDealScenes, fnDealParagraphs } from "../../utils/script";
 import { fnValidateDiary } from "../../utils/diary";
@@ -28,7 +28,6 @@ const Index = () => {
                 if (res.code === 1) {
                     dispatch(updateHash(res.data.plan));
                     dispatch(updateVideoMatchingSentence(0));
-                    dispatch(updateVideoTranslateMatchingSentence(0));
                     dispatch(updateVideoURL(URL.createObjectURL(file)));
                     const resWaveform = await videoInit({ plan: res.data.plan });
                     if (resWaveform.code === 1) {

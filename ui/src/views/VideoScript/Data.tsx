@@ -1,18 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { ScissorOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, CustomerServiceFilled } from "@ant-design/icons";
+import { ScissorOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined, TranslationOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptAudioClips, updateScriptGrammars, updateScriptVocabs } from "../../stores/reducers/plan";
+import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptGrammars, updateScriptVocabs, updateScriptExamples } from "../../stores/reducers/plan";
 import { fnGetMaxTimeFromSentences } from "../../utils/script";
-import { Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagrap, AudioClip as DataAudioClip } from "../../types/Data";
+import { Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagrap, Example as DataExample } from "../../types/Data";
 import Paragraphs, { ParagraphsRef } from "./Paragraphs";
 import EditorVocabs from "../CommonEditorVocabs/Index";
 import EditorGrammars from "../CommonEditorGrammars/Index";
-import EditorAudioClip from "./EditorAudioClips";
 import EditorRoles from "./EditorRoles";
 import EditorScenes from "./EditorScenes";
+import EditorExample from "./EditorExample";
 import "./Data.scss";
 
 const Data = React.memo(() => {
@@ -24,7 +24,7 @@ const Data = React.memo(() => {
     const [sceneEditor, setSceneEditor] = useState(false);
     const [rolesEditor, setRolesEditor] = useState(false);
     const [grammarsEditor, setGrammarsEditor] = useState(false);
-    const [audioClipsEditor, setAudioClipsEditor] = useState(false);
+    const [exampleEditor, setExampleEditor] = useState(false);
     const refScrollbar = useRef<Scrollbars>(null);
     const refParagraphs = useRef<ParagraphsRef>(null);
     const refPanel = useRef<HTMLDivElement>(null);
@@ -102,14 +102,14 @@ const Data = React.memo(() => {
     const handlersRolesEditorSubmit = async (roles: string[]) => {
         dispatch(updateScriptRoles(roles));
     };
-    const handlersClipsEditorOpen = () => {
-        setAudioClipsEditor(true);
+    const handlersExamplesEditorOpen = () => {
+        setExampleEditor(true);
     };
-    const handlersAudioClipsEditorClose = () => {
-        setAudioClipsEditor(false);
+    const handlersExamplesEditorClose = () => {
+        setExampleEditor(false);
     };
-    const handlersAudioClipsEditorSubmit = async (audioClips: DataAudioClip[]) => {
-        dispatch(updateScriptAudioClips(audioClips));
+    const handlersExamplesEditorSubmit = (examples: DataExample[]) => {
+        dispatch(updateScriptExamples(examples));
     };
     const handlersScroll = (event: React.UIEvent<HTMLElement>) => {
         const target = event.currentTarget;
@@ -120,35 +120,6 @@ const Data = React.memo(() => {
                 refPanel.current.classList.remove("fixed");
             }
         }
-    };
-    // For the clear script button
-    const handlersResortData = () => {
-        const paragraphs = [...script.paragraphs];
-        const n = paragraphs.length;
-        for (let i = 0; i < n - 1; i++) {
-            for (let j = 0; j < n - 1 - i; j++) {
-                const maxTime = fnGetMaxTimeFromSentences(paragraphs[j].sentences);
-                const maxTimeNext = fnGetMaxTimeFromSentences(paragraphs[j + 1].sentences);
-                if (maxTime > maxTimeNext) {
-                    const temp = paragraphs[j];
-                    paragraphs[j] = paragraphs[j + 1];
-                    paragraphs[j + 1] = temp;
-                }
-            }
-        }
-        const newParagraphs = paragraphs.map((paragraph, pk) => {
-            const newValue = { ...paragraph };
-            newValue.key = `${pk}`;
-            newValue.sentences = newValue.sentences.map((sentence, sk) => {
-                const newValue = { ...sentence };
-                newValue.key = `${pk}-${sk}`;
-                return newValue;
-            });
-            return newValue;
-        });
-        dispatch(updateScriptParagraphs(newParagraphs));
-        setRenderVersion((prev) => prev + 1);
-        alert("Succeed.");
     };
     useEffect(() => {
         return () => {};
@@ -174,11 +145,11 @@ const Data = React.memo(() => {
                 <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete}>
                     S
                 </Button>
-                <Button icon={<CustomerServiceFilled />} onClick={handlersClipsEditorOpen} />
                 <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen} />
                 <Button icon={<DesktopOutlined />} onClick={handlersScenesEditorOpen} />
                 <Button icon={<FileWordFilled />} onClick={handlersVocabsEditorOpen} />
                 <Button icon={<GoogleOutlined />} onClick={handlersGrammarsEditorOpen} />
+                <Button icon={<TranslationOutlined />} onClick={handlersExamplesEditorOpen} />
             </div>
             <div className="script-meta">
                 <Input defaultValue={script.title} onBlur={(e) => handlersScriptNameUpdate(e.target.value)} placeholder="Script Title" />
@@ -186,7 +157,7 @@ const Data = React.memo(() => {
             <Paragraphs paragraphs={script.paragraphs} scenes={script.scenes} roles={script.roles} onSubmit={handlersParagraphsSubmit} ref={refParagraphs} />
             <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
             <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
-            <EditorAudioClip open={audioClipsEditor} onClose={handlersAudioClipsEditorClose} plan={plan.hash} />
+            <EditorExample examples={script.examples ? script.examples : []} cates={script.scenes} open={exampleEditor} onClose={handlersExamplesEditorClose} onSubmit={handlersExamplesEditorSubmit} />
             <EditorVocabs plan={plan.hash} list={script.vocabs} open={vocabsEditor} onClose={handlersVocabsEditorClose} onSubmit={handlersVocabsEditorSubmit} />
             <EditorGrammars grammars={script.grammars} open={grammarsEditor} onClose={handlersGrammarsEditorClose} onSubmit={handlersGrammarsEditorSubmit} />
         </Scrollbars>

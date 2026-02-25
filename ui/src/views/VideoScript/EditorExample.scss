@@ -1,0 +1,45 @@
+#video-script-editor-examples {
+    #example-panel {
+        .ant-btn {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 20px 0;
+            border-radius: 0;
+            background-color: #ccc;
+        }
+    }
+    #example-list {
+        .item {
+            .item-panel {
+                display: flex;
+                width: 100%;
+                .ant-select {
+                    flex: 1;
+                    .ant-select-selector {
+                        height: 28px;
+                        border-radius: 0;
+                        border-bottom: 0;
+                        background: #ccc;
+                        font-size: 12px;
+                    }
+                }
+                .ant-btn {
+                    width: 36px;
+                    height: 28px;
+                    border-radius: 0;
+                    border-left: 0;
+                    border-bottom: 0;
+                    background: #ccc;
+                }
+            }
+            .item-textarea {
+                textarea {
+                    flex: 1;
+                    min-height: 52px;
+                    border-radius: 0;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}

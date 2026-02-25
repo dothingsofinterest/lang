@@ -10,11 +10,9 @@ export interface StatePlan {
     videoAudioWaveformURL: string;
     videoScriptCurrentTime: number;
     videoScriptWaveformZoom: number;
-    videoTranslateMatchingSentence: number;
-    videoTranslateMatchingSentencePos: number;
     videoMatchingSentence: number;
     videoMatchingSentencePos: number;
-    videoAudioClipsMatching: number;
+    videoExampleMatching: number;
     vocabMatchListen: number;
     vocabMatchMeaning: number;
     vocabMatchWatch: number;
@@ -40,22 +38,22 @@ export interface PayloadPlan {
 /* Data */
 export interface PlanData {
     title: string;
-    audioClips: AudioClip[];
     vocabs: Vocab[];
     grammars: string[];
     date: string;
     content: string;
     scenes: SceneBlock[];
     sentences: Sentence[];
+    examples: Example[];
 }
 export interface Script {
     title: string;
     roles: string[];
     scenes: Scene[];
-    audioClips: AudioClip[];
     vocabs: Vocab[];
     grammars: string[];
     paragraphs: Paragraph[];
+    examples: Example[];
 }
 export interface Paragraph {
     key: string;
@@ -85,9 +83,10 @@ export interface Vocab {
     speed: number;
     pronunciation: string;
 }
-export interface AudioClip {
+export interface Example {
+    id: number;
+    cate: string | number;
     text: string;
-    audio: string;
 }
 export interface Diary {
     title: string;

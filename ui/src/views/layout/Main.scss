@@ -9,16 +9,14 @@
         justify-content: space-between;
         align-items: stretch;
         flex-direction: row;
-        background-color: #000;
+        background-color: #ccc;
         .main-inner-item-aside {
             flex: 1;
             box-sizing: border-box;
-            background-color: #202024;
         }
         .main-inner-item-main {
             flex: 0 0 800px;
             box-sizing: border-box;
-            background-color: #ffffff1a;
         }
         .main-inner-item-footer {
             width: 100%;
