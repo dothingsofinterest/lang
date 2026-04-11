@@ -2,14 +2,11 @@ import axios, { AxiosInstance } from "axios";
 import { Response, RequestDataLogin } from "../types/Http";
 import { APIPrefix } from "../settings.js";
 
-// Request Instance
 const instance: AxiosInstance = axios.create({
     baseURL: `${APIPrefix}`,
     timeout: 10000,
 });
-// Request Instance
 
-// Request Instance Interceptor
 instance.interceptors.response.use(
     (response) => {
         if (response.status === 200) {
@@ -21,7 +18,6 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     },
 );
-// Request Instance Interceptor
 
 // Login
 const OAuthLogin = (data: RequestDataLogin): Promise<Response> => {

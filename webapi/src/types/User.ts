@@ -17,7 +17,6 @@ interface JwtPayload {
 
 export type { TypeEntity, JwtPayload };
 
-/* Data Structure - User */
 interface User {
     id: number;
     username: string;
@@ -26,4 +25,3 @@ interface User {
 }
 
 export type { User };
-/* Data Structure - User */

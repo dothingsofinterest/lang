@@ -29,11 +29,21 @@
             display: flex;
             margin-bottom: 4px;
             .time {
-                flex: 0 0 94px;
+                flex: 0 0 142px;
                 row-gap: 4px;
                 overflow: hidden;
-                .time-input {
-                    border-radius: 0;
+                .time-inner {
+                    row-gap: 0px;
+                    column-gap: 0px;
+                    overflow: hidden;
+                    .ant-input {
+                        border-radius: 0;
+                    }
+                    .ant-btn {
+                        height: 24px;
+                        width: 24px;
+                        border-radius: 0;
+                    }
                 }
             }
             .text {

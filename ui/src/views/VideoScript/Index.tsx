@@ -1,53 +1,146 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button, Switch } from "antd";
-import { useNavigate } from "react-router-dom";
-import WaveSurfer from "wavesurfer.js";
-import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, RedoOutlined, CopyOutlined, CopyFilled } from "@ant-design/icons";
-import { updateProcessings, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom } from "../../stores/reducers/plan";
+import { Layout, Input, Button, Switch, Tooltip } from "antd";
+import { FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, RedoOutlined, ScissorOutlined, FileWordFilled, MinusCircleOutlined, GoogleOutlined, PlusCircleOutlined, DownloadOutlined, TeamOutlined, DesktopOutlined, PlusSquareOutlined, MinusSquareOutlined } from "@ant-design/icons";
+import { updateLoadingVideoScriptIndexWaver, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom } from "../../stores/reducers/status";
+import { updateScriptParagraphs, updateScriptTitle, updateScriptRoles, updateScriptScenes, updateScriptVocab, updateScriptGrammar } from "../../stores/reducers/data";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { fnFloatToSRTTime, fnSRTTimeToFloat, fnIsSRTTime } from "../../utils/script";
-import { Domain } from "../../settings.js";
-import Data from "./Data";
+import { Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagrap, Grammar as DataGrammar } from "../../types/Data";
+import { Scrollbars } from "react-custom-scrollbars-2";
+import Paragraphs, { ParagraphsRef } from "./Paragraphs";
+import WaveSurfer from "wavesurfer.js";
+import EditorLines from "./EditorLines";
+import EditorVocab from "./EditorVocab";
+import EditorGrammar from "./EditorGrammar";
+import EditorRoles from "./EditorRoles";
+import EditorScenes from "./EditorScenes";
 import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const plan = useSelector((state: RootState) => state.plan);
-    const processings = useSelector((state: RootState) => state.plan.processings);
-    const currentTime = useSelector((state: RootState) => state.plan.videoScriptCurrentTime);
-    const waveformZoom = useSelector((state: RootState) => state.plan.videoScriptWaveformZoom);
+    const data = useSelector((state: RootState) => state.data);
+    const script = useSelector((state: RootState) => state.data.script);
+    const loading = useSelector((state: RootState) => state.status.LoadingVideoScriptIndexWaver);
+    const currentTime = useSelector((state: RootState) => state.status.videoScriptCurrentTime);
+    const waveformZoom = useSelector((state: RootState) => state.status.videoScriptWaveformZoom);
+    const [vocabEditor, setVocabEditor] = useState(false);
+    const [grammarEditor, setGrammarEditor] = useState(false);
+    const [sceneEditor, setSceneEditor] = useState(false);
+    const [rolesEditor, setRolesEditor] = useState(false);
+    const [linesEditor, setLinesEditor] = useState(false);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
-    const [videoCanPlay, setVideoCanPlay] = useState(false);
-    const [timeCopyFormat, setTimeCopyFormat] = useState(true); // true: SRT, false: float
     const refVideo = useRef<HTMLVideoElement>(null);
     const refSlider = useRef<HTMLInputElement>(null);
     const refWavesurfer = useRef<WaveSurfer | null>(null);
-    const refState = useRef({ timeCopyFormat });
-    const refAudio = useRef<HTMLAudioElement>(null);
+    const refScrollbar = useRef<Scrollbars>(null);
+    const refParagraphs = useRef<ParagraphsRef>(null);
+    const refPanel = useRef<HTMLDivElement>(null);
+    const handlersScriptNameUpdate = (value: string) => {
+        dispatch(updateScriptTitle({ text: value.trim() }));
+    };
+    const handlersSentenceInsert = () => {
+        refParagraphs.current?.insertSentence();
+    };
+    const handlersSentenceDelete = () => {
+        refParagraphs.current?.deleteSentence();
+    };
+    const handlersParagraphInsert = () => {
+        refParagraphs.current?.insertParagraph();
+    };
+    const handlersParagraphDelete = () => {
+        const confirmed = window.confirm("Do you confirm to delete?");
+        if (confirmed) {
+            refParagraphs.current?.deleteParagraph();
+        }
+    };
+    const handlersParagraphCut = () => {
+        const confirmed = window.confirm("Do you confirm to cut?");
+        if (confirmed) {
+            refParagraphs.current?.cutParagraph();
+        }
+    };
+    const handlersParagraphsSubmit = (paragraphs: DataParagrap[]) => {
+        dispatch(updateScriptParagraphs(paragraphs));
+    };
+    const handlersParagraphsLocateTime = (time: string) => {
+        fnLocateCurrentTime(time);
+    };
+    const handlersVocabEditorOpen = () => {
+        setVocabEditor(true);
+    };
+    const handlersVocabEditorClose = () => {
+        setVocabEditor(false);
+    };
+    const handlersVocabEditorSubmit = async (vocabList: DataVocab[]) => {
+        dispatch(updateScriptVocab(vocabList));
+    };
+    const handlersGrammarEditorSubmit = (grammarList: DataGrammar[]) => {
+        dispatch(updateScriptGrammar(grammarList));
+    };
+    const handlersGrammarEditorOpen = () => {
+        setGrammarEditor(true);
+    };
+    const handlersGrammarEditorClose = () => {
+        setGrammarEditor(false);
+    };
+    const handlersScenesEditorOpen = () => {
+        setSceneEditor(true);
+    };
+    const handlersScenesEditorClose = () => {
+        setSceneEditor(false);
+    };
+    const handlersScenesEditorSubmit = async (scenes: DataScene[]) => {
+        dispatch(updateScriptScenes(scenes));
+    };
+    const handlersRolesEditorOpen = () => {
+        setRolesEditor(true);
+    };
+    const handlersRolesEditorClose = () => {
+        setRolesEditor(false);
+    };
+    const handlersRolesEditorSubmit = async (roles: string[]) => {
+        dispatch(updateScriptRoles(roles));
+    };
+    const handlersLinesEditorSubmit = (paragraphs: DataParagrap[]) => {
+        dispatch(updateScriptParagraphs(paragraphs));
+    };
+    const handlersLinesEditorOpen = () => {
+        setLinesEditor(true);
+    };
+    const handlersLinesEditorClose = () => {
+        setLinesEditor(false);
+    };
+    const handlersScroll = (event: React.UIEvent<HTMLElement>) => {
+        const target = event.currentTarget;
+        if (refPanel.current) {
+            if (target.scrollTop > 50) {
+                refPanel.current.classList.add("fixed");
+            } else {
+                refPanel.current.classList.remove("fixed");
+            }
+        }
+    };
     const handlersVideoPlayBackward = async () => {
-        if (refVideo.current && plan.videoURL) {
+        if (refVideo.current && data.videoURL) {
             const floatTime = Math.max(0, refVideo.current.currentTime - 0.1);
-            const time = timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
             refVideo.current.currentTime = floatTime;
             refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
             dispatch(updateVideoScriptCurrentTime(floatTime));
-            await navigator.clipboard.writeText(`${time}`);
+            await navigator.clipboard.writeText(`${fnFloatToSRTTime(floatTime)}`);
         }
     };
     const handlersVideoPlayForward = async () => {
-        if (refVideo.current && plan.videoURL) {
+        if (refVideo.current && data.videoURL) {
             const floatTime = refVideo.current.currentTime + 0.1;
-            const time = timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
             refVideo.current.currentTime = floatTime;
             refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
             dispatch(updateVideoScriptCurrentTime(floatTime));
-            await navigator.clipboard.writeText(`${time}`);
+            await navigator.clipboard.writeText(`${fnFloatToSRTTime(floatTime)}`);
         }
     };
     const handlersVideoPlay = () => {
-        if (refVideo.current && plan.videoURL) {
+        if (refVideo.current && data.videoURL) {
             if (refVideo.current.paused) {
                 setPlayButton(<PauseCircleOutlined />);
                 refVideo.current
@@ -67,24 +160,11 @@ const Index = () => {
             alert("Please upload video.");
         }
     };
-    const handlersTimeFormatSwitch = (checked: boolean) => {
-        setTimeCopyFormat(checked);
-    };
     const handlersVideoSlide = (e: any) => {
         dispatch(updateVideoScriptWaveformZoom(e.target?.valueAsNumber));
     };
-    const handlersCurrentTime = async (v: any) => {
-        const floatTime = fnIsSRTTime(v) ? fnSRTTimeToFloat(v) : Number(v);
-        if (typeof floatTime === "number" && !isNaN(floatTime)) {
-            if (refVideo.current && plan.videoURL) {
-                refVideo.current.currentTime = floatTime;
-                refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
-                dispatch(updateVideoScriptCurrentTime(floatTime));
-            }
-        }
-    };
-    const handlersVideoCanPlayThrough = () => {
-        setVideoCanPlay(true);
+    const handlersCurrentTime = (v: any) => {
+        fnLocateCurrentTime(v);
     };
     const handlersVideoTagOnTimeUpdate = (e: any) => {
         // console.log("video current time:", e.target.currentTime);
@@ -95,15 +175,14 @@ const Index = () => {
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoTagOnPaused = async (e: any) => {
-        const time = refState.current.timeCopyFormat ? fnFloatToSRTTime(e.target.currentTime) : e.target.currentTime;
         dispatch(updateVideoScriptCurrentTime(e.target.currentTime));
-        await navigator.clipboard.writeText(time);
+        await navigator.clipboard.writeText(fnFloatToSRTTime(e.target.currentTime));
     };
     const handlersCreateWaver = async () => {
-        if (videoCanPlay === true) {
-            if (!refWavesurfer.current) {
-                dispatch(updateProcessings({ buttonID: 4, buttonStatus: true }));
-                const res = await fetch(`${Domain}/data/${plan.hash}/${plan.videoAudioWaveformURL}?${Date.now()}`);
+        if (!refWavesurfer.current) {
+            try {
+                dispatch(updateLoadingVideoScriptIndexWaver(1));
+                const res = await fetch(`${data.videoAudioWaveformURL}?${Date.now()}`);
                 const jsonData = await res.json();
                 if (jsonData.data.length > 0) {
                     refWavesurfer.current = WaveSurfer.create({
@@ -122,15 +201,13 @@ const Index = () => {
                     });
                     refWavesurfer.current.on("click", async () => {
                         const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
-                        const time = refState.current.timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
                         dispatch(updateVideoScriptCurrentTime(currentTime));
-                        await navigator.clipboard.writeText(`${time}`);
+                        await navigator.clipboard.writeText(`${fnFloatToSRTTime(currentTime)}`);
                     });
                     // refWavesurfer.current.on("drag", async (relativeX) => {
                     //     const currentTime = refWavesurfer.current?.getCurrentTime() || 0;
-                    //     const time = refState.current.timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime;
                     //     dispatch(updateVideoScriptCurrentTime(currentTime));
-                    //     await navigator.clipboard.writeText(`${time}`);
+                    //     await navigator.clipboard.writeText(`${fnFloatToSRTTime(currentTime)}`);
                     // });
                     refWavesurfer.current.on("loading", (percent) => {
                         // console.log("Loading", percent + "%");
@@ -139,7 +216,7 @@ const Index = () => {
                         console.log("Ready", duration + "s");
                         refWavesurfer.current?.seekTo(currentTime / refWavesurfer.current.getDuration());
                         refWavesurfer.current?.zoom(waveformZoom);
-                        dispatch(updateProcessings({ buttonID: 4, buttonStatus: false }));
+                        dispatch(updateLoadingVideoScriptIndexWaver(0));
                     });
                     refWavesurfer.current.once("decode", () => {
                         refSlider.current?.addEventListener("input", (e: any) => {
@@ -151,18 +228,22 @@ const Index = () => {
                         });
                     });
                 }
+            } catch (err: any) {
+                console.error(err.message);
+            }
+        }
+    };
+    const fnLocateCurrentTime = (time: string) => {
+        const floatTime = fnIsSRTTime(time) ? fnSRTTimeToFloat(time) : Number(time);
+        if (typeof floatTime === "number" && !isNaN(floatTime)) {
+            if (refVideo.current && data.videoURL) {
+                refVideo.current.currentTime = floatTime;
+                refWavesurfer.current?.seekTo(floatTime / refWavesurfer.current.getDuration());
+                dispatch(updateVideoScriptCurrentTime(floatTime));
             }
         }
     };
     useEffect(() => {
-        if (!plan.hash || !plan.videoURL) {
-            alert("Please upload a video.");
-            navigate("/common/settings");
-        }
-        if (plan.type !== 0 && plan.type !== 1) {
-            alert("This is not a video plan.");
-            navigate("/common/settings");
-        }
         return () => {
             if (refWavesurfer.current) {
                 refWavesurfer.current.destroy();
@@ -170,33 +251,66 @@ const Index = () => {
             }
         };
     }, []);
-    useEffect(() => {
-        refState.current = { ...refState.current, timeCopyFormat };
-    }, [timeCopyFormat]);
     return (
         <Layout id="script-index" className="main-inner" style={{ position: "relative", padding: "0 0 178px", margin: "0" }}>
             <div className="main-inner-item-aside">
-                <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} onCanPlayThrough={handlersVideoCanPlayThrough} ref={refVideo}>
-                    <source src={plan.videoURL} type="video/mp4" /> Your browser does not support video tag.
+                <video style={{ width: "100%", margin: "0 auto" }} id="video" onPause={handlersVideoTagOnPaused} onEnded={handlersVideoTagOnEnded} onTimeUpdate={handlersVideoTagOnTimeUpdate} ref={refVideo}>
+                    <source src={data.videoURL} type="video/mp4" /> Your browser does not support video tag.
                 </video>
             </div>
             <div className="main-inner-item-main">
-                <Data />
+                <Scrollbars style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
+                    <div ref={refPanel} className="script-panel">
+                        <Tooltip title={`Add a Paragraph`}>
+                            <Button icon={<PlusSquareOutlined />} onClick={handlersParagraphInsert} />
+                        </Tooltip>
+                        <Tooltip title={`Remove a Paragraph`}>
+                            <Button icon={<MinusSquareOutlined />} onClick={handlersParagraphDelete} />
+                        </Tooltip>
+                        <Tooltip title={`Cut a Paragraph`}>
+                            <Button icon={<ScissorOutlined />} onClick={handlersParagraphCut} />
+                        </Tooltip>
+                        <Tooltip title={`Insert a Sentence`}>
+                            <Button icon={<PlusCircleOutlined />} onClick={handlersSentenceInsert} />
+                        </Tooltip>
+                        <Tooltip title={`Remove a Sentence`}>
+                            <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete} />
+                        </Tooltip>
+                        <Tooltip title={`Import Lines`}>
+                            <Button icon={<DownloadOutlined />} onClick={handlersLinesEditorOpen} />
+                        </Tooltip>
+                        <Tooltip title={`Edit Roles`}>
+                            <Button icon={<TeamOutlined />} onClick={handlersRolesEditorOpen} />
+                        </Tooltip>
+                        <Tooltip title={`Edit Scenes`}>
+                            <Button icon={<DesktopOutlined />} onClick={handlersScenesEditorOpen} />
+                        </Tooltip>
+                        <Tooltip title={`Edit Vocab`}>
+                            <Button icon={<FileWordFilled />} onClick={handlersVocabEditorOpen} />
+                        </Tooltip>
+                        <Tooltip title={`Edit Grammar`}>
+                            <Button icon={<GoogleOutlined />} onClick={handlersGrammarEditorOpen} />
+                        </Tooltip>
+                    </div>
+                    <div className="script-meta">
+                        <Input defaultValue={script.title} onBlur={(e) => handlersScriptNameUpdate(e.target.value)} placeholder="Script Title" />
+                    </div>
+                    <Paragraphs paragraphs={script.paragraphs} scenes={script.scenes} roles={script.roles} onLocateTime={handlersParagraphsLocateTime} onSubmit={handlersParagraphsSubmit} ref={refParagraphs} />
+                </Scrollbars>
+                <EditorRoles roles={script.roles} open={rolesEditor} onClose={handlersRolesEditorClose} onSubmit={handlersRolesEditorSubmit} />
+                <EditorScenes scenes={script.scenes} open={sceneEditor} onClose={handlersScenesEditorClose} onSubmit={handlersScenesEditorSubmit} />
+                <EditorLines open={linesEditor} onClose={handlersLinesEditorClose} onSubmit={handlersLinesEditorSubmit} />
+                <EditorVocab hash={data.videoHash} list={script.vocab} open={vocabEditor} onClose={handlersVocabEditorClose} onSubmit={handlersVocabEditorSubmit} />
+                <EditorGrammar grammarList={script.grammar} open={grammarEditor} onClose={handlersGrammarEditorClose} onSubmit={handlersGrammarEditorSubmit} />
             </div>
             <div className="main-inner-item-footer" style={{ height: "178px", position: "absolute", bottom: "0", left: "0" }}>
                 <div className="panel">
-                    <Button className="item" icon={<RedoOutlined />} onClick={handlersCreateWaver} loading={processings[4]} />
+                    <Button className="item" icon={<RedoOutlined />} onClick={handlersCreateWaver} loading={!!loading} />
                     <Button className="item" icon={<FastBackwardOutlined />} onClick={handlersVideoPlayBackward} />
                     <Button className="item" icon={playButton} onClick={handlersVideoPlay} />
                     <Button className="item" icon={<FastForwardOutlined />} onClick={handlersVideoPlayForward} />
-                    <div className="item">
-                        <Input className="item" value={timeCopyFormat ? fnFloatToSRTTime(currentTime) : currentTime} onChange={(e) => handlersCurrentTime(e.target.value)} />
-                        <Switch defaultChecked onChange={handlersTimeFormatSwitch} size="small" />
-                    </div>
+                    <Input className="item" value={fnFloatToSRTTime(currentTime)} onChange={(e) => handlersCurrentTime(e.target.value)} />
                     <input className="item" ref={refSlider} type="range" value={waveformZoom} onInput={handlersVideoSlide} />
-                    <section style={{ display: "none" }}>
-                        <audio ref={refAudio}></audio>
-                    </section>
                 </div>
                 <div id="waver" style={{ height: "146px" }}></div>
             </div>

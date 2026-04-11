@@ -26,22 +26,22 @@ const uploader = multer({
         destination: (req, file, cb) => {
             try {
                 if (file.mimetype === "video/mp4") {
-                    const plan = md5(file.originalname.split(".")[0]).slice(25);
-                    const planPath = path.join(`${basePath}`, `${plan}`);
-                    if (!fs.existsSync(planPath)) {
-                        fs.mkdirSync(planPath, { recursive: true });
+                    const videoHash = md5(file.originalname.split(".")[0]).slice(25);
+                    const videoPath = path.join(`${basePath}`, `${videoHash}`);
+                    if (!fs.existsSync(videoPath)) {
+                        fs.mkdirSync(videoPath, { recursive: true });
                     }
-                    cb(null, planPath);
+                    cb(null, videoPath);
                 } else if (file.mimetype === "application/x-zip-compressed" || file.mimetype === "application/json") {
-                    const plan = `${req.query.plan}`;
-                    if (plan === "undefined" || !/^[a-zA-Z0-9]+$/g.test(plan)) {
-                        throw new Error("Plan parameter is missing.");
+                    const videoHash = `${req.query.hash}`;
+                    if (videoHash === "undefined" || !/^[a-zA-Z0-9]+$/g.test(videoHash)) {
+                        throw new Error("hash is missing.");
                     }
-                    const planPath = path.join(`${basePath}`, `${plan}`);
-                    if (!fs.existsSync(planPath)) {
-                        throw new Error("Plan does not exist.");
+                    const videoPath = path.join(`${basePath}`, `${videoHash}`);
+                    if (!fs.existsSync(videoPath)) {
+                        throw new Error("Video does not exist.");
                     }
-                    cb(null, planPath);
+                    cb(null, videoPath);
                 } else {
                     const tempPath = path.join(`${basePath}`, `temp`);
                     if (!fs.existsSync(tempPath)) {

@@ -16,7 +16,6 @@ export const login = async (req: Request, res: Response) => {
     });
     const { error, value } = schema.validate(req.body);
     if (error) {
-        console.error("Failed to validate params: ", error.message);
         return res.status(200).json({
             code: 0,
             message: error.message,
@@ -57,7 +56,6 @@ export const login = async (req: Request, res: Response) => {
             data: { access_token: token, expires_in: Math.floor(Date.now() / 1000) + parseInt(expire) },
         });
     } catch (error) {
-        console.error(error);
         return res.status(200).json({
             code: 0,
             message: `System Error`,

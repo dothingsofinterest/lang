@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Input, Button, Drawer } from "antd";
-import { PlusSquareOutlined, ArrowUpOutlined, ArrowDownOutlined, MinusSquareOutlined, ReloadOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, ArrowUpOutlined, ArrowDownOutlined, MinusSquareOutlined } from "@ant-design/icons";
 import { Scene as DataScene } from "../../types/Data";
-import { fnRandom } from "../../utils/util";
 import "./EditorScenes.scss";
 
 interface EditorScenesProps {
@@ -16,7 +15,7 @@ const EditorScenes: React.FC<EditorScenesProps> = ({ scenes, open, onClose, onSu
     const [tempScene, setTempScene] = useState<DataScene | null>(null);
     const handlersUpdateTempScene = (value: string) => {
         const excluded = scenes.map((scene) => scene.index);
-        const index = fnRandom(0, 65535, excluded);
+        const index = excluded.length === 0 ? 1 : Math.max(...excluded) + 1;
         setTempScene({ index, value });
     };
     const handlersSubmitTempScene = () => {

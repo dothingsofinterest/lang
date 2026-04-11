@@ -43,7 +43,7 @@ const Login = () => {
             const res = await OAuthLogin(data);
             if (res.code) {
                 dispatch(setToken(res));
-                navigate("/common/settings");
+                navigate("/settings");
             } else {
                 alert(`${res.message}`);
             }
@@ -62,7 +62,7 @@ const Login = () => {
     useEffect(() => {
         const cookie = Cookies.get(`ACCESS_TOKEN`);
         if (cookie) {
-            navigate("/common/settings");
+            navigate("/settings");
         }
         loadCaptcha();
     }, []);

@@ -1,27 +1,42 @@
 import React, { useEffect } from "react";
+import Cookies from "js-cookie";
 import { useLocation, Navigate } from "react-router-dom";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { clearToken } from "../../stores/reducers/auth";
-import Cookies from "js-cookie";
+import { message } from "antd";
 
-interface props {
+interface GuardProps {
     children: React.ReactNode;
 }
 
-const Guard: React.FC<props> = ({ children }) => {
+const Guard: React.FC<GuardProps> = ({ children }) => {
     const location = useLocation();
     const dispatch = useDispatch();
-    const token = useSelector((state: RootState) => state.auth.ACCESS_TOKEN);
+    const token = Cookies.get(`ACCESS_TOKEN`);
+    const data = useSelector((state: RootState) => state.data);
+    const [messageApi, contextHolder] = message.useMessage();
     useEffect(() => {
-        const cookie = Cookies.get(`ACCESS_TOKEN`);
-        if (!cookie) {
+        if (!token) {
             dispatch(clearToken());
             window.location.href = "/#/login";
         }
+        if (!data.videoHash) {
+            if (location.pathname !== "/settings") {
+                messageApi.info("Upload an mp4 Video.");
+                window.location.href = "/#/settings";
+            }
+        }
     }, [location.pathname]);
 
-    return token ? <>{children}</> : <Navigate to="/login" replace />;
+    return token ? (
+        <>
+            {contextHolder}
+            {children}
+        </>
+    ) : (
+        <Navigate to="/login" replace />
+    );
 };
 
 export default Guard;

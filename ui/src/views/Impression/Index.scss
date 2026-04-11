@@ -1,0 +1,128 @@
+#impression-index {
+    .main-inner-item-aside {
+        #diary {
+            position: relative;
+            h1 {
+                text-align: center;
+                font-size: 16px;
+                font-weight: 900;
+                line-height: 32px;
+                color: #fff;
+                margin: 10px 16px;
+            }
+            h2 {
+                text-align: center;
+                font-size: 12px;
+                font-style: italic;
+                line-height: 26px;
+                color: #fff;
+                margin: 6px 10px;
+            }
+            .main {
+                color: #000;
+                background-color: #ccc;
+                &:first-of-type {
+                    margin-top: 0;
+                }
+                p {
+                    border-top: 1px dotted #000;
+                    margin: 0;
+                    padding: 6px 10px;
+                    line-height: 30px;
+                    font-size: 16px;
+                    word-wrap: break-word;
+                    text-indent: 40px;
+                    .hl {
+                        cursor: pointer;
+                        padding: 0 4px;
+                        color: #dc1735;
+                        font-weight: 900;
+                        font-style: italic;
+                        text-decoration-line: spelling-error;
+                    }
+                }
+            }
+            .tip {
+                position: fixed;
+                left: 50px;
+                top: 0;
+                width: 800px;
+                height: 70px;
+                background: #ccc;
+                padding: 10px 6px;
+                border-bottom: 1px dotted #000;
+            }
+        }
+    }
+    .main-inner-item-main {
+        #panel {
+            width: 100%;
+            height: 32px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #202024;
+            display: flex;
+            justify-content: space-between;
+            .btn {
+                flex: 1;
+                border-radius: 0;
+                background: linear-gradient(to bottom, #888, #bbb, #888);
+                &.ant-upload-wrapper {
+                    flex: 1;
+                    .ant-upload-select {
+                        width: 100%;
+                        .ant-btn {
+                            width: 100% !important;
+                        }
+                    }
+                    .ant-btn {
+                        justify-content: center;
+                        width: 100%;
+                        border-radius: 0;
+                        background: linear-gradient(to bottom, #888, #bbb, #888);
+                    }
+                }
+            }
+        }
+        #meta {
+            width: 100%;
+            height: 68px;
+            position: absolute;
+            right: 0;
+            top: 32px;
+            input.ant-input {
+                border-radius: 0;
+                font-size: 12px;
+                margin-bottom: 4px;
+                height: 30px;
+                width: 100%;
+            }
+        }
+        #grammar {
+            width: 100%;
+            height: 200px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            border-top: 4px solid;
+        }
+        textarea.ant-input {
+            border: 0;
+            font-size: 16px;
+            line-height: 30px;
+            height: 100%;
+            border-radius: 0;
+            color: #000;
+            overflow-x: hidden;
+            overflow-y: auto;
+            resize: none;
+            &:focus {
+                border-color: 0;
+            }
+            &:hover {
+                border: 0;
+            }
+        }
+    }
+}

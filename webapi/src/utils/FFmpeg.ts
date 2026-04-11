@@ -150,7 +150,7 @@ export const enhanceDialogueAndExtractMP3 = (input: string, output: string): Pro
 };
 
 /*
- * Concat audio
+ * Concat Speech
  *
  * ffmpeg -i audio.mp3 -i vocab_pronunciations/a_pair_of_c05803e.mp3 -filter_complex "[0:a][1:a]concat=n=2:v=0:a=1[a]" -map "[a]" -c:a libmp3lame -b:a 192k output.mp3
  *
@@ -165,43 +165,46 @@ export const enhanceDialogueAndExtractMP3 = (input: string, output: string): Pro
  *
  * [a] 表示刚刚拼接出来的音频流 [a] 输出到最终文件
  */
-export const concatAudio = (planFolder: string, output: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        if (fs.existsSync(planFolder)) {
-            const pronunciationsFolder = path.join(planFolder, "vocab_pronunciations");
-            const pronunciations = fs
-                .readdirSync(pronunciationsFolder)
-                .filter((f) => f.endsWith(".mp3"))
-                .map((f) => path.join(pronunciationsFolder, f));
-            if (pronunciations.length > 0) {
-                const command = ffmpeg();
-                command.input(path.join(planFolder, "audio.mp3"));
-                pronunciations.forEach((p) => command.input(p));
-                command
-                    .noVideo()
-                    .complexFilter([
-                        {
-                            filter: "concat",
-                            options: { n: pronunciations.length, v: 0, a: 1 },
-                            inputs: pronunciations.map((_, i) => `${i}:a`),
-                            outputs: "a",
-                        },
-                    ])
-                    .outputOptions(["-map [a]", "-c:a libmp3lame", "-b:a 192k"])
-                    .save(output)
-                    .on("start", (commandLine) => {
-                        LoggerSystem.info(`fluent-ffmpeg concatAudio command: ${commandLine}`);
-                    })
-                    .on("end", () => {
-                        LoggerSystem.info("✅ fluent-ffmpeg concatAudio command succeed");
-                        resolve();
-                    })
-                    .on("error", (err) => {
-                        LoggerSystem.error(`fluent-ffmpeg error: ${err.message}`);
-                        reject();
-                    });
+export const concatSpeech = async (videoFolder: string, output: string): Promise<void> => {
+    return new Promise(async (resolve, reject) => {
+        if (!fs.existsSync(videoFolder)) {
+            return reject(new Error(`Video folder not exist`));
+        }
+        const files: string[] = [];
+        const pronunciationsFolder = path.join(videoFolder, "vocab_pronunciations");
+        const allFiles = fs.readdirSync(pronunciationsFolder);
+        for (const f of allFiles) {
+            const filePath = path.join(pronunciationsFolder, f);
+            const fileRealFormat = await getAudioCodec(filePath);
+            if (f.endsWith(".mp3") && fileRealFormat === "mp3") {
+                files.push(filePath);
+            } else {
+                LoggerSystem.info(`contact failed: ${f}: ${fileRealFormat}`);
             }
         }
+        if (files.length === 0) {
+            return reject(new Error(`Folder vocab_pronunciations empty`));
+        }
+        const listFile = path.join(videoFolder, "list.txt");
+        const content = files.map((f) => `file '${f}'`).join("\n");
+        fs.writeFileSync(listFile, content);
+        ffmpeg()
+            .input(listFile)
+            .inputOptions(["-f concat", "-safe 0"])
+            .outputOptions(["-c:a libmp3lame", "-b:a 192k"])
+            .save(output)
+            .on("start", (commandLine) => {
+                LoggerSystem.info(`🚀 concatSpeech: ${commandLine}`);
+            })
+            .on("error", (err) => {
+                LoggerSystem.error(`❌ concatSpeech: ${err.message}`);
+                reject();
+            })
+            .on("end", () => {
+                // fs.unlinkSync(listFile);
+                LoggerSystem.info("✅ concatSpeech: succeed!");
+                resolve();
+            });
     });
 };
 
@@ -274,8 +277,30 @@ export const getDuration = (input: string): number => {
         const duration = execSync(command, { encoding: "utf8" }).trim();
         return parseFloat(duration) || 0;
     } catch (error) {
-        console.error(`Failed to get duration: ${(error as Error).message}`);
-        throw new Error(`Failed to get duration: ${(error as Error).message}`);
+        LoggerSystem.error(`getAudioCodec: ${error}`);
+        return 0;
+    }
+};
+
+/**
+ * Get real format of audio
+ * @param input
+ * @returns codec: mp3 / pcm_s16le / aac
+ */
+export const getAudioCodec = async (input: string): Promise<string> => {
+    try {
+        if (!fs.existsSync(input)) {
+            throw new Error(`Input not exist`);
+        }
+        if (path.extname(input) !== ".mp3") {
+            return "";
+        }
+        const command = `${ffprobeBin} -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "${input}"`;
+        const format = execSync(command, { encoding: "utf8" }).trim();
+        return format;
+    } catch (error) {
+        LoggerSystem.error(`getAudioCodec: ${error}`);
+        return "";
     }
 };
 
@@ -361,4 +386,43 @@ export const filterOptionText = (text: string) => {
     reStr = text.replace(regDoubleQuote, "");
     reStr = reStr.replaceAll(regSingleQuote, "");
     return reStr;
+};
+
+/**
+ * Transcode to MP3
+ * @param input input file path
+ * @param output output file path
+ * @returns Promise<void>
+ */
+export const transcodeToMp3 = (input: string, output: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const outDir = path.dirname(output);
+        if (!fs.existsSync(outDir)) {
+            return reject(new Error(`Output folder not exist`));
+        }
+        if (!fs.existsSync(input)) {
+            return reject(new Error(`Input file not exist`));
+        }
+        ffmpeg(input)
+            .outputOptions([
+                "-ar 24000", // 采样率
+                "-ac 1", // 单声道
+                "-b:a 128k", // 码率
+                "-map_metadata -1", // 除可能引起解码错误的元数据
+            ])
+            .audioFilters("highpass=f=200") // 过滤掉 200Hz 以下的闷响或电流声
+            .audioCodec("libmp3lame")
+            .on("start", (commandLine) => {
+                LoggerSystem.info(`🚀 transcodeToMp3: ${commandLine}`);
+            })
+            .on("error", (err) => {
+                LoggerSystem.error(`❌ transcodeToMp3: ${err.message}`);
+                reject(err);
+            })
+            .on("end", () => {
+                LoggerSystem.info("✅ transcodeToMp3: succeed!");
+                resolve();
+            })
+            .save(output);
+    });
 };

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { EyeFilled, TranslationOutlined, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, BulbFilled, EditFilled } from "@ant-design/icons";
+import { EyeFilled, TranslationOutlined, ExpandOutlined, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, BulbFilled, EditFilled } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Menu.scss";
@@ -10,14 +10,15 @@ interface RouteItem {
     icon: JSX.Element;
 }
 const routes: RouteItem[] = [
-    { url: "/common/settings", icon: <SettingFilled /> },
-    { url: "/common/vocabs-listen", icon: <CustomerServiceFilled /> },
-    { url: "/common/vocabs-watch", icon: <EyeFilled /> },
-    { url: "/common/vocabs-meaning", icon: <BulbFilled /> },
-    { url: "/video/script", icon: <ProfileFilled /> },
-    { url: "/video/read", icon: <ReadFilled /> },
-    { url: "/video/translate", icon: <TranslationOutlined /> },
-    { url: "/diary/edit", icon: <EditFilled /> },
+    { url: "/settings", icon: <SettingFilled /> },
+    { url: "/video-script", icon: <ProfileFilled /> },
+    { url: "/following", icon: <ReadFilled /> },
+    { url: "/vocab-listen", icon: <CustomerServiceFilled /> },
+    { url: "/vocab-watch", icon: <EyeFilled /> },
+    { url: "/vocab-meaning", icon: <BulbFilled /> },
+    { url: "/example-recogn", icon: <ExpandOutlined /> },
+    { url: "/example-translation", icon: <TranslationOutlined /> },
+    { url: "/impression", icon: <EditFilled /> },
 ];
 const Menu = () => {
     const location = useLocation();

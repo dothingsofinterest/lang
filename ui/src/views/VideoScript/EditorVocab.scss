@@ -1,0 +1,148 @@
+#video-script-editor-vocab {
+    .vocab-panel {
+        margin-bottom: 20px;
+        textarea {
+            border-radius: 0;
+            border: 1px solid #ccc;
+            min-height: 100px !important;
+            resize: none;
+            &:focus {
+                border-color: 0;
+            }
+        }
+        .panel-base {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            .text {
+                flex: 1;
+            }
+            .image {
+                border-top: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+                height: 32px;
+                width: 32px;
+            }
+            .ant-select-selector {
+                border-radius: 0;
+                border-left: 0;
+                &:hover {
+                    border-color: #ccc !important;
+                }
+            }
+            .ant-upload-wrapper {
+                .ant-btn {
+                    border-radius: 0;
+                    width: 32px;
+                    height: 32px;
+                    background-color: #ccc;
+                    &:hover {
+                        border: 0;
+                        color: rgba(0, 0, 0, 0.88);
+                    }
+                }
+            }
+        }
+        .panel-audio {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            .audio-meta {
+                display: none;
+                &.visible {
+                    flex: 0 0 200px;
+                    display: flex;
+                    justify-content: space-between;
+                    .ant-select {
+                        flex: 1;
+                    }
+                }
+            }
+            .base64 {
+                border-radius: 0;
+                border-right: 0;
+            }
+            .pa-btn {
+                flex: 0 0 32px;
+                border-radius: 0;
+                background-color: #ccc;
+                .ant-btn {
+                    border-radius: 0;
+                    width: 32px;
+                    height: 32px;
+                    background-color: #ccc;
+                    &:hover {
+                        border: 0;
+                        color: rgba(0, 0, 0, 0.88);
+                    }
+                }
+            }
+            .ant-select-selector {
+                border-radius: 0;
+                border-right: 0;
+                &:hover {
+                    border-color: #ccc !important;
+                }
+            }
+        }
+        .panel-clip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            .ant-input {
+                flex: 1;
+                border-radius: 0;
+            }
+            .pc-btn {
+                flex: 1;
+                border-radius: 0;
+                overflow: hidden;
+                justify-content: center;
+                flex: 0 0 32px;
+                border-radius: 0;
+                background-color: #ccc;
+            }
+        }
+        .submit {
+            display: flex;
+            margin-top: 20px;
+            button {
+                flex: 1;
+                padding: 20px 0;
+                border-radius: 0;
+                background-color: #ccc;
+            }
+        }
+    }
+    .vocab-list {
+        color: #000;
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0;
+            padding: 0px 10px;
+            border-top: 1px dotted #000;
+            font-size: 12px;
+            height: 36px;
+            &.active {
+                font-weight: 900;
+            }
+            &:first-child {
+                border: 0;
+            }
+            .index {
+                font-weight: 900;
+                font-style: normal;
+                margin-right: 4px;
+            }
+            img {
+                width: 26px;
+                height: 26px;
+            }
+        }
+    }
+}

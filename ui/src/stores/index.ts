@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import auth from "./reducers/auth";
-import plan from "./reducers/plan";
+import data from "./reducers/data";
+import status from "./reducers/status";
 
 const store = configureStore({
-    reducer: { auth, plan },
+    reducer: { auth, data, status },
 });
 
 export default store;

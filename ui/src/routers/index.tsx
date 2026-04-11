@@ -2,14 +2,15 @@ import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react
 import Login from "../views/Public/Login";
 import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
-import CommonSettings from "../views/CommonSettings/Index";
-import CommonVocabsListen from "../views/CommonVocabsListen/Index";
-import CommonVocabsWatch from "../views/CommonVocabsWatch/Index";
-import CommonVocabsMeaning from "../views/CommonVocabsMeaning/Index";
+import Settings from "../views/Settings/Index";
 import VideoScript from "../views/VideoScript/Index";
-import VideoRead from "../views/VideoRead/Index";
-import VideoTranslate from "../views/VideoTranslate/Index";
-import DiaryEdit from "../views/DiaryEdit/Index";
+import Following from "../views/Following/Index";
+import VocabListen from "../views/VocabListen/Index";
+import VocabWatch from "../views/VocabWatch/Index";
+import VocabMeaning from "../views/VocabMeaning/Index";
+import ExampleRecogn from "../views/Example/ExampleRecogn";
+import ExampleTranslation from "../views/Example/ExampleTranslation";
+import Impression from "../views/Impression/Index";
 
 const routes = [
     {
@@ -22,39 +23,43 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="common/settings" replace />,
+                element: <Navigate to="settings" replace />,
             },
             {
-                path: "common/settings",
-                element: <CommonSettings />,
+                path: "settings",
+                element: <Settings />,
             },
             {
-                path: "common/vocabs-listen",
-                element: <CommonVocabsListen />,
-            },
-            {
-                path: "common/vocabs-watch",
-                element: <CommonVocabsWatch />,
-            },
-            {
-                path: "common/vocabs-meaning",
-                element: <CommonVocabsMeaning />,
-            },
-            {
-                path: "video/script",
+                path: "video-script",
                 element: <VideoScript />,
             },
             {
-                path: "video/read",
-                element: <VideoRead />,
+                path: "following",
+                element: <Following />,
             },
             {
-                path: "video/translate",
-                element: <VideoTranslate />,
+                path: "vocab-listen",
+                element: <VocabListen />,
             },
             {
-                path: "diary/edit",
-                element: <DiaryEdit />,
+                path: "vocab-watch",
+                element: <VocabWatch />,
+            },
+            {
+                path: "vocab-meaning",
+                element: <VocabMeaning />,
+            },
+            {
+                path: "example-recogn",
+                element: <ExampleRecogn />,
+            },
+            {
+                path: "example-translation",
+                element: <ExampleTranslation />,
+            },
+            {
+                path: "impression",
+                element: <Impression />,
             },
         ],
     },

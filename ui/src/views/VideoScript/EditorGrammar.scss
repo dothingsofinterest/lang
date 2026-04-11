@@ -1,0 +1,89 @@
+#video-script-editor-grammar {
+    .ant-drawer-body {
+        background-color: #ccc;
+        #grammar-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            .ant-btn {
+                flex: 1;
+                padding: 20px 0;
+                border-radius: 0;
+                background-color: #aaa;
+            }
+        }
+        #grammar-list {
+            .grammar-item {
+                margin: 20px 0;
+                .grammar-info-base {
+                    display: flex;
+                    justify-content: space-between;
+                    .ant-input {
+                        border-radius: 0;
+                        border: 0;
+                        font-size: 12px;
+                        &.order {
+                            flex: 0 0 32px;
+                            margin-left: 1px;
+                            font-size: 12px;
+                            padding: 0 2px;
+                            text-align: center;
+                        }
+                    }
+                    .ant-btn {
+                        border-radius: 0;
+                        flex: 0 0 32px;
+                        margin-left: 1px;
+                        border: 0;
+                    }
+                }
+                .grammar-info-explanation {
+                    margin-top: 2px;
+                    textarea {
+                        min-height: 51px;
+                        border-radius: 0;
+                        font-size: 12px;
+                        border: 0;
+                    }
+                }
+                .grammar-info-example {
+                    .grammar-info-example-item {
+                        margin-top: 2px;
+                        display: flex;
+                        .ant-radio-group {
+                            flex: 0 0 17px;
+                            display: flex;
+                            flex-direction: column;
+                            overflow: hidden;
+                            height: 51px;
+                            .ant-radio-button-wrapper {
+                                border: 0;
+                                border-radius: 0;
+                                height: 17px;
+                                font-size: 12px;
+                                line-height: 17px;
+                                padding: 0 5px;
+                                width: 100%;
+                                & + .ant-radio-button-wrapper {
+                                    border-top: 1px solid #ccc;
+                                }
+                            }
+                        }
+                        textarea {
+                            flex: 1;
+                            height: 51px !important;
+                            border-radius: 0;
+                            border: 0;
+                            font-size: 12px;
+                            margin-left: 2px;
+                            &:fullscreen {
+                                font-size: 30px;
+                                line-height: 1.6;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

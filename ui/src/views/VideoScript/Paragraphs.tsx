@@ -1,30 +1,35 @@
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
-import { Input, Space, Button, Select, Mentions } from "antd";
+import React, { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import { Input, Space, Select, Button, Mentions } from "antd";
 import { Paragraph as DataParagraph, Scene as DataScene } from "../../types/Data";
-import { fnSRTTimeToFloat, fnIsSRTTime } from "../../utils/script";
-import EditorLinkings from "../CommonEditorLinkings/Index";
+import { fnSRTTimeToFloat, fnFloatToSRTTime, fnIsSRTTime } from "../../utils/script";
+import { AimOutlined, EnterOutlined } from "@ant-design/icons";
 import "./Paragraphs.scss";
 
 const defaultSentence = {
-    key: "0-0",
+    id: 1,
     startTime: "",
     endTime: "",
     texts: [],
-    linkings: [],
 };
 
 const defaultParagraph = {
-    key: `0`,
+    id: 1,
     scene: ``,
     roles: [],
     sentences: [defaultSentence],
 };
+
+interface IDs {
+    pID: number;
+    sID: number;
+}
 
 interface ParagraphsProps {
     paragraphs: DataParagraph[];
     scenes: DataScene[];
     roles: string[];
     onSubmit?: (paragraphs: DataParagraph[]) => void;
+    onLocateTime?: (time: string) => void;
 }
 
 export interface ParagraphsRef {
@@ -33,166 +38,142 @@ export interface ParagraphsRef {
     cutParagraph: () => void;
     insertSentence: () => void;
     deleteSentence: () => void;
-    openLinkingsEditor: () => void;
 }
 
-const Paragraphs = forwardRef<ParagraphsRef, ParagraphsProps>(({ paragraphs, scenes, roles, onSubmit }, ref) => {
-    const [linkings, setLinkings] = useState<string[]>([]);
-    const [linkingsEditor, setLinkingsEditor] = useState(false);
-    const refCurKey = useRef<string>("0-0");
-    const handlersSetCurKey = (key: string) => {
-        refCurKey.current = key;
+const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({ paragraphs, scenes, roles, onSubmit, onLocateTime }, ref) => {
+    const refCurIDs = useRef<IDs>({ pID: 0, sID: 0 });
+    const handlerSetCurIDs = (paragraphID: number, sentenceID: number) => {
+        refCurIDs.current = { pID: paragraphID, sID: sentenceID };
     };
     const handlersParagraphInsert = () => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    const a = paragraphs.slice(0, pKey + 1);
-                    a.push(defaultParagraph);
-                    const b = paragraphs.slice(pKey + 1);
-                    const newParagraphs = [...a, ...b].map((paragraph, pk) => {
-                        return { ...paragraph, key: `${pk}`, sentences: paragraph.sentences.map((sentence, sk) => ({ ...sentence, key: `${pk}-${sk}` })) };
-                    });
-                    if (onSubmit !== undefined) {
-                        onSubmit(newParagraphs);
-                    }
-                }
+        const pID = Number(refCurIDs.current?.pID);
+        const curIndex = paragraphs.findIndex(({ id }) => id === pID);
+        if (curIndex !== -1) {
+            const a = paragraphs.slice(0, curIndex + 1);
+            const b = paragraphs.slice(curIndex + 1);
+            const pIDs = paragraphs.map((paragraph) => paragraph.id);
+            const pIDNew = pIDs.length === 0 ? 1 : Math.max(...pIDs) + 1;
+            a.push({ ...defaultParagraph, id: pIDNew });
+            if (onSubmit !== undefined) {
+                onSubmit([...a, ...b]);
             }
         }
     };
     const handlersParagraphDelete = () => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    if (paragraphs.length > 1) {
-                        const a = paragraphs.slice(0, pKey);
-                        const b = paragraphs.slice(pKey + 1);
-                        const newParagraphs = [...a, ...b].map((paragraph, pk) => {
-                            return { ...paragraph, key: `${pk}`, sentences: paragraph.sentences.map((sentence, sk) => ({ ...sentence, key: `${pk}-${sk}` })) };
-                        });
-                        if (onSubmit !== undefined) {
-                            onSubmit(newParagraphs);
-                        }
-                    }
+        const pID = Number(refCurIDs.current?.pID);
+        const curIndex = paragraphs.findIndex(({ id }) => id === pID);
+        if (curIndex !== -1) {
+            if (paragraphs.length > 1) {
+                const a = paragraphs.slice(0, curIndex);
+                const b = paragraphs.slice(curIndex + 1);
+                if (onSubmit !== undefined) {
+                    onSubmit([...a, ...b]);
                 }
             }
         }
     };
     const handlersParagraphCut = () => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    if (curParagraph.sentences.length > 1) {
-                        const curParagraphSentences = curParagraph.sentences.slice(0, sKey);
-                        const newParagraphSentences = curParagraph.sentences.slice(sKey);
-                        const a = paragraphs.slice(0, pKey + 1).map((p) => (p.key === curParagraph.key ? { ...p, sentences: curParagraphSentences } : p));
-                        a.push({ ...defaultParagraph, sentences: newParagraphSentences });
-                        const b = paragraphs.slice(pKey + 1);
-                        const newParagraphs = [...a, ...b].map((paragraph, pk) => ({ ...paragraph, key: `${pk}`, sentences: paragraph.sentences.map((sentence, sk) => ({ ...sentence, key: `${pk}-${sk}` })) }));
-                        if (onSubmit !== undefined) {
-                            onSubmit(newParagraphs);
-                        }
-                    }
+        const pID = Number(refCurIDs.current?.pID);
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
+        if (curParagraph !== undefined) {
+            if (curParagraph.sentences.length > 1) {
+                const sID = Number(refCurIDs.current?.sID);
+                const curPIndex = paragraphs.findIndex(({ id }) => id === pID);
+                const curSIndex = curParagraph.sentences.findIndex(({ id }) => id === sID);
+                const curParagraphSentences = curParagraph.sentences.slice(0, curSIndex);
+                const newParagraphSentences = curParagraph.sentences.slice(curSIndex);
+                const a = paragraphs.slice(0, curPIndex + 1).map((p) => (p.id === curParagraph.id ? { ...p, sentences: curParagraphSentences } : p));
+                const pIDs = paragraphs.map((paragraph) => paragraph.id);
+                const pIDNew = pIDs.length === 0 ? 1 : Math.max(...pIDs) + 1;
+                a.push({ ...defaultParagraph, id: pIDNew, sentences: newParagraphSentences });
+                const b = paragraphs.slice(curPIndex + 1);
+                if (onSubmit !== undefined) {
+                    onSubmit([...a, ...b]);
                 }
             }
         }
     };
     const handlersSentenceInsert = () => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    const a = curParagraph.sentences.slice(0, sKey + 1);
-                    a.push(defaultSentence);
-                    const b = curParagraph.sentences.slice(sKey + 1);
-                    const newSentences = [...a, ...b].map((sentence, sk) => ({ ...sentence, key: `${curParagraph.key}-${sk}` }));
-                    const newParagraphs = paragraphs.map((paragraph) => (paragraph.key === curParagraph.key ? { ...paragraph, sentences: newSentences } : paragraph));
-                    if (onSubmit !== undefined) {
-                        onSubmit(newParagraphs);
-                    }
+        const pID = Number(refCurIDs.current?.pID);
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
+        if (curParagraph !== undefined) {
+            const sID = Number(refCurIDs.current?.sID);
+            const curSentence = curParagraph.sentences.find(({ id }) => id === sID);
+            if (curSentence !== undefined) {
+                const curSIndex = curParagraph.sentences.findIndex(({ id }) => id === sID);
+                const endTimeFromLast = curSentence.endTime ? curSentence.endTime : "";
+                let maxID = 1;
+                paragraphs.forEach((paragraph) => (maxID = Math.max(maxID, ...paragraph.sentences.map((sentence) => sentence.id))));
+                const a = curParagraph.sentences.slice(0, curSIndex + 1);
+                a.push({ ...defaultSentence, endTime: endTimeFromLast, id: maxID + 1 });
+                const b = curParagraph.sentences.slice(curSIndex + 1);
+                const newParagraphs = paragraphs.map((paragraph) => (paragraph.id === curParagraph.id ? { ...paragraph, sentences: [...a, ...b] } : paragraph));
+                if (onSubmit !== undefined) {
+                    onSubmit([...newParagraphs]);
                 }
             }
         }
     };
     const handlersSentenceDelete = () => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    if (curParagraph.sentences.length > 1) {
-                        const a = curParagraph.sentences.slice(0, sKey);
-                        const b = curParagraph.sentences.slice(sKey);
-                        b.shift();
-                        const newSentences = [...a, ...b].map((sentence, sk) => ({ ...sentence, key: `${curParagraph.key}-${sk}` }));
-                        const newParagraphs = paragraphs.map((paragraph) => (paragraph.key === curParagraph.key ? { ...paragraph, sentences: newSentences } : paragraph));
-                        if (onSubmit !== undefined) {
-                            onSubmit(newParagraphs);
-                        }
+        const pID = Number(refCurIDs.current?.pID);
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
+        if (curParagraph !== undefined) {
+            if (curParagraph.sentences.length > 1) {
+                const sID = Number(refCurIDs.current?.sID);
+                const curSIndex = curParagraph.sentences.findIndex(({ id }) => id === sID);
+                if (curSIndex !== -1) {
+                    const a = curParagraph.sentences.slice(0, curSIndex);
+                    const b = curParagraph.sentences.slice(curSIndex);
+                    b.shift();
+                    const newParagraphs = paragraphs.map((paragraph) => (paragraph.id === curParagraph.id ? { ...paragraph, sentences: [...a, ...b] } : paragraph));
+                    if (onSubmit !== undefined) {
+                        onSubmit([...newParagraphs]);
                     }
                 }
             }
         }
     };
-    const handlersParagraphUpdateScene = (index: number | string, key: string) => {
-        const sIndex = Number(index);
-        const pKey = Number(key);
-        const curParagraph = paragraphs[pKey];
+    const handlersParagraphUpdateScene = (sceneID: number | string, paragraphID: number) => {
+        const sID = Number(sceneID);
+        const pID = Number(paragraphID);
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
         if (curParagraph !== undefined) {
-            const newParagraph = { ...curParagraph, scene: sIndex };
-            const newParagraphs = paragraphs.map((paragraph) => (paragraph.key === newParagraph.key ? newParagraph : paragraph));
+            const newParagraph = { ...curParagraph, scene: sID };
+            const newParagraphs = paragraphs.map((paragraph) => (paragraph.id === newParagraph.id ? newParagraph : paragraph));
             if (onSubmit !== undefined) {
-                onSubmit(newParagraphs);
+                onSubmit([...newParagraphs]);
             }
         }
     };
-    const handlersParagraphUpdateRole = (value: string, key: string) => {
+    const handlersParagraphUpdateRole = (value: string, paragraphID: number) => {
         const roleText = value.trim();
-        const pKey = Number(key);
-        const curParagraph = paragraphs[pKey];
+        const pID = Number(paragraphID);
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
         if (curParagraph !== undefined) {
             const match = roleText ? roleText.match(/@[^@]+/g) : null;
             const res = match !== null ? match.map((v) => v.slice(1)) : [];
             const newParagraph = { ...curParagraph, roles: res };
-            const newParagraphs = paragraphs.map((paragraph) => (paragraph.key === newParagraph.key ? newParagraph : paragraph));
+            const newParagraphs = paragraphs.map((paragraph) => (paragraph.id === newParagraph.id ? newParagraph : paragraph));
             if (onSubmit !== undefined) {
-                onSubmit(newParagraphs);
+                onSubmit([...newParagraphs]);
             }
         }
     };
-    const handlersSentenceUpdateStartTime = (value: string, key: string) => {
+    const handlersSentenceUpdateStartTime = (value: string, IDs: IDs) => {
         if (value) {
-            const keyPair = key.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[sKey];
-                    if (curSentence !== undefined) {
-                        if (fnIsSRTTime(value)) {
-                            if (value !== curSentence.startTime) {
-                                if ((curSentence.endTime && fnSRTTimeToFloat(value) < fnSRTTimeToFloat(curSentence.endTime)) || !curSentence.endTime) {
-                                    const newSentences = curParagraph.sentences.map((sentence) => (sentence.key == curSentence.key ? { ...curSentence, startTime: value ? value : "" } : sentence));
-                                    const newParagraphs = paragraphs.map((paragraph) => (paragraph.key == curParagraph.key ? { ...paragraph, sentences: newSentences } : paragraph));
-                                    if (onSubmit !== undefined) {
-                                        onSubmit(newParagraphs);
-                                    }
+            const pID = Number(IDs.pID);
+            const curParagraph = paragraphs.find(({ id }) => id === pID);
+            if (curParagraph !== undefined) {
+                const sID = Number(IDs.sID);
+                const curSentence = curParagraph.sentences.find(({ id }) => id === sID);
+                if (curSentence !== undefined) {
+                    if (fnIsSRTTime(value)) {
+                        if (value !== curSentence.startTime) {
+                            if ((curSentence.endTime && fnSRTTimeToFloat(value) < fnSRTTimeToFloat(curSentence.endTime)) || !curSentence.endTime) {
+                                const newSentences = curParagraph.sentences.map((sentence) => (sentence.id == curSentence.id ? { ...curSentence, startTime: value ? value : "" } : sentence));
+                                const newParagraphs = paragraphs.map((paragraph) => (paragraph.id == curParagraph.id ? { ...paragraph, sentences: newSentences } : paragraph));
+                                if (onSubmit !== undefined) {
+                                    onSubmit([...newParagraphs]);
                                 }
                             }
                         }
@@ -201,24 +182,21 @@ const Paragraphs = forwardRef<ParagraphsRef, ParagraphsProps>(({ paragraphs, sce
             }
         }
     };
-    const handlersSentenceUpdateEndTime = (value: string, key: string) => {
+    const handlersSentenceUpdateEndTime = (value: string, IDs: IDs) => {
         if (value) {
-            const keyPair = key.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[sKey];
-                    if (curSentence !== undefined) {
-                        if (fnIsSRTTime(value)) {
-                            if (value !== curSentence.endTime) {
-                                if ((curSentence.startTime && fnSRTTimeToFloat(value) > fnSRTTimeToFloat(curSentence.startTime)) || !curSentence.startTime) {
-                                    const newSentences = curParagraph.sentences.map((sentence) => (sentence.key == curSentence.key ? { ...curSentence, endTime: value ? value : "" } : sentence));
-                                    const newParagraphs = paragraphs.map((paragraph) => (paragraph.key == curParagraph.key ? { ...paragraph, sentences: newSentences } : paragraph));
-                                    if (onSubmit !== undefined) {
-                                        onSubmit(newParagraphs);
-                                    }
+            const pID = Number(IDs.pID);
+            const curParagraph = paragraphs.find(({ id }) => id === pID);
+            if (curParagraph !== undefined) {
+                const sID = Number(IDs.sID);
+                const curSentence = curParagraph.sentences.find(({ id }) => id === sID);
+                if (curSentence !== undefined) {
+                    if (fnIsSRTTime(value)) {
+                        if (value !== curSentence.endTime) {
+                            if ((curSentence.startTime && fnSRTTimeToFloat(value) > fnSRTTimeToFloat(curSentence.startTime)) || !curSentence.startTime) {
+                                const newSentences = curParagraph.sentences.map((sentence) => (sentence.id == curSentence.id ? { ...curSentence, endTime: value ? value : "" } : sentence));
+                                const newParagraphs = paragraphs.map((paragraph) => (paragraph.id == curParagraph.id ? { ...paragraph, sentences: newSentences } : paragraph));
+                                if (onSubmit !== undefined) {
+                                    onSubmit(newParagraphs);
                                 }
                             }
                         }
@@ -227,69 +205,52 @@ const Paragraphs = forwardRef<ParagraphsRef, ParagraphsProps>(({ paragraphs, sce
             }
         }
     };
-    const handlersSentenceUpdateText = (value: string, key: string) => {
+    const handlersSentenceUpdateText = (value: string, IDs: IDs) => {
         if (value) {
-            const keyPair = key.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                // prettier-ignore
-                const text = value.split("\n---\n").map((v: string) => {
-                    const s = v.split("\n");
-                    return s[1] === undefined ? `${s[0].trim()}` : `${s[0].trim()}\n${s[1].trim()}`;
-                }).join("\n---\n");
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[sKey];
-                    if (curSentence !== undefined) {
-                        if (text !== curSentence.texts.join("\n---\n")) {
-                            const newSentences = curParagraph.sentences.map((sentence) => (sentence.key == curSentence.key ? { ...curSentence, texts: text ? text.split("\n---\n") : [] } : sentence));
-                            const newParagraphs = paragraphs.map((paragraph) => (paragraph.key === curParagraph.key ? { ...paragraph, sentences: newSentences } : paragraph));
-                            if (onSubmit !== undefined) {
-                                onSubmit(newParagraphs);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-    const handlersSentenceUpdateLinkings = async (list: string[]) => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const curParagraph = paragraphs[pKey];
-                if (curParagraph !== undefined) {
-                    const curSentence = curParagraph.sentences[sKey];
-                    if (curSentence !== undefined) {
-                        const newSentences = curParagraph.sentences.map((sentence) => (sentence.key == curSentence.key ? { ...curSentence, linkings: list ? list : [] } : sentence));
-                        const newParagraphs = paragraphs.map((paragraph) => (paragraph.key == curParagraph.key ? { ...paragraph, sentences: newSentences } : paragraph));
+            const text = value
+                .split("\n---\n")
+                .map((v: string) => v.trim())
+                .join("\n---\n");
+            const pID = Number(IDs.pID);
+            const curParagraph = paragraphs.find(({ id }) => id === pID);
+            if (curParagraph !== undefined) {
+                const sID = Number(IDs.sID);
+                const curSentence = curParagraph.sentences.find(({ id }) => id === sID);
+                if (curSentence !== undefined) {
+                    if (text !== curSentence.texts.join("\n---\n")) {
+                        const newSentences = curParagraph.sentences.map((sentence) => (sentence.id == curSentence.id ? { ...curSentence, texts: text ? text.split("\n---\n") : [] } : sentence));
+                        const newParagraphs = paragraphs.map((paragraph) => (paragraph.id === curParagraph.id ? { ...paragraph, sentences: newSentences } : paragraph));
                         if (onSubmit !== undefined) {
-                            onSubmit(newParagraphs);
+                            onSubmit([...newParagraphs]);
                         }
-                        setLinkings(list);
                     }
                 }
             }
         }
     };
-    const handlersLinkingsEditorOpen = () => {
-        if (refCurKey.current) {
-            const keyPair = refCurKey.current.split("-");
-            if (keyPair[0] !== undefined && keyPair[1] !== undefined) {
-                const pKey = Number(keyPair[0]);
-                const sKey = Number(keyPair[1]);
-                const paragraph = paragraphs[pKey];
-                const sentence = paragraph.sentences[sKey];
-                setLinkings(sentence.linkings ? sentence.linkings : []);
-                setLinkingsEditor(true);
-            }
+    const handlerLocateTime = (time: string) => {
+        if (onLocateTime !== undefined) {
+            onLocateTime(time);
         }
     };
-    const handlersLinkingsEditorClose = () => {
-        setLinkingsEditor(false);
+    const handlerButtTime = (IDs: IDs) => {
+        const pID = Number(IDs.pID);
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
+        if (curParagraph !== undefined) {
+            const sID = Number(IDs.sID);
+            const curSIndex = curParagraph.sentences.findIndex(({ id }) => id === sID);
+            const curSentence = curParagraph.sentences.find(({ id }) => id === sID);
+            const lasSIndex = curSIndex - 1;
+            const lastSentence = curParagraph.sentences[lasSIndex];
+            if (curSentence !== undefined && lastSentence !== undefined) {
+                const floatTimeButt = lastSentence.endTime ? fnSRTTimeToFloat(lastSentence.endTime) + 0.001 : 0;
+                const newSentences = curParagraph.sentences.map((sentence) => (sentence.id === curSentence.id ? { ...curSentence, startTime: fnFloatToSRTTime(floatTimeButt) } : sentence));
+                const newParagraphs = paragraphs.map((paragraph) => (paragraph.id == curParagraph.id ? { ...paragraph, sentences: newSentences } : paragraph));
+                if (onSubmit !== undefined) {
+                    onSubmit([...newParagraphs]);
+                }
+            }
+        }
     };
     const filterItemRoles = (roles: string[]): string => {
         return roles.length > 0 ? roles.map((v: string) => `@${v}`).join(" ") : "";
@@ -300,35 +261,56 @@ const Paragraphs = forwardRef<ParagraphsRef, ParagraphsProps>(({ paragraphs, sce
         cutParagraph: handlersParagraphCut,
         insertSentence: handlersSentenceInsert,
         deleteSentence: handlersSentenceDelete,
-        openLinkingsEditor: handlersLinkingsEditorOpen,
     }));
     useEffect(() => {
         return () => {};
     }, []);
     return (
         <div id="video-script-paragraphs">
-            {paragraphs.map((paragraph, k) => {
+            {paragraphs.map((paragraph) => {
                 return (
-                    <div className="paragraph" key={k}>
+                    <div className="paragraph" key={paragraph.id}>
                         <div className="meta">
-                            <Select size="small" onChange={(v) => handlersParagraphUpdateScene(v, paragraph.key)} defaultValue={paragraph.scene} options={scenes.map((v) => ({ label: v.value, value: v.index }))} />
-                            <Mentions autoSize onChange={(v) => handlersParagraphUpdateRole(v, paragraph.key)} defaultValue={filterItemRoles(paragraph.roles)} options={roles.map((v) => ({ label: v, value: v }))} />
+                            <Select size="small" onChange={(v) => handlersParagraphUpdateScene(v, paragraph.id)} defaultValue={paragraph.scene} options={scenes.map((v) => ({ label: v.value, value: v.index }))} />
+                            <Mentions autoSize onChange={(v) => handlersParagraphUpdateRole(v, paragraph.id)} defaultValue={filterItemRoles(paragraph.roles)} options={roles.map((v) => ({ label: v, value: v }))} />
                         </div>
-                        {paragraph.sentences.map((scene, k) => {
+                        {paragraph.sentences.map((sentence) => {
                             return (
-                                <div className="sentence" key={k}>
+                                <div className="sentence" key={sentence.id}>
                                     <Space size="small" className="time" direction="vertical">
-                                        <Input size="small" className="time-input" defaultValue={scene.startTime} onFocus={(e) => handlersSetCurKey(scene.key)} onBlur={(e) => handlersSentenceUpdateStartTime(e.target.value, scene.key)} placeholder="00:00:00,000" />
-                                        <Input size="small" className="time-input" defaultValue={scene.endTime} onFocus={(e) => handlersSetCurKey(scene.key)} onBlur={(e) => handlersSentenceUpdateEndTime(e.target.value, scene.key)} placeholder="00:00:00,001" />
+                                        <Space size="small" className="time-inner">
+                                            <Input size="small" className="time-input" value={sentence.startTime} onFocus={() => handlerSetCurIDs(paragraph.id, sentence.id)} onChange={(e) => handlersSentenceUpdateStartTime(e.target.value, { pID: paragraph.id, sID: sentence.id })} placeholder="00:00:00,000" />
+                                            <Button
+                                                icon={<AimOutlined />}
+                                                onClick={() => {
+                                                    handlerLocateTime(sentence.startTime);
+                                                }}
+                                            />
+                                            <Button
+                                                icon={<EnterOutlined />}
+                                                onClick={() => {
+                                                    handlerButtTime({ pID: paragraph.id, sID: sentence.id });
+                                                }}
+                                            />
+                                        </Space>
+                                        <Space size="small" className="time-inner">
+                                            <Input size="small" className="time-input" value={sentence.endTime} onFocus={() => handlerSetCurIDs(paragraph.id, sentence.id)} onChange={(e) => handlersSentenceUpdateEndTime(e.target.value, { pID: paragraph.id, sID: sentence.id })} placeholder="00:00:00,001" />
+                                            <Button
+                                                icon={<AimOutlined />}
+                                                onClick={() => {
+                                                    handlerLocateTime(sentence.endTime);
+                                                }}
+                                            />
+                                            <Button icon={<EnterOutlined />} />
+                                        </Space>
                                     </Space>
-                                    <Input.TextArea autoSize className="text" defaultValue={scene.texts.join("\n---\n")} onFocus={(e) => handlersSetCurKey(scene.key)} onBlur={(e) => handlersSentenceUpdateText(e.target.value, scene.key)} />
+                                    <Input.TextArea autoSize className="text" defaultValue={sentence.texts.join("\n---\n")} onFocus={(e) => handlerSetCurIDs(paragraph.id, sentence.id)} onBlur={(e) => handlersSentenceUpdateText(e.target.value, { pID: paragraph.id, sID: sentence.id })} />
                                 </div>
                             );
                         })}
                     </div>
                 );
             })}
-            <EditorLinkings linkings={linkings} open={linkingsEditor} onClose={handlersLinkingsEditorClose} onSubmit={handlersSentenceUpdateLinkings} />
         </div>
     );
 });

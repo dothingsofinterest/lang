@@ -1,25 +1,13 @@
-/* Plan */
 export interface StateAuth {
     ACCESS_TOKEN: string | undefined;
 }
-export interface StatePlan {
-    hash: string;
-    type: number;
+export interface StateData {
+    videoHash: string;
     videoURL: string;
     videoAudioURL: string;
     videoAudioWaveformURL: string;
-    videoScriptCurrentTime: number;
-    videoScriptWaveformZoom: number;
-    videoMatchingSentence: number;
-    videoMatchingSentencePos: number;
-    videoExampleMatching: number;
-    vocabMatchListen: number;
-    vocabMatchMeaning: number;
-    vocabMatchWatch: number;
     script: Script;
-    diary: Diary;
-    processings: boolean[];
-    data: PlanData;
+    scriptParsed: ScriptParsed;
 }
 export interface PayloadScript {
     pKey?: number;
@@ -29,44 +17,26 @@ export interface PayloadScript {
     index?: number;
     list?: string[];
 }
-export interface PayloadPlan {
-    buttonID?: number;
-    buttonStatus?: boolean;
-}
-/* Plan */
 
 /* Data */
-export interface PlanData {
-    title: string;
-    vocabs: Vocab[];
-    grammars: string[];
-    date: string;
-    content: string;
-    scenes: SceneBlock[];
-    sentences: Sentence[];
-    examples: Example[];
-}
 export interface Script {
     title: string;
     roles: string[];
     scenes: Scene[];
-    vocabs: Vocab[];
-    grammars: string[];
     paragraphs: Paragraph[];
-    examples: Example[];
+    vocab: Vocab[];
+    grammar: Grammar[];
+    impression: Impression;
 }
-export interface Paragraph {
-    key: string;
-    scene: string | number; // temporary
-    roles: string[];
+export interface ScriptParsed {
+    title: string;
+    vocab: Vocab[];
+    grammar: Grammar[];
+    exampleRecogn: GrammarExamplePractice[];
+    exampleTranslation: GrammarExamplePractice[];
+    scenes: SceneBlock[];
     sentences: Sentence[];
-}
-export interface Sentence {
-    key: string;
-    startTime: string;
-    endTime: string;
-    texts: string[];
-    linkings: string[];
+    impression: Impression;
 }
 export interface SceneBlock {
     name: string;
@@ -76,23 +46,43 @@ export interface Scene {
     index: number;
     value: string;
 }
+export interface Paragraph {
+    id: number;
+    scene: string | number; // temporary
+    roles: string[];
+    sentences: Sentence[];
+}
+export interface Sentence {
+    id: number;
+    startTime: string;
+    endTime: string;
+    texts: string[];
+}
 export interface Vocab {
+    id: number;
     text: string;
+    type: number; // 1:listening, 2:watching, 4:thinking of
     image: string;
-    voice: number;
-    speed: number;
     pronunciation: string;
 }
-export interface Example {
+export interface Grammar {
     id: number;
-    cate: string | number;
+    order: number;
+    name: string;
+    text: string;
+    examples: GrammarExample[];
+}
+export interface GrammarExample {
+    id: number;
+    type: number;
     text: string;
 }
-export interface Diary {
-    title: string;
-    date: string;
+export interface GrammarExamplePractice {
+    text: string[];
+    type: number;
+}
+export interface Impression {
     content: string;
-    vocabs: Vocab[];
-    grammars: string[];
+    grammar: string[];
 }
 /* Data */

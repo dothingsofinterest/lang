@@ -1,10 +1,10 @@
-import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, PlanData } from "../types/Data";
+import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, ScriptParsed } from "../types/Data";
 import { dataSync } from "../api/requestAuth";
 import { Domain } from "../settings.js";
 import { fnRandom } from "./util";
-import Joi from "joi";
+import Joi, { number } from "joi";
 
-export const fnParseVocabs = (text: string): string => {
+export const fnParseVocab = (text: string): string => {
     let r = ``;
     if (text) {
         const res = [];
@@ -24,7 +24,7 @@ export const fnParseVocabs = (text: string): string => {
                         for (let k = 0; k < nameExt.length; k++) {
                             const matchNameExt = text.match(nameExt[k]);
                             if (matchNameExt && matchNameExt[2]) {
-                                str += fnParseVocabsCheckNoun(matchName[1], matchNameExt[2]);
+                                str += fnParseVocabCheckNoun(matchName[1], matchNameExt[2]);
                             }
                         }
                     }
@@ -38,7 +38,7 @@ export const fnParseVocabs = (text: string): string => {
                                 strArr.push(matchNameExt[2]);
                             }
                         }
-                        str += fnParseVocabsCheckVerbs(matchName[1], strArr);
+                        str += fnParseVocabCheckVerbs(matchName[1], strArr);
                     }
                     // Adjective
                     if (i === 2) {
@@ -66,7 +66,7 @@ export const fnParseVocabs = (text: string): string => {
     return r;
 };
 
-export const fnParseVocabsCheckNoun = (base: string, plural: string): string => {
+export const fnParseVocabCheckNoun = (base: string, plural: string): string => {
     if (base && plural) {
         const vs = new RegExp(`^${base}s`); // +s invents
         const ves = new RegExp(`^${base}es`); // +es touches
@@ -78,7 +78,7 @@ export const fnParseVocabsCheckNoun = (base: string, plural: string): string => 
     return "";
 };
 
-export const fnParseVocabsCheckVerbs = (base: string, variants: string[]): string => {
+export const fnParseVocabCheckVerbs = (base: string, variants: string[]): string => {
     const [third, past, participle, gerund] = variants;
     if (third) {
         const vs = new RegExp(`^${base}s`); // +s invents
@@ -111,25 +111,21 @@ export const fnParseVocabsCheckVerbs = (base: string, variants: string[]): strin
     return "";
 };
 
-export const fnGetFormattedData = (plan: string, script: DataScript): PlanData => {
-    const data: PlanData = {
+export const fnGetFormattedData = (hash: string, script: DataScript): ScriptParsed => {
+    const data: ScriptParsed = {
         title: script.title,
-        examples: [],
-        vocabs: [],
-        grammars: script.grammars,
+        vocab: [],
+        grammar: script.grammar,
+        exampleRecogn: [],
+        exampleTranslation: [],
         scenes: [],
         sentences: [],
-        date: "",
-        content: "",
+        impression: {
+            content: "",
+            grammar: [],
+        },
     };
-    const staticPrefix = `${Domain}/data/${plan}`;
-    data.vocabs = script.vocabs.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
-    data.examples = script.examples
-        ? script.examples.map((v) => {
-              const scene = script.scenes.find(({ index }) => index === Number(v.cate));
-              return { ...v, cate: scene ? scene.value : v.cate };
-          })
-        : [];
+    const staticPrefix = `${Domain}/data/${hash}`;
     script.paragraphs.forEach((v: DataParagraph) => {
         data.sentences.push(...v.sentences);
     });
@@ -154,6 +150,34 @@ export const fnGetFormattedData = (plan: string, script: DataScript): PlanData =
             data.scenes[0].paragraphs.push(v);
         });
     }
+    data.vocab = script.vocab.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
+    script.grammar.forEach((grammarItem) => {
+        grammarItem.examples.forEach((example) => {
+            const text = [];
+            const textArr = example.text.split("\n---\n");
+            if (textArr.length === 1) {
+                const exm = { text: ["", "", "", ""], type: example.type };
+                data.exampleRecogn.push(exm);
+                data.exampleTranslation.push(exm);
+            } else {
+                textArr[0] && text.push(...textArr[0].split("\n"));
+                textArr[1] && text.push(...textArr[1].split("\n"));
+                const exampleItem = { text, type: example.type };
+                if (Number(example.type) === 0 || Number(example.type) === 2) {
+                    data.exampleRecogn.push(exampleItem);
+                }
+                if (Number(example.type) === 1 || Number(example.type) === 2) {
+                    data.exampleTranslation.push(exampleItem);
+                }
+            }
+        });
+    });
+    data.impression = script.impression
+        ? script.impression
+        : {
+              content: "",
+              grammar: [],
+          };
     return data;
 };
 
@@ -206,10 +230,10 @@ export const fnValidateVideoScript = (data: any): boolean => {
         scenes: Joi.array()
             .items(Joi.alternatives().try(Joi.object(), Joi.string().allow("")))
             .required(),
-        vocabs: Joi.array().items(Joi.object()).required(),
-        examples: Joi.array().items(Joi.object()),
-        grammars: Joi.array().items(Joi.string()).required(),
         paragraphs: Joi.array().items(Joi.object()).required(),
+        vocab: Joi.array().items(Joi.object()).required(),
+        grammar: Joi.array().items(Joi.object()).required(),
+        impression: Joi.object(),
     });
     const { error, value } = schema.validate(data);
     if (error) {
@@ -228,12 +252,14 @@ export const fnGetMaxTimeFromSentences = (sentences: Sentence[]): number => {
     return Math.max(...timeArr);
 };
 
-export const fnSyncScript = async (plan: string, script: DataScript) => {
+export const fnSyncScript = async (hash: string, script: DataScript) => {
     const blob = new Blob([JSON.stringify(script, null, 4)], { type: "application/json" });
     const formData = new FormData();
     formData.append("file", blob, "script.json");
-    dataSync({ plan }, formData);
+    await dataSync({ hash }, formData);
 };
+
+export const fnCheckVocabText = (text: string) => /^(.+) \| (.+) \| (.+)$/.test(text);
 
 // Temporary
 export const fnDealScenes = (script: DataScript) => {
@@ -253,12 +279,15 @@ export const fnDealScenes = (script: DataScript) => {
 
 // Temporary
 export const fnDealParagraphs = (script: DataScript) => {
-    return script.paragraphs.map((p: DataParagraph) => {
-        if (typeof p === "number") {
-            return p;
-        } else {
-            const scene = script.scenes.find(({ value }) => p.scene === value);
-            return { ...p, scene: scene ? scene.index : p.scene };
-        }
+    let i = 1;
+    let j = 1;
+    return script.paragraphs.map((paragraph: DataParagraph) => {
+        return { ...paragraph, id: i++, sentences: paragraph.sentences.map((sentence) => ({ ...sentence, id: j++ })) };
     });
+};
+
+// Temporary
+export const fnDealVocab = (script: DataScript) => {
+    let i = 1;
+    return script.vocab.map((v: DataVocab) => ({ ...v, id: i++ }));
 };
