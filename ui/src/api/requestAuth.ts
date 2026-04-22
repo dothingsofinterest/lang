@@ -177,3 +177,38 @@ export const statisticsSearch = (params: object): Promise<Response> => {
     });
 };
 // Statistics
+
+// Vocab
+export const vocabCreate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/create`,
+        data: data,
+    });
+};
+export const vocabList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/list`,
+        params: params,
+    });
+};
+// Vocab
+
+// File
+export const fileMove = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/file/move`,
+        params: params,
+    });
+};
+
+export const fileRemove = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/file/remove`,
+        params: params,
+    });
+};
+// File

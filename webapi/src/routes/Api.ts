@@ -4,6 +4,8 @@ import { dataImport, dataExport, dataSync, vocabImageUpload, vocabImagePronuncia
 import { textToSpeech, uploadSpeech, batchTranscodeToMp3 } from "../controller/TTSController";
 import { countVocab, search } from "../controller/StatisticsController";
 import { upload } from "../middleware/Upload";
+import { create as vocabCreate, list as vocabList } from "../controller/VocabularyController";
+import { move as fileMove, remove as fileRemove } from "../controller/FileController";
 
 const router = express.Router();
 
@@ -36,6 +38,16 @@ router.post("/speech/batch_transcode", batchTranscodeToMp3);
 router.post("/statistics/count_vocab", countVocab);
 router.post("/statistics/search", search);
 // Statistics
+
+// Vocab
+router.post("/vocab/create", vocabCreate);
+router.post("/vocab/list", vocabList);
+// Vocab
+
+// File
+router.post("/file/move", fileMove);
+router.post("/file/remove", fileRemove);
+// File
 
 // User
 router.post("/logout", (req: Request, res: Response) => res.json({ code: 1, message: "success" }));

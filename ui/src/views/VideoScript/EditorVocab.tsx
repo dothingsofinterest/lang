@@ -7,7 +7,7 @@ import { fnBase64ToBlob } from "../../utils/util";
 import { Domain } from "../../settings.js";
 import { md5 } from "js-md5";
 import { clipAudio } from "../../api/requestAuth";
-import { vocabImageUpload, speechTTS, speechUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove } from "../../api/requestAuth";
+import { vocabImageUpload, speechTTS, speechUpload, vocabImagePronunciationMove, vocabImagePronunciationRemove, fileMove, fileRemove, vocabCreate, vocabList } from "../../api/requestAuth";
 import Audio, { AudioRef } from "../Public/Audio";
 import "./EditorVocab.scss";
 
@@ -45,7 +45,16 @@ const pronounceEngineOptions = [
 
 const defaultVocab = { id: 0, text: "", type: 7, image: "", pronunciation: "" };
 
-const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, onSubmit }) => {
+type Vocabulary = {
+    id: number;
+    definition: string;
+    image: string;
+    pronunciation: string;
+    category: number;
+};
+
+const EditorVocab: React.FC<EditorVocabProps> = ({ hash, open, onClose, onSubmit }) => {
+    const [list, setList] = useState<Vocabulary[]>([]);
     const [parsedVocab, setParsedVocab] = useState("");
     const [vocab, setVocab] = useState<DataVocab>(defaultVocab);
     const [vocabActive, setVocabActive] = useState(0);
@@ -65,6 +74,13 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
     };
     const handlersVocabUpdateType = (value: number) => {
         setVocab({ ...vocab, type: value });
+    };
+    const apiGetList = async () => {
+        const res = await vocabList({ videoID: 1, page: 1, pageSize: 10 });
+        console.log("res", res);
+        if (res.code === 1) {
+            setList(res.data.list);
+        }
     };
     const handlersVocabUpdateImage = async (file: any) => {
         if (vocab.text && fnCheckVocabText(vocab.text)) {
@@ -110,7 +126,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
     };
     const handlersPronunciationClick = async () => {
         if (vocab.pronunciation) {
-            const audioSrc = `${Domain}/data/temp/${vocab.pronunciation}`;
+            const audioSrc = `${Domain}/upload/temp/${vocab.pronunciation}`;
             refAudio.current?.play(audioSrc, 1);
             window.open(audioSrc, "_blank");
         }
@@ -126,7 +142,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
                 const res = await speechTTS({ engine: pronounceEngine, content, filename, voice: pronounceVoice, speed: pronounceSpeed });
                 if (res.code) {
                     setVocab({ ...vocab, pronunciation: `${filename}.mp3` });
-                    refAudio.current?.play(`${Domain}/data/temp/${filename}.mp3?${Date.now()}`, 1);
+                    refAudio.current?.play(`${Domain}/upload/temp/${filename}.mp3?${Date.now()}`, 1);
                 }
             } catch (e: any) {
                 messageApi.open({
@@ -153,7 +169,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
                     const res = await speechUpload({}, formData);
                     if (res.code === 1) {
                         setVocab({ ...vocab, pronunciation: res.data.filename });
-                        refAudio.current?.play(`${Domain}/data/temp/${res.data.filename}?${Date.now()}`, 1);
+                        refAudio.current?.play(`${Domain}/upload/temp/${res.data.filename}?${Date.now()}`, 1);
                     }
                 } catch (e: any) {
                     messageApi.open({
@@ -189,7 +205,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
                     const res = await speechUpload({}, formData);
                     if (res.code === 1) {
                         setVocab({ ...vocab, pronunciation: res.data.filename });
-                        refAudio.current?.play(`${Domain}/data/temp/${res.data.filename}?${Date.now()}`, 1);
+                        refAudio.current?.play(`${Domain}/upload/temp/${res.data.filename}?${Date.now()}`, 1);
                     }
                 } catch (e: any) {
                     messageApi.open({
@@ -210,110 +226,111 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
             });
         }
     };
-    const handlersListUnshiftItem = async () => {
+    const handlerVocabCreate = async () => {
         if (vocabActive === 0) {
             if (vocab.text && fnCheckVocabText(vocab.text) && vocab.pronunciation) {
-                const res = await vocabImagePronunciationMove({ hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
+                const res = await fileMove({ videoID: 1, image: vocab.image, pronunciation: vocab.pronunciation });
                 if (res.code === 1) {
-                    const newList = [...list];
-                    const vIDs = newList.map((item) => item.id);
-                    const id = vIDs.length === 0 ? 1 : Math.max(...vIDs) + 1;
-                    newList.unshift({ ...vocab, id });
-                    if (onSubmit !== undefined) {
-                        setVocab(defaultVocab);
-                        setParsedVocab("");
-                        setVocabActive(0);
-                        onSubmit(newList);
-                    }
+                    const res = await vocabCreate({ videoID: 1, definition: vocab.text, image: vocab.image, pronunciation: vocab.pronunciation, category: vocab.type });
+                    // const newList = [...list];
+                    // const vIDs = newList.map((item) => item.id);
+                    // const id = vIDs.length === 0 ? 1 : Math.max(...vIDs) + 1;
+                    // newList.unshift({ ...vocab, id });
+                    // if (onSubmit !== undefined) {
+                    //     setVocab(defaultVocab);
+                    //     setParsedVocab("");
+                    //     setVocabActive(0);
+                    //     onSubmit(newList);
+                    // }
                 }
             }
         }
     };
     const handlersListDeleteItem = async () => {
-        const confirmed = window.confirm("Are you confirmed to delete?");
-        if (confirmed) {
-            const curVocab = list.find(({ id }) => id === vocabActive);
-            if (curVocab !== undefined && curVocab.text && curVocab.pronunciation) {
-                const res = await vocabImagePronunciationRemove({ hash, vocabImage: curVocab.image, vocabPronunciation: curVocab.pronunciation });
-                if (res.code === 1) {
-                    const curVocabIndex = list.findIndex(({ id }) => id === vocabActive);
-                    const a = list.slice(0, curVocabIndex);
-                    const b = list.slice(curVocabIndex + 1);
-                    if (onSubmit !== undefined) {
-                        setVocab(defaultVocab);
-                        setParsedVocab("");
-                        setVocabActive(0);
-                        onSubmit([...a, ...b]);
-                    }
-                }
-            }
-        }
+        // const confirmed = window.confirm("Are you confirmed to delete?");
+        // if (confirmed) {
+        //     const curVocab = list.find(({ id }) => id === vocabActive);
+        //     if (curVocab !== undefined && curVocab.text && curVocab.pronunciation) {
+        //         const res = await vocabImagePronunciationRemove({ hash, vocabImage: curVocab.image, vocabPronunciation: curVocab.pronunciation });
+        //         if (res.code === 1) {
+        //             const curVocabIndex = list.findIndex(({ id }) => id === vocabActive);
+        //             const a = list.slice(0, curVocabIndex);
+        //             const b = list.slice(curVocabIndex + 1);
+        //             if (onSubmit !== undefined) {
+        //                 setVocab(defaultVocab);
+        //                 setParsedVocab("");
+        //                 setVocabActive(0);
+        //                 onSubmit([...a, ...b]);
+        //             }
+        //         }
+        //     }
+        // }
     };
     const handlersListUpdateItem = async () => {
-        if (vocabActive !== 0) {
-            if (vocab.text && fnCheckVocabText(vocab.text)) {
-                const res = await vocabImagePronunciationMove({ hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
-                if (res.code === 1) {
-                    const newList = list.map((item) => (item.id === vocabActive ? { ...item, text: vocab.text, type: vocab.type, image: vocab.image ? vocab.image : item.image, pronunciation: vocab.pronunciation ? vocab.pronunciation : item.pronunciation } : item));
-                    if (onSubmit !== undefined) {
-                        setVocab(defaultVocab);
-                        setParsedVocab("");
-                        setVocabActive(0);
-                        onSubmit(newList);
-                    }
-                }
-            }
-        }
+        // if (vocabActive !== 0) {
+        //     if (vocab.text && fnCheckVocabText(vocab.text)) {
+        //         const res = await vocabImagePronunciationMove({ hash, vocabImage: vocab.image, vocabPronunciation: vocab.pronunciation });
+        //         if (res.code === 1) {
+        //             const newList = list.map((item) => (item.id === vocabActive ? { ...item, text: vocab.text, type: vocab.type, image: vocab.image ? vocab.image : item.image, pronunciation: vocab.pronunciation ? vocab.pronunciation : item.pronunciation } : item));
+        //             if (onSubmit !== undefined) {
+        //                 setVocab(defaultVocab);
+        //                 setParsedVocab("");
+        //                 setVocabActive(0);
+        //                 onSubmit(newList);
+        //             }
+        //         }
+        //     }
+        // }
     };
     const handlersListUpItem = () => {
-        if (vocabActive !== 0) {
-            const vocabIndex = list.findIndex(({ id }) => id === vocabActive);
-            const newList = [...list];
-            const a = newList.slice(0, vocabIndex);
-            const b = newList.slice(vocabIndex);
-            const upOne = a.pop();
-            const theOne = b.shift();
-            if (theOne) {
-                a.push(theOne);
-            }
-            if (upOne) {
-                b.unshift(upOne);
-            }
-            if (onSubmit !== undefined) {
-                onSubmit([...a, ...b]);
-            }
-            setVocabActive(vocabActive);
-        }
+        // if (vocabActive !== 0) {
+        //     const vocabIndex = list.findIndex(({ id }) => id === vocabActive);
+        //     const newList = [...list];
+        //     const a = newList.slice(0, vocabIndex);
+        //     const b = newList.slice(vocabIndex);
+        //     const upOne = a.pop();
+        //     const theOne = b.shift();
+        //     if (theOne) {
+        //         a.push(theOne);
+        //     }
+        //     if (upOne) {
+        //         b.unshift(upOne);
+        //     }
+        //     if (onSubmit !== undefined) {
+        //         onSubmit([...a, ...b]);
+        //     }
+        //     setVocabActive(vocabActive);
+        // }
     };
     const handlersListDownItem = () => {
-        if (vocabActive !== 0) {
-            const vocabIndex = list.findIndex(({ id }) => id === vocabActive);
-            const newList = [...list];
-            const a = newList.slice(0, vocabIndex);
-            const b = newList.slice(vocabIndex);
-            const theOne = b.shift();
-            const downOne = b.shift();
-            if (theOne) {
-                b.unshift(theOne);
-            }
-            if (downOne) {
-                b.unshift(downOne);
-            }
-            if (onSubmit !== undefined) {
-                onSubmit([...a, ...b]);
-            }
-            setVocabActive(vocabActive);
-        }
+        // if (vocabActive !== 0) {
+        //     const vocabIndex = list.findIndex(({ id }) => id === vocabActive);
+        //     const newList = [...list];
+        //     const a = newList.slice(0, vocabIndex);
+        //     const b = newList.slice(vocabIndex);
+        //     const theOne = b.shift();
+        //     const downOne = b.shift();
+        //     if (theOne) {
+        //         b.unshift(theOne);
+        //     }
+        //     if (downOne) {
+        //         b.unshift(downOne);
+        //     }
+        //     if (onSubmit !== undefined) {
+        //         onSubmit([...a, ...b]);
+        //     }
+        //     setVocabActive(vocabActive);
+        // }
     };
     const handlerClickVocab = (vocabID: number) => {
-        if (list.length > 0) {
-            setVocabActive(vocabID);
-            const vocab = list.find(({ id }) => id === vocabID);
-            if (vocab && vocab.text && vocab.pronunciation) {
-                setVocab({ ...defaultVocab, id: vocab.id, text: vocab.text, type: vocab.type ? vocab.type : 7 });
-                refAudio.current?.play(`${Domain}/data/${hash}/vocab_pronunciations/${vocab.pronunciation}?${Date.now()}`, 1);
-            }
-        }
+        // if (list.length > 0) {
+        //     setVocabActive(vocabID);
+        //     const vocab = list.find(({ id }) => id === vocabID);
+        //     if (vocab && vocab.text && vocab.pronunciation) {
+        //         setVocab({ ...defaultVocab, id: vocab.id, text: vocab.text, type: vocab.type ? vocab.type : 7 });
+        //         refAudio.current?.play(`${Domain}/data/pronunciation/1/${vocab.pronunciation}?${Date.now()}`, 1);
+        //     }
+        // }
     };
     const handlersClearTemp = () => {
         if (list.length > 0) {
@@ -330,13 +347,13 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
             const res = await clipAudio({ hash, name, start, end });
             if (res.code === 1) {
                 setClipTemp(`${name}.mp3`);
-                refAudio.current?.play(`${Domain}/data/temp/${name}.mp3`, 1);
+                refAudio.current?.play(`${Domain}/upload/temp/${name}.mp3`, 1);
             }
         }
     };
     const handlersClipClick = () => {
         if (clipTemp) {
-            window.open(`${Domain}/data/temp/${clipTemp}`, "_blank");
+            window.open(`${Domain}/data/upload/temp/${clipTemp}`, "_blank");
         }
     };
     const handlersOnClose = () => {
@@ -345,6 +362,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
         }
     };
     useEffect(() => {
+        apiGetList();
         return () => {};
     }, []);
     return (
@@ -386,7 +404,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
                         <Button icon={<ArrowDownOutlined />} onClick={handlersListDownItem} />
                         <Button icon={<ClearOutlined />} onClick={handlersClearTemp} />
                         <Button icon={<MinusOutlined />} onClick={handlersListDeleteItem} />
-                        <Button icon={<PlusSquareOutlined />} onClick={handlersListUnshiftItem} />
+                        <Button icon={<PlusSquareOutlined />} onClick={handlerVocabCreate} />
                     </div>
                 </div>
             )}
@@ -397,9 +415,9 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
                             <div key={value.id} className={vocabActive === value.id ? "item active" : "item"} onClick={() => handlerClickVocab(value.id)}>
                                 <span className="text">
                                     <i className="index">[{key + 1}] </i>
-                                    {value.text}
+                                    {value.definition}
                                 </span>
-                                <span className="img">{value.image && <img src={`${Domain}/data/${hash}/vocab_images/${value.image}`} />}</span>
+                                <span className="img">{value.image && <img src={`${Domain}/data/1/image/${value.image}`} />}</span>
                             </div>
                         );
                     })}
