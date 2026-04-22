@@ -5,17 +5,18 @@ import "./Vocab.scss";
 
 interface VocabProps {
     text: string;
+    assetsPrefix: string;
     vocabList: DataVocab[];
     onClick?: (pronunciation: string) => void;
 }
 
 const tipBgColor = "#c5a587";
 
-const Vocab: React.FC<VocabProps> = ({ text, vocabList, onClick }) => {
+const Vocab: React.FC<VocabProps> = ({ text, assetsPrefix, vocabList, onClick }) => {
     if (!vocabList) return <>{text}</>;
     const handlerPlay = (pronunciation: string) => {
         if (onClick !== undefined) {
-            onClick(pronunciation);
+            onClick(`${assetsPrefix}${pronunciation}?${Date.now()}`);
         }
     };
     const fnRecurHalf = (text: string, inputs: DataVocab[]) => {

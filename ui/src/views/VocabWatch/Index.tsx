@@ -4,73 +4,91 @@ import { RootState } from "../../stores";
 import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined, SoundFilled } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
-import { updateVocabMatchWatch } from "../../stores/reducers/status";
-import { fnRandom, fnShuffle } from "../../utils/util";
+import { updateVocabWatchCur, updateVocabWatchCurIndex } from "../../stores/reducers/status";
+import { fnShuffle } from "../../utils/util";
 import { Vocab as DataVocab } from "../../types/Data";
 import Audio, { AudioRef } from "../Public/Audio";
+import { Domain } from "../../settings.js";
 import "./Index.scss";
+
+const calOptions = (excludedItem: DataVocab, list: DataVocab[]): DataVocab[] => {
+    const result: DataVocab[] = [excludedItem];
+    for (let i = 0; i < 3; i++) {
+        const filterList = list.filter((item) => !result.map((r) => r.id).includes(item.id));
+        const randomIndex = Math.floor(Math.random() * (filterList.length - 1));
+        result.push(filterList[randomIndex]);
+    }
+    return fnShuffle(result);
+};
 
 const Index = () => {
     const dispatch = useDispatch();
+    const scriptParsed = useSelector((state: RootState) => state.data.scriptParsed);
     const inputListFilteredSelector = createSelector([(state: RootState) => state.data.scriptParsed.vocab], (inputs: DataVocab[]) => inputs.filter((v) => v.type === undefined || (v.type & 2) !== 0));
     const inputList = useSelector(inputListFilteredSelector);
-    const matchingVocab = useSelector((state: RootState) => state.status.vocabMatchWatch);
-    const [selectorVocab, setSelectorVocab] = useState<number[]>([]);
-    const [selectorVocabActvie, setSelectorVocabActvie] = useState<number | null>(null);
-    const [progressValue, setProgressValue] = useState<number>(0);
+    const curVocab = useSelector((state: RootState) => {
+        if (inputList.length === 0) return null;
+        return state.status.vocabWatchCur === null ? inputList[0] : state.status.vocabWatchCur;
+    });
+    const curVocabIndex = useSelector((state: RootState) => state.status.vocabWatchCurIndex);
+    const [selection, setSelection] = useState<DataVocab[]>(() => (curVocab ? calOptions(curVocab, inputList) : []));
+    const [selectionActvie, setSelectionActvie] = useState<number>(0);
     const refAudio = useRef<AudioRef>(null);
-    const refState = useRef({ matchingVocab });
-    const handlersClickSelector = (text: string, index: number) => {
-        const vocab = inputList[matchingVocab];
-        if (vocab) {
-            const inputText = text.split(" | ")[0];
-            const answerText = vocab.text.split(" | ")[0];
+    const refState = useRef({ curVocab, curVocabIndex });
+    const handlerClickSelection = (vocab: DataVocab) => {
+        if (curVocab) {
+            const inputText = vocab.text.split(" | ")[0];
+            const answerText = curVocab.text.split(" | ")[0];
             if (inputText === answerText) {
-                dispatch(updateVocabMatchWatch(matchingVocab + 1 >= inputList.length ? matchingVocab : matchingVocab + 1));
                 refAudio.current?.play("/audio/paid.mp3", 1);
+                const nextVocab = inputList[curVocabIndex + 1];
+                if (nextVocab !== undefined) {
+                    fnPlayTo(nextVocab);
+                }
             } else {
-                setSelectorVocabActvie(index);
+                setSelectionActvie(vocab.id);
             }
         }
     };
-    const handlersPlayAudio = () => {
-        if (inputList.length > 0) {
-            const vocab = inputList[matchingVocab];
-            if (vocab && vocab.pronunciation) {
-                refAudio.current?.play(vocab.pronunciation, 1);
-            }
+    const handlerPlayAudio = () => {
+        const curVocab = refState.current.curVocab;
+        if (curVocab && curVocab.pronunciation) {
+            refAudio.current?.play(`${Domain}/data/${scriptParsed.hash}/vocab_pronunciations/${curVocab.pronunciation}`, 1);
         }
     };
     const handlersPlayBackward = () => {
-        const matchingVocab = refState.current.matchingVocab;
-        const index = matchingVocab - 1 <= 0 ? 0 : matchingVocab - 1;
-        dispatch(updateVocabMatchWatch(index));
+        const curVocabIndex = refState.current.curVocabIndex;
+        const lastVocab = inputList[curVocabIndex - 1];
+        if (lastVocab !== undefined) {
+            fnPlayTo(lastVocab);
+        }
     };
     const handlersPlayForward = () => {
-        const matchingVocab = refState.current.matchingVocab;
-        const index = matchingVocab + 1 >= inputList.length ? matchingVocab : matchingVocab + 1;
-        dispatch(updateVocabMatchWatch(index));
+        const curVocabIndex = refState.current.curVocabIndex;
+        const nextVocab = inputList[curVocabIndex + 1];
+        if (nextVocab !== undefined) {
+            fnPlayTo(nextVocab);
+        }
     };
     const handlersPlayClear = () => {
-        dispatch(updateVocabMatchWatch(0));
-    };
-    const fnGetRandomNumbers = (index: number) => {
-        const results: number[] = [index];
-        const vocabLen = inputList.length;
-        if (vocabLen > 0) {
-            for (let i = 0; i < 3; i++) {
-                const randomIndex = fnRandom(0, vocabLen - 1, results);
-                results.push(randomIndex);
-            }
+        if (inputList.length > 0) {
+            fnPlayTo(inputList[0]);
         }
-        return fnShuffle(results);
+    };
+    const fnPlayTo = (vocab: DataVocab) => {
+        if (vocab) {
+            setSelection(calOptions(vocab, inputList));
+            setSelectionActvie(0);
+            dispatch(updateVocabWatchCur(vocab));
+            dispatch(updateVocabWatchCurIndex(inputList.findIndex(({ id }) => id === vocab.id)));
+        }
     };
     useEffect(() => {
         const onKeyDownHandler = (event: KeyboardEvent) => {
-            if (event.code === "PageUp") {
+            if (event.code === "ArrowLeft") {
                 handlersPlayBackward();
             }
-            if (event.code === "PageDown") {
+            if (event.code === "ArrowRight") {
                 handlersPlayForward();
             }
         };
@@ -80,10 +98,8 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        setSelectorVocab(fnGetRandomNumbers(matchingVocab));
-        setProgressValue(Math.ceil(((matchingVocab === 0 ? 0 : matchingVocab + 1) / inputList.length) * 100));
-        refState.current = { matchingVocab };
-    }, [matchingVocab]);
+        refState.current = { curVocab, curVocabIndex };
+    }, [curVocab, curVocabIndex]);
     return (
         <Layout className="main-inner" id="vocab-watch-index">
             <div className="main-inner-item-aside"></div>
@@ -91,28 +107,27 @@ const Index = () => {
                 <section id="panel">
                     <div className="buttons">
                         <Button icon={<FastBackwardOutlined />} onClick={handlersPlayBackward} className="btn" />
-                        <Button icon={<SoundFilled />} onClick={handlersPlayAudio} className="btn" />
+                        <Button icon={<SoundFilled />} onClick={handlerPlayAudio} className="btn" />
                         <Button icon={<ClearOutlined />} onClick={handlersPlayClear} className="btn" />
                         <Button icon={<FastForwardOutlined />} onClick={handlersPlayForward} className="btn" />
                     </div>
                     <div className="progress">
-                        <Progress percent={progressValue} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
+                        <Progress percent={Math.ceil(((curVocabIndex + 1) / inputList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
                     </div>
                 </section>
                 <section id="display">
-                    {inputList.length > 0 && (
+                    {curVocab && (
                         <>
-                            <div className="text">{inputList[matchingVocab].text.split(" | ")[0]}</div>
+                            <div className="text">{curVocab.text.split(" | ")[0]}</div>
                             <div className="selector">
-                                {inputList.length > 0 &&
-                                    selectorVocab.map((key) => {
-                                        return (
-                                            <div key={key} className={`item${key === selectorVocabActvie ? " active" : ""}`} onClick={() => handlersClickSelector(inputList[key].text, key)}>
-                                                {inputList[key].image && <img src={inputList[key].image} />}
-                                                <i className="cn">{inputList[key].text.split(" | ")[2]}</i>
-                                            </div>
-                                        );
-                                    })}
+                                {selection.map((item) => {
+                                    return (
+                                        <div key={item.id} className={`item${item.id === selectionActvie ? " active" : ""}`} onClick={() => handlerClickSelection(item)}>
+                                            {item.image && <img src={`${Domain}/data/${scriptParsed.hash}/vocab_images/${item.image}`} />}
+                                            <i className="cn">{item.text.split(" | ")[2]}</i>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </>
                     )}

@@ -53,7 +53,9 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({ paragraph
             const b = paragraphs.slice(curIndex + 1);
             const pIDs = paragraphs.map((paragraph) => paragraph.id);
             const pIDNew = pIDs.length === 0 ? 1 : Math.max(...pIDs) + 1;
-            a.push({ ...defaultParagraph, id: pIDNew });
+            let maxID = 1;
+            paragraphs.forEach((paragraph) => (maxID = Math.max(maxID, ...paragraph.sentences.map((sentence) => sentence.id))));
+            a.push({ ...defaultParagraph, id: pIDNew, sentences: [{ ...defaultSentence, id: maxID + 1 }] });
             if (onSubmit !== undefined) {
                 onSubmit([...a, ...b]);
             }

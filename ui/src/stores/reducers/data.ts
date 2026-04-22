@@ -35,6 +35,7 @@ const initialState: StateData = {
         },
     },
     scriptParsed: {
+        hash: "",
         title: "",
         vocab: [],
         grammar: [],

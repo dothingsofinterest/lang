@@ -29,6 +29,7 @@ export interface Script {
     impression: Impression;
 }
 export interface ScriptParsed {
+    hash: string;
     title: string;
     vocab: Vocab[];
     grammar: Grammar[];

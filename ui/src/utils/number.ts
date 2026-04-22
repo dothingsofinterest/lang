@@ -17,3 +17,4 @@ type NumberType = number | string;
 export const strip = (num: NumberType, precision = 15): number => {
     return +parseFloat(Number(num).toPrecision(precision));
 };
+

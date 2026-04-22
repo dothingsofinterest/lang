@@ -4,47 +4,48 @@ import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined, CopyOutlined,
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
-import { updateVocabMatchListen } from "../../stores/reducers/status";
+import { updateVocabListenCur, updateVocabListenCurIndex } from "../../stores/reducers/status";
 import { Vocab as DataVocab } from "../../types/Data";
 import debounce from "lodash.debounce";
 import { strip } from "../../utils/number";
 import Audio, { AudioRef } from "../Public/Audio";
+import { Domain } from "../../settings.js";
 import "./Index.scss";
 
 const Index = () => {
     const dispatch = useDispatch();
+    const scriptParsed = useSelector((state: RootState) => state.data.scriptParsed);
     const inputListFilteredSelector = createSelector([(state: RootState) => state.data.scriptParsed.vocab], (inputs: DataVocab[]) => inputs.filter((v) => v.type === undefined || (v.type & 1) !== 0));
     const inputList = useSelector(inputListFilteredSelector);
-    const matchingVocab = useSelector((state: RootState) => state.status.vocabMatchListen);
-    const curVocab = inputList.find(({ id }) => id === matchingVocab);
-    const curVocabIndex = inputList.findIndex(({ id }) => id === matchingVocab);
+    const curVocab = useSelector((state: RootState) => {
+        if (inputList.length === 0) return null;
+        return state.status.vocabListenCur === null ? inputList[0] : state.status.vocabListenCur;
+    });
+    const curVocabIndex = useSelector((state: RootState) => state.status.vocabListenCurIndex);
     const [playSpeed, setPlaySpeed] = useState<number>(1);
     const [textareaValue, setTextareaValue] = useState("");
     const [maskClass, setMaskClass] = useState("mask");
     const [isFocused, setIsFocused] = useState(false);
     const refAudio = useRef<AudioRef>(null);
-    const refState = useRef({ matchingVocab, playSpeed, maskClass, isFocused });
+    const refState = useRef({ curVocab, curVocabIndex, playSpeed, maskClass, isFocused });
     const handlersPlayBackward = () => {
-        const curSentenceID = refState.current.matchingVocab;
         const playSpeed = refState.current.playSpeed;
-        const curSentenceIndex = inputList.findIndex(({ id }) => id === curSentenceID);
-        const lastSentence = inputList[curSentenceIndex - 1];
-        if (lastSentence !== undefined) {
-            fnPlayTo(lastSentence, playSpeed);
+        const curVocabIndex = refState.current.curVocabIndex;
+        const lastVocab = inputList[curVocabIndex - 1];
+        if (lastVocab !== undefined) {
+            fnPlayTo(lastVocab, playSpeed);
         }
     };
     const handlersPlayForward = () => {
-        const curSentenceID = refState.current.matchingVocab;
         const playSpeed = refState.current.playSpeed;
-        const curSentenceIndex = inputList.findIndex(({ id }) => id === curSentenceID);
-        const lastSentence = inputList[curSentenceIndex + 1];
-        if (lastSentence !== undefined) {
-            fnPlayTo(lastSentence, playSpeed);
+        const curVocabIndex = refState.current.curVocabIndex;
+        const nextVocab = inputList[curVocabIndex + 1];
+        if (nextVocab !== undefined) {
+            fnPlayTo(nextVocab, playSpeed);
         }
     };
     const handlersInputCopy = () => {
-        const curSentenceID = refState.current.matchingVocab;
-        const vocab = inputList.find(({ id }) => id === curSentenceID);
+        const vocab = refState.current.curVocab;
         if (vocab && vocab.text) {
             const text = vocab.text.split(" | ");
             if (text && text[0]) {
@@ -55,38 +56,34 @@ const Index = () => {
         }
     };
     const handlerPlaySpeedUp = () => {
-        const curSentenceID = refState.current.matchingVocab;
-        const curSentence = inputList.find(({ id }) => id === curSentenceID);
-        if (curSentence !== undefined) {
+        const curVocab = refState.current.curVocab;
+        if (curVocab) {
             const playSpeed = refState.current.playSpeed;
             const valueComputed = strip(playSpeed + 0.2);
             const value = valueComputed > 3 ? 3 : valueComputed;
             setPlaySpeed(value);
-            fnPlayTo(curSentence, playSpeed);
+            fnPlayTo(curVocab, playSpeed);
         }
     };
     const handlerPlaySpeedDown = () => {
-        const curSentenceID = refState.current.matchingVocab;
-        const curSentence = inputList.find(({ id }) => id === curSentenceID);
-        if (curSentence !== undefined) {
+        const curVocab = refState.current.curVocab;
+        if (curVocab) {
             const playSpeed = refState.current.playSpeed;
             const valueComputed = strip(playSpeed - 0.2);
             const value = valueComputed === 0 ? 0.2 : valueComputed;
             setPlaySpeed(value);
-            fnPlayTo(curSentence, playSpeed);
+            fnPlayTo(curVocab, playSpeed);
         }
     };
     const handlersPlayClear = () => {
         if (inputList.length > 0) {
-            const first = inputList[0];
-            dispatch(updateVocabMatchListen(first.id));
-            setPlaySpeed(1);
-            fnPlayTo(first, playSpeed);
+            fnPlayTo(inputList[0], playSpeed);
         }
     };
     const handlersTypeVocab = (value: string) => {
-        setTextareaValue(value.replace(/\n/, ""));
-        fnDebouncedTypeVocab(value.replace(/\n/, ""));
+        setTextareaValue(value);
+        setMaskClass("mask");
+        fnDebouncedTypeVocab(value);
     };
     const handlerToggleTips = () => {
         const maskClass = refState.current.maskClass;
@@ -94,23 +91,21 @@ const Index = () => {
     };
     const fnPlayTo = (vocab: DataVocab, speed: number) => {
         if (vocab) {
-            dispatch(updateVocabMatchListen(vocab.id));
             setTextareaValue(vocab.text.charAt(0));
-            refAudio.current?.play(vocab.pronunciation, speed);
+            dispatch(updateVocabListenCur(vocab));
+            dispatch(updateVocabListenCurIndex(inputList.findIndex(({ id }) => id === vocab.id)));
+            refAudio.current?.play(`${Domain}/data/${scriptParsed.hash}/vocab_pronunciations/${vocab.pronunciation}`, speed);
         }
     };
     const fnDebouncedTypeVocab = useCallback(
         debounce((value) => {
             if (inputList.length > 0) {
-                const curSentenceID = refState.current.matchingVocab;
-                const curSentence = inputList.find(({ id }) => id === curSentenceID);
-                if (curSentence) {
-                    const text = curSentence.text.split(" | ")[0];
+                const curVocab = refState.current.curVocab;
+                if (curVocab) {
+                    const text = curVocab.text.split(" | ")[0];
                     const textParts = text.split("/");
                     if (textParts[0] === value) {
                         setMaskClass("mask invisible");
-                    } else {
-                        setMaskClass("mask");
                     }
                 }
             }
@@ -131,6 +126,7 @@ const Index = () => {
             }
             if (event.code === "Enter") {
                 if (refState.current.isFocused) {
+                    event.preventDefault();
                     setMaskClass("mask");
                     handlersPlayForward();
                 }
@@ -145,19 +141,17 @@ const Index = () => {
                 handlerPlaySpeedDown();
             }
         };
-        if (inputList.length > 0) {
-            const first = inputList[0];
-            fnPlayTo(first, 1);
-            dispatch(updateVocabMatchListen(matchingVocab ? matchingVocab : first.id));
-        }
         window.addEventListener("keydown", onKeyDownHandler);
+        if (curVocab) {
+            fnPlayTo(curVocab, 1);
+        }
         return () => {
             window.removeEventListener("keydown", onKeyDownHandler);
         };
     }, []);
     useEffect(() => {
-        refState.current = { matchingVocab, playSpeed, maskClass, isFocused };
-    }, [matchingVocab, playSpeed, maskClass, isFocused]);
+        refState.current = { curVocab, curVocabIndex, playSpeed, maskClass, isFocused };
+    }, [curVocab, curVocabIndex, playSpeed, maskClass, isFocused]);
     return (
         <Layout className="main-inner" id="vocab-listen-index">
             <div className="main-inner-item-aside"></div>
@@ -178,13 +172,13 @@ const Index = () => {
                         </Button>
                     </div>
                     <div className="progress">
-                        <Progress percent={Math.ceil(((curVocabIndex === 0 ? 0 : curVocabIndex + 1) / inputList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
+                        <Progress percent={Math.ceil(((curVocabIndex + 1) / inputList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
                     </div>
                 </section>
                 <section id="display">
                     {curVocab && (
                         <>
-                            <div className="img">{curVocab.image && <img src={curVocab.image} />}</div>
+                            <div className="img">{curVocab.image && <img src={`${Domain}/data/${scriptParsed.hash}/vocab_images/${curVocab.image}`} />}</div>
                             <div className="text">{curVocab.text}</div>
                             <div className={maskClass}></div>
                         </>

@@ -17,14 +17,14 @@ const Index = () => {
     const data = useSelector((state: RootState) => state.data);
     const scriptParsed = useSelector((state: RootState) => state.data.scriptParsed);
     const videoURL = useSelector((state: RootState) => state.data.videoURL);
-    const firstSentenceID = scriptParsed.sentences.length > 0 ? scriptParsed.sentences[0].id : 0;
-    const matchingSentence = useSelector((state: RootState) => (state.status.videoMatchingSentence ? state.status.videoMatchingSentence : firstSentenceID));
+    const matchingSentence = useSelector((state: RootState) => state.status.videoMatchingSentence);
     const matchingSentencePos = useSelector((state: RootState) => state.status.videoMatchingSentencePos);
+    const [curSentence, setCurSentence] = useState(() => (matchingSentence === 0 ? scriptParsed.sentences[0] : scriptParsed.sentences.find(({ id }) => id === matchingSentence)));
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [playSpeed, setPlaySpeed] = useState<number>(1);
     const refScrollbar = useRef<Scrollbars>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
-    const refState = useRef({ matchingSentence, playSpeed });
+    const refState = useRef({ curSentence, playSpeed });
     const handlersPanelPlay = () => {
         if (refVideo.current && videoURL) {
             const isPaused = refVideo.current.paused;
@@ -41,8 +41,7 @@ const Index = () => {
     const handlersPanelPlayAgain = () => {
         if (refVideo.current && videoURL) {
             const playSpeed = refState.current.playSpeed;
-            const curSentenceID = refState.current.matchingSentence;
-            const curSentence = scriptParsed.sentences.find(({ id }) => id === curSentenceID);
+            const curSentence = refState.current.curSentence;
             if (curSentence !== undefined && fnIsSRTTime(curSentence.startTime)) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(curSentence.startTime);
                 refVideo.current.playbackRate = playSpeed;
@@ -54,30 +53,32 @@ const Index = () => {
     const handlersPanelPlayBackward = () => {
         if (refVideo.current && videoURL) {
             const playSpeed = refState.current.playSpeed;
-            const curSentenceID = refState.current.matchingSentence;
-            const curSentenceIndex = scriptParsed.sentences.findIndex(({ id }) => id === curSentenceID);
+            const curSentenceID = refState.current.curSentence?.id;
+            const curSentenceIndex = curSentenceID === 0 ? 0 : scriptParsed.sentences.findIndex(({ id }) => id === curSentenceID);
             const prevSentence = scriptParsed.sentences[curSentenceIndex - 1];
             if (prevSentence !== undefined && fnIsSRTTime(prevSentence.startTime)) {
-                dispatch(updateVideoMatchingSentence(prevSentence.id));
                 refVideo.current.currentTime = fnSRTTimeToFloat(prevSentence.startTime);
                 refVideo.current.playbackRate = playSpeed;
                 refVideo.current.play();
+                setCurSentence(prevSentence);
                 setPlayButton(<PauseCircleOutlined />);
+                dispatch(updateVideoMatchingSentence(prevSentence.id));
             }
         }
     };
     const handlersPanelPlayForward = () => {
         if (refVideo.current && videoURL) {
             const playSpeed = refState.current.playSpeed;
-            const curSentenceID = refState.current.matchingSentence;
-            const curSentenceIndex = scriptParsed.sentences.findIndex(({ id }) => id === curSentenceID);
+            const curSentenceID = refState.current.curSentence?.id;
+            const curSentenceIndex = curSentenceID === 0 ? 0 : scriptParsed.sentences.findIndex(({ id }) => id === curSentenceID);
             const nextSentence = scriptParsed.sentences[curSentenceIndex + 1];
             if (nextSentence !== undefined && fnIsSRTTime(nextSentence.startTime)) {
-                dispatch(updateVideoMatchingSentence(nextSentence.id));
                 refVideo.current.currentTime = fnSRTTimeToFloat(nextSentence.startTime);
                 refVideo.current.playbackRate = playSpeed;
                 refVideo.current.play();
+                setCurSentence(nextSentence);
                 setPlayButton(<PauseCircleOutlined />);
+                dispatch(updateVideoMatchingSentence(nextSentence.id));
             }
         }
     };
@@ -85,8 +86,7 @@ const Index = () => {
         if (refVideo.current && videoURL) {
             const playSpeed = strip(refState.current.playSpeed + 0.2);
             const playSpeedMax = playSpeed > 2 ? 2 : playSpeed;
-            const curSentenceID = refState.current.matchingSentence;
-            const curSentence = scriptParsed.sentences.find(({ id }) => id === curSentenceID);
+            const curSentence = refState.current.curSentence;
             if (curSentence !== undefined && fnIsSRTTime(curSentence.startTime)) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(curSentence.startTime);
                 refVideo.current.playbackRate = playSpeedMax;
@@ -100,8 +100,7 @@ const Index = () => {
         if (refVideo.current && videoURL) {
             const playSpeed = strip(refState.current.playSpeed - 0.2);
             const playSpeedMax = playSpeed === 0 ? 0.2 : playSpeed;
-            const curSentenceID = refState.current.matchingSentence;
-            const curSentence = scriptParsed.sentences.find(({ id }) => id === curSentenceID);
+            const curSentence = refState.current.curSentence;
             if (curSentence !== undefined && fnIsSRTTime(curSentence.startTime)) {
                 refVideo.current.currentTime = fnSRTTimeToFloat(curSentence.startTime);
                 refVideo.current.playbackRate = playSpeedMax;
@@ -116,11 +115,14 @@ const Index = () => {
             refVideo.current.currentTime = 0;
             refVideo.current.pause();
             setPlayButton(<PlayCircleOutlined />);
+            if (scriptParsed.sentences.length > 0) {
+                const first = scriptParsed.sentences[0];
+                setCurSentence(first);
+                dispatch(updateVideoMatchingSentence(first.id));
+            }
         }
-        dispatch(updateVideoMatchingSentence(firstSentenceID));
     };
     const handlersVideoEnded = () => {
-        dispatch(updateVideoMatchingSentence(firstSentenceID));
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoPlay = async (e: any) => {
@@ -130,9 +132,8 @@ const Index = () => {
         setPlayButton(<PlayCircleOutlined />);
     };
     const handlersVideoTimeUpdate = (e: any) => {
-        const cur = scriptParsed.sentences.find(({ id }) => id === matchingSentence);
-        if (cur !== undefined) {
-            if (e.target.currentTime >= fnSRTTimeToFloat(cur.endTime)) {
+        if (curSentence !== undefined) {
+            if (e.target.currentTime >= fnSRTTimeToFloat(curSentence.endTime)) {
                 refVideo.current?.pause();
                 setPlayButton(<PlayCircleOutlined />);
             }
@@ -198,12 +199,15 @@ const Index = () => {
         const videoElem = refVideo.current;
         const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {
             if (event.code === "Numpad0") {
+                event.preventDefault();
                 handlersPanelPlayAgain();
             }
             if (event.code === "ArrowLeft") {
+                event.preventDefault();
                 handlersPanelPlayBackward();
             }
             if (event.code === "ArrowRight") {
+                event.preventDefault();
                 handlersPanelPlayForward();
             }
             if (event.code === "ControlRight") {
@@ -219,7 +223,6 @@ const Index = () => {
                 handlersPlaySpeedDown();
             }
         };
-        const curSentence = scriptParsed.sentences.find(({ id }) => id === matchingSentence);
         if (curSentence !== undefined && curSentence.startTime) {
             if (videoElem) {
                 videoElem.load();
@@ -238,8 +241,8 @@ const Index = () => {
         };
     }, []);
     useEffect(() => {
-        refState.current = { matchingSentence, playSpeed };
-    }, [matchingSentence, playSpeed]);
+        refState.current = { curSentence, playSpeed };
+    }, [curSentence, playSpeed]);
     return (
         <Layout id="following-index" className="main-inner">
             <div className="main-inner-item-aside">
@@ -260,7 +263,7 @@ const Index = () => {
                     <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
                 </section>
                 <Scrollbars ref={refScrollbar}>
-                    <Script scriptParsed={scriptParsed} curSentenceID={matchingSentence} onRendered={handlersRenderedCallback} />
+                    <Script scriptParsed={scriptParsed} curSentenceID={curSentence?.id} onRendered={handlersRenderedCallback} />
                 </Scrollbars>
             </div>
         </Layout>

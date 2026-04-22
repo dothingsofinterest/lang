@@ -46,3 +46,18 @@ export const fnBase64ToBlob = (base64: string, mimeType: string) => {
     }
     return new Blob(byteArrays, { type: mimeType });
 };
+
+/**
+ * Randomly get indexes excluding certain one from a list
+ */
+export const fnGetRandomIndexes = (excludedItem: any, list: any[], count: number) => {
+    const forCount = count > list.length ? list.length : count;
+    const result: any[] = [excludedItem];
+    for (let i = 0; i < forCount - 1; i++) {
+        const excludedID = result.map((r) => r.id);
+        const filterList = list.filter((item) => !excludedID.includes(item.id));
+        const randomIndex = Math.floor(Math.random() * (filterList.length - 1));
+        result.push(filterList[randomIndex]);
+    }
+    return fnShuffle(result);
+};

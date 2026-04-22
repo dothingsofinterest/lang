@@ -3,6 +3,7 @@ import { ScriptParsed } from "../../types/Data";
 import ScriptFooter from "./ScriptFooter";
 import Vocab from "./Vocab";
 import Audio, { AudioRef } from "../Public/Audio";
+import { Domain } from "../../settings.js";
 import "./Script.scss";
 
 interface ScriptProps {
@@ -13,7 +14,6 @@ interface ScriptProps {
 }
 
 const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFooter = false, onRendered }) => {
-    const vocabSorted = [...scriptParsed.vocab].sort((a, b) => a.text.split(" | ")[0].length - b.text.split(" | ")[0].length);
     const refArticle = useRef<HTMLDivElement>(null);
     const refSentences = useRef<HTMLElement[]>([]);
     const refAudio = useRef<AudioRef>(null);
@@ -42,12 +42,7 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
         }
     };
     useEffect(() => {
-        fnScroll();
-        return () => {
-            if (refAudio.current) {
-                refAudio.current.pause();
-            }
-        };
+        return () => refAudio.current?.pause();
     }, []);
     useEffect(() => {
         fnScroll();
@@ -68,7 +63,7 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
                                             {paragraph.sentences.map((sentence) => {
                                                 return (
                                                     <span ref={(el) => el && (refSentences.current[sentence.id] = el)} className={`point${curSentenceID === sentence.id ? " matching" : ""}`} key={sentence.id}>
-                                                        {sentence.texts.length > 0 && <Vocab text={sentence.texts[0].split("\n")[0]} vocabList={vocabSorted} onClick={handlerPlayAudio} />}
+                                                        {sentence.texts.length > 0 && <Vocab text={sentence.texts[0].split("\n")[0]} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/vocab_pronunciations/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}
                                                     </span>
                                                 );
                                             })}
@@ -84,7 +79,7 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
                                                             return (
                                                                 <li key={n}>
                                                                     <i className="role">{paragraph.roles[n]}: </i>
-                                                                    <span>{<Vocab text={partOfSentence} vocabList={vocabSorted} onClick={handlerPlayAudio} />}</span>
+                                                                    <span>{<Vocab text={partOfSentence} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/vocab_pronunciations/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}</span>
                                                                 </li>
                                                             );
                                                         })}

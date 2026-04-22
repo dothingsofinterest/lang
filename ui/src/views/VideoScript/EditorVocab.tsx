@@ -311,7 +311,7 @@ const EditorVocab: React.FC<EditorVocabProps> = ({ hash, list, open, onClose, on
             const vocab = list.find(({ id }) => id === vocabID);
             if (vocab && vocab.text && vocab.pronunciation) {
                 setVocab({ ...defaultVocab, id: vocab.id, text: vocab.text, type: vocab.type ? vocab.type : 7 });
-                refAudio.current?.play(`${Domain}/data/${hash}/vocab_pronunciations/${vocab.pronunciation}`, 1);
+                refAudio.current?.play(`${Domain}/data/${hash}/vocab_pronunciations/${vocab.pronunciation}?${Date.now()}`, 1);
             }
         }
     };

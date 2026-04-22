@@ -113,6 +113,7 @@ export const fnParseVocabCheckVerbs = (base: string, variants: string[]): string
 
 export const fnGetFormattedData = (hash: string, script: DataScript): ScriptParsed => {
     const data: ScriptParsed = {
+        hash: hash,
         title: script.title,
         vocab: [],
         grammar: script.grammar,
@@ -125,7 +126,6 @@ export const fnGetFormattedData = (hash: string, script: DataScript): ScriptPars
             grammar: [],
         },
     };
-    const staticPrefix = `${Domain}/data/${hash}`;
     script.paragraphs.forEach((v: DataParagraph) => {
         data.sentences.push(...v.sentences);
     });
@@ -150,7 +150,7 @@ export const fnGetFormattedData = (hash: string, script: DataScript): ScriptPars
             data.scenes[0].paragraphs.push(v);
         });
     }
-    data.vocab = script.vocab.map((v) => ({ ...v, image: v.image ? `${staticPrefix}/vocab_images/${v.image}` : ``, pronunciation: `${staticPrefix}/vocab_pronunciations/${v.pronunciation}` }));
+    data.vocab = [...script.vocab].sort((a, b) => a.text.split(" | ")[0].length - b.text.split(" | ")[0].length);
     script.grammar.forEach((grammarItem) => {
         grammarItem.examples.forEach((example) => {
             const text = [];

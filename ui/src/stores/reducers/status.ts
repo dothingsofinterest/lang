@@ -1,15 +1,35 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Vocab as DataVocab } from "../../types/Data";
 
-const initialState: Record<string, number> = {
+type initialState = {
+    videoScriptCurrentTime: number;
+    videoScriptWaveformZoom: number;
+    videoMatchingSentence: number;
+    videoMatchingSentencePos: number;
+    videoExampleRecognMatching: number;
+    videoExampleTranslationMatching: number;
+    vocabListenCur: DataVocab | null;
+    vocabListenCurIndex: number;
+    vocabMatchMeaning: number;
+    vocabWatchCur: DataVocab | null;
+    vocabWatchCurIndex: number;
+    loadingUploadVideo: number;
+    loadingImportData: number;
+    loadingVideoScriptIndexWaver: number;
+};
+
+const initialState: initialState = {
     videoScriptCurrentTime: 0,
     videoScriptWaveformZoom: 0,
     videoMatchingSentence: 0,
     videoMatchingSentencePos: 0,
     videoExampleRecognMatching: 0,
     videoExampleTranslationMatching: 0,
-    vocabMatchListen: 0,
+    vocabListenCur: null,
+    vocabListenCurIndex: 0,
     vocabMatchMeaning: 0,
-    vocabMatchWatch: 0,
+    vocabWatchCur: null,
+    vocabWatchCurIndex: 0,
     loadingUploadVideo: 0,
     loadingImportData: 0,
     loadingVideoScriptIndexWaver: 0,
@@ -37,14 +57,20 @@ const slice = createSlice({
         updateVideoScriptWaveformZoom: (state, action: PayloadAction<number>) => {
             state.videoScriptWaveformZoom = action.payload;
         },
-        updateVocabMatchListen: (state, action: PayloadAction<number>) => {
-            state.vocabMatchListen = action.payload;
+        updateVocabListenCur: (state, action: PayloadAction<DataVocab>) => {
+            state.vocabListenCur = action.payload;
+        },
+        updateVocabListenCurIndex: (state, action: PayloadAction<number>) => {
+            state.vocabListenCurIndex = action.payload;
         },
         updateVocabMatchMeaning: (state, action: PayloadAction<number>) => {
             state.vocabMatchMeaning = action.payload;
         },
-        updateVocabMatchWatch: (state, action: PayloadAction<number>) => {
-            state.vocabMatchWatch = action.payload;
+        updateVocabWatchCur: (state, action: PayloadAction<DataVocab>) => {
+            state.vocabWatchCur = action.payload;
+        },
+        updateVocabWatchCurIndex: (state, action: PayloadAction<number>) => {
+            state.vocabWatchCurIndex = action.payload;
         },
         updateLoadingUploadVideo: (state, action: PayloadAction<number>) => {
             state.loadingUploadVideo = action.payload;
@@ -58,6 +84,6 @@ const slice = createSlice({
     },
 });
 
-export const { updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoExampleRecognMatching, updateVideoExampleTranslationMatching, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabMatchListen, updateVocabMatchMeaning, updateVocabMatchWatch, updateLoadingUploadVideo, updateLoadingImportData, updateLoadingVideoScriptIndexWaver } = slice.actions;
+export const { updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoExampleRecognMatching, updateVideoExampleTranslationMatching, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabListenCur, updateVocabListenCurIndex, updateVocabMatchMeaning, updateVocabWatchCur, updateVocabWatchCurIndex, updateLoadingUploadVideo, updateLoadingImportData, updateLoadingVideoScriptIndexWaver } = slice.actions;
 
 export default slice.reducer;
