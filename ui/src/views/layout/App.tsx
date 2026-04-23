@@ -1,11 +1,13 @@
 import Guard from "./Guard";
-import Menu from "./Menu";
+import List from "./List";
+import Nav from "./Nav";
 import Main from "./Main";
 
 const App = () => {
     return (
         <Guard>
-            <Menu />
+            <Nav />
+            <List />
             <Main />
         </Guard>
     );

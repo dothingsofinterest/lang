@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateLoadingUploadVideo, updateLoadingImportData } from "../../stores/reducers/status";
 import { updateVideoURL, updateVideoAudioWaverURL, updateVideoAudioURL } from "../../stores/reducers/video";
 import { useParams } from "react-router-dom";
-import "./Menu.scss";
+import "./List.scss";
 
 interface RouteItem {
     url: string;
@@ -24,24 +24,10 @@ interface ListParams {
     keyword?: string;
 }
 
-const routes: RouteItem[] = [
-    { url: "/settings", icon: <SettingFilled /> },
-    { url: "/video-script", icon: <ProfileFilled /> },
-    { url: "/following", icon: <ReadFilled /> },
-    { url: "/vocab-listen", icon: <CustomerServiceFilled /> },
-    { url: "/vocab-watch", icon: <EyeFilled /> },
-    { url: "/vocab-meaning", icon: <BulbFilled /> },
-    { url: "/example-recogn", icon: <ExpandOutlined /> },
-    { url: "/example-translation", icon: <TranslationOutlined /> },
-    { url: "/impression", icon: <EditFilled /> },
-];
-const Menu = () => {
+const List = () => {
     const { id } = useParams();
     const videoId = Number(id);
-    console.log("id22", id);
-    const location = useLocation();
     const dispatch = useDispatch();
-    console.log(location);
     const [list, setList] = useState<DataVideo[]>([]);
     const [listParams, setListParams] = useState<ListParams>({ page: 1, pageSize: 10, totalPages: 0 });
     const handlerImportVideo = async (file: any) => {
@@ -83,13 +69,13 @@ const Menu = () => {
         return () => {};
     }, []);
     return (
-        <aside id="menu">
+        <aside id="list">
             <Upload className="create-btn" showUploadList={false} beforeUpload={handlerImportVideo}>
                 <Button icon={<PlusCircleOutlined />} />
             </Upload>
             {list.map((item, key) => {
                 return (
-                    <Link to={`/read/${item.id}`} key={key} className={item.id === videoId ? `menu-item active` : `menu-item`}>
+                    <Link to={`/read/${item.id}`} key={key} className={item.id === videoId ? `item active` : `item`}>
                         {item.name}
                     </Link>
                 );
@@ -98,4 +84,4 @@ const Menu = () => {
     );
 };
 
-export default Menu;
+export default List;

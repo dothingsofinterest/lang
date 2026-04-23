@@ -3,14 +3,13 @@ import Login from "../views/Public/Login";
 import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
 // import Settings from "../views/Settings/Index";
-// import VideoScript from "../views/VideoScript/Index";
-import Following from "../views/Read/Index";
+import Read from "../views/Read/Index";
+import Script from "../views/Script/Index";
 // import VocabListen from "../views/VocabListen/Index";
 // import VocabWatch from "../views/VocabWatch/Index";
 import VocabMeaning from "../views/VocabMeaning/Index";
 import ExampleRecogn from "../views/Example/ExampleRecogn";
 import ExampleTranslation from "../views/Example/ExampleTranslation";
-import Impression from "../views/Impression/Index";
 
 const routes = [
     {
@@ -29,13 +28,13 @@ const routes = [
             //     path: "settings",
             //     element: <Settings />,
             // },
-            // {
-            //     path: "video-script",
-            //     element: <VideoScript />,
-            // },
+            {
+                path: "script/:id",
+                element: <Script />,
+            },
             {
                 path: "read/:id",
-                element: <Following />,
+                element: <Read />,
             },
             // {
             //     path: "vocab-listen",
@@ -56,10 +55,6 @@ const routes = [
             {
                 path: "example-translation",
                 element: <ExampleTranslation />,
-            },
-            {
-                path: "impression",
-                element: <Impression />,
             },
         ],
     },

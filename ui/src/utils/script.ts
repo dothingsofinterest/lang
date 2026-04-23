@@ -110,75 +110,75 @@ export const fnParseVocabCheckVerbs = (base: string, variants: string[]): string
     return "";
 };
 
-export const fnGetFormattedData = (hash: string, script: DataScript): ScriptParsed => {
-    const data: ScriptParsed = {
-        hash: hash,
-        title: script.title,
-        vocab: [],
-        grammar: script.grammar,
-        exampleRecogn: [],
-        exampleTranslation: [],
-        scenes: [],
-        sentences: [],
-        impression: {
-            content: "",
-            grammar: [],
-        },
-    };
-    script.paragraphs.forEach((v: DataParagraph) => {
-        data.sentences.push(...v.sentences);
-    });
-    const emptyScene = script.paragraphs.find(({ scene }) => scene === "");
-    if (emptyScene === undefined) {
-        script.paragraphs.forEach((v: DataParagraph, k: number, a: DataParagraph[]) => {
-            const sceneItem = script.scenes.find(({ index }) => index === v.scene);
-            const sceneName = sceneItem ? sceneItem.value : `${v.scene}-${v.scene}`;
-            if (k === 0) {
-                data.scenes.push({ name: sceneName, paragraphs: [v] });
-            } else {
-                if (v.scene !== a[k - 1].scene) {
-                    data.scenes.push({ name: sceneName, paragraphs: [v] });
-                } else {
-                    data.scenes[data.scenes.length - 1].paragraphs.push(v);
-                }
-            }
-        });
-    } else {
-        data.scenes.push({ name: "", paragraphs: [] });
-        script.paragraphs.forEach((v: DataParagraph) => {
-            data.scenes[0].paragraphs.push(v);
-        });
-    }
-    data.vocab = [...script.vocab].sort((a, b) => a.definition.split(" | ")[0].length - b.definition.split(" | ")[0].length);
-    script.grammar.forEach((grammarItem) => {
-        grammarItem.examples.forEach((example) => {
-            const text = [];
-            const textArr = example.text.split("\n---\n");
-            if (textArr.length === 1) {
-                const exm = { text: ["", "", "", ""], type: example.type };
-                data.exampleRecogn.push(exm);
-                data.exampleTranslation.push(exm);
-            } else {
-                textArr[0] && text.push(...textArr[0].split("\n"));
-                textArr[1] && text.push(...textArr[1].split("\n"));
-                const exampleItem = { text, type: example.type };
-                if (Number(example.type) === 0 || Number(example.type) === 2) {
-                    data.exampleRecogn.push(exampleItem);
-                }
-                if (Number(example.type) === 1 || Number(example.type) === 2) {
-                    data.exampleTranslation.push(exampleItem);
-                }
-            }
-        });
-    });
-    data.impression = script.impression
-        ? script.impression
-        : {
-              content: "",
-              grammar: [],
-          };
-    return data;
-};
+// export const fnGetFormattedData = (hash: string, script: DataScript): ScriptParsed => {
+// const data: ScriptParsed = {
+//     hash: hash,
+//     title: script.title,
+//     vocab: [],
+//     // grammar: script.grammar,
+//     exampleRecogn: [],
+//     exampleTranslation: [],
+//     scenes: [],
+//     sentences: [],
+//     impression: {
+//         content: "",
+//         grammar: [],
+//     },
+// };
+// script.paragraphs.forEach((v: DataParagraph) => {
+//     data.sentences.push(...v.sentences);
+// });
+// const emptyScene = script.paragraphs.find(({ scene }) => scene === "");
+// if (emptyScene === undefined) {
+//     script.paragraphs.forEach((v: DataParagraph, k: number, a: DataParagraph[]) => {
+//         const sceneItem = script.scenes.find(({ index }) => index === v.scene);
+//         const sceneName = sceneItem ? sceneItem.value : `${v.scene}-${v.scene}`;
+//         if (k === 0) {
+//             data.scenes.push({ name: sceneName, paragraphs: [v] });
+//         } else {
+//             if (v.scene !== a[k - 1].scene) {
+//                 data.scenes.push({ name: sceneName, paragraphs: [v] });
+//             } else {
+//                 data.scenes[data.scenes.length - 1].paragraphs.push(v);
+//             }
+//         }
+//     });
+// } else {
+//     data.scenes.push({ name: "", paragraphs: [] });
+//     script.paragraphs.forEach((v: DataParagraph) => {
+//         data.scenes[0].paragraphs.push(v);
+//     });
+// }
+// data.vocab = [...script.vocab].sort((a, b) => a.definition.split(" | ")[0].length - b.definition.split(" | ")[0].length);
+// script.grammar.forEach((grammarItem) => {
+//     grammarItem.examples.forEach((example) => {
+//         const text = [];
+//         const textArr = example.text.split("\n---\n");
+//         if (textArr.length === 1) {
+//             const exm = { text: ["", "", "", ""], type: example.type };
+//             data.exampleRecogn.push(exm);
+//             data.exampleTranslation.push(exm);
+//         } else {
+//             textArr[0] && text.push(...textArr[0].split("\n"));
+//             textArr[1] && text.push(...textArr[1].split("\n"));
+//             const exampleItem = { text, type: example.type };
+//             if (Number(example.type) === 0 || Number(example.type) === 2) {
+//                 data.exampleRecogn.push(exampleItem);
+//             }
+//             if (Number(example.type) === 1 || Number(example.type) === 2) {
+//                 data.exampleTranslation.push(exampleItem);
+//             }
+//         }
+//     });
+// });
+// data.impression = script.impression
+//     ? script.impression
+//     : {
+//           content: "",
+//           grammar: [],
+//       };
+// return data;
+// };
 
 export const fnFloatToSRTTime = (floatSeconds: number): string => {
     // 计算小时、分钟、秒数和毫秒
@@ -245,8 +245,8 @@ export const fnValidateVideoScript = (data: any): boolean => {
 export const fnGetMaxTimeFromSentences = (sentences: Sentence[]): number => {
     const timeArr: number[] = [];
     sentences.forEach((v) => {
-        timeArr.push(fnSRTTimeToFloat(v.startTime));
-        timeArr.push(fnSRTTimeToFloat(v.endTime));
+        timeArr.push(v.startTime);
+        timeArr.push(v.endTime);
     });
     return Math.max(...timeArr);
 };
@@ -278,13 +278,13 @@ export const fnDealScenes = (script: DataScript) => {
 export const fnDealParagraphs = (script: DataScript) => {
     let i = 1;
     let j = 1;
-    return script.paragraphs.map((paragraph: DataParagraph) => {
-        return { ...paragraph, id: i++, sentences: paragraph.sentences.map((sentence) => ({ ...sentence, id: j++ })) };
-    });
+    // return script.paragraphs.map((paragraph: DataParagraph) => {
+    //     return { ...paragraph, id: i++, sentences: paragraph.sentences.map((sentence) => ({ ...sentence, id: j++ })) };
+    // });
 };
 
 // Temporary
 export const fnDealVocab = (script: DataScript) => {
-    let i = 1;
-    return script.vocab.map((v: DataVocab) => ({ ...v, id: i++ }));
+    // let i = 1;
+    // return script.vocab.map((v: DataVocab) => ({ ...v, id: i++ }));
 };

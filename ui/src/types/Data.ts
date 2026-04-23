@@ -12,14 +12,20 @@ export interface PayloadScript {
 }
 
 /* Data */
+// export interface Script {
+//     title: string;
+//     roles: string[];
+//     scenes: Scene[];
+//     paragraphs: Paragraph[];
+//     vocab: Vocab[];
+//     grammar: Grammar[];
+//     impression: Impression;
+// }
 export interface Script {
+    id: number;
     title: string;
-    roles: string[];
-    scenes: Scene[];
-    paragraphs: Paragraph[];
-    vocab: Vocab[];
-    grammar: Grammar[];
-    impression: Impression;
+    scenes: SceneBlock[];
+    sentences: Sentence[];
 }
 export interface ScriptParsed {
     hash: string;
@@ -48,8 +54,8 @@ export interface Paragraph {
 }
 export interface Sentence {
     id: number;
-    startTime: string;
-    endTime: string;
+    startTime: number;
+    endTime: number;
     texts: string[];
 }
 export interface Video {

@@ -16,6 +16,9 @@ type initialState = {
     loadingUploadVideo: number;
     loadingImportData: number;
     loadingVideoScriptIndexWaver: number;
+
+    readSentenceIndex: number;
+    readVideoCurrentTime: number;
 };
 
 const initialState: initialState = {
@@ -33,6 +36,9 @@ const initialState: initialState = {
     loadingUploadVideo: 0,
     loadingImportData: 0,
     loadingVideoScriptIndexWaver: 0,
+
+    readSentenceIndex: 0,
+    readVideoCurrentTime: 0,
 };
 
 const slice = createSlice({
@@ -81,9 +87,15 @@ const slice = createSlice({
         updateLoadingVideoScriptIndexWaver: (state, action: PayloadAction<number>) => {
             state.loadingVideoScriptIndexWaver = action.payload;
         },
+        updateReadSentenceIndex: (state, action: PayloadAction<number>) => {
+            state.readSentenceIndex = action.payload;
+        },
+        updateReadVideoCurrentTime: (state, action: PayloadAction<number>) => {
+            state.readVideoCurrentTime = action.payload;
+        },
     },
 });
 
-export const { updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoExampleRecognMatching, updateVideoExampleTranslationMatching, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabListenCur, updateVocabListenCurIndex, updateVocabMatchMeaning, updateVocabWatchCur, updateVocabWatchCurIndex, updateLoadingUploadVideo, updateLoadingImportData, updateLoadingVideoScriptIndexWaver } = slice.actions;
+export const { updateReadSentenceIndex, updateReadVideoCurrentTime, updateVideoMatchingSentence, updateVideoMatchingSentencePos, updateVideoExampleRecognMatching, updateVideoExampleTranslationMatching, updateVideoScriptCurrentTime, updateVideoScriptWaveformZoom, updateVocabListenCur, updateVocabListenCurIndex, updateVocabMatchMeaning, updateVocabWatchCur, updateVocabWatchCurIndex, updateLoadingUploadVideo, updateLoadingImportData, updateLoadingVideoScriptIndexWaver } = slice.actions;
 
 export default slice.reducer;

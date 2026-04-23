@@ -32,30 +32,24 @@ export const create = (req: Request, res: Response) => {
     }
     try {
         // prettier-ignore
-        const result = db.prepare(`
+        const result = db.prepare<[string, string, string , number]>(`
             INSERT INTO \`vocabulary\` 
-            (definition, speech, image, category) VALUES (?, ?, ?, ?)`
+            (definition, speech, image, category) VALUES (?, ?, ?, ?)`,
         ).run(
             value.definition, 
-            value.speech ?? null, 
-            value.image ?? null, 
-            value.category ?? 7
+            value.speech, 
+            value.image, 
+            value.category
         );
-        if (!result.lastInsertRowid) {
-            return res.status(200).json({
-                code: 0,
-                message: `Failed to create.`,
-            });
-        }
-        res.status(200).json({
-            code: 1,
-            message: `Succeed.`,
+        return res.status(200).json({
+            code: result.lastInsertRowid ? 1 : 0,
+            message: result.lastInsertRowid ? `Succeed` : `Failed`,
         });
     } catch (error: any) {
         LoggerSystem.error(error.message);
         return res.status(200).json({
             code: 0,
-            message: `Failed.`,
+            message: `Failed`,
         });
     }
 };
@@ -77,25 +71,26 @@ export const update = (req: Request, res: Response) => {
     }
     try {
         // prettier-ignore
-        db.prepare(`UPDATE \`vocabulary\` 
+        const result = db.prepare<[string, string, string , number, number]>(`
+            UPDATE \`vocabulary\` 
             SET definition = ?, speech = ?, image = ?, category = ?
             WHERE id = ?
         `).run(
             value.definition, 
-            value.speech ?? null, 
-            value.image ?? null, 
-            value.category ?? 7, 
+            value.speech, 
+            value.image, 
+            value.category, 
             value.id
         );
-        res.status(200).json({
-            code: 1,
-            message: `Succeed.`,
+        return res.status(200).json({
+            code: result.changes ? 1 : 0,
+            message: result.changes ? `Succeed` : `Failed`,
         });
     } catch (error: any) {
         LoggerSystem.error(error.message);
         return res.status(200).json({
             code: 0,
-            message: `Failed.`,
+            message: `Failed`,
         });
     }
 };
@@ -112,16 +107,16 @@ export const remove = (req: Request, res: Response) => {
         });
     }
     try {
-        db.prepare(`DELETE \`vocabulary\` WHERE id = ?`).run(value.id);
+        const result = db.prepare<[number]>("DELETE `vocabulary` WHERE id = ?").run(value.id);
         res.status(200).json({
-            code: 1,
-            message: `Succeed.`,
+            code: result.changes ? 1 : 0,
+            message: result.changes ? `Succeed` : `Failed`,
         });
     } catch (error: any) {
         LoggerSystem.error(error.message);
         return res.status(200).json({
             code: 0,
-            message: `Failed.`,
+            message: `Failed`,
         });
     }
 };
@@ -159,7 +154,7 @@ export const list = (req: Request, res: Response) => {
         const totalPages = Math.ceil((totalRow ? totalRow.total : 0) / pageSize);
 
         // prettier-ignore
-        const list = db.prepare<[...any[], number, number], Vocabulary>(`
+        const list = db.prepare<[...string[], number, number], Vocabulary>(`
             SELECT * FROM \`vocabulary\` ${SQLWhere.join("")} 
             ORDER BY id DESC 
             LIMIT ? 
@@ -168,7 +163,7 @@ export const list = (req: Request, res: Response) => {
 
         res.status(200).json({
             code: 1,
-            message: `Succeed.`,
+            message: `Succeed`,
             data: {
                 list,
                 listParams: {
@@ -183,7 +178,7 @@ export const list = (req: Request, res: Response) => {
         LoggerSystem.error(error.message);
         return res.status(200).json({
             code: 0,
-            message: `Failed.`,
+            message: `Failed`,
         });
     }
 };

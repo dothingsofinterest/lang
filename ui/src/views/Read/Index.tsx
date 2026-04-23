@@ -4,141 +4,140 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, DashboardOutlined, FastBackwardOutlined, PrinterOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { updateVideoMatchingSentence, updateVideoMatchingSentencePos } from "../../stores/reducers/status";
+import { updateReadSentenceIndex, updateReadVideoCurrentTime } from "../../stores/reducers/status";
 import { fnIsSRTTime, fnSRTTimeToFloat } from "../../utils/script";
 import ReactDOMServer from "react-dom/server";
 import { useParams } from "react-router-dom";
 import Script from "./Script";
-import printJS from "print-js";
+import { Script as DataScript } from "../../types/Data";
+import { Domain } from "../../settings.js";
 import { strip } from "../../utils/number";
 import "./Index.scss";
 
 const Index = () => {
     const { id } = useParams();
-    console.log("id", id);
+    const videoId = Number(id);
+    console.log(videoId);
     const dispatch = useDispatch();
-    const videoURL = useSelector((state: RootState) => state.video.videoURL);
-    const matchingSentence = useSelector((state: RootState) => state.status.videoMatchingSentence);
-    const matchingSentencePos = useSelector((state: RootState) => state.status.videoMatchingSentencePos);
-    // const [curSentence, setCurSentence] = useState(() => (matchingSentence === 0 ? scriptParsed.sentences[0] : scriptParsed.sentences.find(({ id }) => id === matchingSentence)));
+    const video = useSelector((state: RootState) => state.video);
+    const sentenceIndex = useSelector((state: RootState) => state.status.readSentenceIndex);
+    const videoCurrentTime = useSelector((state: RootState) => state.status.readVideoCurrentTime);
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [playSpeed, setPlaySpeed] = useState<number>(1);
+    const [script, setScript] = useState<DataScript>();
     const refScrollbar = useRef<Scrollbars>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
-    // const refState = useRef({ curSentence, playSpeed });
-    const handlersPanelPlay = () => {
-        // if (refVideo.current && videoURL) {
-        //     const isPaused = refVideo.current.paused;
-        //     if (isPaused) {
-        //         const playSpeed = refState.current.playSpeed;
-        //         refVideo.current.playbackRate = playSpeed;
-        //         refVideo.current.play();
-        //     } else {
-        //         refVideo.current.pause();
-        //     }
-        //     setPlayButton(isPaused ? <PauseCircleOutlined /> : <PlayCircleOutlined />);
-        // }
+    const refState = useRef({ playSpeed, sentenceIndex });
+    const handlerPanelPlay = () => {
+        if (refVideo.current) {
+            const isPaused = refVideo.current.paused;
+            if (isPaused) {
+                const playSpeed = refState.current.playSpeed;
+                refVideo.current.playbackRate = playSpeed;
+                refVideo.current.play();
+            } else {
+                refVideo.current.pause();
+            }
+            setPlayButton(isPaused ? <PauseCircleOutlined /> : <PlayCircleOutlined />);
+        }
     };
-    const handlersPanelPlayAgain = () => {
-        // if (refVideo.current && videoURL) {
-        //     const playSpeed = refState.current.playSpeed;
-        //     const curSentence = refState.current.curSentence;
-        //     if (curSentence !== undefined && fnIsSRTTime(curSentence.startTime)) {
-        //         refVideo.current.currentTime = fnSRTTimeToFloat(curSentence.startTime);
-        //         refVideo.current.playbackRate = playSpeed;
-        //         refVideo.current.play();
-        //         setPlayButton(<PauseCircleOutlined />);
-        //     }
-        // }
+    const handlerPanelPlayAgain = () => {
+        if (refVideo.current) {
+            const playSpeed = refState.current.playSpeed;
+            const sentenceIndex = refState.current.sentenceIndex;
+            const curSentence = script?.sentences[sentenceIndex];
+            if (curSentence && curSentence.startTime) {
+                refVideo.current.currentTime = curSentence.startTime;
+                refVideo.current.playbackRate = playSpeed;
+                refVideo.current.play();
+                setPlayButton(<PauseCircleOutlined />);
+            }
+        }
     };
-    const handlersPanelPlayBackward = () => {
-        // if (refVideo.current && videoURL) {
-        //     const playSpeed = refState.current.playSpeed;
-        //     const curSentenceID = refState.current.curSentence?.id;
-        //     const curSentenceIndex = curSentenceID === 0 ? 0 : scriptParsed.sentences.findIndex(({ id }) => id === curSentenceID);
-        //     const prevSentence = scriptParsed.sentences[curSentenceIndex - 1];
-        //     if (prevSentence !== undefined && fnIsSRTTime(prevSentence.startTime)) {
-        //         refVideo.current.currentTime = fnSRTTimeToFloat(prevSentence.startTime);
-        //         refVideo.current.playbackRate = playSpeed;
-        //         refVideo.current.play();
-        //         setCurSentence(prevSentence);
-        //         setPlayButton(<PauseCircleOutlined />);
-        //         dispatch(updateVideoMatchingSentence(prevSentence.id));
-        //     }
-        // }
+    const handlerPanelPlayBackward = () => {
+        if (refVideo.current) {
+            const playSpeed = refState.current.playSpeed;
+            const sentenceIndex = refState.current.sentenceIndex;
+            const prevSentence = script?.sentences[sentenceIndex - 1];
+            if (prevSentence && prevSentence.startTime) {
+                refVideo.current.currentTime = prevSentence.startTime;
+                refVideo.current.playbackRate = playSpeed;
+                refVideo.current.play();
+                setPlayButton(<PauseCircleOutlined />);
+                dispatch(updateReadSentenceIndex(sentenceIndex - 1));
+            }
+        }
     };
-    const handlersPanelPlayForward = () => {
-        // if (refVideo.current && videoURL) {
-        //     const playSpeed = refState.current.playSpeed;
-        //     const curSentenceID = refState.current.curSentence?.id;
-        //     const curSentenceIndex = curSentenceID === 0 ? 0 : scriptParsed.sentences.findIndex(({ id }) => id === curSentenceID);
-        //     const nextSentence = scriptParsed.sentences[curSentenceIndex + 1];
-        //     if (nextSentence !== undefined && fnIsSRTTime(nextSentence.startTime)) {
-        //         refVideo.current.currentTime = fnSRTTimeToFloat(nextSentence.startTime);
-        //         refVideo.current.playbackRate = playSpeed;
-        //         refVideo.current.play();
-        //         setCurSentence(nextSentence);
-        //         setPlayButton(<PauseCircleOutlined />);
-        //         dispatch(updateVideoMatchingSentence(nextSentence.id));
-        //     }
-        // }
+    const handlerPanelPlayForward = () => {
+        if (refVideo.current) {
+            const playSpeed = refState.current.playSpeed;
+            const sentenceIndex = refState.current.sentenceIndex;
+            const nextSentence = script?.sentences[sentenceIndex + 1];
+            if (nextSentence && nextSentence.startTime) {
+                refVideo.current.currentTime = nextSentence.startTime;
+                refVideo.current.playbackRate = playSpeed;
+                refVideo.current.play();
+                setPlayButton(<PauseCircleOutlined />);
+                dispatch(updateReadSentenceIndex(sentenceIndex + 1));
+            }
+        }
     };
-    const handlersPlaySpeedUp = () => {
-        // if (refVideo.current && videoURL) {
-        //     const playSpeed = strip(refState.current.playSpeed + 0.2);
-        //     const playSpeedMax = playSpeed > 2 ? 2 : playSpeed;
-        //     const curSentence = refState.current.curSentence;
-        //     if (curSentence !== undefined && fnIsSRTTime(curSentence.startTime)) {
-        //         refVideo.current.currentTime = fnSRTTimeToFloat(curSentence.startTime);
-        //         refVideo.current.playbackRate = playSpeedMax;
-        //         refVideo.current.play();
-        //         setPlaySpeed(playSpeedMax);
-        //         setPlayButton(<PauseCircleOutlined />);
-        //     }
-        // }
+    const handlerPlaySpeedUp = () => {
+        if (refVideo.current) {
+            const playSpeed = strip(refState.current.playSpeed + 0.2);
+            const playSpeedMax = playSpeed > 2 ? 2 : playSpeed;
+            const sentenceIndex = refState.current.sentenceIndex;
+            const curSentence = script?.sentences[sentenceIndex + 1];
+            if (curSentence && curSentence.startTime) {
+                refVideo.current.currentTime = curSentence.startTime;
+                refVideo.current.playbackRate = playSpeedMax;
+                refVideo.current.play();
+                setPlaySpeed(playSpeedMax);
+                setPlayButton(<PauseCircleOutlined />);
+            }
+        }
     };
-    const handlersPlaySpeedDown = () => {
-        // if (refVideo.current && videoURL) {
-        //     const playSpeed = strip(refState.current.playSpeed - 0.2);
-        //     const playSpeedMax = playSpeed === 0 ? 0.2 : playSpeed;
-        //     const curSentence = refState.current.curSentence;
-        //     if (curSentence !== undefined && fnIsSRTTime(curSentence.startTime)) {
-        //         refVideo.current.currentTime = fnSRTTimeToFloat(curSentence.startTime);
-        //         refVideo.current.playbackRate = playSpeedMax;
-        //         refVideo.current.play();
-        //         setPlaySpeed(playSpeedMax);
-        //         setPlayButton(<PauseCircleOutlined />);
-        //     }
-        // }
+    const handlerPlaySpeedDown = () => {
+        if (refVideo.current) {
+            const playSpeed = strip(refState.current.playSpeed - 0.2);
+            const playSpeedMin = playSpeed === 0 ? 0.2 : playSpeed;
+            const sentenceIndex = refState.current.sentenceIndex;
+            const curSentence = script?.sentences[sentenceIndex + 1];
+            if (curSentence && curSentence.startTime) {
+                refVideo.current.currentTime = curSentence.startTime;
+                refVideo.current.playbackRate = playSpeedMin;
+                refVideo.current.play();
+                setPlaySpeed(playSpeedMin);
+                setPlayButton(<PauseCircleOutlined />);
+            }
+        }
     };
-    const handlersPanelActiveClear = () => {
-        // if (refVideo.current && videoURL) {
-        //     refVideo.current.currentTime = 0;
-        //     refVideo.current.pause();
-        //     setPlayButton(<PlayCircleOutlined />);
-        //     if (scriptParsed.sentences.length > 0) {
-        //         const first = scriptParsed.sentences[0];
-        //         setCurSentence(first);
-        //         dispatch(updateVideoMatchingSentence(first.id));
-        //     }
-        // }
+    const handlerPanelActiveClear = () => {
+        if (refVideo.current) {
+            refVideo.current.currentTime = 0;
+            refVideo.current.pause();
+            setPlayButton(<PlayCircleOutlined />);
+            dispatch(updateReadSentenceIndex(0));
+            dispatch(updateReadVideoCurrentTime(0));
+        }
     };
-    const handlersVideoEnded = () => {
+    const handlerVideoEnded = () => {
         setPlayButton(<PlayCircleOutlined />);
     };
-    const handlersVideoPlay = async (e: any) => {
+    const handlerVideoPlay = async (e: any) => {
         setPlayButton(<PauseCircleOutlined />);
     };
-    const handlersVideoPause = async (e: any) => {
+    const handlerVideoPause = async (e: any) => {
         setPlayButton(<PlayCircleOutlined />);
     };
-    const handlersVideoTimeUpdate = (e: any) => {
-        // if (curSentence !== undefined) {
-        //     if (e.target.currentTime >= fnSRTTimeToFloat(curSentence.endTime)) {
-        //         refVideo.current?.pause();
-        //         setPlayButton(<PlayCircleOutlined />);
-        //     }
-        // }
+    const handlerVideoTimeUpdate = (e: any) => {
+        const curSentence = script?.sentences[sentenceIndex];
+        if (curSentence) {
+            if (e.target.currentTime >= curSentence.endTime) {
+                refVideo.current?.pause();
+                setPlayButton(<PlayCircleOutlined />);
+            }
+        }
     };
     const handlersRenderedCallback = (scrollTopPoint: number) => {
         const scrollTop = refScrollbar.current?.getScrollTop() || 0;
@@ -146,54 +145,15 @@ const Index = () => {
         dispatch(updateVideoMatchingSentencePos(scrollTopPointValue));
         refScrollbar.current?.scrollTop(scrollTopPointValue);
     };
-    const handlersPrint = () => {
-        // if (data.videoHash && data.videoURL) {
-        //     if (scriptParsed.title) {
-        //         const style1 = `
-        // 			@media print {
-        // 				@page { margin: 1cm 0.4cm; }
-        // 				* { outline: none; }
-        // 				html,body,p,h1,h2,h3,h4,h5,ul,ol,li { margin: 0; padding: 0; }
-        // 				body { margin: 0; padding: 0; font-size: 12pt; font-family: "Hiragino Sans GB", "Microsoft Yahei", "SimSun", Arial, "Helvetica Neue", Helvetica; color: #333; word-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
-        // 				ol, ul, li { list-style: none; }
-        // 				article { width: 100%; }
-        // 				article h1 { text-align: center; font-size: 14pt; font-weight: 900; line-height: 22pt; color: #000; margin: 2pt; }
-        // 				article .scene { background: #fff; color: #000;  padding: 10px 0 0; margin: 10px 20px; }
-        // 				article .scene h2 { text-align: center; font-size: 14pt; font-weight: 300; font-style: italic; line-height: 22pt; color: #000; margin: 0 6pt; }
-        // 				article .scene p { margin: 2pt 0; padding: 0; color: #000; font-size: 12pt; line-height: 24pt; }
-        // 				article .scene p.pure { text-indent: 26pt; }
-        //                 article .scene p.indent { text-indent: 26pt; }
-        // 				article .scene p:first-of-type  { border-top: 0; }
-        // 				article .scene p .point { padding: 0 2pt; }
-        // 				article .scene p .point:first-child { padding: 0; }
-        // 				article .scene p .role { font-style: normal; font-weight: 900; color: #000; }
-        // 				article .scene ul { margin: 0; padding: 2pt 0; color: #000; font-size: 10pt; line-height: 22pt; }
-        // 				article .scene ul .role { font-style: normal; font-weight: 900; color: #000; }
-        // 				article footer { height: 100%; }
-        // 				article footer #script-vocab,
-        // 				article footer #script-grammar { color: #000; padding: 6pt 0 0; margin: 16pt; background: #fff; }
-        // 				article footer #script-vocab .title,
-        // 				article footer #script-grammar .title { color: #000; margin: 0; line-height: 36pt; text-align: center; font-weight: 900; font-size: 12pt; }
-        // 				article footer #script-vocab .item,
-        // 				article footer #script-grammar .item { margin: 0; padding: 2pt 0; border-top: 1px dotted #ccc; font-size: 12pt; line-height: 24pt; }
-        // 				article footer #script-vocab .item { display: flex; justify-content: space-between; }
-        //                 article footer #script-vocab .item:nth-child(2),
-        // 				article footer #script-grammar .item:nth-child(2) { border-top: 0; }
-        //                 article footer #script-vocab .item .en { flex: 1; }
-        //                 article footer #script-vocab .item .pr,
-        //                 article footer #script-vocab .item .cn { flex: 0.5; }
-        //                 article footer #script-vocab .item .cn { font-size: 10pt; }
-        // 				article footer #script-vocab .item .index,
-        // 				article footer #script-grammars .item .index { font-weight: 300; margin-right: 1pt; font-style: normal; };
-        // 			}
-        // 		`;
-        //         const content = ReactDOMServer.renderToStaticMarkup(<Script scriptParsed={scriptParsed} showFooter={true} />);
-        //         printJS({ printable: `${content}`, type: "raw-html", style: style1 });
-        //     } else {
-        //         alert(`Data not be set`);
-        //     }
-        // } else {
-        //     alert("Please upload a video.");
+    const apiGetScript = async () => {
+        // const res = await videoList({
+        //     page: listParams.page,
+        //     pageSize: listParams.pageSize,
+        //     keyword: listParams.keyword,
+        // });
+        // if (res.code === 1) {
+        //     setList(res.data.list);
+        //     setListParams(res.data.listParams);
         // }
     };
     useEffect(() => {
@@ -201,27 +161,27 @@ const Index = () => {
         const videoKeyboardOnDownHandler = (event: KeyboardEvent) => {
             if (event.code === "Numpad0") {
                 event.preventDefault();
-                handlersPanelPlayAgain();
+                handlerPanelPlayAgain();
             }
             if (event.code === "ArrowLeft") {
                 event.preventDefault();
-                handlersPanelPlayBackward();
+                handlerPanelPlayBackward();
             }
             if (event.code === "ArrowRight") {
                 event.preventDefault();
-                handlersPanelPlayForward();
+                handlerPanelPlayForward();
             }
             if (event.code === "ControlRight") {
                 event.preventDefault();
-                handlersPanelPlay();
+                handlerPanelPlay();
             }
             if (event.code === "ArrowUp") {
                 event.preventDefault();
-                handlersPlaySpeedUp();
+                handlerPlaySpeedUp();
             }
             if (event.code === "ArrowDown") {
                 event.preventDefault();
-                handlersPlaySpeedDown();
+                handlerPlaySpeedDown();
             }
         };
         // if (curSentence !== undefined && curSentence.startTime) {
@@ -231,6 +191,7 @@ const Index = () => {
         //         refScrollbar.current?.scrollTop(matchingSentencePos);
         //     }
         // }
+        apiGetScript(); // April 24 6:45
         window.addEventListener("keydown", videoKeyboardOnDownHandler);
         return () => {
             window.removeEventListener("keydown", videoKeyboardOnDownHandler);
@@ -247,21 +208,19 @@ const Index = () => {
     return (
         <Layout id="read-index" className="main-inner">
             <div className="main-inner-item-aside">
-                <video style={{ width: "100%" }} id="video" onPlay={handlersVideoPlay} onPause={handlersVideoPause} onEnded={handlersVideoEnded} onTimeUpdate={handlersVideoTimeUpdate} ref={refVideo}>
-                    <source src={videoURL} type="video/mp4" /> Your browser does not support video tag.
+                <video key={videoId} style={{ width: "100%" }} id="video" onPlay={handlerVideoPlay} onPause={handlerVideoPause} onEnded={handlerVideoEnded} onTimeUpdate={handlerVideoTimeUpdate} ref={refVideo}>
+                    <source src={`${Domain}/database/${videoId}/video.mp4`} type="video/mp4" /> Your browser does not support video tag.
                 </video>
             </div>
             <div className="main-inner-item-main" style={{ position: "relative", padding: "32px 0 0" }}>
                 <section id="panel">
-                    <Button icon={<RedoOutlined />} onClick={handlersPanelPlayAgain} className="btn"></Button>
+                    <Button icon={<RedoOutlined />} onClick={handlerPanelPlayAgain} className="btn"></Button>
                     <Button icon={<DashboardOutlined />} className="btn">
                         {playSpeed}
                     </Button>
-                    <Button icon={<FastBackwardOutlined />} onClick={handlersPanelPlayBackward} className="btn"></Button>
-                    <Button icon={playButton} onClick={handlersPanelPlay} className="btn"></Button>
-                    <Button icon={<FastForwardOutlined />} onClick={handlersPanelPlayForward} className="btn"></Button>
-                    <Button icon={<ClearOutlined />} onClick={handlersPanelActiveClear} className="btn"></Button>
-                    <Button icon={<PrinterOutlined />} onClick={handlersPrint} className="btn" />
+                    <Button icon={<FastBackwardOutlined />} onClick={handlerPanelPlayBackward} className="btn"></Button>
+                    <Button icon={<FastForwardOutlined />} onClick={handlerPanelPlayForward} className="btn"></Button>
+                    <Button icon={<ClearOutlined />} onClick={handlerPanelActiveClear} className="btn"></Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>{/* <Script scriptParsed={scriptParsed} curSentenceID={curSentence?.id} onRendered={handlersRenderedCallback} /> */}</Scrollbars>
             </div>
