@@ -17,11 +17,11 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
     const refArticle = useRef<HTMLDivElement>(null);
     const refSentences = useRef<HTMLElement[]>([]);
     const refAudio = useRef<AudioRef>(null);
-    const handlerPlayAudio = (pronunciation: string) => {
+    const handlerPlayAudio = (speech: string) => {
         const audio = refAudio.current;
-        if (audio && pronunciation) {
+        if (audio && speech) {
             audio.pause();
-            audio.play(pronunciation, 1);
+            audio.play(speech, 1);
         }
     };
     const handleClickArticle = (e: React.MouseEvent) => {
@@ -63,7 +63,7 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
                                             {paragraph.sentences.map((sentence) => {
                                                 return (
                                                     <span ref={(el) => el && (refSentences.current[sentence.id] = el)} className={`point${curSentenceID === sentence.id ? " matching" : ""}`} key={sentence.id}>
-                                                        {sentence.texts.length > 0 && <Vocab text={sentence.texts[0].split("\n")[0]} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/vocab_pronunciations/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}
+                                                        {sentence.texts.length > 0 && <Vocab text={sentence.texts[0].split("\n")[0]} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/speech/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}
                                                     </span>
                                                 );
                                             })}
@@ -79,7 +79,7 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
                                                             return (
                                                                 <li key={n}>
                                                                     <i className="role">{paragraph.roles[n]}: </i>
-                                                                    <span>{<Vocab text={partOfSentence} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/vocab_pronunciations/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}</span>
+                                                                    <span>{<Vocab text={partOfSentence} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/speech/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}</span>
                                                                 </li>
                                                             );
                                                         })}

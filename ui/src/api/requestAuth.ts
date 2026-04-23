@@ -57,85 +57,45 @@ export const OAuthUpdatePassword = (data: RequestDataUpdatePassword): Promise<Re
 // User
 
 // Video
-export const videoImport = (data: FormData): Promise<Response> => {
+export const videoCreate = (data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/import`,
+        url: `/video/create`,
         data: data,
     });
 };
-export const videoInit = (params: object): Promise<Response> => {
+export const videoUpdate = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: "/video/init",
+        url: `/video/update`,
+        data: data,
+    });
+};
+export const videoRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/video/remove`,
+        data: data,
+    });
+};
+export const videoList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/video/list`,
         params: params,
     });
 };
 // Video
 
-// Video Data
-export const importData = (params: Object, data: FormData): Promise<Response> => {
+// Audio
+export const audioClip = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/data/import`,
-        data: data,
+        url: `/audio/clip`,
         params: params,
     });
 };
-export const exportData = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/video/data/export`,
-        responseType: "blob",
-        params: params,
-    });
-};
-export const dataSync = (params: Object, data: FormData): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `video/data/sync`,
-        data: data,
-        params: params,
-    });
-};
-export const vocabImageUpload = (params: object, data: FormData): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/video/data/vocab_image_upload`,
-        data: data,
-        params: params,
-    });
-};
-export const vocabImagePronunciationMove = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/video/data/vocab_image_pronunciation_move`,
-        params: params,
-    });
-};
-export const vocabImagePronunciationRemove = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/video/data/vocab_image_pronunciation_remove`,
-        params: params,
-    });
-};
-export const concatAudio = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/video/data/audio_concat`,
-        responseType: "blob",
-        params: params,
-    });
-};
-export const clipAudio = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/video/data/audio_clip`,
-        params: params,
-    });
-};
-// Video Data
+// Audio
 
 // Speech
 export const speechTTS = (params: object): Promise<Response> => {
@@ -157,6 +117,14 @@ export const speechBatchTranscode = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
         url: `/speech/batch_transcode`,
+        params: params,
+    });
+};
+export const speechConcat = (params: object): Promise<Blob> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/speech/concat`,
+        responseType: "blob",
         params: params,
     });
 };
@@ -186,6 +154,20 @@ export const vocabCreate = (data: object): Promise<Response> => {
         data: data,
     });
 };
+export const vocabUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/update`,
+        data: data,
+    });
+};
+export const vocabRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/remove`,
+        data: data,
+    });
+};
 export const vocabList = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
@@ -193,22 +175,26 @@ export const vocabList = (params: object): Promise<Response> => {
         params: params,
     });
 };
+export const vocabFileMove = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/file/move`,
+        params: params,
+    });
+};
+export const vocabFileRemove = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/file/remove`,
+        params: params,
+    });
+};
+export const vocabFileUploadImage = (params: object, data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/vocab/file/image_upload`,
+        data: data,
+        params: params,
+    });
+};
 // Vocab
-
-// File
-export const fileMove = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/file/move`,
-        params: params,
-    });
-};
-
-export const fileRemove = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/file/remove`,
-        params: params,
-    });
-};
-// File

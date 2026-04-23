@@ -14,19 +14,19 @@ const Guard: React.FC<GuardProps> = ({ children }) => {
     const location = useLocation();
     const dispatch = useDispatch();
     const token = Cookies.get(`ACCESS_TOKEN`);
-    const data = useSelector((state: RootState) => state.data);
+    const video = useSelector((state: RootState) => state.video);
     const [messageApi, contextHolder] = message.useMessage();
     useEffect(() => {
         if (!token) {
             dispatch(clearToken());
             window.location.href = "/#/login";
         }
-        if (!data.videoHash) {
-            if (location.pathname !== "/settings") {
-                messageApi.info("Upload an mp4 Video.");
-                window.location.href = "/#/settings";
-            }
-        }
+        // if (!video.videoURL) {
+        //     if (location.pathname !== "/settings") {
+        //         messageApi.info("Upload an mp4 Video.");
+        //         window.location.href = "/#/settings";
+        //     }
+        // }
     }, [location.pathname]);
 
     return token ? (

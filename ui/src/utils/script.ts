@@ -1,5 +1,4 @@
 import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, ScriptParsed } from "../types/Data";
-import { dataSync } from "../api/requestAuth";
 import { Domain } from "../settings.js";
 import { fnRandom } from "./util";
 import Joi, { number } from "joi";
@@ -150,7 +149,7 @@ export const fnGetFormattedData = (hash: string, script: DataScript): ScriptPars
             data.scenes[0].paragraphs.push(v);
         });
     }
-    data.vocab = [...script.vocab].sort((a, b) => a.text.split(" | ")[0].length - b.text.split(" | ")[0].length);
+    data.vocab = [...script.vocab].sort((a, b) => a.definition.split(" | ")[0].length - b.definition.split(" | ")[0].length);
     script.grammar.forEach((grammarItem) => {
         grammarItem.examples.forEach((example) => {
             const text = [];
@@ -256,10 +255,8 @@ export const fnSyncScript = async (hash: string, script: DataScript) => {
     const blob = new Blob([JSON.stringify(script, null, 4)], { type: "application/json" });
     const formData = new FormData();
     formData.append("file", blob, "script.json");
-    await dataSync({ hash }, formData);
+    // await dataSync({ hash }, formData);
 };
-
-export const fnCheckVocabText = (text: string) => /^(.+) \| (.+) \| (.+)$/.test(text);
 
 // Temporary
 export const fnDealScenes = (script: DataScript) => {

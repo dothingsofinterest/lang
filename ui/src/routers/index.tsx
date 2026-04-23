@@ -2,11 +2,11 @@ import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react
 import Login from "../views/Public/Login";
 import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
-import Settings from "../views/Settings/Index";
-import VideoScript from "../views/VideoScript/Index";
-import Following from "../views/Following/Index";
-import VocabListen from "../views/VocabListen/Index";
-import VocabWatch from "../views/VocabWatch/Index";
+// import Settings from "../views/Settings/Index";
+// import VideoScript from "../views/VideoScript/Index";
+import Following from "../views/Read/Index";
+// import VocabListen from "../views/VocabListen/Index";
+// import VocabWatch from "../views/VocabWatch/Index";
 import VocabMeaning from "../views/VocabMeaning/Index";
 import ExampleRecogn from "../views/Example/ExampleRecogn";
 import ExampleTranslation from "../views/Example/ExampleTranslation";
@@ -23,28 +23,28 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="settings" replace />,
+                element: <Navigate to="read/1" replace />,
             },
+            // {
+            //     path: "settings",
+            //     element: <Settings />,
+            // },
+            // {
+            //     path: "video-script",
+            //     element: <VideoScript />,
+            // },
             {
-                path: "settings",
-                element: <Settings />,
-            },
-            {
-                path: "video-script",
-                element: <VideoScript />,
-            },
-            {
-                path: "following",
+                path: "read/:id",
                 element: <Following />,
             },
-            {
-                path: "vocab-listen",
-                element: <VocabListen />,
-            },
-            {
-                path: "vocab-watch",
-                element: <VocabWatch />,
-            },
+            // {
+            //     path: "vocab-listen",
+            //     element: <VocabListen />,
+            // },
+            // {
+            //     path: "vocab-watch",
+            //     element: <VocabWatch />,
+            // },
             {
                 path: "vocab-meaning",
                 element: <VocabMeaning />,

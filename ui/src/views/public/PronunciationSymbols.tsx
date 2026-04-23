@@ -1,11 +1,11 @@
 import { Typography } from "antd";
-import "./PronunciationSymbols.scss";
+import "./SpeechSymbols.scss";
 
 const { Paragraph } = Typography;
 
-const PronunciationSymbols = () => {
+const SpeechSymbols = () => {
     return (
-        <div id="pronunciation-symbols">
+        <div id="speech-symbols">
             <div className="line">
                 <Paragraph copyable={{ text: "tə" }}>to ➤ tə</Paragraph>
                 <Paragraph copyable={{ text: "ðer" }}>their ➤ ðer</Paragraph>
@@ -52,4 +52,4 @@ const PronunciationSymbols = () => {
     );
 };
 
-export default PronunciationSymbols;
+export default SpeechSymbols;

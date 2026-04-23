@@ -7,7 +7,8 @@ import Database from "better-sqlite3";
 
 const dataPath = process.env.DATA_PATH;
 const uploadPath = process.env.UPLOAD_PATH;
-const dbFile = path.join(`${dataPath}`, `${process.env.DATA_DATABASE}`);
+const dbName = process.env.DATA_DATABASE;
+const dbFile = path.join(`${dataPath}`, `${dbName}`);
 const db = new Database(dbFile);
 
 type Video = {
@@ -15,11 +16,11 @@ type Video = {
     name: string;
 };
 
-export const move = (req: Request, res: Response) => {
+export const moveFile = (req: Request, res: Response) => {
     const schema = Joi.object({
         videoID: Joi.number().required(),
         image: Joi.string().allow(null, ""),
-        pronunciation: Joi.string().allow(null, ""),
+        speech: Joi.string().allow(null, ""),
     });
     const { error, value } = schema.validate(req.query);
     if (error) {
@@ -38,14 +39,14 @@ export const move = (req: Request, res: Response) => {
     try {
         const videoFilePath = path.join(`${dataPath}`, `${video.id}`);
         const pathUploadTemp = path.join(`${uploadPath}`, `temp`);
-        if (value.pronunciation) {
-            const pronunciationOriginalFile = path.join(videoFilePath, "pronunciation", value.pronunciation);
-            if (fs.existsSync(pronunciationOriginalFile)) {
-                fs.unlinkSync(pronunciationOriginalFile);
+        if (value.speech) {
+            const speechOriginalFile = path.join(videoFilePath, "speech", value.speech);
+            if (fs.existsSync(speechOriginalFile)) {
+                fs.unlinkSync(speechOriginalFile);
             }
-            const pronunciationTempFile = path.join(pathUploadTemp, value.pronunciation);
-            if (fs.existsSync(pronunciationTempFile)) {
-                fs.renameSync(pronunciationTempFile, pronunciationOriginalFile);
+            const pcTempFile = path.join(pathUploadTemp, value.speech);
+            if (fs.existsSync(pcTempFile)) {
+                fs.renameSync(pcTempFile, speechOriginalFile);
             }
         }
         if (value.image) {
@@ -71,11 +72,11 @@ export const move = (req: Request, res: Response) => {
     }
 };
 
-export const remove = (req: Request, res: Response) => {
+export const removeFile = (req: Request, res: Response) => {
     const schema = Joi.object({
         videoID: Joi.number().required(),
         image: Joi.string().allow(null, ""),
-        pronunciation: Joi.string().allow(null, ""),
+        speech: Joi.string().allow(null, ""),
     });
     const { error, value } = schema.validate(req.query);
     if (error) {
@@ -100,10 +101,10 @@ export const remove = (req: Request, res: Response) => {
                 fs.unlinkSync(imageFile);
             }
         }
-        if (value.pronunciation) {
-            const pronunciationFile = path.join(videoFilePath, "pronunciation", value.pronunciation);
-            if (fs.existsSync(pronunciationFile)) {
-                fs.unlinkSync(pronunciationFile);
+        if (value.speech) {
+            const pcFile = path.join(videoFilePath, "speech", value.speech);
+            if (fs.existsSync(pcFile)) {
+                fs.unlinkSync(pcFile);
             }
         }
         res.status(200).json({
@@ -117,4 +118,18 @@ export const remove = (req: Request, res: Response) => {
             message: `Failed.`,
         });
     }
+};
+
+export const uploadImage = (req: Request, res: Response) => {
+    if (!req.file) {
+        return res.status(200).json({
+            code: 0,
+            message: `Failed.`,
+        });
+    }
+    res.status(200).json({
+        code: 1,
+        message: `Succeed.`,
+        data: { filename: req.file.originalname },
+    });
 };

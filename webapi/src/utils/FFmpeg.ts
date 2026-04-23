@@ -165,29 +165,8 @@ export const enhanceDialogueAndExtractMP3 = (input: string, output: string): Pro
  *
  * [a] 表示刚刚拼接出来的音频流 [a] 输出到最终文件
  */
-export const concatSpeech = async (videoFolder: string, output: string): Promise<void> => {
+export const concatSpeech = async (listFile: string, output: string): Promise<void> => {
     return new Promise(async (resolve, reject) => {
-        if (!fs.existsSync(videoFolder)) {
-            return reject(new Error(`Video folder not exist`));
-        }
-        const files: string[] = [];
-        const pronunciationsFolder = path.join(videoFolder, "vocab_pronunciations");
-        const allFiles = fs.readdirSync(pronunciationsFolder);
-        for (const f of allFiles) {
-            const filePath = path.join(pronunciationsFolder, f);
-            const fileRealFormat = await getAudioCodec(filePath);
-            if (f.endsWith(".mp3") && fileRealFormat === "mp3") {
-                files.push(filePath);
-            } else {
-                LoggerSystem.info(`contact failed: ${f}: ${fileRealFormat}`);
-            }
-        }
-        if (files.length === 0) {
-            return reject(new Error(`Folder vocab_pronunciations empty`));
-        }
-        const listFile = path.join(videoFolder, "list.txt");
-        const content = files.map((f) => `file '${f}'`).join("\n");
-        fs.writeFileSync(listFile, content);
         ffmpeg()
             .input(listFile)
             .inputOptions(["-f concat", "-safe 0"])
@@ -201,7 +180,6 @@ export const concatSpeech = async (videoFolder: string, output: string): Promise
                 reject();
             })
             .on("end", () => {
-                // fs.unlinkSync(listFile);
                 LoggerSystem.info("✅ concatSpeech: succeed!");
                 resolve();
             });

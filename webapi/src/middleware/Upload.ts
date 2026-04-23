@@ -26,8 +26,7 @@ const uploader = multer({
         destination: (req, file, cb) => {
             try {
                 if (file.mimetype === "video/mp4") {
-                    const videoHash = md5(file.originalname.split(".")[0]).slice(25);
-                    const videoPath = path.join(`${basePath}`, `${videoHash}`);
+                    const videoPath = path.join(`${basePath}`, `temp`);
                     if (!fs.existsSync(videoPath)) {
                         fs.mkdirSync(videoPath, { recursive: true });
                     }

@@ -7,16 +7,16 @@ interface VocabProps {
     text: string;
     assetsPrefix: string;
     vocabList: DataVocab[];
-    onClick?: (pronunciation: string) => void;
+    onClick?: (speech: string) => void;
 }
 
 const tipBgColor = "#c5a587";
 
 const Vocab: React.FC<VocabProps> = ({ text, assetsPrefix, vocabList, onClick }) => {
     if (!vocabList) return <>{text}</>;
-    const handlerPlay = (pronunciation: string) => {
+    const handlerPlay = (speech: string) => {
         if (onClick !== undefined) {
-            onClick(`${assetsPrefix}${pronunciation}?${Date.now()}`);
+            onClick(`${assetsPrefix}${speech}?${Date.now()}`);
         }
     };
     const fnRecurHalf = (text: string, inputs: DataVocab[]) => {
@@ -24,7 +24,7 @@ const Vocab: React.FC<VocabProps> = ({ text, assetsPrefix, vocabList, onClick })
         const next = theInputs.pop();
         if (next) {
             let res: any[] = [];
-            const inputParts = next.text.split(" | ");
+            const inputParts = next.definition.split(" | ");
             const inputReg = new RegExp(`(^| )${inputParts[0]}`, "i");
             const inputMatch = text.match(inputReg);
             const halfs = [];
@@ -43,8 +43,8 @@ const Vocab: React.FC<VocabProps> = ({ text, assetsPrefix, vocabList, onClick })
                 res.push(...fnRecurHalf(half, theInputs));
                 if (halfs.length === 2 && k === 0) {
                     res.push(
-                        <Tooltip className="vocab-item" title={next.text} color={tipBgColor}>
-                            <span onClick={() => handlerPlay(next.pronunciation)}>{inputMatch ? inputMatch[0] : inputParts[0]}</span>
+                        <Tooltip className="vocab-item" title={next.definition} color={tipBgColor}>
+                            <span onClick={() => handlerPlay(next.speech)}>{inputMatch ? inputMatch[0] : inputParts[0]}</span>
                         </Tooltip>,
                     );
                 }

@@ -5,7 +5,7 @@ import { PrinterOutlined, FileWordOutlined, GoogleOutlined } from "@ant-design/i
 import { RootState } from "../../stores";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateScriptImpression } from "../../stores/reducers/data";
+// import { updateScriptImpression } from "../../stores/reducers/data";
 import { Vocab as DataVocab } from "../../types/Data";
 import GrammarTips from "./GrammarTips";
 import debounce from "lodash.debounce";
@@ -14,8 +14,8 @@ import "./Index.scss";
 const Index = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const script = useSelector((state: RootState) => state.data.script);
-    const data = useSelector((state: RootState) => state.data);
+    // const script = useSelector((state: RootState) => state.data.script);
+    // const data = useSelector((state: RootState) => state.data);
     const [textareaValue, setTextareaValue] = useState("");
     const refDiary = useRef<HTMLDivElement>(null);
     const handlersTypeVocab = (value: string) => {
@@ -24,7 +24,7 @@ const Index = () => {
     };
     const fnDebouncedTypeVocab = useCallback(
         debounce((value) => {
-            dispatch(updateScriptImpression(value));
+            // dispatch(updateScriptImpression(value));
         }, 100),
         [],
     );
@@ -47,8 +47,7 @@ const Index = () => {
     }, []);
     return (
         <Layout className="main-inner" id="impression-index">
-            <div className="main-inner-item-aside">
-            </div>
+            <div className="main-inner-item-aside"></div>
             <div className="main-inner-item-main" style={{ position: "relative", padding: "100px 0 0" }}>
                 TODO
             </div>

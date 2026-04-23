@@ -1,14 +1,7 @@
 export interface StateAuth {
     ACCESS_TOKEN: string | undefined;
 }
-export interface StateData {
-    videoHash: string;
-    videoURL: string;
-    videoAudioURL: string;
-    videoAudioWaveformURL: string;
-    script: Script;
-    scriptParsed: ScriptParsed;
-}
+
 export interface PayloadScript {
     pKey?: number;
     sKey?: number;
@@ -59,12 +52,16 @@ export interface Sentence {
     endTime: string;
     texts: string[];
 }
+export interface Video {
+    id: number;
+    name: string;
+}
 export interface Vocab {
     id: number;
-    text: string;
-    type: number; // 1:listening, 2:watching, 4:thinking of
+    definition: string;
     image: string;
-    pronunciation: string;
+    speech: string;
+    category: number; // 1:listening, 2:watching, 4:thinking of
 }
 export interface Grammar {
     id: number;
@@ -87,3 +84,9 @@ export interface Impression {
     grammar: string[];
 }
 /* Data */
+
+export interface Pagination {
+    page: number;
+    pageSize: number;
+    totalPages: number;
+}

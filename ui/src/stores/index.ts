@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import auth from "./reducers/auth";
-import data from "./reducers/data";
+import video from "./reducers/video";
 import status from "./reducers/status";
 
 const store = configureStore({
-    reducer: { auth, data, status },
+    reducer: { auth, video, status },
 });
 
 export default store;
