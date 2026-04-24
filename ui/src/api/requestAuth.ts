@@ -198,3 +198,13 @@ export const vocabFileUploadImage = (params: object, data: FormData): Promise<Re
     });
 };
 // Vocab
+
+// Script
+export const scriptDetail = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script/detail`,
+        params: params,
+    });
+};
+// Script

@@ -25,7 +25,6 @@ export interface Script {
     id: number;
     title: string;
     scenes: SceneBlock[];
-    sentences: Sentence[];
 }
 export interface ScriptParsed {
     hash: string;
@@ -56,7 +55,7 @@ export interface Sentence {
     id: number;
     startTime: number;
     endTime: number;
-    texts: string[];
+    text: string;
 }
 export interface Video {
     id: number;

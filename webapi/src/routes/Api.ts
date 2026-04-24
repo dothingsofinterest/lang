@@ -6,6 +6,7 @@ import { create as vocabCreate, update as vocabUpdate, remove as vocabRemove, li
 import { moveFile as vocabFileMove, removeFile as vocabFileRemove, uploadImage as vocabFileUploadImage } from "../controller/VocabularyFileController";
 import { textToSpeech, batchTranscodeToMp3, upload as speechUpload, concat as speechConcat } from "../controller/SpeechController";
 import { clip as audioClip } from "../controller/AudioController";
+import { detail } from "../controller/ScriptController";
 
 const router = express.Router();
 
@@ -44,6 +45,10 @@ router.post("/vocab/file/image_upload", upload, vocabFileUploadImage);
 // Audio
 router.post("/audio/clip", audioClip);
 // Audio
+
+// Script
+router.post("/script/detail", detail);
+// Script
 
 // User
 router.post("/logout", (req: Request, res: Response) => res.json({ code: 1, message: "success" }));

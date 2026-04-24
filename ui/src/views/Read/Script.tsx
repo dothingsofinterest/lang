@@ -1,19 +1,25 @@
 import React, { useRef, useEffect } from "react";
-import { ScriptParsed } from "../../types/Data";
+import { Sentence as DataSentence } from "../../types/Data";
 import ScriptFooter from "./ScriptFooter";
 import Vocab from "./Vocab";
 import Audio, { AudioRef } from "../Public/Audio";
 import { Domain } from "../../settings.js";
 import "./Script.scss";
 
+interface Data {
+    id: number;
+    title: string;
+    scenes: any[];
+}
+
 interface ScriptProps {
-    scriptParsed: ScriptParsed;
+    data: Data;
     curSentenceID?: number;
     showFooter?: boolean;
     onRendered?: (scrollTopPoint: number) => void;
 }
 
-const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFooter = false, onRendered }) => {
+const Script: React.FC<ScriptProps> = ({ data, curSentenceID = 0, showFooter = false, onRendered }) => {
     const refArticle = useRef<HTMLDivElement>(null);
     const refSentences = useRef<HTMLElement[]>([]);
     const refAudio = useRef<AudioRef>(null);
@@ -50,51 +56,29 @@ const Script: React.FC<ScriptProps> = ({ scriptParsed, curSentenceID = 0, showFo
     return (
         <article ref={refArticle} onClick={handleClickArticle} id="script">
             <React.Fragment>
-                {scriptParsed.title && <h1>{scriptParsed.title}</h1>}
-                {scriptParsed.scenes.map((scene, index) => {
+                {data.title && <h1>{data.title}</h1>}
+                {data.scenes.map((scene, index) => {
                     return (
                         <section className="scene" key={index}>
                             {scene.name && <h2>{scene.name}</h2>}
-                            {scene.paragraphs.map((paragraph) => {
-                                return paragraph.roles.length < 2 ? (
-                                    <React.Fragment key={paragraph.id}>
-                                        <p key={paragraph.id} className={paragraph.roles.length === 0 ? "indent" : undefined}>
-                                            {paragraph.roles.length > 0 && <i className="role">{paragraph.roles[0]}: </i>}
-                                            {paragraph.sentences.map((sentence) => {
-                                                return (
-                                                    <span ref={(el) => el && (refSentences.current[sentence.id] = el)} className={`point${curSentenceID === sentence.id ? " matching" : ""}`} key={sentence.id}>
-                                                        {sentence.texts.length > 0 && <Vocab text={sentence.texts[0].split("\n")[0]} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/speech/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}
-                                                    </span>
-                                                );
-                                            })}
-                                        </p>
-                                    </React.Fragment>
-                                ) : (
-                                    <React.Fragment key={paragraph.id}>
-                                        {paragraph.sentences.map((sentence) => {
+                            {scene.paragraphs.map((paragraph: any) => {
+                                <React.Fragment key={paragraph.id}>
+                                    <p key={paragraph.id} className={paragraph.roles.length === 0 ? "indent" : undefined}>
+                                        {paragraph.roles.length > 0 && <i className="role">{paragraph.roles[0]}: </i>}
+                                        {paragraph.sentences.map((sentence: DataSentence) => {
                                             return (
-                                                <React.Fragment key={sentence.id}>
-                                                    <ul ref={(el) => el && (refSentences.current[sentence.id] = el)} className={`point${curSentenceID === sentence.id ? " matching" : ""}`} key={sentence.id}>
-                                                        {sentence.texts.map((partOfSentence: any, n: number) => {
-                                                            return (
-                                                                <li key={n}>
-                                                                    <i className="role">{paragraph.roles[n]}: </i>
-                                                                    <span>{<Vocab text={partOfSentence} assetsPrefix={`${Domain}/data/${scriptParsed.hash}/speech/`} vocabList={scriptParsed.vocab} onClick={handlerPlayAudio} />}</span>
-                                                                </li>
-                                                            );
-                                                        })}
-                                                    </ul>
-                                                </React.Fragment>
+                                                <span ref={(el) => el && (refSentences.current[sentence.id] = el)} className={`point${curSentenceID === sentence.id ? " matching" : ""}`} key={sentence.id}>
+                                                    {sentence.text.length > 0 && <Vocab text={sentence.text[0].split("\n")[0]} assetsPrefix={`${Domain}/database/${data.id}/speech/`} vocabList={[]} onClick={handlerPlayAudio} />}
+                                                </span>
                                             );
                                         })}
-                                    </React.Fragment>
-                                );
+                                    </p>
+                                </React.Fragment>;
                             })}
                         </section>
                     );
                 })}
             </React.Fragment>
-            <footer className="footer">{showFooter && <ScriptFooter vocabList={scriptParsed.vocab} grammarList={scriptParsed.grammar} />}</footer>
             <Audio ref={refAudio} loop={true} />
         </article>
     );

@@ -12,6 +12,7 @@ import Script from "./Script";
 import { Script as DataScript } from "../../types/Data";
 import { Domain } from "../../settings.js";
 import { strip } from "../../utils/number";
+import { scriptDetail } from "../../api/requestAuth";
 import "./Index.scss";
 
 const Index = () => {
@@ -142,19 +143,14 @@ const Index = () => {
     const handlersRenderedCallback = (scrollTopPoint: number) => {
         const scrollTop = refScrollbar.current?.getScrollTop() || 0;
         const scrollTopPointValue = scrollTop + scrollTopPoint;
-        dispatch(updateVideoMatchingSentencePos(scrollTopPointValue));
+        // dispatch(updateVideoMatchingSentencePos(scrollTopPointValue));
         refScrollbar.current?.scrollTop(scrollTopPointValue);
     };
     const apiGetScript = async () => {
-        // const res = await videoList({
-        //     page: listParams.page,
-        //     pageSize: listParams.pageSize,
-        //     keyword: listParams.keyword,
-        // });
-        // if (res.code === 1) {
-        //     setList(res.data.list);
-        //     setListParams(res.data.listParams);
-        // }
+        const res = await scriptDetail({ videoId: videoId });
+        if (res.code === 1) {
+            setScript(res.data);
+        }
     };
     useEffect(() => {
         const videoElem = refVideo.current;
@@ -202,9 +198,9 @@ const Index = () => {
             }
         };
     }, []);
-    // useEffect(() => {
-    //     refState.current = { curSentence, playSpeed };
-    // }, [curSentence, playSpeed]);
+    useEffect(() => {
+        apiGetScript();
+    }, [videoId]);
     return (
         <Layout id="read-index" className="main-inner">
             <div className="main-inner-item-aside">
@@ -219,10 +215,13 @@ const Index = () => {
                         {playSpeed}
                     </Button>
                     <Button icon={<FastBackwardOutlined />} onClick={handlerPanelPlayBackward} className="btn"></Button>
+                    <Button icon={playButton} onClick={handlerPanelPlay} className="btn"></Button>
                     <Button icon={<FastForwardOutlined />} onClick={handlerPanelPlayForward} className="btn"></Button>
                     <Button icon={<ClearOutlined />} onClick={handlerPanelActiveClear} className="btn"></Button>
                 </section>
-                <Scrollbars ref={refScrollbar}>{/* <Script scriptParsed={scriptParsed} curSentenceID={curSentence?.id} onRendered={handlersRenderedCallback} /> */}</Scrollbars>
+                <Scrollbars ref={refScrollbar}>
+                    <Script data={script} curSentenceID={curSentence?.id} onRendered={handlersRenderedCallback} />
+                </Scrollbars>
             </div>
         </Layout>
     );

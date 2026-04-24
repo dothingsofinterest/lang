@@ -29,7 +29,7 @@ const List = () => {
     const videoId = Number(id);
     const dispatch = useDispatch();
     const [list, setList] = useState<DataVideo[]>([]);
-    const [listParams, setListParams] = useState<ListParams>({ page: 1, pageSize: 10, totalPages: 0 });
+    const [listParams, setListParams] = useState<ListParams>({ page: 1, pageSize: 100, totalPages: 0 });
     const handlerImportVideo = async (file: any) => {
         if (/^(.+?)\.(mp4)$/g.test(file.name) && file.type === "video/mp4") {
             dispatch(updateLoadingUploadVideo(1));
