@@ -1,54 +1,52 @@
 export interface Script {
-    title: string;
-    roles: string[];
-    scenes: Scene[];
-    paragraphs: Paragraph[];
-    vocab: Vocab[];
-    grammar: Grammar[];
-    impression: Impression;
-}
-
-export interface Grammar {
     id: number;
-    order: number;
     name: string;
-    text: string;
-    examples: GrammarExample[];
+    studyCount: number;
 }
 
-export interface GrammarExample {
+export interface ScriptScene {
     id: number;
-    type: number;
+    scriptId: number;
+    name: string;
+}
+
+export interface ScriptRole {
+    id: number;
+    scriptId: number;
+    name: string;
+}
+
+export interface ScriptParagraph {
+    id: number;
+    scriptId: number;
+    sceneId: number;
+    roleId: number;
+    orderNum: number;
+}
+
+export interface ScriptParagraphWithSentences {
+    id: number;
+    scriptId: number;
+    sceneId: number | null;
+    roleId: number | null;
+    orderNum: number;
+    sentences: {
+        id: number;
+        startTime: number;
+        endTime: number;
+        orderNum: number;
+        text: string;
+        piece: string;
+    }[];
+}
+
+export interface ScriptSentence {
+    id: number;
+    scriptId: number;
+    paragraphId: number;
+    startTime: number;
+    endTime: number;
+    orderNum: number;
     text: string;
-}
-
-export interface Impression {
-    content: string;
-    grammar: string[];
-}
-
-export interface Vocab {
-    text: string;
-    type: number; // 1:listening, 2:watching, 4:thinking of
-    image: string;
-    pronunciation: string;
-}
-
-export interface Paragraph {
-    key: string;
-    scene: string;
-    roles: string[];
-    sentences: Sentence[];
-}
-
-export interface Sentence {
-    key: string;
-    startTime: string;
-    endTime: string;
-    texts: string[];
-}
-
-export interface Scene {
-    index: number;
-    value: string;
+    piece: string;
 }

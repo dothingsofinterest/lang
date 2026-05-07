@@ -1,5 +1,5 @@
 import Guard from "./Guard";
-import List from "./List";
+import Catalog from "./Catalog";
 import Nav from "./Nav";
 import Main from "./Main";
 
@@ -7,7 +7,7 @@ const App = () => {
     return (
         <Guard>
             <Nav />
-            <List />
+            <Catalog />
             <Main />
         </Guard>
     );

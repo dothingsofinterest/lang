@@ -1,0 +1,77 @@
+#skeleton-index {
+    .main-inner-item-main {
+        #panel {
+            width: 100%;
+            height: 32px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #202024;
+            display: flex;
+            justify-content: space-between;
+            .btn {
+                flex: 1;
+                border-top: 0;
+                border-left: 0;
+                border-radius: 0;
+                background: linear-gradient(to bottom, #888, #bbb, #888);
+            }
+        }
+        #script {
+            height: 100%;
+            h1 {
+                text-align: center;
+                font-size: 18px;
+                font-weight: 900;
+                line-height: 32px;
+                padding: 26px 20px 0;
+                background: #ccc;
+            }
+            .scene {
+                color: #000;
+                background: #ccc;
+                padding: 20px 0;
+                border-top: 2px dotted;
+                &:nth-child(2) {
+                    border-top: 0;
+                }
+                h2 {
+                    text-align: center;
+                    font-size: 16px;
+                    font-style: normal;
+                    line-height: 20px;
+                    color: #000;
+                    margin: 0 20px 10px;
+                }
+                p {
+                    margin: 0;
+                    padding: 4px 26px;
+                    color: #000;
+                    font-size: 16px;
+                    line-height: 36px;
+                    &:first-of-type {
+                        border-top: 0;
+                    }
+                    &.indent {
+                        text-indent: 30px;
+                    }
+                    .role {
+                        font-style: normal;
+                        font-weight: 500;
+                        color: #000;
+                    }
+                    .ant-input {
+                        font-size: 16px;
+                        display: inline;
+                        text-align: center;
+                        margin-right: 4px;
+                        padding: 2px 4px;
+                        min-width: 44px;
+                        background: #fff;
+                        color: #000;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -19,9 +19,88 @@
                 border-left: 0;
                 border-radius: 0;
                 background: linear-gradient(to bottom, #888, #bbb, #888);
-                &.recording {
-                    color: red;
+            }
+        }
+        #script {
+            height: 100%;
+            h1 {
+                text-align: center;
+                font-size: 18px;
+                font-weight: 900;
+                line-height: 32px;
+                padding: 26px 20px 0;
+                background: #ccc;
+            }
+            .scene {
+                color: #000;
+                background: #ccc;
+                padding: 20px 0;
+                border-top: 2px dotted;
+                &:nth-child(2) {
+                    border-top: 0;
                 }
+                h2 {
+                    text-align: center;
+                    font-size: 16px;
+                    font-style: normal;
+                    line-height: 20px;
+                    color: #000;
+                    margin: 0 20px 10px;
+                }
+                p {
+                    margin: 0;
+                    padding: 4px 26px;
+                    color: #000;
+                    font-size: 16px;
+                    line-height: 30px;
+                    &:first-of-type {
+                        border-top: 0;
+                    }
+                    &.indent {
+                        text-indent: 30px;
+                    }
+                    .role {
+                        font-style: normal;
+                        font-weight: 500;
+                        color: #000;
+                    }
+                }
+                .point {
+                    &.matching {
+                        font-weight: 500;
+                        color: #499fe8;
+                        .vocab-item {
+                            color: #499fe8 !important;
+                            font-weight: 500;
+                        }
+                    }
+                    &:first-child {
+                        padding: 0;
+                    }
+                    .vocab-item {
+                        color: #9b0900;
+                        cursor: pointer;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ant-modal-root {
+    .chunks {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        span {
+            margin: 0 6px 6px 0;
+            border: 1px solid;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            &.piece {
+                background-color: #ccc;
             }
         }
     }

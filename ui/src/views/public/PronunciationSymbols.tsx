@@ -1,5 +1,4 @@
 import { Typography } from "antd";
-import "./SpeechSymbols.scss";
 
 const { Paragraph } = Typography;
 

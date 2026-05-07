@@ -1,4 +1,4 @@
-import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, ScriptParsed } from "../types/Data";
+// import { Script as DataScript, Vocab as DataVocab, Scene as DataScene, Paragraph as DataParagraph, Sentence, ScriptParsed } from "../types/Data";
 import { Domain } from "../settings.js";
 import { fnRandom } from "./util";
 import Joi, { number } from "joi";
@@ -180,111 +180,111 @@ export const fnParseVocabCheckVerbs = (base: string, variants: string[]): string
 // return data;
 // };
 
-export const fnFloatToSRTTime = (floatSeconds: number): string => {
-    // 计算小时、分钟、秒数和毫秒
-    const hours = Math.floor(floatSeconds / 3600);
-    const minutes = Math.floor((floatSeconds % 3600) / 60);
-    const seconds = Math.floor(floatSeconds % 60);
-    const milliseconds = Math.round((floatSeconds % 1) * 1000);
-    // 格式化成 SRT 时间格式 (hh:mm:ss,SSS)
-    const timeString = `${fnPadZero(hours)}:${fnPadZero(minutes)}:${fnPadZero(seconds)},${fnPadZero(milliseconds, 3)}`;
-    return timeString;
-};
+// export const fnFloatToSRTTime = (floatSeconds: number): string => {
+//     // 计算小时、分钟、秒数和毫秒
+//     const hours = Math.floor(floatSeconds / 3600);
+//     const minutes = Math.floor((floatSeconds % 3600) / 60);
+//     const seconds = Math.floor(floatSeconds % 60);
+//     const milliseconds = Math.round((floatSeconds % 1) * 1000);
+//     // 格式化成 SRT 时间格式 (hh:mm:ss,SSS)
+//     const timeString = `${fnPadZero(hours)}:${fnPadZero(minutes)}:${fnPadZero(seconds)},${fnPadZero(milliseconds, 3)}`;
+//     return timeString;
+// };
 
-export const fnSRTTimeToFloat = (SRTTime: string): number => {
-    // Split the SRT time into hours, minutes, seconds, and milliseconds
-    const timeParts = SRTTime.split(/[:,]/); // Split by ":" and ","
-    // Parse the parts
-    const hours = parseInt(timeParts[0], 10); // HH
-    const minutes = parseInt(timeParts[1], 10); // MM
-    const seconds = parseInt(timeParts[2], 10); // SS
-    const milliseconds = parseInt(timeParts[3], 10); // SSS
-    // Convert to seconds
-    return hours * 3600 + minutes * 60 + seconds + milliseconds / 1000;
-};
+// export const fnSRTTimeToFloat = (SRTTime: string): number => {
+//     // Split the SRT time into hours, minutes, seconds, and milliseconds
+//     const timeParts = SRTTime.split(/[:,]/); // Split by ":" and ","
+//     // Parse the parts
+//     const hours = parseInt(timeParts[0], 10); // HH
+//     const minutes = parseInt(timeParts[1], 10); // MM
+//     const seconds = parseInt(timeParts[2], 10); // SS
+//     const milliseconds = parseInt(timeParts[3], 10); // SSS
+//     // Convert to seconds
+//     return hours * 3600 + minutes * 60 + seconds + milliseconds / 1000;
+// };
 
-export const fnFloatToASSTime = (floatSeconds: number): string => {
-    // 计算小时、分钟、秒数和毫秒
-    const hours = Math.floor(floatSeconds / 3600);
-    const minutes = Math.floor((floatSeconds % 3600) / 60);
-    const seconds = Math.floor(floatSeconds % 60);
-    const milliseconds = Math.round((floatSeconds % 1) * 1000);
-    // 格式化成 SRT 时间格式 (hh:mm:ss,SSS)
-    const timeString = `${fnPadZero(hours)}:${fnPadZero(minutes)}:${fnPadZero(seconds)}.${fnPadZero(milliseconds, 3).slice(0, 2)}`;
-    return timeString;
-};
+// export const fnFloatToASSTime = (floatSeconds: number): string => {
+//     // 计算小时、分钟、秒数和毫秒
+//     const hours = Math.floor(floatSeconds / 3600);
+//     const minutes = Math.floor((floatSeconds % 3600) / 60);
+//     const seconds = Math.floor(floatSeconds % 60);
+//     const milliseconds = Math.round((floatSeconds % 1) * 1000);
+//     // 格式化成 SRT 时间格式 (hh:mm:ss,SSS)
+//     const timeString = `${fnPadZero(hours)}:${fnPadZero(minutes)}:${fnPadZero(seconds)}.${fnPadZero(milliseconds, 3).slice(0, 2)}`;
+//     return timeString;
+// };
 
-export const fnPadZero = (num: number, length: number = 2): string => {
-    return num.toString().padStart(length, "0");
-};
+// export const fnPadZero = (num: number, length: number = 2): string => {
+//     return num.toString().padStart(length, "0");
+// };
 
-export const fnIsSRTTime = (value: string): boolean => {
-    return value.match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/) ? true : false;
-};
+// export const fnIsSRTTime = (value: string): boolean => {
+//     return value.match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/) ? true : false;
+// };
 
-export const fnValidateVideoScript = (data: any): boolean => {
-    const schema = Joi.object({
-        title: Joi.string().required().allow(""),
-        roles: Joi.array().items(Joi.string()).required(),
-        scenes: Joi.array()
-            .items(Joi.alternatives().try(Joi.object(), Joi.string().allow("")))
-            .required(),
-        paragraphs: Joi.array().items(Joi.object()).required(),
-        vocab: Joi.array().items(Joi.object()).required(),
-        grammar: Joi.array().items(Joi.object()).required(),
-        impression: Joi.object(),
-    });
-    const { error, value } = schema.validate(data);
-    if (error) {
-        console.log("Json file validatation error:1", error);
-        return false;
-    }
-    return true;
-};
+// export const fnValidateVideoScript = (data: any): boolean => {
+//     const schema = Joi.object({
+//         title: Joi.string().required().allow(""),
+//         roles: Joi.array().items(Joi.string()).required(),
+//         scenes: Joi.array()
+//             .items(Joi.alternatives().try(Joi.object(), Joi.string().allow("")))
+//             .required(),
+//         paragraphs: Joi.array().items(Joi.object()).required(),
+//         vocab: Joi.array().items(Joi.object()).required(),
+//         grammar: Joi.array().items(Joi.object()).required(),
+//         impression: Joi.object(),
+//     });
+//     const { error, value } = schema.validate(data);
+//     if (error) {
+//         console.log("Json file validatation error:1", error);
+//         return false;
+//     }
+//     return true;
+// };
 
-export const fnGetMaxTimeFromSentences = (sentences: Sentence[]): number => {
-    const timeArr: number[] = [];
-    sentences.forEach((v) => {
-        timeArr.push(v.startTime);
-        timeArr.push(v.endTime);
-    });
-    return Math.max(...timeArr);
-};
+// export const fnGetMaxTimeFromSentences = (sentences: Sentence[]): number => {
+//     const timeArr: number[] = [];
+//     sentences.forEach((v) => {
+//         timeArr.push(v.startTime);
+//         timeArr.push(v.endTime);
+//     });
+//     return Math.max(...timeArr);
+// };
 
-export const fnSyncScript = async (hash: string, script: DataScript) => {
-    const blob = new Blob([JSON.stringify(script, null, 4)], { type: "application/json" });
-    const formData = new FormData();
-    formData.append("file", blob, "script.json");
-    // await dataSync({ hash }, formData);
-};
+// export const fnSyncScript = async (hash: string, script: DataScript) => {
+//     const blob = new Blob([JSON.stringify(script, null, 4)], { type: "application/json" });
+//     const formData = new FormData();
+//     formData.append("file", blob, "script.json");
+//     // await dataSync({ hash }, formData);
+// };
 
-// Temporary
-export const fnDealScenes = (script: DataScript) => {
-    const min = 0,
-        max = 65535;
-    const excluded: number[] = [];
-    return script.scenes.map((scene) => {
-        if (typeof scene === "object") {
-            return scene;
-        } else {
-            const index = fnRandom(min, max, excluded);
-            excluded.push(index);
-            return { index: index, value: scene };
-        }
-    });
-};
+// // Temporary
+// export const fnDealScenes = (script: DataScript) => {
+//     const min = 0,
+//         max = 65535;
+//     const excluded: number[] = [];
+//     return script.scenes.map((scene) => {
+//         if (typeof scene === "object") {
+//             return scene;
+//         } else {
+//             const index = fnRandom(min, max, excluded);
+//             excluded.push(index);
+//             return { index: index, value: scene };
+//         }
+//     });
+// };
 
-// Temporary
-export const fnDealParagraphs = (script: DataScript) => {
-    let i = 1;
-    let j = 1;
-    // return script.paragraphs.map((paragraph: DataParagraph) => {
-    //     return { ...paragraph, id: i++, sentences: paragraph.sentences.map((sentence) => ({ ...sentence, id: j++ })) };
-    // });
-};
+// // Temporary
+// export const fnDealParagraphs = (script: DataScript) => {
+//     let i = 1;
+//     let j = 1;
+//     // return script.paragraphs.map((paragraph: DataParagraph) => {
+//     //     return { ...paragraph, id: i++, sentences: paragraph.sentences.map((sentence) => ({ ...sentence, id: j++ })) };
+//     // });
+// };
 
-// Temporary
-export const fnDealVocab = (script: DataScript) => {
-    // let i = 1;
-    // return script.vocab.map((v: DataVocab) => ({ ...v, id: i++ }));
-};
+// // Temporary
+// export const fnDealVocab = (script: DataScript) => {
+//     // let i = 1;
+//     // return script.vocab.map((v: DataVocab) => ({ ...v, id: i++ }));
+// };

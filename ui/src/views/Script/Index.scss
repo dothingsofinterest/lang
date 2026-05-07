@@ -23,7 +23,7 @@
             &.fixed {
                 position: fixed;
                 right: 0;
-                top: 0;
+                top: 50px;
                 width: 800px;
                 z-index: 997;
             }
@@ -46,9 +46,10 @@
             .item {
                 flex: 1;
                 border-radius: 0;
-                background-color: #ccc;
                 display: flex;
                 align-items: center;
+                background: linear-gradient(to bottom, #888, #bbb, #888);
+                border-left: 0;
                 .ant-input {
                     flex: 1;
                     border-radius: 0;

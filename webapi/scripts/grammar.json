@@ -1,0 +1,3597 @@
+{
+    "title": "Grammar",
+    "roles": [],
+    "scenes": [],
+    "paragraphs": [],
+    "vocab": [
+        {
+            "text": "pronoun | ˈproʊnaʊn | n.代词",
+            "image": "pronoun_c02f123.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "pronoun_c02f123.mp3",
+            "id": 1
+        },
+        {
+            "text": "determiner | dɪˈtɜːrmɪnər | n.限定词",
+            "image": "determiner_f7faa9f.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "determiner_f7faa9f.mp3",
+            "id": 2
+        },
+        {
+            "text": "preposition | ˌprepəˈzɪʃn | n.介词",
+            "image": "preposition_eda2c9c.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "preposition_eda2c9c.mp3",
+            "id": 3
+        },
+        {
+            "text": "past participle | ˈpɑːrtɪsɪpl | n.过去分词",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "past_participle_38d85d2.mp3",
+            "id": 4
+        },
+        {
+            "text": "subject | ˈsʌbdʒɪkt | n.主语",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "subject_c209d2e.mp3",
+            "id": 5
+        },
+        {
+            "text": "verb | vɜːrb | n.动词",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "verb_d7595f8.mp3",
+            "id": 6
+        },
+        {
+            "text": "infinitive | ɪnˈfɪnətɪv | n.动词不定式",
+            "image": "infinitive_1779c1a.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "infinitive_1779c1a.mp3",
+            "id": 7
+        },
+        {
+            "text": "gerund | ˈdʒerənd | n.动名词",
+            "image": "gerund_c6a653b.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "gerund_c6a653b.mp3",
+            "id": 8
+        },
+        {
+            "text": "noun | naʊn | n.名词",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "noun_e9c7057.mp3",
+            "id": 9
+        },
+        {
+            "text": "object | ˈɑːbdʒekt | n.宾语",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "object_8c47021.mp3",
+            "id": 10
+        },
+        {
+            "text": "adverb | ˈædvɜːrb | n.副词",
+            "image": "adverb_50ddc17.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "adverb_50ddc17.mp3",
+            "id": 11
+        },
+        {
+            "text": "adjective | ˈædʒɪktɪv | n.形容词",
+            "image": "adjective_979ba84.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "adjective_979ba84.mp3",
+            "id": 12
+        },
+        {
+            "text": "plural | ˈplʊrəl | n.复数",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "plural_813019e.mp3",
+            "id": 13
+        },
+        {
+            "text": "concession | kənˈseʃn | n.让步;迁就",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "concession_b611c84.mp3",
+            "id": 14
+        },
+        {
+            "text": "conjunction | kənˈdʒʌŋkʃn | n.连词",
+            "image": "conjunction_89c28bd.png",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "conjunction_89c28bd.mp3",
+            "id": 15
+        },
+        {
+            "text": "phrase | freɪz | n.词组",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "phrase_bde286c.mp3",
+            "id": 16
+        },
+        {
+            "text": "passive voice | ˈpæsɪv | n.被动式",
+            "image": "",
+            "voice": 0,
+            "speed": 150,
+            "pronunciation": "passive_voice_aa410b7.mp3",
+            "id": 17
+        },
+        {
+            "text": "active voice | a | n.主动式",
+            "image": "",
+            "voice": 0,
+            "speed": 120,
+            "pronunciation": "active_voice_214b392.mp3",
+            "id": 18
+        },
+        {
+            "text": "nominal clause | ˈnɑːmɪnl | n.名词性从句",
+            "image": "",
+            "voice": 0,
+            "speed": 120,
+            "pronunciation": "nominal_clause_2203d42.mp3",
+            "id": 19
+        },
+        {
+            "text": "adverbial clause | ædˈvɜːrbiəl | n.状语从句",
+            "image": "",
+            "voice": 0,
+            "speed": 120,
+            "pronunciation": "adverbial_clause_ef675d6.mp3",
+            "id": 20
+        },
+        {
+            "text": "subjunctive | səbˈdʒʌŋktɪv | n.虚拟语气",
+            "image": "",
+            "voice": 0,
+            "speed": 120,
+            "pronunciation": "subjunctive_6f7538a.mp3",
+            "id": 21
+        },
+        {
+            "text": "relative clause | klɔːs | n.定语从句",
+            "image": "",
+            "voice": 0,
+            "speed": 120,
+            "pronunciation": "relative_clause_b51b0f1.mp3",
+            "id": 22
+        },
+        {
+            "text": "base verb | vɜːrb | n.动词原形",
+            "image": "",
+            "speed": 150,
+            "pronunciation": "base_verb_4549b13.mp3",
+            "id": 23
+        }
+    ],
+    "grammar": [
+        {
+            "id": 188,
+            "order": 0,
+            "name": "",
+            "text": "But what _ _ _ exact  _ _ _ _ the mission? It is the Delta Force,\nBut what is the exact unit tasked with the mission?It is the Delta Force,",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 187,
+            "order": 0,
+            "name": "..., while...",
+            "text": "【含义】：对比",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "The tiny hermit crab uses its claws mostly for feeding and protection inside shells, while the burly coconut crab wields its massive pinchers to crack open coconut"
+                }
+            ]
+        },
+        {
+            "id": 186,
+            "order": 0,
+            "name": "much of  + 抽象名词",
+            "text": "【含义】：很多什么\n【成分】：名词",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "he brought so [much of his Maori culture] into the Metkayina\n【很多什么】他带来了[很多毛利文化]，融入他的角色里\n---\n【much of  + 很多什么】他带来了很多毛利文化，融入他的角色里\nso much of his Maori culture"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Hitler's forces conquered much of Europe\n【很多什么】希特勒的军队征服了欧洲大部分地区\n---\n【much of  + 很多什么】希特勒的军队征服了欧洲大部分地区\nHitler's forces conquered much of Europe"
+                }
+            ]
+        },
+        {
+            "id": 185,
+            "order": 0,
+            "name": "What is it like doing/to do",
+            "text": "【含义】：感觉如何？\n【注意】：后面的非谓语动词引导一个句子，这个句子等于形式主语 it\n【例子】：相当于 What was working with all the new actors like",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": "What was it like working with all the new actors?"
+                }
+            ]
+        },
+        {
+            "id": 184,
+            "order": 0,
+            "name": "插入式疑问",
+            "text": "【含义】：特殊疑问句 + 陈述句。\n【注意】：它是插进来的，不属于句子结构的一部分",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "How do you think your character is handling being a parent?"
+                }
+            ]
+        },
+        {
+            "id": 183,
+            "order": 0,
+            "name": "How is the A different from the B?",
+            "text": "【含义】：A 与 B 有什么不同",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": "How was the filming of Avatar: The Way of Water different from the first film?"
+                }
+            ]
+        },
+        {
+            "id": 182,
+            "order": 0,
+            "name": "trouble with sth",
+            "text": "【含义】：某方面的麻烦\n【翻译】：...麻烦",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "do scenes that we have enough trouble with on dry land\n【某方面的麻烦】然后拍那些我们在陆地上都已经很难的戏\n---\n【trouble with sth ↔ 某方面的麻烦】然后拍那些我们在陆地上都已经很难的戏\ndo scenes that we have enough trouble with on dry land"
+                }
+            ]
+        },
+        {
+            "id": 181,
+            "order": 0,
+            "name": "wait for sth",
+            "text": "【含义】：等什么东西",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "you should wait for about three to five minutes\n【等什么东西】你应该等大概三五分钟\n---\n【wait for ↔ 等什么东西】你应该等大概三五分钟\nyou should wait for about three to five minutes"
+                }
+            ]
+        },
+        {
+            "id": 180,
+            "order": 0,
+            "name": "come prep sth",
+            "text": "【含义】：物品以什么方式出现\n【结构】：come in/with/under sth\n【翻译】：直接翻译后面的介词",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "this small plate that goes under your teacup is called a saucer\n【物品以什么方式出现】放在茶杯下面的这个小碟子叫做茶碟\n---\n【come in/with/under sth ↔ 物品以什么方式出现】茶杯会带一个小碟子\na teacup will come with a small plate"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "a teacup will come with a small plate\n【物品以什么方式出现】茶杯会带一个小碟子\n---\n【come in/with/under sth ↔ 物品以什么方式出现】茶杯会带一个小碟子\na teacup will come with a small plate"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "loose leaf tea will come in a container\n【物品以什么方式出现】散装茶叶将装在一个容器里\n---\n【come in/with/under sth ↔ 物品以什么方式出现】散装茶叶将装在一个容器里\nloose leaf tea will come in a container"
+                }
+            ]
+        },
+        {
+            "id": 179,
+            "order": 0,
+            "name": "depend on sth",
+            "text": "【含义】：根据什么",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "depending on who you talk to, the word can be pronounced differently\n【根据什么】[根据你讲话的对象]，这个词可以发不同的音\n---\n【depend on sth ↔ 根据什么】根据你讲话的对象\ndepending on who you talk to"
+                }
+            ]
+        },
+        {
+            "id": 178,
+            "order": 0,
+            "name": "break sth apart in half",
+            "text": "【含义】：掰成两半\n【注意】：apart 与 in half 共同修饰动词 break，而不是 in half 修饰 apart。介词不能修饰副词。",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "You will break them apart in half and you can add cream and jam\n【掰成两半】[你将它们掰成两半]，然后你可以放奶油和果酱\n---\n【break sth apart in half ↔ 掰成两半】你将它们掰成两半\nYou will break them apart in half"
+                }
+            ]
+        },
+        {
+            "id": 177,
+            "order": 0,
+            "name": "get away with sth",
+            "text": "【含义】：从...全身而退",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Uranus wouldn't [get away with] this assault so easily\n【从...全身而退】这次袭击，天王星无法轻易全身而退\n---\n【get away with sth ↔ 从...全身而退】这次袭击，天王星无法轻易全身而退\nUranus wouldn't get away with this assault so easily"
+                }
+            ]
+        },
+        {
+            "id": 176,
+            "order": 0,
+            "name": "A is XXX away from B",
+            "text": "【含义】：A 距离 B 多远",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Uranus [is] 3 billion km [away from] us\n【A 距离 B 多远】天王星距离我们 30 亿公里\n---\n【A is XXX away from B ↔ A 距离 B 多远】天王星距离我们 30 亿公里\nUranus is 3 billion km away from us"
+                }
+            ]
+        },
+        {
+            "id": 174,
+            "order": 0,
+            "name": "jump out at sb",
+            "text": "【含义】：突然跳出来吓某人一跳",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "horror movies have things that [jump out at you]\n【突然跳出来吓某人一跳】恐怖电影里总会有些东西突然跳出来吓你一跳\n---\n【jump out at sb ↔ 突然跳出来吓某人一跳】恐怖电影里总会有些东西突然跳出来吓你一跳\nhorror movies have things that jump out at you"
+                }
+            ]
+        },
+        {
+            "id": 173,
+            "order": 0,
+            "name": "be able to do",
+            "text": "【含义】：表示能力\n【注意】：是更正式、更灵活的 can",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I don't trust that I'll [be able to] get her back at the end of night\n【能力】我不相信晚上[我能把它弄回来]\n---\n【be able to do ↔ 能力】我不相信晚上我能把它弄回来\nI'll be able to get her back"
+                }
+            ]
+        },
+        {
+            "id": 172,
+            "order": 0,
+            "name": "have been sth",
+            "text": "【含义】：一直是什么\n【注意】：\n-没有 have been being sth 这样的结构，因为 be 是状态动词，不是可持续的动作\n-如果是可持续动作，要使用 have been doing sth",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "recently some of the most famous fantasy movies [have been Harry Potter and Avatar]\n【一直是什么】最近一些有名的奇幻电影包括《哈利·波特》和《阿凡达》\n---\n【have been sth ↔ 一直是什么】与恐怖电影截然不同\nrecently some famous fantasy movies have been Harry Potter and Avatar"
+                }
+            ]
+        },
+        {
+            "id": 171,
+            "order": 0,
+            "name": "as opposed to sth",
+            "text": "【含义】：而非什么",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Thriller makes you consider things psychologically [as opposed to horror movies] that just come right out and scare you with things\n【而非什么】惊悚片会让你从心理层面思考问题，[而非恐怖片那样]，只是直接用各种东西吓唬你\n---\n【as opposed to sth ↔ 而非什么】而非恐怖片那样\nas opposed to horror movies that"
+                }
+            ]
+        },
+        {
+            "id": 170,
+            "order": 0,
+            "name": "be afraid of sth",
+            "text": "【含义】：害怕某个东西\n【结构】：be afraid/scared of sth",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[are] you [scared of] horror movies\n【害怕某个东西】你害怕恐怖电影吗\n---\n【be afraid/scared of sth ↔ 害怕某个东西】你害怕恐怖电影吗\nare you scared of horror movies"
+                }
+            ]
+        },
+        {
+            "id": 168,
+            "order": 0,
+            "name": "right 核心含义",
+            "text": "【含义】：直的\n【翻译】：径直、直接",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[come right out] and scare you\n【径直、直接】[突然出来]吓唬你\n---\n【right 核心含义 ↔ 径直、直接】突然出来吓唬你\ncome right out"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the kitty police will come [right] through that front door\n【径直、直接】猫警会[从前门直接进来]\n---\n【right 核心含义 ↔ 径直、直接】猫警会从前门直接进来\ncome right through that front door"
+                }
+            ]
+        },
+        {
+            "id": 167,
+            "order": 0,
+            "name": "try doing",
+            "text": "【含义】：尝试做\n【注意】：它表示建议。try to do 表示努力，意思完全不同",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "If you are looking for some entertainment with some great action, [try watching] an action movie\n【尝试做】如果你想找一部动作精彩、娱乐性十足的电影，[尝试看一部动作电影]\n---\n【try doing ↔ 尝试做】尝试看一部动作电影\ntry watching an action movie"
+                }
+            ]
+        },
+        {
+            "id": 166,
+            "order": 0,
+            "name": "got to",
+            "text": "【含义】：不得不做某事，不然\n【翻译】：得",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "if I don't grab her, she'll stay there all day until she sees movement, so I [got to] get her\n【得】我得把它抓来\n---\n【got to ↔ 得】我得\nI got to get her"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I [got to] flush all the toilets? \n【得】我得冲所有的厕所？\n---\n【got to ↔ 得】我得\nI got to flush all the toilets? "
+                }
+            ]
+        },
+        {
+            "id": 165,
+            "order": 0,
+            "name": "stop sb from doing sth",
+            "text": "【含义】：阻止某人做某事",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the bad weather does not [stop] the cats [from doing] their jobs\n【阻止某人做某事】坏天气无法阻止猫做它们的工作\n---\n【stop sb from doing sth ↔ 阻止某人做某事】坏天气无法阻止猫做它们的工作\nthe bad weather does not stop the cats from doing their jobs"
+                }
+            ]
+        },
+        {
+            "id": 164,
+            "order": 0,
+            "name": "take offense",
+            "text": "【含义】：生气",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "don't take offense to me showing these clips\n【生气】不要生气我展示这些镜头\n---\n【take offense ↔ 生气】不要生气我展示这些镜头\ndon't take offense to me showing these clips"
+                }
+            ]
+        },
+        {
+            "id": 163,
+            "order": 0,
+            "name": "catch sth on film",
+            "text": "【含义】：拍下来\n【结构】：catch/get sth on film",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I've seen the cats get into some precarious situations and [I don't always catch it on film]\n【拍下来】我曾多次看到猫咪陷入危险境地，但[我并非总能拍到]\n---\n【catch sth on film ↔ 拍下来】我并非总能拍到\nI don't always catch it on film"
+                }
+            ]
+        },
+        {
+            "id": 162,
+            "order": 0,
+            "name": "be going to do",
+            "text": "【含义】：将要实施已经想好的事。是加强版的 be doing\n【翻译】：要、不翻译\n【注意】：\n-going to 常读成 gonna 以凸显将之意\n-will 翻译为会，但没有 be going to do 确定性高",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the thing about running a farm is that you['re going to] have some kind of rodent activity\n【要】经营农场的一大问题就是，[你会有一些鼠患]\n---\n【be going to do ↔ 要】你会有一些鼠患\nyou're going to have some kind of rodent activity"
+                }
+            ]
+        },
+        {
+            "id": 161,
+            "order": 0,
+            "name": "all sorts of things",
+            "text": "【含义】：各种各样的东西\n【注意】：看作复数",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "all sorts of sauce recipes\n【各种各样的东西】各种各样的酱料秘方\n---\n【all sorts of things ↔ 各种各样的东西】各种各样的酱料秘方\nall sorts of sauce recipes"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the job is to control all sorts of pests\n【各种各样的东西】工作是控制各种各样的害虫\n---\n【all sorts of things ↔ 各种各样的东西】工作是控制各种各样的害虫\nthe job is to control all sorts of pests"
+                }
+            ]
+        },
+        {
+            "id": 160,
+            "order": 0,
+            "name": "keep sb in line",
+            "text": "【含义】：让某人守规矩",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "he doesn't take no guff from any of the other cats and [keeps them in line]\n【让某人守规矩】他不会听其他任何猫的废话，[让它们守规矩]\n---\n【keep sb in line ↔ 让某人守规矩】让它们守规矩\nkeeps them in line"
+                }
+            ]
+        },
+        {
+            "id": 159,
+            "order": 0,
+            "name": "do not take no guff from sb",
+            "text": "【含义】：不接受某人的废话、不吃这一套\n【结构】：across the world/globe",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "he doesn't take no guff from any of the other cats\n【不接受某人的废话】他不会听其他任何猫的废话\n---\n【do not take no guff from sb ↔ 不接受某人的废话】他不会听其他任何猫的废话\nhe doesn't take no guff from any of the other cats"
+                }
+            ]
+        },
+        {
+            "id": 158,
+            "order": 0,
+            "name": "across the world",
+            "text": "【含义】：在世界各地\n【结构】：across the world/globe",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[as I look in this arena and across the globe], a piece of you died\n【在世界各地】[当我环顾这片赛场，放眼全球]，我感到你们的一部分已经逝去\n---\n【across the world/globe ↔ 在世界各地】当我环顾这片赛场，放眼全球\nas I look in this arena and across the globe"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "why [across the world] there's a woman just like me\n【在世界各地】为什么[世界各地]都有像我一样的女人\n---\n【across the world/globe ↔ 在世界各地】为什么世界各地都有像我一样的女人\nacross the world"
+                }
+            ]
+        },
+        {
+            "id": 157,
+            "order": 0,
+            "name": "in addition to sth",
+            "text": "【含义】：在...的基础之上\n【注意】：虽然有时翻译为除了，但前后是加的关系，不是排除的关系",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "shipping fee is extra money [in addition to] the cost of the actual item \n【在...的基础之上】运费是在实物花费基础之上的额外费用\n---\n【in addition to sth ↔ 在...的基础之上】运费是在实物花费基础之上的额外费用\nshipping fee is extra money in addition to the cost of the actual item "
+                }
+            ]
+        },
+        {
+            "id": 156,
+            "order": 0,
+            "name": "other than sth",
+            "text": "【含义】：除了某个东西",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "international shipping means that a company will ship to [a country other than its origins]\n【除了某个东西】国际运输是指公司将货物运送到[原产国以外的国家]\n---\n【other than sth ↔ 除了某个东西】原产国以外的国家\na country other than its origins"
+                }
+            ]
+        },
+        {
+            "id": 155,
+            "order": 0,
+            "name": "think of...as...",
+            "text": "【含义】：认为...是...",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "we [think of] worms [as] being gross insects\n【认为...是...】我们认为蠕虫是恶心的昆虫\n---\n【think of...as... ↔ 认为...是...】我们认为蠕虫是恶心的昆虫\nwe think of worms as being gross insects"
+                }
+            ]
+        },
+        {
+            "id": 154,
+            "order": 0,
+            "name": "suffer from sth",
+            "text": "【含义】：遭受什么困扰",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "I'm suffering from grief\n【遭受】我正承受着悲痛\n---\n【suffer from ↔ 遭受】我正承受着悲痛\nI'm suffering from grief"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "you are suffering from depression\n【遭受】你患有抑郁症\n---\n【suffer from ↔ 遭受】你患有抑郁症\nyou are suffering from depression"
+                }
+            ]
+        },
+        {
+            "id": 153,
+            "order": 0,
+            "name": "be afraid to do",
+            "text": "【含义】：害怕干什么\n【结构】：be afraid/scared to do",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "next time you feel the urge to pee, don't [be afraid to take a break] and go to the bathroom\n【害怕干什么】下次感觉想撒尿，[不要害怕停下来]，去上个厕所\n---\n【be afraid/scared to do ↔ 害怕干什么】不要害怕停下来\ndon't be afraid to take a break"
+                }
+            ]
+        },
+        {
+            "id": 152,
+            "order": 0,
+            "name": "be like",
+            "text": "【含义】：像\n【注意】：该结构就是我们常说的像，即本质上像。如果看着像则使用 it looks like",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "a popsicle is like a frozen dessert on a stick\n【像】雪糕像一个在棍上的冻的点心\n---\n【be like ↔ 像】雪糕像一个在棍上的冻的点心\na popsicle is like a frozen dessert on a stick"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "a bladder [is like] a big balloon\n【像】膀胱像一个大气球\n---\n【be like ↔ 像】膀胱像一个大气球\na bladder is like a big balloon"
+                }
+            ]
+        },
+        {
+            "id": 151,
+            "order": 0,
+            "name": "develop...into a habit",
+            "text": "【含义】：养成...为一种习惯",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "if you have [developed] this [into a habit], then it's better to get rid of it\n【养成...为一种习惯】如果[你已经将此养成了一种习惯]，那么最好戒掉它\n---\n【develop...into a habit ↔ 养成...为一种习惯】如果你已经将此养成了一种习惯\nyou have developed this into a habit"
+                }
+            ]
+        },
+        {
+            "id": 150,
+            "order": 0,
+            "name": "what matters is",
+            "text": "【含义】: 重要的是\n【注意】：what 被看成单数，所有使用第三人称 matters ，类似的还有 it doesn't matter",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[what matters] to your brain is how you respond to that stress\n【重要的是】对你的大脑来说，重要的是你如何应对这种压力\n---\n【what matters is ↔ 重要的是】重要的是你如何应对这种压力\nwhat matters to your brain is how you respond to that stress"
+                }
+            ]
+        },
+        {
+            "id": 149,
+            "order": 0,
+            "name": "turn sth into sth",
+            "text": "【含义】: 将什么变成什么",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the strange power to [turn] men [into] stone\n【将什么变成什么】将人变成石头的奇异力量\n---\n【turn sth into sth ↔ 将什么变成什么】将人变成石头的奇异力量\nthe strange power to turn men into stone"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[turning] them [into] a salty liquid\n【将什么变成什么】将它们变成咸液体\n---\n【turn sth into sth ↔ 将什么变成什么】\nturning them into a salty liquid"
+                }
+            ]
+        },
+        {
+            "id": 148,
+            "order": 0,
+            "name": "see...as...",
+            "text": "【含义】: 视作\n【结构】: see/view...as...",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "if you can [view] those situations [as] challenges you can control\n【视作】如果你能视这些情况为你能控制的挑战\n---\n【see...as... ↔ 视作】\nif you can view those situations as challenges you can control"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Medusa [was seen as] vice incarnate\n【视作】美杜莎被视作邪恶的化身\n---\n【see...as... ↔ 视作】\nMedusa was seen as vice incarnate"
+                }
+            ]
+        },
+        {
+            "id": 147,
+            "order": 0,
+            "name": "be no longer adjective",
+            "text": "【含义】: 不再处于某个状态",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "they feel they [are no longer in danger]\n【不再处于某个状态】他们觉得[自己不再处于危险之中]\n---\n【be no longer adjective ↔ 不再处于某个状态】自己不再处于危险之中\nthey are no longer in danger"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "they [are no longer close]\n【不再处于某个状态】他们不再亲近\n---\n【be no longer adjective ↔ 不再处于某个状态】他们不再亲近\nthey are no longer close"
+                }
+            ]
+        },
+        {
+            "id": 146,
+            "order": 0,
+            "name": "be similar to",
+            "text": "【含义】: 与...相似",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "science fiction movies [are] a little bit [similar to] fantasy\n【与...相似】科幻小说电影与奇幻电影有点相似\n---\n【be similar to ↔ 与...相似】科幻小说电影与奇幻电影有点相似\nscience fiction movies are a little bit similar to fantasy"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "slice and chop [are similar to] each other\n【与...相似】切和剁相似\n---\n【be similar to ↔ 与...相似】切和剁相似\nslice and chop are similar to each other"
+                }
+            ]
+        },
+        {
+            "id": 145,
+            "order": 0,
+            "name": "cut...into",
+            "text": "【含义】: 将...切成",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I want to [cut] things [into] perfect squares\n【将...切成】我想将东西切成完美方块\n---\n【cut...into ↔ 将...切成】我想将东西切成完美方块\nI want to cut things into perfect squares"
+                }
+            ]
+        },
+        {
+            "id": 143,
+            "order": 0,
+            "name": "make...do/make...adjective",
+            "text": "【含义】: 让宾语行动、让宾语状态变化\n【翻译】：让、使\n【注意】：有强迫之意",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "this action to [make] the potatoes [softer] and [mushy] is called mashing\n【让】这个让土豆变软和黏的动作叫做 mashing\n---\n【让 ↔ make...do/make...adjective】这个让土豆变软和黏的动作叫做 mashing\nthis action to make the potatoes softer and mushy is called mashing"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you don't need anybody to [make] you [happy]\n【让】你无需任何人[使你快乐]\n---\n【让 - make...do/make...adjective】使你快乐\nmake you happy"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the sudden movement can [make] the crab [feel] more threatened\n【让】突然移动会[让螃蟹感到更大威胁]\n---\n【让 - make...do/make...adjective】让螃蟹感到更大威胁\nmake the crab feel more threatened"
+                }
+            ]
+        },
+        {
+            "id": 142,
+            "order": 0,
+            "name": "stick...into...",
+            "text": "【含义】：将什么扎进",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "we are going to [stick] the thermometer [into] the turkey and check the temperature\n【将什么扎进】[我们要把温度计扎进火鸡里]，测测温度\n---\n【stick...into... - 将什么扎进】将温度计扎进火鸡里\nwe are going to stick the thermometer into the turkey"
+                }
+            ]
+        },
+        {
+            "id": 141,
+            "order": 0,
+            "name": "a sense of XXX",
+            "text": "【含义】：一种什么感觉",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "she has [a] good [sense of] humor\n【一种什么感觉】她很有幽默感\n---\n【a sense of XXX - 一种什么感觉】她很有幽默感\nshe has a good  sense of humor"
+                }
+            ]
+        },
+        {
+            "id": 140,
+            "order": 0,
+            "name": "compare A to B",
+            "text": "【含义】：将 A 和 B 作比较",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "don't [compare] Canada [to] the United States\n【将 A 和 B 作比较】不要将加拿大与美国相提并论\n---\n【compare A to B - 将 A 和 B 作比较】不要将加拿大与美国相提并论\ndon't compare Canada to the United States"
+                }
+            ]
+        },
+        {
+            "id": 139,
+            "order": 0,
+            "name": "it sounds adjective",
+            "text": "【含义】：听着如何",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "this expression sounds strange to native speakers\n【听着如何】这种表达方式对母语者来说听着奇怪\n---\n【it sounds adjective - 听着如何】听着奇怪\nthis expression sounds strange to native speakers"
+                }
+            ]
+        },
+        {
+            "id": 138,
+            "order": 0,
+            "name": "no one does",
+            "text": "【含义】：没人怎么着\n【注意】：动词要使用单数",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[no one knows] how much time we have\n【没人怎么着】没人知道我们有多少时间\n---\n【no one does - 没人怎么着】没人知道\nno one knows how much time we have"
+                }
+            ]
+        },
+        {
+            "id": 137,
+            "order": 0,
+            "name": "it looks adjective",
+            "text": "【含义】：看着如何",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "this ice cream looks cool and refreshing\n【看着如何】这个冰激凌看着清凉舒爽\n---\n【it looks adjective - 看着如何】这个冰激凌看着清凉舒爽\nthis ice cream looks cool and refreshing"
+                }
+            ]
+        },
+        {
+            "id": 136,
+            "order": 0,
+            "name": "imagine...doing",
+            "text": "【含义】：想象干什么",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[imagine walking] barefoot along a sunny beach\n【想象干什么】想象沿着阳光沙滩光脚行走\n---\n【imagine...doing - 想象干什么】想象行走\nimagine walking barefoot along a sunny beach"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[imagine] a planet of rotten eggs [engulfing] the Earth\n【想象干什么】想象一个臭鸡蛋星球吞没地球\n---\n【imagine...doing - 想象干什么】想象...吞没\nimagine a planet of rotten eggs engulfing the Earth"
+                }
+            ]
+        },
+        {
+            "id": 135,
+            "order": 0,
+            "name": "twice the property of A",
+            "text": "【含义】：两倍于 A 的某个属性\n【注意】：twice is a adverb",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "another planetary object, [twice the size of Earth]\n【两倍于 A 的某个属性】另一个天体，[地球体积的两倍]\n---\n【twice the property of A - 两倍于 A 的某个属性】地球体积的两倍\ntwice the size of Earth"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "that's more than [twice the bite force of a human molar]\n【两倍于 A 的某个属性】那比[人类智齿咬力的两倍]还多\n---\n【twice the property of A - 两倍于 A 的某个属性】人类智齿咬力的两倍\ntwice the bite force of a human molar"
+                }
+            ]
+        },
+        {
+            "id": 134,
+            "order": 0,
+            "name": "as...as...",
+            "text": "【含义】：...到什么程度\n【结构】：as noun/adjective/adverb as...\n【技巧】：看弱第一个 as，视 ... as 为整体，即一个 noun/adjective/adverb",
+            "examples": [
+                {
+                    "id": 6,
+                    "type": 2,
+                    "text": "it would look just as [cool as] if the Earth was one of Jupiter's moons\n【...到什么程度】它看起来就很酷，像地球是木星的月亮一样\n---\n【as...as ↔ ...到什么程度】它看起来就很酷，像地球是木星的月亮一样\nit would look just as cool as if the Earth was one of Jupiter's moons"
+                },
+                {
+                    "id": 5,
+                    "type": 2,
+                    "text": "you don't have as [big a bubbles as] boil\n【...到什么程度】你没有像煮那样的大泡\n---\n【as...as... ↔ ...到什么程度】像煮那样的大泡\nyou don't have as big a bubbles as boil"
+                },
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "native speakers don't speak as [clearly as] I do\n【...到什么程度】母语者不会讲的清晰到像我这样\n---\n【as...as... ↔ ...到什么程度】母语者不会讲的清晰到像我这样\nnative speakers don't speak as clearly as I do"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "I'm as [real as] you are\n【...到什么程度】我和你一样真实\n---\n【as...as... ↔ ...到什么程度】和你一样真实\nI'm as real as you are"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "You'll probably be about as [good as] I was\n【...到什么程度】你大概会和我以前差不多\n---\n【as...as... ↔ ...到什么程度】和我以前差不多\nYou'll probably be about as good as I was"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "these asteroids can be as [big as] 240 km in diameter\n【...到什么程度】这些小行星直径能达到240公里\n---\n【as...as... ↔ ...到什么程度】这些小行星直径能达到240公里\nthese asteroids can be as big as 240 km in diameter"
+                }
+            ]
+        },
+        {
+            "id": 133,
+            "order": 0,
+            "name": "shine down on",
+            "text": "【含义】：照耀着",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Our sky would look gorgeous. Not only because of the ice giant [shining down on] us, but also thanks to many shooting stars\n【照耀着】我们的天空看起来绚丽多彩。不仅因为[照耀着我们的那颗冰巨星]，还归功于许多流行\n---\n【shine down on - 照耀着】照耀着我们\nthe ice giant shining down on us"
+                }
+            ]
+        },
+        {
+            "id": 132,
+            "order": 0,
+            "name": "be the same as ",
+            "text": "【含义】：和...一样\n【注意】：same is an adjective",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "it is not exactly the same as sour\n【和...一样】它和酸味不完全一样\n---\n【be the same as - 和...一样】它和酸味不完全一样\nit is not exactly the same as sour"
+                }
+            ]
+        },
+        {
+            "id": 131,
+            "order": 0,
+            "name": "is free to do",
+            "text": "【含义】：随心所欲",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "a single individual [who is free to impose their vision]\n【随心所欲】一个个体, [他随心所欲地施行自己愿景]\n---\n【is free to do - 随心所欲】他随心所欲地施行自己愿景\nwho is free to impose their vision"
+                }
+            ]
+        },
+        {
+            "id": 130,
+            "order": 0,
+            "name": "be composed of",
+            "text": "【含义】：构成",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Uranus's atmosphere [is composed of] hydrogen sulfide\n【构成】天王星的大气层由硫化氢构成\n---\n【be composed of - 构成】\nUranus's atmosphere is composed of hydrogen sulfide"
+                }
+            ]
+        },
+        {
+            "id": 129,
+            "order": 0,
+            "name": "it smells adjective",
+            "text": "【含义】：闻着如何",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "that part of the house is not going to [smell good]\n【闻着如何】房子的那个部分不会好闻\n---\n【it smells adjective - 闻着如何】好闻\nthat part of the house is not going to smell good"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Uranus smells like farts\n【闻着如何】天王星闻着像屁\n---\n【it smells adjective - 闻着如何】天王星闻着像屁\nUranus smells like farts"
+                }
+            ]
+        },
+        {
+            "id": 128,
+            "order": 0,
+            "name": "be responsible for",
+            "text": "【含义】：对于...负有责任",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the man most [responsible for] our enemies technological superiority\n【对于...负有责任】对于我们敌人技术优势，负主要责任的人\n---\n【be responsible for - 对于...负有责任】\nthe man most responsible for our enemies technological superiority"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the asteroid [responsible for] wiping dinosaurs off the face of the Earth\n【对于...负有责任】对于恐龙从地球上灭绝，负有责任的小行星\n---\n【responsible for - 对于...负有责任】\nthe asteroid responsible for wiping dinosaurs off the face of the Earth"
+                }
+            ]
+        },
+        {
+            "id": 127,
+            "order": 0,
+            "name": "be short",
+            "text": "【含义】：不足",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "we'd [be short] on time, but at least we'd have a slight chance to evacuate the Earth\n【不足】[时间上我们会不足]，但至少我们还有一线希望撤离地球\n---\n【be short - 不足】时间上我们会不足\nwe'd be short on time"
+                }
+            ]
+        },
+        {
+            "id": 126,
+            "order": 0,
+            "name": "live a xxx life",
+            "text": "【含义】：过着...的生活",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Uranus [lived a quiet life] on the outskirts of the Solar System\n【过着...的生活】天王星在太阳系边缘过着平静的生活\n---\n【live a xxx life - 过着...的生活】\nUranus lived a quiet life on the outskirts of the Solar System"
+                }
+            ]
+        },
+        {
+            "id": 125,
+            "order": 0,
+            "name": "attribute...to...",
+            "text": "【含义】：归功于",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "he [attributes] her power [to] grace not evil\n【归功于】[他将她的力量归功于恩典]而非邪恶\n---\n【attribute...to... - 归功于】\nhe attributes her power to grace"
+                }
+            ]
+        },
+        {
+            "id": 124,
+            "order": 0,
+            "name": "describe...as...",
+            "text": "【含义】：说成",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[Greek scholar described the Gorgon sisters as having scaled heads], large tusks and golden wings\n【说成】[希腊学者将 Gorgon 姐妹说成长有鳞片头]，长牙，金翅膀\n---\n【describe...as... - 说成】：希腊学者将 Gorgon 姐妹说成长有鳞片头\nGreek scholar described the Gorgon sisters as having scaled heads"
+                }
+            ]
+        },
+        {
+            "id": 123,
+            "order": 0,
+            "name": "bottle up emotions",
+            "text": "【含义】：压抑情绪",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "don't [bottle up your feelings]. If you feel sad, cry\n【压抑情绪】[不要压抑你的情绪]。如果感到难过，就哭\n---\n【bottle up emotions - 压抑情绪】不要压抑你的情绪\ndon't bottle up your feelings"
+                }
+            ]
+        },
+        {
+            "id": 122,
+            "order": 0,
+            "name": "drown one's sorrows",
+            "text": "【含义】：借酒消愁",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "to [drown your sorrows] means to consume a lot of alcohol so that you will no longer feel sad\n【借酒消愁】[借酒消愁]意思是喝很多酒，以不再感到难过\n---\n【drown one's sorrows - 借酒消愁】\ndrown your sorrows"
+                }
+            ]
+        },
+        {
+            "id": 119,
+            "order": 0,
+            "name": "be part of",
+            "text": "【含义】：属于、是整体的一部分",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "my husband's parents [are part of my family]\n【属于】我丈夫的父母属于我的家人\n---\n【be part of - 属于】属于我的家人\nmy husband's parents are part of my family"
+                }
+            ]
+        },
+        {
+            "id": 118,
+            "order": 0,
+            "name": "in contact with",
+            "text": "【含义】：保持联系",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "To live in the moment means to enjoy each and every one that we come [in contact with]\n【保持联系】活在当下意味着，要享受[我们接触到的所有]\n---\n【in contact with - 保持联系】\neach and every one that we come in contact with"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "they are no longer [in contact with] each other\n【保持联系】他们不再互相保持联系\n---\n【in contact with - 保持联系】\nthey are no longer in contact with each other"
+                }
+            ]
+        },
+        {
+            "id": 117,
+            "order": 0,
+            "name": "be made up of",
+            "text": "【含义】：组成\n【注意】：be made of = 制成",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "a lot of the footage [is] not [made up of] actors\n【组成】很多镜头并非由演员拍摄\n---\n【be made up of - 组成】 很多镜头并非由演员拍摄\na lot of the footage is not made up of actors"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Your immediate family [is made up of] the people who are the most closely related to you\n【组成】 你的直系亲属[由与你最密切相关的人组成]\n---\n【be made up of - 组成】 你的直系亲属由与你最密切相关的人组成\nis made up of the people who are the most closely related to you"
+                }
+            ]
+        },
+        {
+            "id": 116,
+            "order": 0,
+            "name": "reach out to ",
+            "text": "【含义】：联系",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "After many years of no communication, her estranged father [reached out to her] for the first time.\n【联系】多年不联系，她疏远的父亲，首次[联系到她]\n---\n【reach out to - 联系】联系到她\nreached out to her"
+                }
+            ]
+        },
+        {
+            "id": 115,
+            "order": 0,
+            "name": "in doing",
+            "text": "【含义】：在...过程中",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "this is an early step [in triggering the process of atherosclerosis]\n【在...过程中】这是[引发动脉粥样硬化的过程中]的早期步骤\n---\n【in doing - 在...过程中】引发动脉粥样硬化的过程中\nin triggering the process of atherosclerosis"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I'm having some success [in calling them back]\n【在...过程中】[在叫它们回来这件事上], 我有着[不错的效果]\n---\n【in doing - 在...过程中】在叫它们回来这件事上\nsome success in calling them back"
+                }
+            ]
+        },
+        {
+            "id": 114,
+            "order": 0,
+            "name": "part ways",
+            "text": "【含义】：分道扬镳\n【注意】：中性表达，非消极",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Your mother and father are living separately and [have parted ways]\n【分道扬镳】你妈妈和爸爸分开住，[分道扬镳了]\n---\n【part ways - 分道扬镳】分道扬镳了\nhave parted ways"
+                }
+            ]
+        },
+        {
+            "id": 113,
+            "order": 0,
+            "name": "commit to sth",
+            "text": "【含义】：致力于某事",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[Godparents will commit to praying for the child] and making sure they are helping to instill the child with good religious beliefs\n【致力于某事】[教父母将致力于为孩子祈祷]，确保他们帮助孩子树立良好的宗教信仰。\n---\n【commit to sth- 致力于某事】教父母将致力于为孩子祈祷\nGodparents will commit to praying for the child"
+                }
+            ]
+        },
+        {
+            "id": 111,
+            "order": 0,
+            "name": "get in on sth",
+            "text": "【含义】参与其中",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "volcanoes would begin erupting uncontrollably, and tremendous [earthquakes would get in on the act]\n【参与其中】火山会不受控的喷发，同时巨大的[地震会参与进来]\n---\n【参与其中】地震会参与进来\nearthquakes would get in on the act"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "You had an opportunity to [get in on] Starbucks\n【参与其中】你有过一个参与投资星巴克的机会\n---\n【参与其中】参与投资\nYou had an opportunity to get in on Starbucks"
+                }
+            ]
+        },
+        {
+            "id": 107,
+            "order": 0,
+            "name": "triumph over sb",
+            "text": "【含义】：战胜\n【结构】：自动词 triumph + prep",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Perseus is reframed as a symbol of virtue, [triumphing over Medusa]\n【战胜】Perseus 被重塑为正义的象征，[战胜美杜莎]\n---\n【triumph over sb - 战胜】\ntriumphing over Medusa"
+                }
+            ]
+        },
+        {
+            "id": 106,
+            "order": 0,
+            "name": "lead sb astray",
+            "text": "【含义】：误导、使之误入歧途\n【结构】：astray is a adverb",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "a woman's power to [lead] men [astray]\n【误导】一种女人误导男人的能力\n---\n【lead sb astray - 误导】\na woman's power to lead men astray"
+                }
+            ]
+        },
+        {
+            "id": 105,
+            "order": 0,
+            "name": "a vice incarnate",
+            "text": "【含义】：邪恶的化身",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Medusa was seen as [vice incarnate]\n【邪恶的化身】美杜莎被视作邪恶的化身\n---\n【a vice incarnate - 邪恶的化身】\nMedusa was seen as vice incarnate"
+                }
+            ]
+        },
+        {
+            "id": 104,
+            "order": 0,
+            "name": "originate with",
+            "text": "【含义】：起源于",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the mythological idea [originates with] ancient Greeks trying to explain the existence of prehistoric fossils\n【起源于】这种神话观念[起源于古希腊人试图解释史前化石的存在]\n---\n【originate with - 起源于】\noriginates with ancient Greeks trying to explain the existence of prehistoric fossils"
+                }
+            ]
+        },
+        {
+            "id": 103,
+            "order": 0,
+            "name": "all the rage",
+            "text": "【含义】：all the = 全然，rage = 名词狂热，all the rage = 完全疯狂、非常流行\n【成分】：noun",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "while the brown sauce was [all the rage] in Europe\n【完全疯狂】在[那种褐色酱料在欧洲完全疯狂]的时候\n---\n【all the rage - 完全疯狂】\nthe brown sauce was all the rage in Europe"
+                }
+            ]
+        },
+        {
+            "id": 102,
+            "order": 0,
+            "name": "period",
+            "text": "【含义】：period 本意是句号\n【翻译】：就这么简单、啥也不说了、不接受反驳\n",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "You want something. Go get it. [Period].\n【就这么简单】你想做什么，就去做，[就这么简单]\n---\n【period - 就这么简单】\nPeriod"
+                }
+            ]
+        },
+        {
+            "id": 101,
+            "order": 0,
+            "name": "...type thing",
+            "text": "【含义】：什么之类的东西",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the maintenance type things\n【什么之类的东西】维修之类的事情 \n---\n【...type thing - 什么之类的东西】维修之类的事情 \nthe maintenance type things\n"
+                }
+            ]
+        },
+        {
+            "id": 98,
+            "order": 0,
+            "name": "be associated with",
+            "text": "【含义】：与什么有关",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "it has even [been associated with] shortened telomeres\n【与什么有关】它甚至[与端粒缩短有关]\n---\n【be associated with - 与什么有关】：与端粒缩短有关\nassociated with shortened telomere"
+                }
+            ]
+        },
+        {
+            "id": 97,
+            "order": 0,
+            "name": "speaking of sth",
+            "text": "【含义】：说起什么事",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[speaking of] digestion, does chronic stress affect your waistline?\n【说起】[说起消化]，慢性压力影响你的腰围吗？\n---\n【speaking of sth - 说起】说起消化\nspeaking of digestion"
+                }
+            ]
+        },
+        {
+            "id": 96,
+            "order": 0,
+            "name": "be being adjective",
+            "text": "【含义】：显得",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[you're being very rude]. you shouldn't be asking me this.\n【显得】[你显得很没礼貌]. 你不应该问我这个\n---\n【be being adjective - 显得】你显得很没礼貌\nyou're being very rude"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "when we say I'm starving, [we are being dramatic] and over the top\n【显得】当我们说我饿死了，[我们显得很夸张]，有点过\n---\n【be being adjective - 显得】我们显得很夸张\nwe are being dramatic"
+                }
+            ]
+        },
+        {
+            "id": 95,
+            "order": 0,
+            "name": "continue doing / continue to do",
+            "text": "【含义】：继续做某事",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "don't [continue sitting] there when there is an elderly man standing\n【继续做某事】[不要继续坐在那]，当有老人站着时\n---\n【continue doing / continue to do - 继续做某事】不要继续坐在那\ndon't continue sitting there"
+                }
+            ]
+        },
+        {
+            "id": 92,
+            "order": 0,
+            "name": "a way into",
+            "text": "【含义】：通往...的道路",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "No monster has slithered [their way into our hearts], quite like the snake-haired seductress\n【通往...的道路】[没有哪个怪物能爬出一条路进入我们内心]，像那个蛇发狐狸精那样\n---\n【a way into - 通往...的道路】没有哪个怪物能爬出一条路进入我们内心\nNo monster has slithered their way into our hearts"
+                }
+            ]
+        },
+        {
+            "id": 90,
+            "order": 0,
+            "name": "take shape",
+            "text": "【含义】：成型、初具规模",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the modern Medusa [takes shape]\n【成型】现代美杜莎的形象逐渐成形\n---\n【take shape - 成型】现代美杜莎的形象逐渐成形\nthe modern Medusa takes shape"
+                }
+            ]
+        },
+        {
+            "id": 88,
+            "order": 0,
+            "name": "not ... much",
+            "text": "【含义】：不太",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "they [didn't] think too [much] of them in old Paris\n【不太】在老巴黎，[他们不太关心这些]\n---\n【not ... much 不太】他们不太关心这些\nthey didn't think too much of them"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "she['s not much] to look at\n【不太】她不太值得一看\n---\n【not ... much 不太】她不太值得一看\nshe's not much to look at"
+                }
+            ]
+        },
+        {
+            "id": 87,
+            "order": 0,
+            "name": "go figure",
+            "text": "【含义】：直译为去想想吧\n【翻译】：不可思议",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "The winged-horse on your book is the son of a snake-hair monster and the god of the sea. [Go figure]\n【不可思议】你书上的飞马是蛇发怪兽和海神的儿子。[不可思议]\n---\n【go figure - 不可思议】\nGo figure"
+                }
+            ]
+        },
+        {
+            "id": 86,
+            "order": 0,
+            "name": "spring forth",
+            "text": "【含义】：涌现\n【注意】：forth 除了表示向前，还表示向外",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "when Perseus gives Medusa the old Marie Antoinette, two children [spring forth] from her body: Chrysaor and Pegasus\n【涌现】珀尔修斯给了美杜莎留意十六妻子同样的结局，[两个孩子从她的体内涌现出来]：克律萨俄耳和飞马\n---\n涌现\ntwo children spring forth from her body"
+                }
+            ]
+        },
+        {
+            "id": 85,
+            "order": 0,
+            "name": "sneak up on",
+            "text": "【含义】：悄悄接近",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[Perseus sneaks up on the sleeping Gorgons], using his shield as a mirror to avoid looking Medusa in the eyes \n【悄悄接近】[珀尔修斯悄悄接近睡梦中的戈耳工]，使用他的盾牌作为镜子，避免直视美杜莎的眼睛\n---\n【sneak up on - 悄悄接近】珀尔修斯悄悄接近睡梦中的戈耳工\nPerseus sneaks up on the sleeping Gorgons"
+                }
+            ]
+        },
+        {
+            "id": 84,
+            "order": 0,
+            "name": "avoid doing",
+            "text": "【含义】：避免做某事",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Perseus sneaks up on the sleeping Gorgons, using his shield as a mirror to [avoid looking Medusa in the eyes]\n【避免做某事】珀尔修斯悄悄接近睡梦中的戈耳工，使用他的盾牌作为镜子，[避免直视美杜莎的眼睛]\n---\n【avoid doing - 避免做某事】避免直视美杜莎的眼睛\navoid looking Medusa in the eyes"
+                }
+            ]
+        },
+        {
+            "id": 79,
+            "order": 0,
+            "name": "serves as",
+            "text": "【含义】：作为、充当",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the senate had chosen him to [serve as] dictator with absolute power over the military and government\n【充当】[参议院选择了他，作为领导者]，拥有凌驾于军队和政府之上的绝对权力\n---\n【serves as - 充当】参议院选择了他，作为领导者\nthe senate had chosen him to serve as dictator"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "a full bladder [serves as] a perfect breeding ground for many harmful bacteria\n【充当】[憋满尿的膀胱可作为]许多有害细菌的[理想滋生场所]\n---\n【serves as - 充当】憋满尿的膀胱可作为许多有害细菌的理想滋生场所\na full bladder serves as a perfect breeding ground"
+                }
+            ]
+        },
+        {
+            "id": 78,
+            "order": 0,
+            "name": "in a matter of weeks",
+            "text": "【含义】：...的问题、...的事情",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Cincinnatus set down his plow, took control and [in a matter of weeks], saved Rome.\n【短短数周】Cincinnatus 放下锄头，接管权力，[短短数周]，拯救了罗马\n---\n【in a matter of weeks - 短短数周】几周的事、几周的时间\nin a matter of weeks"
+                }
+            ]
+        },
+        {
+            "id": 77,
+            "order": 0,
+            "name": "live up to",
+            "text": "【含义】：活到某个道德高度\n【翻译】：成为什么样的人、达到",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "no modern dictator has [lived up to] this ideal\n【成为什么样的人】没有哪个现代独裁者成为这样完美的人\n---\n【live up to - 成为什么样的人】没有哪个现代独裁者成为这样完美的人\nno modern dictator has lived up to this ideal"
+                }
+            ]
+        },
+        {
+            "id": 76,
+            "order": 0,
+            "name": "be/stand accused of",
+            "text": "【含义】：被指控做了什么",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Even so-called benevolent dictators, [stand accused of censoring journalists]\n【被指控做了什么】即使所谓的仁慈的独裁者，也[被指控审查记者]\n---\n【be/stand accused of - 被指控做了什么】被指控审查记者\nstand accused of censoring journalists"
+                }
+            ]
+        },
+        {
+            "id": 72,
+            "order": 0,
+            "name": "do around",
+            "text": "【含义】：四处地做、来回来去地做",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "not just [sit around] and be decorative\n【来回来去地做】不仅仅是[闲坐着]，作个摆设\n---\n【do around - 来回来去地做】闲坐着\nsit around"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "what is this stupid thing you're [carrying around]\n【来回来去地做】这是什么鬼东西，你拿来拿去的\n---\n【do around - 来回来去地做】拿来拿去的\nwhat is this stupid thing you're carrying around"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "we just [go around] and we play against all these young guys\n【来回来去地做】我们就[四处转悠]，跟这些年轻人对阵\n---\n【do around - 来回来去地做】四处转悠\ngo around"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I don't want you out here [shooting] this ball [around] all day and night\n【来回来去地做】我不想你在外面整天投来投去的\n---\n【do around - 来回来去地做】投来投去\nI don't want you out here shooting this ball around all day and night"
+                }
+            ]
+        },
+        {
+            "id": 71,
+            "order": 0,
+            "name": "go adjective",
+            "text": "【含义】：进入某种状态\n【翻译】：…了\n【注意】：往往用在负面场景。而 get adjective 更通用。",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "cooks everywhere were [going crazy] for it\n【…了（负面）】各地厨师正为之疯狂\n---\n【go adjective - …了（负面）】疯狂\ncooks everywhere were going crazy for it"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "that disbelieving little boy [went missing]\n【…了（负面）】那个不相信的小男孩失踪了\n---\n【go adjective - …了（负面）】失踪了\nthat disbelieving little boy went missing"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "they didn't want fish to [go bad]\n【…了（负面）】他们不想让鱼坏掉\n---\n【go adjective - …了（负面）】坏掉\nthey didn't want fish to go bad\n"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I'm [going pro]\n【…了（负面）】我要成为职业选手\n---\n【go adjective - …了（负面）】成为职业选手\nI'm going pro"
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "order": 0,
+            "name": "start doing / start to do",
+            "text": "【含义】：开始",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "It got so confusing that they [began calling] all brown sauce ketchup\n【开始】这非常让人困惑，以至于[他们开始管所有褐色酱料叫 ketchup]\n---\n【start doing / start to do - 开始】他们开始管所有褐色酱料叫 ketchup\nthey began calling all brown sauce ketchup"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "when the temperatures [start to go] below zero\n【开始】当温度开始降至零度以下时\n---\n【start doing / start to do - 开始】温度开始降至零度以下\nwhen the temperatures start to go below zero"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "once you [start renting] you are a tenant\n【开始】[一旦你开始租]，你是一个租客\n---\n【start doing / start to do - 开始】一旦你开始租\nonce you start renting"
+                }
+            ]
+        },
+        {
+            "id": 70,
+            "order": 0,
+            "name": "fill with",
+            "text": "【含义】：充满",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "you [filled] the sky [with] 150 aircraft\n【充满】你用150战机布满天空\n---\n【fill with - 充满】你用150战机布满天空\nyou filled the sky with 150 aircraft"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "your life will always [be filled with] stressful situations\n【充满】你的生活将永远充满压力\n---\n【fill with - 充满】你的生活将永远充满压力\nyour life will always be filled with stressful situations"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I['m filled with] dread\n【充满】我充满恐惧\n---\n【fill with - 充满】我充满恐惧\nI'm filled with dread"
+                }
+            ]
+        },
+        {
+            "id": 69,
+            "order": 0,
+            "name": "either…, or…",
+            "text": "【含义】：二选一\n【注意】：该结构的重点在后方，either 是 adverb，or 是 conjunction",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you need to contact [either] the landowner [or] the superintendent\n【二选一】你需要联系房主或房管\n---\n【either…, or… - 二选一】你需要联系房主或房管\nyou need to contact either the landowner or the superintendent"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[either] the swear word will be censored, [or] at the beginning of the program there will be a warning\n【二选一】要么对脏话进行审查，要么在节目开始时发出警告\n---\n【either…, or… - 二选一】要么对脏话进行审查，要么在节目开始时发出警告\neither the swear word will be censored, or at the beginning of the program there will be a warning"
+                }
+            ]
+        },
+        {
+            "id": 68,
+            "order": 0,
+            "name": "not only..., but also...",
+            "text": "【含义】：事情远不止于此\n【翻译】：更、还、而且\n【注意】：\n-该结构的重点在后方：not only 是 adverb, but also 是 conjunction\n-位于句首时，助动词要提前、倒装\n",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[not only] do we have the largest economy in the world, we have the strongest economy in the world\n【不仅..., 而且...】我们不仅拥有世界上最大的经济体，而且拥有世界上最强大的经济体\n---\n【not only..., but also... - 不仅..., 而且...】我们不仅拥有世界上最大的经济体，而且拥有世界上最强大的经济体\nnot only do we have the largest economy in the world, we have the strongest economy in the world"
+                }
+            ]
+        },
+        {
+            "id": 29,
+            "order": 0,
+            "name": "be supposed to do",
+            "text": "【含义】：应该。基于某些约束，应该做什么\n【翻译】：应该\n【注意】：be supposed to do 偏义务，should 偏建议",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the expected delivery date is when the package [is supposed to] arrive at your address\n【理应】预计送达日期是指, [包裹应该到达您地址的日期]\n---\n【be supposed to - 理应】包裹应该到达您地址的日期\nwhen the package is supposed to arrive at your address"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "you['re not supposed] to have that\n【理应】你不应该拿那个\n---\n【be supposed to - 理应】你不应该\nyou're not supposed to have that"
+                }
+            ]
+        },
+        {
+            "id": 30,
+            "order": 0,
+            "name": "mind doing",
+            "text": "【含义】：介意",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "would you [mind bringing] him to me\n【介意】你介意把它拿给我吗\n---\n【mind doing - 介意】\nwould you mind bringing him to me"
+                }
+            ]
+        },
+        {
+            "id": 34,
+            "order": 0,
+            "name": "it takes (sb) time or money",
+            "text": "【含义】：花费时间和精力\n【翻译】：需要",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "it would [take] Uranus [13 years] to reach the collision point\n【花费时间和精力】[那会花费天王星13年]达到碰撞点\n---\n【it takes (sb) time or money - 花费时间和精力 - 需要】那会花费天王星13年达到碰撞点\nit would take Uranus 13 years"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "if you struggle to do something, it means [it takes] a lot of effort and a lot of energy\n【花费时间和精力】如果你做某些事很吃力，那就意味着做[它需要付出很多努力]和精力\n---\n【it takes (sb) time or money - 花费时间和精力 - 需要】它需要付出很多努力\nit takes a lot of effort"
+                }
+            ]
+        },
+        {
+            "id": 36,
+            "order": 0,
+            "name": "I find…",
+            "text": "【含义】：我发现… \n【注意】：类似 I think",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "[I find] the plot too unbelievable\n【我发现】我发现那个情节太不可信\n---\n【I find - 我发现】\nI find the plot too unbelievable"
+                },
+                {
+                    "id": 2,
+                    "type": 0,
+                    "text": "[you found] it difficult to finish reading the book\n【我发现】你发现很难读完那本书\n---\n【I find - 我发现】\nyou found it difficult to finish reading the book"
+                },
+                {
+                    "id": 1,
+                    "type": 0,
+                    "text": "[you didn't find] the book interesting\n【我发现】你发现那本书没意思\n---\n【I find - 我发现】\nyou didn't find the book interesting"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "order": 0,
+            "name": "be worth the noun",
+            "text": "【含义】：因为两件事等价，所以值得\n【翻译】：值得…",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you['re not worth the trouble] to hit you\n【值得一】你不值得我费劲去打你\n---\n【be worth the noun - 值得一】你不值得我费劲去打你\nyou're not worth the trouble to hit you"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "it'll [be worth the wait]\n【值得一】那值得一等\n---\n【be worth the noun - 值得一】那值得一等\nit'll be worth the wait"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "order": 0,
+            "name": "make it difficult to do",
+            "text": "【含义】：使之难以…",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "fog [make it difficult to see] in front of you\n【使之难以】雾使你难以看到前方\n---\n【make it difficult to do - 使之难以】雾使你难以看到前方\nfog make it difficult to see in front of you"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "This type of fat [make it harder to button] your pants\n【使之难以】这种脂肪使你更难扣上裤子\n---\n【make it difficult to do - 使之难以】这种脂肪使你更难扣上裤子\nThis type of fat make it harder to button your pants"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "order": 0,
+            "name": "A cause B to do",
+            "text": "【含义】：引起事物变化\n【翻译】：引起、导致",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "it [causes you to crave] comfort foods\n【引起】它使你渴望安慰食物\n---\n【A cause B to do - 引起】它使你渴望安慰食物\nit causes you to crave comfort foods"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "adrenaline [causes your heart to beat] faster\n【引起】肾上腺素引起你的心脏跳得更快\n---\n【A cause B to do - 引起】肾上腺素引起你的心脏跳得更快\nadrenaline causes your heart to beat faster"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "order": 0,
+            "name": "A communicate the B to the C",
+            "text": "【含义】：将 A 传递给 B",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "brain [communicates] stress [to] your enteric nervous system\n【A 将 B 传给 C】大脑将压力传导给你的肠道神经系统\n---\n【A communicate the B to the C - A 将 B 传给 C】大脑将压力传导给你的肠道神经系统\nbrain communicates stress to your enteric nervous system"
+                }
+            ]
+        },
+        {
+            "id": 60,
+            "order": 0,
+            "name": "what if",
+            "text": "【含义】：如果...会怎样\n【注意】：可以简单看作 if",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[what if] you hold your urine for too long\n【如果...会怎样】如果憋尿时间过长会怎样\n---\n【what if - 如果...会怎样】如果憋尿时间过长会怎样\nwhat if you hold your urine for too long"
+                }
+            ]
+        },
+        {
+            "id": 59,
+            "order": 0,
+            "name": "be dying for",
+            "text": "【含义】：想死某个东西了",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I'm dying for pizza\n【想死某个东西了】我想死披萨了\n---\n【be dying for - 想死某个东西了】我想死披萨了\nI'm dying for pizza"
+                }
+            ]
+        },
+        {
+            "id": 58,
+            "order": 0,
+            "name": "do up",
+            "text": "【含义】：表示状态拉满、完成状态转变\n【翻译】：...起来",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "the sky has [cleared up]\n【...起来】天气放晴了\n---\n【do up - ...起来】天气放晴了\nthe sky has cleared up"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "the wind [picked up]\n【...起来】风大起来了\n---\n【do up - ...起来】风大起来了\nthe wind picked up"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "Jason: Look it up\n【...起来】查一查\n---\n【do up - ...起来】查一查\nLook it up"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Kobe: Selfie it up\n【...起来】拍起来\n---\n【do up - ...起来】拍起来\nSelfie it up"
+                }
+            ]
+        },
+        {
+            "id": 57,
+            "order": 0,
+            "name": "look sb in the eyes",
+            "text": "【含义】：看某人的眼睛",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "Perseus sneaks up on the sleeping Gorgons, using his shield as a mirror to avoid [looking Medusa in the eyes]\n【看某人的眼睛】珀尔修斯悄悄接近睡梦中的戈耳工，使用他的盾牌作为镜子，避免[直视美杜莎的眼睛]\n---\n【look sb in the eyes - 看某人的眼睛】直视美杜莎的眼睛\nlooking Medusa in the eyes"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "look them in the eyes\n【看某人的眼睛】看着他们的眼睛\n---\n【look sb in the eyes - 看某人的眼睛】看着他们的眼睛\nlook them in the eyes"
+                }
+            ]
+        },
+        {
+            "id": 56,
+            "order": 0,
+            "name": "it pays off",
+            "text": "【含义】：很值得。即结清后算下来结果挺好",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "you just play with kids sometimes and [it pays off]\n【很值得】你就偶尔跟孩子玩玩，[就会有意想不到的收获]\n---\n【it pays off - 很值得】会有意想不到的收获\nit pays off"
+                }
+            ]
+        },
+        {
+            "id": 67,
+            "order": 0,
+            "name": "kill for sth",
+            "text": "【含义】：拼命想要",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I would [kill for] this job\n【拼命想要】我非常想得到这份工作\n---\n【kill for sth - 拼命想要】我非常想得到这份工作\nI would kill for this job"
+                }
+            ]
+        },
+        {
+            "id": 55,
+            "order": 0,
+            "name": "get sth",
+            "text": "【含义】：处于一种状态\n【句型】：\nget sth\nhave got sth",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "I've got the knowledge\n【处于一种状态】我知识渊博\n---\n【get sth - 处于一种状态】我知识渊博\nI've got the knowledge"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "I've got a thing for watching baseball\n【处于一种状态】我喜欢看棒球\n---\n【get sth - 处于一种状态】我喜欢看棒球\nI've got a thing for watching baseball"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "I've got a craving for pizza\n【处于一种状态】我想吃披萨了\n---\n【get sth - 处于一种状态】我想吃披萨了\nI've got a craving for pizza\n"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I get the munchies\n【处于一种状态】我馋零食\n---\n【get sth - 处于一种状态】我馋零食\nI get the munchies"
+                }
+            ]
+        },
+        {
+            "id": 65,
+            "order": 0,
+            "name": "through",
+            "text": "【含义】：渠道\n【翻译】：通过、经过\n【注意】：by 侧重手段，翻译为靠、用。",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "the best way to get packages is [through courier]\n【渠道 - 通过】接收包裹的最佳方式是通过快递\n---\n【thourgh - 渠道 - 通过】通过快递\nthe best way to get packages is through courier"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "your bladder pushes the pee out [through] a tube called the urethra\n【渠道 - 通过】你的膀胱通过一个管子排出尿液\n---\n【thourgh - 渠道 - 通过】\nyour bladder pushes the pee out through a tube"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Hitler rose to power [through] manipulation and violence\n【渠道 - 通过】希特勒通过操纵和暴力掌权\n---\n【through - 渠道 - 通过】\nHitler rose to power through manipulation and violence"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "order": 0,
+            "name": "A help B do",
+            "text": "【含义】：A 帮 B 做事情\n【结构】：A help (B) (to) do sth\n【翻译】：有助于\n【注意】：现代英语中常省略 to",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "these numbers help you to track your package\n【帮着做】[房管帮着打理]维修事宜\n---\n【A help B do - 帮着做】帮着打理\nthe superintendent helps take care of"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "the superintendent [helps take] care of all the maintenance type things\n【帮着做】[房管帮着打理]维修事宜\n---\n【A help B do - 帮着做】帮着打理\nthe superintendent helps take care of"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "they [help reduce] the number of pests on your property\n【帮着做】[它们有助于减少]您房产上的[害虫数量]\n---\n【A help B do - 帮着做】有助于减少害虫数量\nthey help reduce the number of pests"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the immune cells [help heal] after injury\n【帮着做】免疫细胞有助于伤后恢复\n---\n【A help B do - 帮着做】免疫细胞有助于伤后恢复\nthe immune cells help heal after injury"
+                }
+            ]
+        },
+        {
+            "id": 175,
+            "order": 1,
+            "name": "【常用表达 - 方位与距离】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 方位与距离】天王星距离我们 30 亿公里\n---\n【常用表达 - 方位与距离】a\nUranus is 3 billion km away from us"
+                }
+            ]
+        },
+        {
+            "id": 144,
+            "order": 1,
+            "name": "【常用表达 - 做饭】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 8,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：我在削土豆\n---\na\nI'm peeling potatoes"
+                },
+                {
+                    "id": 7,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：我用刮铲刮里面\n---\na\nI use a spatula to scrape the inside"
+                },
+                {
+                    "id": 6,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：我们要烤馅饼\n---\na\nwe are baking the pie"
+                },
+                {
+                    "id": 5,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：我们要烤蔬菜\n---\na\nwe are roasting the vegetables"
+                },
+                {
+                    "id": 4,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：我在和馅儿\n---\na\nI am mixing filling"
+                },
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：往蔬菜上撒盐\n---\na\nsprinkle salt onto the vegetables"
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：给蔬菜上淋上橄榄油\n---\na\ndrizzle the vegetables with olive oil"
+                },
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达- 做饭】：将苹果切成方块\n---\na\ncut the apple into cubes"
+                }
+            ]
+        },
+        {
+            "id": 112,
+            "order": 1,
+            "name": "【常用表达 - 购物】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 8,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】正在促销。\n---\na\nIt is on sale."
+                },
+                {
+                    "id": 7,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】我买东西之前总会先读顾客评价。\n---\na\nI always read customer reviews before buying."
+                },
+                {
+                    "id": 6,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】请务必仔细阅读退货政策。\n---\na\nMake sure you read the return policy carefully."
+                },
+                {
+                    "id": 5,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】我想换一件，因为尺寸太小了。\n---\na\nI want to exchange it because the size is too small."
+                },
+                {
+                    "id": 4,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】申请退款。\n---\na\nRequest a refund."
+                },
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】收据在确认邮件里。\n---\na\nThe receipt is in the confirmation email."
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】预计送达时间是上午9点。\n---\na\nThe estimated delivery time is 9:00 AM."
+                },
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 购物】快递员今天送来了我的包裹。\n---\na\nThe courier dropped off my package today."
+                }
+            ]
+        },
+        {
+            "id": 108,
+            "order": 1,
+            "name": "【常用表达 - 提问】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 6,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 提问 - 多久】你多久打一次羽毛球？\n---\na\nHow often do you play badminton?"
+                },
+                {
+                    "id": 5,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 提问 - 什么】这是什么？\n---\na\nWhat is this?"
+                },
+                {
+                    "id": 4,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 提问】比利，你对此有何看法？\n---\na\nWhat do you say to that?"
+                },
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 提问】母亲，您是什么意思？\n---\na\nWhat do you mean?"
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 提问】你对玛丽·肖了解多少？\n---\na\nWhat do you know about Mary Shaw?"
+                },
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 提问】为什么美杜莎是女性？\n---\na\nWhy is Medusa female?"
+                }
+            ]
+        },
+        {
+            "id": 94,
+            "order": 1,
+            "name": "【常用表达 - 礼貌】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 礼貌】不要一边吃东西一边说话\n---\na\ndon't talk with food in your mouth"
+                }
+            ]
+        },
+        {
+            "id": 83,
+            "order": 1,
+            "name": "【常用表达 - 吵架】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 吵架】你要打我吗？\n---\na\nare you gonna hit me"
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 吵架】你不值得我费劲打你\n---\na\nyou're not worth the trouble to hit you"
+                },
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达 - 吵架】你要干啥？\n---\na\nwhat are you gonna do"
+                }
+            ]
+        },
+        {
+            "id": 75,
+            "order": 1,
+            "name": "【常用表达- 食物】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达- 食物】冰脑袋了（吃凉的吃太快）\n---\na\nI get brain freeze"
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达- 食物】冰激凌有点化了\n---\na\nthe ice cream is melting a little bit"
+                },
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达- 食物】我饱了\n---\na\nI'm full"
+                }
+            ]
+        },
+        {
+            "id": 73,
+            "order": 1,
+            "name": "【常用表达- 租房】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 9,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：请务必仔细阅读租赁协议。\n---\na\nMake sure you read the lease agreement carefully."
+                },
+                {
+                    "id": 8,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：有停车位吗？\n---\na\nIs there a parking spot?"
+                },
+                {
+                    "id": 7,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：包含水电费吗？\n---\na\nDoes it include utilities?"
+                },
+                {
+                    "id": 6,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：带家具吗？\n---\na\nIs it furnished?"
+                },
+                {
+                    "id": 5,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：租一间房的平均租金在 650 美元每月左右\n---\na\nThe average rent is around $650 a month for renting one room"
+                },
+                {
+                    "id": 4,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：我是 509 租户\n---\na\nI'm the tenant 509"
+                },
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：你是房主吗\n---\na\nAre you the landowner?"
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：我能预约看房吗？\n---\na\nCan I schedule a viewing?"
+                },
+                {
+                    "id": 1,
+                    "type": 1,
+                    "text": "a\n【常用表达- 租房】：我想租一间房\n---\na\nI want to rent a room"
+                }
+            ]
+        },
+        {
+            "id": 66,
+            "order": 1,
+            "name": "【常用表达】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 25,
+                    "type": 1,
+                    "text": "a\n【常用表达】我本人最喜欢伯爵红茶\n---\na\nI myself enjoy Earl Grey black tea the best"
+                },
+                {
+                    "id": 24,
+                    "type": 1,
+                    "text": "a\n【常用表达】我来给你示范\n---\na\nI'll show you"
+                },
+                {
+                    "id": 23,
+                    "type": 1,
+                    "text": "a\n【常用表达】就在那里\n---\na\nThere it is"
+                },
+                {
+                    "id": 22,
+                    "type": 1,
+                    "text": "a\n【常用表达】我从来不知道\n---\na\nI never knew that"
+                },
+                {
+                    "id": 20,
+                    "type": 1,
+                    "text": "a\n【常用表达】：天晴了\n---\na\nthe skies cleared up"
+                },
+                {
+                    "id": 19,
+                    "type": 1,
+                    "text": "a\n【常用表达】：冷死了\n---\na\nit's bitterly cold"
+                },
+                {
+                    "id": 18,
+                    "type": 1,
+                    "text": "a\n【常见表达】：有风\n---\na\nit's windy"
+                },
+                {
+                    "id": 17,
+                    "type": 1,
+                    "text": "a\n【常用表达】：风太大了\n---\na\nthe wind is too strong"
+                },
+                {
+                    "id": 16,
+                    "type": 1,
+                    "text": "a\n【常用表达】：今天晴\n---\na\nit's sunny"
+                },
+                {
+                    "id": 15,
+                    "type": 1,
+                    "text": "a\n【常用表达】：我湿透了\n---\na\nI'm soaked"
+                },
+                {
+                    "id": 14,
+                    "type": 1,
+                    "text": "a\n【常见表达】：下雾了\n---\na\nit's foggy"
+                },
+                {
+                    "id": 13,
+                    "type": 1,
+                    "text": "a\n【常用表达】：天气潮湿\n---\na\nit's humid"
+                },
+                {
+                    "id": 11,
+                    "type": 1,
+                    "text": "a\n【常用表达】：冻死了\n---\na\nit's freezing"
+                },
+                {
+                    "id": 10,
+                    "type": 1,
+                    "text": "a\n【常用表达】：下雨了\n---\na\nit's raining"
+                },
+                {
+                    "id": 8,
+                    "type": 1,
+                    "text": "a\n【常用表达】：不要问别人年龄\n---\na\ndon't ask people about their age"
+                },
+                {
+                    "id": 7,
+                    "type": 1,
+                    "text": "a\n【常用表达】：打喷嚏或打哈欠时，请转身并捂住口鼻\n---\na\nplease turn away and cover your mouth when sneezing or yawning"
+                },
+                {
+                    "id": 5,
+                    "type": 1,
+                    "text": "a\n【常用表达】：不要在孩子面前说脏话\n---\na\ndon't swear in front of children"
+                },
+                {
+                    "id": 4,
+                    "type": 1,
+                    "text": "a\n【常用表达】：别忘了给小费\n---\na\ndon't forget to tip"
+                },
+                {
+                    "id": 3,
+                    "type": 1,
+                    "text": "a\n【常用表达】：请排队等候\n---\na\nplease wait your turn in the line"
+                },
+                {
+                    "id": 2,
+                    "type": 1,
+                    "text": "a\n【常用表达】：把你的狗拴起来\n---\na\nkeep your dog on a leash"
+                }
+            ]
+        },
+        {
+            "id": 20,
+            "order": 1,
+            "name": "定语后置",
+            "text": "【含义】：先说中心语，后说修饰成分。这是最重要的英语思维之一。",
+            "examples": [
+                {
+                    "id": 14,
+                    "type": 2,
+                    "text": "children [of their own]\n【定语后置】他们自己的孩子\n---\n【定语后置】他们自己的\nchildren of their own"
+                },
+                {
+                    "id": 13,
+                    "type": 2,
+                    "text": "things [in common]\n【定语后置】共同之处\n---\n【定语后置】共同之处\nthings in common"
+                },
+                {
+                    "id": 10,
+                    "type": 2,
+                    "text": "somewhere [in the 70s]\n【定语后置】70年代的某个时间\n---\n【定语后置】70年代的\nsomewhere in the 70s"
+                },
+                {
+                    "id": 9,
+                    "type": 2,
+                    "text": "people in Canada\n【定语后置】在加拿大的人\n---\n【定语后置】在加拿大的人\npeople in Canada\n"
+                },
+                {
+                    "id": 8,
+                    "type": 2,
+                    "text": "a masterclass in deception\n【定语后置】一个欺骗大师课\n---\n【定语后置】一个欺骗大师课\na masterclass in deception"
+                },
+                {
+                    "id": 7,
+                    "type": 2,
+                    "text": "the girl next to me\n【定语后置】挨着我的那个女孩\n---\n【定语后置】挨着我的那个女孩\nthe girl next to me"
+                },
+                {
+                    "id": 6,
+                    "type": 2,
+                    "text": "something interesting\n【定语后置】一些有趣的事情\n---\n【定语后置】一些有趣的事情\nsomething interesting"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "a crab scuttling across the sand\n【定语后置】一只螃蟹在沙滩上快速爬行\n---\n【定语后置】一只螃蟹在沙滩上快速爬行\na crab scuttling across the sand"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "something made of metal\n【定语后置】金属制品\n---\n【定语后置】金属制品\nsomething made of metal"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "a multi-purpose tool used for cutting food\n【定语后置】一个用于切食物的多功能工具\n---\n【定语后置】一个用于切食物的多功能工具\na multi-purpose tool used for cutting food"
+                }
+            ]
+        },
+        {
+            "id": 82,
+            "order": 2,
+            "name": "必须加 the 的情况",
+            "text": "-最高级\n-序数词\n-唯一的存在\n-强调或特指\n-其他",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 0,
+                    "text": "it is not exactly [the same] as sour\na\n---\n【形容词 same 前必须加 the 加以强调，以缩小相同的范围】：它与酸不完全相同\na"
+                },
+                {
+                    "id": 1,
+                    "type": 0,
+                    "text": "this is the thing I wanted to try [the most]\na\n---\n【最高级必须加 the】最\na"
+                }
+            ]
+        },
+        {
+            "id": 81,
+            "order": 2,
+            "name": "完成进行式",
+            "text": "【含义】：表示动作从过去持续到现在，仍在进行。\n【结构】：have been doing\n【翻译】：一直在\n【注意】：was doing 说的是过去的事，与现在无关。",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "with a gaze that can turn men to stone, she [has been] terrorizing and petrifying humanity for thousands of years\n【一直在】 她拥有能将男人石化的目光，[数千年来一直在恐吓和吓唬着人类]\n---\n【have been doing - 一直在】 一直在\nshe has been terrorizing and petrifying humanity for thousands of years"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "so someting bitter because [we've been eating] things that are sweet\n【一直在】 所以来点苦的，因为[我们一直在吃甜的东西]\n---\n【have been doing - 一直在】 所以来点苦的，因为我们一直在吃甜的东西\nwe've been eating things that are sweet"
+                }
+            ]
+        },
+        {
+            "id": 109,
+            "order": 2,
+            "name": "提问的思路",
+            "text": "1. 想陈述句结构\n2. 将提问的关键词定在句首，例如 what, why, how many 等\n3. 助动词紧跟其后，例如 would/could/can/do/is",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 74,
+            "order": 2,
+            "name": "in 的用法",
+            "text": "【含义一：in + 抽象名词 = 状态容器，处于某种状态中，翻译为“的”即可】",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "a rock [in disguise]\n【处于某种状态中】一个伪装的石头\n---\n【in 的用法 - 处于某种状态中】一个伪装的石头\na rock in disguise"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "a masterclass [in deception]\n【处于某种状态中】一个欺骗的经典之作\n---\n【in 的用法 - 处于某种状态中】一个欺骗的经典之作\na masterclass in deception"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you have more [things in common] with each other\n【处于某种状态中】你们彼此有更多的共同之处\n---\n【in 的用法 - 处于某种状态中】共同之处\nyou have more things in common with each other"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "You yelp, jump, and probably fling your hand [in] a mix of panic and reflex\n【处于某种状态中】出于恐慌和本能，甩动你的手\n---\n【in 的用法 - 处于某种状态中】出于恐慌和本能\nfling your hand in a mix of panic and reflex"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "order": 2,
+            "name": "with",
+            "text": "【含义一：有 - 属性或状态】\n【含义二：随着 - 交代背景】类似于 as，区别是 with 接名词，as 接完整句子\n【含义三：跟 - 表示互动的对象】\n【含义四：用 - 使用工具或技术】",
+            "examples": [
+                {
+                    "id": 15,
+                    "type": -1,
+                    "text": "I will do the best I can with this life to be of use."
+                },
+                {
+                    "id": 14,
+                    "type": 2,
+                    "text": "Struggling with poverty and repeated failures\n【互动的对象 - 跟】a\n---\n【with 的用法 - 互动的对象 - 跟】挣扎于贫困和频繁失败\nStruggling with poverty and repeated failures"
+                },
+                {
+                    "id": 13,
+                    "type": 2,
+                    "text": "many people enjoy drinking their tea [with] teacups\n【用工具或技术】a\n---\n【with 的用法 - 用工具或技术】用茶杯\nmany people enjoy drinking their tea [with] teacups"
+                },
+                {
+                    "id": 12,
+                    "type": 2,
+                    "text": "animated movies that are done [with] computer graphics\n【用工具或技术】利用计算机图形技术制作的动画电影\n---\n【with 的用法 - 用工具或技术】利用计算机图形技术\nanimated movies that are done with computer graphics"
+                },
+                {
+                    "id": 11,
+                    "type": 2,
+                    "text": "some movies [with] some great action\n【属性或状态 - 有】一些包含精彩动作的电影\n---\n【with 的用法 - 属性或状态 - 有】一些包含精彩动作的电影\nsome movies with some great action"
+                },
+                {
+                    "id": 10,
+                    "type": 2,
+                    "text": "I always think of that with people [with] big houses\n【属性或状态 - 有】我总是会想到那些[拥有大房子的人]\n---\n【with 的用法 - 属性或状态 - 有】拥有大房子的人\npeople with big houses"
+                },
+                {
+                    "id": 9,
+                    "type": 2,
+                    "text": "a face [with] a protruding tongue and fangs\n【属性或状态 - 有】一张长有长舌和长牙的脸\n---\n【with 的用法 - 属性或状态 - 有】一张长有长舌和长牙的脸\na face with a protruding tongue and fangs"
+                },
+                {
+                    "id": 8,
+                    "type": 2,
+                    "text": "we can call 911 to check [with] the pawlice\n【互动的对象 - 跟】我们可以打911跟警察确认\n---\n【with 的用法 - 互动的对象 - 跟】跟警察确认\nwe can call 911 to check with the pawlice"
+                },
+                {
+                    "id": 7,
+                    "type": 2,
+                    "text": "rinse the area [with] clean water\n【用工具或技术】用清水清洗那个地方\n---\n【with 的用法 - 用工具或技术】用清水\nrinse the area with clean water"
+                },
+                {
+                    "id": 5,
+                    "type": 2,
+                    "text": "I stood there [with] my cash\n【属性或状态 - 有】我站在那，拿着我的现金\n---\n【with 的用法 - 属性或状态 - 有】我站在那，拿着我的现金\nI stood there with my cash"
+                },
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "it gave me a promo code for the next time I shop [with] the same retailer\n【互动的对象 - 跟】它给了我一个优惠码，[下次我跟同一商家购物时]可以使用\n---\n【with 的用法 - 互动的对象 - 跟】下次我跟同一商家购物时\nthe next time I shop with the same retailer"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "cookbooks started popping up [with] all sorts of sauce recipes\n【属性或状态 - 有】：[包含各种酱料制作方法的烹饪书籍]开始出现\n---\n【with 的用法 - 属性或状态 - 有】：包含各种酱料制作方法的烹饪书籍\ncookbooks with all sorts of sauce recipes"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "telomeres shorten [with] each cell division\n【交代背景 - 随着】：端粒[随着每次细胞分裂]变短\n---\n【with 的用法 - 交代背景 - 随着】：随着每次细胞分裂\nwith each cell division"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "order": 2,
+            "name": "noun, noun | 同位语",
+            "text": "【含义】：同位语。进一步解释前面的名词\n【翻译】：也就是\n【注意】：必须紧贴被修饰词",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "you have your kitchen, [the area where you make your food]\n【同位语】你有你的厨房，[就是那个你做饭的区域]\n---\n【同位语】就是那个你做饭的区域\nthe area where you make your food"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the burly coconut crab wields its massive pinchers to crack open coconut, [one of the toughest natural shells on the planet]\n【同位语】体型健壮的椰子蟹挥舞着巨大的螯钳，打开椰子——[地球上最坚硬的天然外壳之一]。\n---\n【同位语】地球上最坚硬的天然外壳之一\none of the toughest natural shells on the planet"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "it has even been associated with shortened telomeres, [the shoelace tip ends of chromosomes]\n【同位语】它甚至与端粒缩短有关，[也就是染色体的那些“鞋带尖端”]\n---\n【同位语】也就是染色体的那些“鞋带尖端”\nthe shoelace tip ends of chromosomes"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "order": 2,
+            "name": "…, doing…",
+            "text": "【含义】: 现在分词作伴随状语，交代主语所处的状态。\n【翻译】：由于、着、不翻译\n【注意】: \n-该动作由主句主语发出\n-语法上可以理解为非限制性定语从句，补充主句的主语",
+            "examples": [
+                {
+                    "id": 5,
+                    "type": 2,
+                    "text": "pretty much every day they scour the property, [looking] for something that's out of place\n【交代主语所处的状态】他们几乎每天都会仔细搜查这块地，[寻找一些不寻常的东西]\n---\n【…, doing… - 交代主语所处的状态】寻找一些不寻常的东西\nlooking for something that's out of place"
+                },
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "you know my dream has always been just run away and become an artist, [living] in the garret, poor but free\n【交代主语所处的状态】我的梦想一直是离家出走，成为一名艺术家，[住着阁楼]，穷但自由\n---\n【…, doing… - 交代主语所处的状态】住着阁楼\nliving in the garret"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "She used to sit at this bar every night, [wearing] every piece of jewelry she owned\n【交代主语所处的状态】她过去每晚都会坐在这家酒吧里，[戴着她拥有的每件珠宝]\n---\n【…, doing… - 交代主语所处的状态】戴着她拥有的每件珠宝\nwearing every piece of jewelry she owned"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[struggling] with poverty and repeated failures, Hitler embraced this rhetoric\n【交代主语所处的状态】[饱受贫困和屡次失败的困扰]，希特勒接受了这种论调。\n---\n【…, doing… - 交代主语所处的状态】饱受贫困和屡次失败的困扰\nstruggling with poverty and repeated failures"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "order": 2,
+            "name": "双宾语结构",
+            "text": "【含义】: 有些动词本身带有 \"给予\"、\"为某人做\" 之意，所以可以先接人再接物，拥有两个宾语，相当于 do sth for sb\n【结构】：show/make/build/buy + people + object\n【翻译】：给…看/做/建",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "buy me a coffee\n【双宾语】给我买杯咖啡\n---\n【双宾语】给我买杯咖啡\nbuy me a coffee"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "I think we should [show this boy how real I am]\n【双宾语】我想我们应该[给这个男孩看看我有多真实]\n---\n【双宾语】给这个男孩看看我有多真实\nshow this boy how real I am"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the town [built itself a grand old theater]\n【双宾语】那个小镇[给自己建了一座宏伟的旧式的剧院]\n---\n【双宾语】给自己建了一座宏伟的旧式的剧院\nbuilt itself a grand old theater"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I'm [making you a gourmet dinner]\n【双宾语】我要[给你做一顿美味晚餐]\n---\n【双宾语】给你做一顿美味晚餐\nmaking you a gourmet dinner"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "order": 2,
+            "name": "more than sth",
+            "text": "【含义】：超过、不仅仅\n【词性】：prep",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": -1,
+                    "text": "People tend to speak French [more than] they do English\n人们倾向于讲法语[超过]讲英语\n---\n超过\nmore than"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "[more than] just an emotion, stress is a hardwired physical response\n【超过】[不仅仅是一种情绪]，压力是一种硬性物理反应\n---\n【more than sth - 超过】不仅仅是一种情绪\nmore than just an emotion"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "that's [more than] twice the bite force of a human molar\n【超过】那[超过]人类臼齿咬力的[两倍]\n---\n【more than sth - 超过】超过两倍\nmore than twice"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "they have roamed Earth's oceans or [more than] 200 million years\n【超过】它们畅游地球海洋[超过200万年]\n---\n【more than sth - 超过】超过200万年\nmore than 200 million years"
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "order": 2,
+            "name": "…, doing…",
+            "text": "【含义】：现在分词作结果状语，补充主句产生的后果\n【翻译】：导致、致使、不翻译\n【注意】：\n-该结构不强调因果关系\n-语法上可以理解为非限制性定语从句，修饰前面整个主句。",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "adrenaline causes your heart to beat faster and raises your blood pressure, over time [causing] hypertension\n【补充主句产生的后果】肾上腺素导致你的心脏跳动更快，提升你的血压，[久而久之导致高血压]\n---\n【…, doing… - 补充主句产生的后果】久而久之导致高血压\nover time causing hypertension"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "Not only that, the excess urine can flow back into the kidneys, [resulting] in infection\n【补充主句产生的后果】不仅如此，多余的尿液会回流到肾脏中，[导致感染]\n---\n【…, doing… - 补充主句产生的后果】导致感染\nresulting in infection\n"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "several F-35 stealth fighters punch a hole through the enemy lines, [destabilizing] their anti-air defenses\n【补充主句产生的后果】几架F35隐形战机撕开敌人防线，[破坏了它们的防空系统]\n---\n【…, doing… - 补充主句产生的后果】破坏了它们的防空系统\ndestabilizing their anti-air defenses\n"
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "order": 2,
+            "name": "把字句",
+            "text": "【含义】： 把字句。主语对宾语行动处理\n【结构】：have/get object done",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "you need to [have] the copies of all the documents [notarized] by a notary public\n【把字句】你需要[把所有文件的副本]交给公证机关[公证]\n---\n【have/get object done - 把字句】把所有文件的副本公证\nhave the copies of all the documents notarized"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "they even [get] themselves [entangled] with a snake\n【把字句】它们甚至[把自己跟蛇缠在一起]\n---\n【have/get object done - 把字句】把自己跟蛇缠在一起\nget themselves entangled with a snake"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you [had] it [made that big]\n【把字句】你把它做的那么大\n---\n【have/get object done - 把字句】你把它做的那么大\nyou had it made that big"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "they['ve got] you [trapped]\n【把字句】他们把你困住了\n---\n【have/get object done - 把字句】他们把你困住了\nthey've got you trapped"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "order": 2,
+            "name": "使役句",
+            "text": "【含义】: 主语驱动宾语行动或状态变化\n【结构】：let/make/have/get + object + do/adjective\n【翻译】：让、使\n【注意】：与把字句的区别是，object do 或 object adjective 是一个主动态结构\n【例子】：\n-the sudden movement can [make] the crab [feel] more threatened\n-you don't need anybody to [make] you [happy]\n-[make] each day [count]\n-Wait. Just [let] me [hold] it in my hand\n-this action to [make] the potatoes [softer] and [mushy] is called mashing",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Wait. Just [let] me [hold] it in my hand\n【使役句】等一下。[让我拿在手里]\n---\n【使役句 - object do 或 object adjective】让我拿在手里\nlet me hold it in my hand"
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "order": 2,
+            "name": "感官动词",
+            "text": "【含义】：see/watch/hear 等感官动词的用法\n【句型】：\n感官动词 do = 感知一件事，相当于宾语从句，I'd never seen (that) black people drink coffee\n感官动词 doing = 感知宾语发出的动作，相当于后置定语，I see black people drinking(who is drinking) coffee",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "we'd just be left here, [watching] the end of times [unfold] in front of our eyes\n【感观】我们将困在这里，[眼看着末日到来]\n---\n【感观】我们将困在这里，眼看着末日到来\nwatching the end of times unfold"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "you can [see] it [starting] to melt\n【感观】你可以看到它开始化了\n---\n【感观】你可以看到它开始化了\nyou can see it starting to melt"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "I'd never [seen] black people [drink] coffee\n【感观】我从没见过黑人喝咖啡\n---\n【感观】我从没见过黑人喝咖啡\nI'd never seen black people drink coffee"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "every time I go to Starbucks, I [see] black people [drinking] coffee\n【感观】每次我去星巴克，[我看见黑人在喝咖啡]\n---\n【感观】我看见黑人在喝咖啡\nI see black people drinking coffee"
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "order": 2,
+            "name": "假如",
+            "text": "【含义】: 大概率不会发生的假设\n【句型】: \n假如 - if were\n假如当时 - if had done\n【注意】：\n-它就是教材中讲的虚拟语气条件句，但那样学不利于理解\n-注意普通假设不属于该句型，例如我是工薪阶层，如果我有2万块存款是可以实现的，所以用普通假设 if I have 20k",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[if he had a brother], it would be my brother-in-law\n【假如】[假如他有兄弟]，那会是我的 brother-in-law\n---\n【if were / did / had done - 假如】假如他有兄弟\nif he had a brother"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[if she were alive], she'd be very proud\n【假如】[假如他活着]，她会非常自豪\n---\n【if were / did / had done - 假如】假如他活着\nif she were alive"
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "order": 2,
+            "name": "both",
+            "text": "【含义】: 两个都。代指、限定、修饰两个相同特质的事物、动作。",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "they will [both] say sorry\n【两个都】他俩都会说对不起\n---\n【两个都】他俩都会说对不起\nthey will both say sorry"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[both Alberta and BC province] are well known for the Rocky Mountains\n【两个都】[阿省和BC省都]以落基山著名\n---\n【两个都】阿省和BC省都\nboth Alberta and BC province"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Both are tough. Both are smart.\n【两个都】两位都强硬。两位都聪明。\n---\n【两个都】两位都强硬。两位都聪明。\nBoth are tough. Both are smart."
+                }
+            ]
+        },
+        {
+            "id": 22,
+            "order": 2,
+            "name": "新闻标题省略法",
+            "text": "【含义】：新闻标题省略法。为了节省空间的写法。\n【规则】：使用一般现在是、谓语被简化。\n-be adjective -> adjective\n-done 表示被动式而不是过去式：be done -> done\n-be doing -> doing",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 0,
+                    "text": "Iranian president says Iran will not attack neighbours unless [attacked] first\na\n---\n【新闻标题省略法】they are attacked\na"
+                },
+                {
+                    "id": 2,
+                    "type": 0,
+                    "text": "Video [Ready] to Download!\na\n---\n【新闻标题省略法】is Ready\na"
+                },
+                {
+                    "id": 1,
+                    "type": 0,
+                    "text": "Iranian protester [no longer] sentenced to death after Trump warnings\na\n---\n【新闻标题省略法】are no longer\na"
+                }
+            ]
+        },
+        {
+            "id": 32,
+            "order": 2,
+            "name": "for 的用法",
+            "text": "【含义一：以什么代价】\n【含义二：指向：对】\n【含义三：当作、作为】\n【含义四：引出总数，总计】",
+            "examples": [
+                {
+                    "id": 10,
+                    "type": 2,
+                    "text": "we have three territories and ten provinces [for] a total of 13 different areas\n【引出总数 - 总计】我们拥有三个领地，十个省，[总计13个不同地区]\n---\n【for 的用法 - 引出总数 - 总计】总计13个不同地区\nfor a total of 13 different areas"
+                },
+                {
+                    "id": 9,
+                    "type": 2,
+                    "text": "she's got snakes [for] hair\n【当作】她以蛇为发\n---\n【for 的用法 - 当作】她以蛇为发\nshe's got snakes for hair"
+                },
+                {
+                    "id": 8,
+                    "type": 2,
+                    "text": "whatever you have a love [for]\n【指向 - 对】任何你热爱的东西\n---\n【for 的用法 - 指向 - 对】任何你热爱的东西\nwhatever you have a love for"
+                },
+                {
+                    "id": 7,
+                    "type": 2,
+                    "text": "a taste [for] the salty condiment\n【指向 - 对】对那种咸味调味品的喜爱\n---\n【for 的用法 - 指向 - 对】对那种咸味调味品的喜爱\na taste for the salty condiment"
+                },
+                {
+                    "id": 6,
+                    "type": 2,
+                    "text": "just two ice creams [for] bloody nine pounds. nine quid [for] two. yes nine quid.\n【以什么代价】[就两个冰激凌要特么9镑. 9块钱俩.] 是的9块钱.\n---\n【for 的用法 - 以什么代价】就两个冰激凌要特么9镑\njust two ice creams for bloody nine pounds. nine quid for two."
+                },
+                {
+                    "id": 5,
+                    "type": 2,
+                    "text": "don't take it [for] granted\n【当作】不要把它当作理所当然\n---\n【for 的用法 - 当作】不要把它当作理所当然\ndon't take it for granted"
+                }
+            ]
+        },
+        {
+            "id": 35,
+            "order": 2,
+            "name": "ask 的用法",
+            "text": "【ask sb sth - 问某人某事】\n【ask sb about sth - 问某人关于某事】\n【ask sb for sth - 要东西】\n【ask sb to do - 要求某人做某事】\n【ask to do - 要求】",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[ask] people [about] their hobbies\n【问某人关于某事】询问人们的爱好\n---\n【ask sb about sth - 问某人关于某事】询问人们的爱好\nask people about their hobbies"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "when talking about books with other people, they might [ask you your opinion] on a certain book\n【问某人某事】当与他人谈论书籍时，他们可能会[问你对某本书的看法]\n---\n【ask sb sth - 问某人某事】问你对某本书的看法\nask you your opinion on a certain book"
+                }
+            ]
+        },
+        {
+            "id": 43,
+            "order": 2,
+            "name": "…, done…",
+            "text": "【含义】：过去分词作伴随状语，交代主语所处的状态（被动）\n【翻译】：如果、一旦\n【注意】: \n-由主句主语承受该动作\n-作用与现在分词做伴随状语类似",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[given] a fair shot, [given] a fair chance, Americans have never let their country down\n【交代主语所处的状态（被动）】[给个公平的尝试]，[给个公平的机会]，美国人从没让他们的国家失望过\n---\n【…, done… - 交代主语所处的状态（被动）】：给个公平的尝试，给个公平的机会\ngiven a fair shot, given a fair chance"
+                }
+            ]
+        },
+        {
+            "id": 54,
+            "order": 2,
+            "name": "as...",
+            "text": "【含义】：补充动作发生的方式\n【词性】：prepostion\n【翻译】：以…方式",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "high levels of cortisol can also cause you to put on those extra calories [as] deep belly fat\n【以…方式】皮质醇水平过高也会导致你摄入额外的卡路里[以深层腹部脂肪的形式]\n---\n【as - 以…方式】以深层腹部脂肪的形式\nas deep belly fat"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I will do [as] my mother asked\n【以…方式】我会[按我母亲要求的]做\n---\n【as - 以…方式】按我母亲要求的\nas my mother asked"
+                }
+            ]
+        },
+        {
+            "id": 25,
+            "order": 2,
+            "name": "as...",
+            "text": "【含义】: 在作演讲或报告等叙述场景下，用于衔接同时进展的两件事。\n【词性】：conjunction\n【翻译】: 随着、因为、当或不翻译\n【注意】:\n----它不像 because 那样强调逻辑关系\n----它不是 before 或 after，而是在前面事件未结束时，后面事件就会发生，并且二者同时进展。\n----常使用过去式\n----有时翻译成“因为”是因为在汉语中“随着”本身就有一种弱的因果逻辑\n----有时翻译成“当”是因为事件发展可能很短暂",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "Maduro shock and awe froze him [as] Delta Force breached the compound\n【随着】[随着三角洲部队攻入院子]，马杜罗的震惊和敬畏让他愣住了\n---\n【随着】随着三角洲部队攻入院子\nas Delta Force breached the compound"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "By 1945, [as] Allied forces closed in on Berlin, Hitler retreated to his underground bunker\n【随着】到了1945年，[随着盟军逼近柏林]，希特勒撤到了他的地堡中\n---\n【随着】随着盟军逼近柏林\nas Allied forces closed in on Berlin"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "On April 30, 1945, [as] Soviet troops entered the city, Hitler took his own life\n【随着】1945年4月30日，[随着苏联部队进入城市]，希特勒结束了自己的声明\n---\n【随着】随着苏联部队进入城市\nas Soviet troops entered the city"
+                }
+            ]
+        },
+        {
+            "id": 49,
+            "order": 2,
+            "name": "主系表结构",
+            "text": "【含义】：用于描述主语的状态、性质、特征、内容。\n【结构】：subject + linking verb + 表语\n【例子】：\n-[smell/sound/appear/seem + noun/abjective = 说明主语的状态]\n-The house is not going to smell good. 那房子不会好闻。\n-It appears that the Empire has mounted a full scale assault. 看来帝国发动了全面袭击。\n-The pronunciation of the number four sounds the same as the word of death. 数字四的发音听起来跟死的发音一样。\n-To them, your hand might look like a rival, an intruding predator, or just something that got too close for comfort.\n-\n-[be + infinitive = 解释主语是干什么的]\n-If we get wet from this rain, there are two great collocations for that. One is to be soaked to the skin or to be soaked to the bone.\n-We also have two specific collocations we can use for enjoying sunlight. There are to soak up the sun or to soak up some rays.\n-My job is to look after the old in the nursing home.\n-The best strategy is not to yank your hand away immediately.\n-\n-[be + infinitive = 法律、行政、遗嘱等文件中的命令、指示、规定]\n-In her will, Mary stated that her dummies were to be buried with her. 玛丽在遗嘱中声明，她的玩偶要和她葬在一起。\n-Both parties are to cease all hostilities within 24 hours. 双方必须在24小时内停止一切敌对行动。\n-\n-[be+ adverb]\n-she is here",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 48,
+            "order": 2,
+            "name": "Passive Voice",
+            "text": "【含义】：被动式，主语被动承受动作\n【结构】：be + done\n【注意】：该结构一定使用动词的过去分词，而不是过去式\n------------// 一般现在时\n------------The meal is cooked by the chef.\n------------Both Alberta and British Columbia are well known for the Rocky Mountains, which are sometimes just called the Rockies.\n------------// 一般过去时\n------------The tree was pulled down.\n------------// 现在进行时\n------------A bridge is being built.\n------------// 现在完成时\n------------The work has been finished.\n------------// 含情态动词\n------------The window can be opened.",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 47,
+            "order": 2,
+            "name": "什么情况下使用动词原形",
+            "text": "--------[情态动词]:\n------------[can]\n------------[would]\n------------[must]\n--------[感官动词]: 侧重描述\\\"动作相关的事实\\\"，而不是\\\"动作本身\\\"。\n------------[see-看见]: For now, we can stay here for a while. Cause you know, I just wanna see you smile.\n------------[see-看见]: I'd never seen black people drink coffee. 黑人喝咖啡\n------------[see-看见]: So now, every time I go to Starbucks, I see black people drinking coffee. 黑人在喝咖啡\n------------[hear]: \n------------[watch]: \n------------[notice]: \n------------[feel]: \n------------[make-让]: He made me wait.\n------------[let-让]: She let him go.\n------------[have]: \n--------[Causative-使役结构中使宾语行动的情况]\n------------[make-使]: The sudden movement can make the crab feel more threatened.\n--------[help (sb) do sth]: 美式使用 Base Verb，英式则使用 Infinitive\n------------They do certainly help reduce the number of pests on your property.\n------------The superintendent usually lives on the property and helps take care of all the maintenance type things.",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 46,
+            "order": 2,
+            "name": "get",
+            "text": "【含义一】：主语获得具体东西。\n-Can you get a drink for me? 能帮我弄杯喝的吗？\n-I have got a car. 我有了一辆车\n【含义二】：主语的状态发生变化。将其视为固定词组的一部分，这样容易理解和记忆。\n-[get home-回家]: I will get home in 10 minutes. \n-[get fed-喂]: Our cats get fed twice a day\n-[get to know-了解,熟悉]: As I got to know him. 随着我越加了解他\n-[get ready for-准备]: Getting ready for school play\n-[got to-不得不。即过去或完成式表示状态变化完成]: I have got to work. 我得工作了\n-[got to-不得不。即过去或完成式表示状态变化完成]: I got to flush all the toilets? 我得冲所有的厕所？\n-[got to-不得不。即过去或完成式表示状态变化完成]: You got to move out. 你得搬家了.（用完成式表示状态变化完成 -> 必须）必须）\n【注意】：\n-翻译时，不翻译，或加一个程度副词+动词。\n-\"使变化\"归到使役结构。\n-Get 与 Have 都能表示 \"有\"，虽然意思相同，但形态不相关。\n--I have got a car. (\"have got\" is the past participle of \"get\")\n--I have a car. (have)\n-Get 与 Have 都能表示 \"状态变化\"，虽然意思相同，但形态不相关。\n--I have got to work. (\"have got\" is the past participle of \"get\")\n--I have to work. (have)\n-Get 经常以完成式出现，这个结构包含一个 have，但它是结构助词，与 have 无关。\n--I have got a car. (\"have got\" is the past participle of \"get\")\n--I have got to work. (\"have got\" is the past participle of \"get\")",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you break up with that person, or you [get divorced]\n【…了】你和那个人分手了，或者[你离婚了]\n---\n【get adjective - …了】你离婚了\nyou get divorced"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "when you have finished your meal and you [are getting ready] to pay\n【…了】当你吃完了，[你要准备付钱]\n---\n【get adjective - …了】你要准备付钱\nyou are getting ready to pay"
+                }
+            ]
+        },
+        {
+            "id": 45,
+            "order": 2,
+            "name": "完成式",
+            "text": "【含义】：用已经结束的动作表示由来已久的状态。\n【结构】：have/had + done\n【翻译】：...了, ...过\n--------住了：How long have you lived in that house?\n--------弹了：How long have you played piano?\n--------有过：We've had candidates before attempted to get elected by appealing to our fears\n--------遨游了：They have roamed Earth's oceans or more than 200 million years.\n--------没明白过：I have never understood why some people are lucky enough to be born with the chance that I had\",",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I'[ve thought] about it for years\n【由来已久的状态：...了】 我考虑了好几年了\n---\n【由来已久的状态 - ...了】 我考虑了好几年了\nI've thought about it for years"
+                }
+            ]
+        },
+        {
+            "id": 44,
+            "order": 2,
+            "name": "Adverbial Clause of Concession",
+            "text": "【含义】： 让步状语从句。强调主句发生的必然性。即从句所描述的情况尽管存在，但主句所描述的事情仍然发生。\n【句型】：\n, ...even though - 虽然\nalthough... - 尽管\nno mater... - 无论\n",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "I love you [even though] you're a chonker\n【让步状语从句】我爱你，[虽然你是个大胖子]\n---\n【让步状语从句 - 虽然】虽然你是个大胖子\neven though you're a chonker"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "[although] most of Canada tries to be bilingual, they really aren't\n【让步状语从句】[尽管加拿大大部分地区努力成为双语的]，但它们真的不是\n---\n【让步状语从句 - 尽管】尽管加拿大大部分地区努力成为双语的\nalthough most of Canada tries to be bilingual"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[no matter] where he saw me, it was a challenge\n【让步状语从句】[无论他在哪看见我]，那都是一个挑战\n---\n【让步状语从句 - 无论】无论他在哪看见我\nno matter where he saw me"
+                }
+            ]
+        },
+        {
+            "id": 53,
+            "order": 2,
+            "name": "Adverbial Clause of Result",
+            "text": "【含义】：结果状语从句，补充主句引发的后果\n【翻译】：以至于\n",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "the operators breached the room [so] fast [that] his security could not even react\n【结果状语从句 - 以至于】队员们攻破房间[如此之快，以至于他的护卫无法做出反应]\n---\n【结果状语从句 - 以至于】队员们攻破房间如此之快，以至于他的安全员无法做出反应\nso fast that his security could not even react"
+                }
+            ]
+        },
+        {
+            "id": 42,
+            "order": 2,
+            "name": "Adverbial Clause of Condition",
+            "text": "【含义】：条件状语从句，交代主句发生的条件\n【句型】：\nif - 如果\n...once... - 一旦\n...unless... - 除非\n...as long as... - 只要",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "most crabs will release their hold [once] they feel they are no longer trapped\n【交代条件信息 - 一旦】多数螃蟹会松掉钳子，[一旦他们觉得他们不在被困住]\n---\n【交代条件信息 - 一旦】一旦他们觉得他们不在被困住\nonce they feel they are no longer trapped"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "they're not in the will [unless] they get two degrees\n【交代条件信息 - 除非】他们不会在遗嘱里，[除非他们获得两个学位]\n---\n【交代条件信息 - 除非】除非他们获得两个学位\nunless they get two degrees"
+                }
+            ]
+        },
+        {
+            "id": 41,
+            "order": 2,
+            "name": "Adverbial Clause of Time",
+            "text": "【含义】：时间状语从句，交代主句发生的时间\n【句型】：\nwhen - 当时\nevery time - 每次\nwhile - 在期间\nbefore - 在之前",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "[While] in jail, he wrote My Struggle\n【交代时间信息 - 期间】[服刑期间]，他写了我的奋斗\n---\n【交代时间信息 - 期间】服刑期间\nWhile in jail"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "I bought it [when] it was 25,000 square feet\n【交代时间信息 - 当时】我买的，[当时它 25,000 平尺]\n---\n【交代时间信息 - 当时】当时它 25,000 平尺\nwhen it was 25,000 square feet"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[every time] I thought about selling it, I thought of Cal\n【交代时间信息 - 每次】[每次我考虑卖掉它]，我想起卡尔\n---\n【交代时间信息 - 每次】每次我考虑卖掉它\nevery time I thought about selling it"
+                }
+            ]
+        },
+        {
+            "id": 40,
+            "order": 2,
+            "name": "非限制性定语从句",
+            "text": "【含义】：补充性关系从句。被逗号隔开的，用于补充说明前面的名词或整个句子的从句，在整个句子里作状语。\n【结构】：逗号 + 关系代词(that禁止使用. 在从句中主要作主语和宾语) + 从句\n【注意】：\n-翻译时修饰部分要放在最后面，像是可有可无的题外话。\n-现在分词作伴随、结果状语，也可以视作该句型的简写。",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "\"this program contains coarse language. viewer discretion is advised\", [which means there is swearing in this program] so if there's children now is the time to get them to leave the room or turn off the TV\n【为前面的句子补充信息】“本节目包含粗俗语言，敬请观众酌情观看” [这意味着本节目中有脏话]，所以如果有孩子在场，现在就应该让他们离开房间或关掉电视\n---\n【为前面的句子补充信息】这意味着本节目中有脏话\nwhich means there is swearing in this program"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "there's a woman just like me with the same abilities and the same desires, [who would most likely make better films] and better speeches\n【为前面的主语补充信息】有一位女性和我一样，拥有相同的能力和愿望，[她很可能会拍出更好的电影]，发表更精彩的演讲\n---\n【为前面的主语补充信息】她很可能会拍出更好的电影\nwho would most likely make better films\n"
+                }
+            ]
+        },
+        {
+            "id": 39,
+            "order": 2,
+            "name": "Relative Clause",
+            "text": "【含义】：定语从句。用于修饰和限定一个名词，并紧跟其后的从句。\n【结构】：先行词 + 关系代词(在从句中主要作主语和宾语) + 从句\n【结构】： 翻译时修饰部分要放在名词前，虽然它可能很长。\n--------[when-adverb-修饰时刻]: fog is the type of weather when there is tiny bits of moisture in the air\n--------[when-adverb-修饰时间]: I remember the day when we met.\n--------[who-pronoun-修饰人]: The girl who sings well is my sister.\n--------[who-pronoun-修饰人]: The person who you met yesterday is my boss.\n--------[whose-修饰人]: The man whose car was stolen called the police.\n--------[which-pronoun-修饰物]: The book which is on the table is mine.\n--------[which-pronoun-修饰物]: The movie which you recommended was great.\n--------[where-adverb-修饰地点]: This is the house where I was born.\n--------[why-adverb-解释原因]: That is the reason why he left early",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 38,
+            "order": 2,
+            "name": "Nominal Clause",
+            "text": "【含义】：名词性从句。使用完整句子描述一个事物或事情，成分等同于名词。它在主句中是什么成分就是什么从句。\n【注意】：主语在前、谓语在后\n【结构】：关系代词/副词/连词 引导一个句子。关系词在从句中可作任何成分。\n--------关系代词：Ice cream, coke, hamburgers, whatever you have a love for. \n--------关系代词：Kobe gave every last ounce of himself to whatever he was doing.\n--------关系代词：Whatever it is, it's too late.\n--------关系副词：I don’t know when he will come.\n--------关系副词：Tell me why you were late.\n--------关系连词：I don't know whether he will come.\n--------关系连词：Tell me if you need help",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "that's [why we must live in the moment]\n【句子充当名词】那就是[为什么我们必须活在当下]\n---\n【句子充当名词】那就是为什么我们必须活在当下\nwhy we must live in the moment"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "we don't even know [if it works]\n【句子充当名词】我们甚至不知道[它是否有效]\n---\n【句子充当名词】：我们甚至不知道它是否有效\nif it works"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "asking somebody [how old they are is considered rude]\n【句子充当名词】问[别人多大]被认为是不礼貌的\n---\n【句子充当名词】：问别人多大被认为是不礼貌的\nhow old they are"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "she worries about [what her children will eat]\n【句子充当名词】她担心[孩子们会吃什么]\n---\n【句子充当名词】：她担心孩子们会吃什么\nwhat her children will eat"
+                }
+            ]
+        },
+        {
+            "id": 23,
+            "order": 2,
+            "name": "使用 noun 的思路",
+            "text": "【Input】\n1. 以 the 开头是在强调事物\n-the cat 那只猫\n-the cats 那些猫\n-in the winter..., in the summer 在冬天如何，在夏天如何\n2. 单数在表示一个事物、复数在表示多个事物、非单非复在表示抽象概念\n-a cat 一只猫\n-two coffees 两杯咖啡\n-vocabulary is the sum of many words\n【Output】\n1. 要强调事物，则以 the 开头\n-the cat 那只猫\n-the cats 那些猫\n-in the winter..., in the summer 在冬天如何，在夏天如何\n2. 要表示\"可被单位化\"、\"成个存在\"的事物则必须加 a 或 s、要表示抽象概念则使用裸词\n-a cat 一只猫\n-two cats 两只猫\n-a water 一片水域\n-a attachment 依赖是一种心里状态\n-vocabulary 词汇\n-love 感情\n-an ice cream 一支冰淇淋，使用 an 的根本原因，是名词以元音开头不容易发音，与前面的 n 形容连读，更容易发音。an ice 发音时只需发 n + ice 即可，a 可以省略",
+            "examples": []
+        },
+        {
+            "id": 24,
+            "order": 2,
+            "name": "单词变形规则",
+            "text": "【plural】\n----[+s]: invents\n----[+es]: touches\n----[y +ies]: studies\n【past & past participle】\n----[+d]: tortured\n----[+ed]: invented\n----[-y +ied]: carried\n----[+辅 +ed]: stopped\n【gerund】\n----[+ing]: inventing\n----[-e +ing]: whistling\n----[+辅 +ing]: stopping",
+            "examples": []
+        },
+        {
+            "id": 27,
+            "order": 2,
+            "name": "撇号 ' 的作用",
+            "text": "【含义】：表示省略了某些字母，起到展位的作用\n【结构】：常省略 a, i, g\n【例子】：\n----I'm student\n----dyin' was a part of life\n----you're not coming out",
+            "examples": []
+        },
+        {
+            "id": 64,
+            "order": 2,
+            "name": "日期",
+            "text": "【规则】\n-day = 0:00 ~ 24:00\n-night = 21:00 ~ 00:00\n-在 year & month 要使用介词 in\n-在 day 要使用介词 on\n-在 night 要使用介词 at\n-month & date 要大写: November, Monday\n-day 的读法:  1~3(first, second, third), 24~29(fourth~ninth)",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 0,
+                    "text": "【读法】：on November 21, on November 24\na\n---\n【日期 - Day 的读法】on November twenty first, on November twenty fourth\na"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "in November\n【日期】在11月\n---\n【日期 - 在 Year & Month 要使用介词 in】在11月\nin November"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[on] November 22\n【日期】在11月22日\n---\n【日期 - 表示 Day 要使用介词 on】在11月22日\non November 22"
+                }
+            ]
+        },
+        {
+            "id": 110,
+            "order": 2,
+            "name": "长度和面积",
+            "text": "【规则】\nsquare feet 除以 10 后，约等于平方米",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "my house is 76,000 square feet\n【长度和面积】我房子有 76,000 平方尺\n---\n【长度和面积】76 thousand 平方尺\nmy house is 76,000 square feet"
+                }
+            ]
+        },
+        {
+            "id": 89,
+            "order": 2,
+            "name": "纪年",
+            "text": "【规则】：\n-数字在前、BC 在后\n-BC & BCE 都表示公元，前者为 Before Christ，后者为 Before Common Era\n-1~3(first, second, third), 24~29(fourth~ninth)",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "the [19th] century, the [21st] century\n【纪年】19世纪，21世纪\n---\n【纪年 - 1~3(first, second, third), 24~29(fourth~ninth)】19世纪，21世纪\nthe 19th century, the 21st century"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "let's journey back to [300 BCE] China\n【纪年】让我们回到[公元前300年]的中国\n---\n【纪年 - 数字在前、BC 在后】公元前300年\n300 BCE"
+                }
+            ]
+        },
+        {
+            "id": 63,
+            "order": 2,
+            "name": "货币",
+            "text": "【规则】：\n-符号在前、数字在后\n-pounds, dollars, bucks 使用复数，quid 使用单数",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "$1, £9, 9 quid, 9 bucks\n【货币】1美元，9英镑，9块钱（英镑），9块钱（美元）\n---\n【货币 - 符号在前、数字在后】1美元，9英镑，9块钱（英镑），9块钱（美元）\n$1, £9, nine quid, nine bucks"
+                }
+            ]
+        },
+        {
+            "id": 18,
+            "order": 2,
+            "name": "数字",
+            "text": "【规则】： \n-1100–1900 要以 hundred 为单位\n-hundred/thousand/million 作为单位时，要使用单数，其后的名词使用复数",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 0,
+                    "text": "【读法】：200 books\na\n---\n【Number - hundred/thousand/million 作为单位时，要使用单数，其后的名词使用复数】2 hundred books\na"
+                },
+                {
+                    "id": 2,
+                    "type": 0,
+                    "text": "【读法】：the average price is around [﹩1,300] a month\na\n---\n【Number - 1100–1900 要以 hundred 为单位】13 hundred dollars\na"
+                },
+                {
+                    "id": 1,
+                    "type": 0,
+                    "text": "【读法】：fast forward to the [1600]\na\n---\n【Number - 1100–1900 要以 hundred 为单位】16 hundred\na"
+                }
+            ]
+        },
+        {
+            "id": 120,
+            "order": 2,
+            "name": "结婚",
+            "text": "【表达一：marry sb 嫁或娶某人】\n【表达二：be married to sb 跟某人结婚】\n【表达三：get married 结婚了】",
+            "examples": [
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "Your spouse is your husband or wife after [you get married]\n【结婚的表达方式 - 结婚了】[你们结婚之后]，你的配偶就是你的丈夫或妻子\n---\n【get married - 结婚的表达方式 - 结婚了】你们结婚之后\nafter you get married"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "Why the hell are you married to me?\n【结婚的表达方式 - 跟某人结婚】为什么你跟我结婚？\n---\n【be married to sb - 结婚的表达方式 - 跟某人结婚】为什么你跟我结婚？\nWhy the hell are you married to me?"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "before my father married my mother, [he was married to a different woman]\n【结婚的表达方式 - 跟某人结婚】我爸娶我妈之前，[他跟另一个女人结过婚]\n---\n【be married to sb - 结婚的表达方式 - 跟某人结婚】他跟另一个女人结过婚\nhe was married to a different woman"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[before my father married my mother], he was married to a different woman\n【结婚的表达方式 - 嫁或娶某人】[我爸娶我妈之前]，他跟另一个女人结过婚\n---\n【marry sb - 结婚的表达方式 - 嫁或娶某人】我爸娶我妈之前\nbefore my father married my mother"
+                }
+            ]
+        },
+        {
+            "id": 100,
+            "order": 2,
+            "name": "as if",
+            "text": "【含义】：仿佛\n【成分】：方式状语，补充动作进行的方式\n【句型】：\n仿佛 - as if were\n仿佛当时 - as if had done\n【注意】：注意普通\"好像\"不属于该句型，It looks as if it is going to rain 天上有乌云，真的要下",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "[as if] all that [weren't] enough\n【仿佛】仿佛一切还不够\n---\n【仿佛】仿佛一切还不够\nas if all that weren't enough"
+                }
+            ]
+        },
+        {
+            "id": 99,
+            "order": 2,
+            "name": "I wish I did",
+            "text": "【含义】: 表达遗憾\n【翻译】：多么希望\n【注意】：普通\"希望\"不属于该句型，它表达的是期许，而不是遗憾，例如 I wish you success",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "you wish that you had the same thing that they have\n【表达遗憾 - 多么希望】你希望自己也能拥有他们所拥有的那些东西\n---\n【表达遗憾 - 多么希望】你希望自己也能拥有他们所拥有的那些东西\nyou wish that you had the same thing that they have"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "I [wish] I had more time to travel\n【表达遗憾 - 多么希望】我希望我有更多时间去旅行\n---\n【表达遗憾 - 多么希望】我希望我有更多时间去旅行\nI wish I had more time to travel"
+                }
+            ]
+        },
+        {
+            "id": 26,
+            "order": 2,
+            "name": "be doing",
+            "text": "【含义】：下一步的打算\n【翻译】：要、会或不翻译\n【注意】：该结构大概率会发生，而 want 停留在想法阶段",
+            "examples": [
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "Mango, you['re not coming] out? I got some yummy food for you.\n【下一步的打算，要】芒果，[你不出来吗]？我有好吃的给你。\n---\n【be doing - 下一步的打算，要】你不出来吗\nyou're not coming out"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "he['s not eating] it, just killing it\n【下一步的打算，要】[它不吃]，它只杀\n---\n【be doing - 下一步的打算，要】它不吃\nhe's not eating it"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "Leave me alone. I['m going] back\n【下一步的打算，要】放开我。[我要回去]\n---\n【be doing - 下一步的打算，要】我要回去\nI'm going back"
+                }
+            ]
+        },
+        {
+            "id": 80,
+            "order": 2,
+            "name": "委婉表达",
+            "text": "【含义】：用委婉、谨慎的态度表达观点\n【句型】：\n描述现在 - may/could/would do\n描述过去 - might/could/would have done\n【注意】：\n-它就是教材中所说的虚拟语气的主句部分，但那样学不容易理解。单独拿出来更好理解。\n-不直接使用过去式的原因是情态动词只能接原形。而去掉情态动词，直接使用过去式又会变成肯定语气。",
+            "examples": [
+                {
+                    "id": 6,
+                    "type": 2,
+                    "text": "[I would have gone overboard], but Mr.Dawson here saved me\n【委婉表达】[我可能会落水]，但这位道森先生救了我\n---\n【委婉表达】我可能会落水\nI would have gone overboard"
+                },
+                {
+                    "id": 5,
+                    "type": 2,
+                    "text": "he would have punished those who said otherwise\n【委婉表达】他会惩罚那些持相反观点的人\n---\n【委婉表达】他会惩罚那些持相反观点的人\nhe would have punished those who said otherwise"
+                },
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "[you may not think that beans are sweet] but actually these are sweet red beans\n【委婉表达】[你可能认为这个豆不是甜的]，但实际这是甜的红豆\n---\n【委婉表达】你可能认为这个豆不是甜的\nyou may not think that beans are sweet"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "what I was thinking was [what could have happened] to this girl\n【委婉表达】我当时想的是[可能发生了什么]\n---\n【委婉表达】可能发生了什么\nwhat could have happened"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "it might have been from France\n【委婉表达】它可能来自法国\n---\n【委婉表达】它可能来自法国\nit might have been from France"
+                }
+            ]
+        },
+        {
+            "id": 61,
+            "order": 2,
+            "name": "【难懂结构】",
+            "text": "",
+            "examples": [
+                {
+                    "id": 2,
+                    "type": 0,
+                    "text": "[the lunch break isn't] until 12\na\n---\n【难懂结构：这样完全合法，就像 it is 或 it is not】：午休时间还没到，12点才开始\na"
+                },
+                {
+                    "id": 1,
+                    "type": 0,
+                    "text": "Jack, Mr.Dawson, [it's been a pleasure]\na\n---\n【难懂结构：它是 it's a pleasure 的完成态，表示一段时间内的状态】：很荣幸\na"
+                }
+            ]
+        },
+        {
+            "id": 93,
+            "order": 2,
+            "name": "【比较 - Oh my God & Oh my Goodness】",
+            "text": "-不直接使用 God 而使用 Goodness/ Gosh 是为了避免亵渎神灵\n-Goodness/ Gosh 首音与 God 接近\n-注意，没有 Oh my Goddess 的说法",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 51,
+            "order": 2,
+            "name": "Subordinating Conjunction",
+            "text": "【含义】: 从属连词。用于引导从句，为主句补充信息。\n【注意】:\n-汉语角度，原因、条件等信息是必要背景和前提，要先交代。而英语角度，从句就是在给主句补充信息，主句先说、从句作为补充。\n-虽然连词可以引导完整句子，从逻辑上，它不能独立成句。\n【种类】:\n-[time]: after, before, when, while, as, since, until, once, as soon as。\n-[condition]: if, unless, in case, provided that, as long as。\n-[concession]: although, though, even though, while。\n-[reason]: because, as, since, in order that, so that。\n-[nomial]: that, if, whether",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "order": 2,
+            "name": "Complement",
+            "text": "【含义】: 补语。为主语或宾语补充状态信息，主语或宾语与补语构成系表关系。\n【注意】：\n-主语 + 补语就是主补，宾语 + 补语就是宾补\n- \"补\"不是\"补充\"，因为它是句子的主干成分，去掉它句子意思将改变\n-宾补结构常见的动词 call/consider/find/elect/keep + object + 表\n",
+            "examples": [
+                {
+                    "id": 9,
+                    "type": 2,
+                    "text": "he was appointed Chancellor of Germany\n【补语】a\n---\n【Complement - 补语】a\nhe was appointed Chancellor of Germany"
+                },
+                {
+                    "id": 8,
+                    "type": 2,
+                    "text": "[you]'d drop [unconscious] from even one whiff of it\n【补语】闻一下，[你就会倒地，不省人事]\n---\n【Complement - 补语】闻一下，你就会倒地，不省人事\nyou'd drop unconscious"
+                },
+                {
+                    "id": 7,
+                    "type": 2,
+                    "text": "rehearsing the raid until [they] could do it [blindfolded]\n【补语】演练突击，直到他们能[闭眼完成]\n---\n【Complement - 补语】演练突击，直到他们能闭眼完成\nthey could do it blindfolded"
+                },
+                {
+                    "id": 6,
+                    "type": 2,
+                    "text": "if there is a little of snow falling, they are called [flurries]\n【补语】如果只下一点雪，[它们被叫做 flurries]\n---\n【Complement - 补语】它们被叫做 flurries\nthey are called flurries"
+                },
+                {
+                    "id": 5,
+                    "type": 2,
+                    "text": "keeps [them in line]\n【补语】让它们守规矩\n---\n【Complement - 补语】让它们守规矩\nkeeps them in line"
+                },
+                {
+                    "id": 4,
+                    "type": 2,
+                    "text": "I found the [book interesting]\n【补语】我发现那本书有意思\n---\n【Complement - 补语】我发现那本书有意思\nI found the book interesting"
+                },
+                {
+                    "id": 3,
+                    "type": 2,
+                    "text": "we consider [them pets]\n【补语】我们视它们为宠物\n---\n【Complement - 补语】我们视它们为宠物\nwe consider them pets"
+                },
+                {
+                    "id": 2,
+                    "type": 2,
+                    "text": "if there is a tiny bit of rain that will then stop, we call [this a shower]\n【补语】如果只有一点雨，然后停了，[我们称这个为阵雨]\n---\n【Complement - 补语】我们称这个为阵雨\nwe call this a shower"
+                },
+                {
+                    "id": 1,
+                    "type": 2,
+                    "text": "they elect [him chairman]\n【补语】他们选他为主席\n---\n【Complement - 补语】他们选他为主席\nthey elect him chairman"
+                }
+            ]
+        },
+        {
+            "id": 31,
+            "order": 2,
+            "name": "疑问代词 & 关系代词",
+            "text": "【含义】：前者是用于引导疑问句的代词，后者是用于引导名词性从句的代词。\n【示例】：\n----疑问代词：what is this? \n----关系代词：Ice cream, coke, hamburgers, whatever you have a love for",
+            "examples": []
+        },
+        {
+            "id": 50,
+            "order": 2,
+            "name": "Coordinating Conjunction",
+            "text": "【含义】：并列连词，用于连接两个主句或结构相同的成分。\n【种类】：for, and, nor, but, or, yet, so, 简称 fanboys\n【注意】：只要符合逻辑，它可以独立成句。\n-不推荐使用 But 开启独立句子。推荐使用副词 However\n-不推荐使用 So 开启独立句子。推荐使用副词 Therefore\n-不推荐使用 Or else 开启独立句子。荐使用副词 Otherwise\n【示例】：\n-[but]: But you have a sense of love for him in the way that he can bring out the best in you.\n-[but - Not only 是副词成分并引发了倒装]: Not only do we have the largest economy in the world, we have the strongest economy in the world.\n-[but]: he is remembered not just as a man who rose to power through manipulation and violence, but as a symbol of the dangers of hatred and unchecked power.\n-[and]: And he did that for me.\n-[or else-否则] As I look in this arena and across the globe, a piece of you died, or else you wouldn't be here.\n-[or else-否则] You can't replace one of the words, or else expression sounds strange to native speakers.\n-[or - either 是副词性成分]: What will happen if there is a swear word on Canadian TV? Either the swear word will be censored, or at the beginning of the program there will be a warning.\n-[nor - neither 是副词性成分]",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "order": 3,
+            "name": "真实的发音规律",
+            "text": "【轻读、紧读，采用跳跃式读法的部分有：'ll/'s/'re/'d/the/a/an/will/would/to】\n【to】 用于强调其后面的成分，其发音要轻、紧促、顿搓感\n【the】 用于强调名词，其发音要紧促且有顿搓感\n【t】以 t 结尾，其发音要紧促且有抑制感\n【doing】 的 g 不发音，duːɪn 杜-嗯\n【and】 的 d 不发音\n【if 】不是“义副”，而是“诶副” -> 副\n【y】以 y 结尾，其音标是 ɪ 结尾，其发音要拉长 seɪ:\n【s】单词以 s 开头，其发音要拉长\n【would/could have】have 读成 əv 且与前面的 would 或 have 连读，读音紧促 kədə(v) / wouldə(v)\n【for 】读成 fər 而非 fɔːr\n【m】闭嘴、共鸣\n【are】发 er 而不是 r \n【have】做助动词时要简读为 v",
+            "examples": [
+                {
+                    "id": 19,
+                    "type": 0,
+                    "text": "【发音练习 - 连读】What is this? 绝不是老师教的一个字一个字读\na\n---\nwɑːtisis\na"
+                },
+                {
+                    "id": 18,
+                    "type": 0,
+                    "text": "【发音练习】what are you gonna do now\na\n---\n【are 发 er 额】what r you gonna do\na"
+                },
+                {
+                    "id": 17,
+                    "type": 0,
+                    "text": "cult | kʌlt | n.邪教：先发 kʌ 再滑向 lt\na\n---\na\na\n"
+                },
+                {
+                    "id": 16,
+                    "type": 0,
+                    "text": "【发音练习】some say that\na\n---\n【t】以 t 结尾，其发音要紧促且有抑制感\nthatt"
+                },
+                {
+                    "id": 15,
+                    "type": 0,
+                    "text": "【发音练习】you name it\na\n---\n【t】以 t 结尾，其发音要紧促且有抑制感\nitt"
+                },
+                {
+                    "id": 14,
+                    "type": 0,
+                    "text": "【发音练习】He's the leader. He's the king\na\n---\n【the】 用于强调名词，其发音要紧促且有顿搓感\nthe"
+                },
+                {
+                    "id": 13,
+                    "type": 0,
+                    "text": "【发音练习】need to go, need to talk\na\n---\n【to】 用于强调其后面的成分，其发音要轻、紧促、顿搓感\na"
+                },
+                {
+                    "id": 11,
+                    "type": 0,
+                    "text": "【发音练习】some say that\na\n---\n【y】以 y 结尾，其音标是 ɪ 结尾，其发音要拉长 seɪ:\n"
+                },
+                {
+                    "id": 10,
+                    "type": 0,
+                    "text": "spoiled little brat even\na\n---\nspoiled \ns~poiled"
+                },
+                {
+                    "id": 8,
+                    "type": 0,
+                    "text": "【发音练习】I would have gone overboard. what could have happened.\na\n---\n【would/could have】have 读成 əv 且与前面的 would 或 have 连读，读音紧促 kədə(v) / wouldə(v)\na\n"
+                },
+                {
+                    "id": 7,
+                    "type": 0,
+                    "text": "【发音练习】I want to thank you for what you did, not just for pulling me back, but for your discretion.\na\n---\n【for 】读成 fər 而非 fɔːr\na"
+                },
+                {
+                    "id": 6,
+                    "type": 0,
+                    "text": "【发音练习】munchies, mice\na\n---\n【m】闭嘴、共鸣"
+                }
+            ]
+        },
+        {
+            "id": 37,
+            "order": 999,
+            "name": "示例模板",
+            "text": "0【短语】\n1【翻译】\n2【语法】\n3【发音】\n【示例写法】\nshe used to sit at this bar every night, [wearing every piece of jewelry she owned]\n她过去每晚都会坐在这家酒吧里，[戴着她拥有的每件珠宝]\n---\n【伴随状语】：戴着她拥有的每件珠宝\nwearing every piece of jewelry she owned",
+            "examples": [
+                {
+                    "id": 1,
+                    "type": -1,
+                    "text": ""
+                }
+            ]
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { APIPrefix } from "../settings.js";
-import { Response, RequestDataUpdatePassword, RequestParamsTts } from "../types/Http";
+import { Response, RequestDataUpdatePassword } from "../types/Http";
 import store from "../stores";
 import { clearToken } from "../stores/reducers/auth";
 
@@ -56,36 +56,236 @@ export const OAuthUpdatePassword = (data: RequestDataUpdatePassword): Promise<Re
 };
 // User
 
-// Video
+// Script
 export const videoCreate = (data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/create`,
+        url: `/script/create`,
         data: data,
     });
 };
 export const videoUpdate = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/update`,
+        url: `/script/update`,
         data: data,
     });
 };
 export const videoRemove = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/remove`,
+        url: `/script/remove`,
         data: data,
     });
 };
 export const videoList = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/video/list`,
+        url: `/script/list`,
         params: params,
     });
 };
-// Video
+export const scriptRead = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script/read`,
+        params: params,
+    });
+};
+/// Script
+
+// Script Paragraph
+export const scriptParagraphList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_paragraph/list`,
+        params: params,
+    });
+};
+export const scriptParagraphInsert = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_paragraph/insert`,
+        data: data,
+    });
+};
+export const scriptParagraphUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_paragraph/update`,
+        data: data,
+    });
+};
+export const scriptParagraphRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_paragraph/remove`,
+        data: data,
+    });
+};
+export const scriptParagraphCut = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_paragraph/cut`,
+        data: data,
+    });
+};
+// Script Paragraph
+
+// Script Sentence
+export const scriptSentenceList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_sentence/list`,
+        params: params,
+    });
+};
+export const scriptSentenceInsert = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_sentence/insert`,
+        data: data,
+    });
+};
+export const scriptSentenceUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_sentence/update`,
+        data: data,
+    });
+};
+export const scriptSentenceInsertBatch = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_sentence/insert_batch`,
+        data: data,
+    });
+};
+export const scriptSentenceRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_sentence/remove`,
+        data: data,
+    });
+};
+// Script Sentence
+
+// Script Vocabulary
+export const scriptVocabCreate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_vocab/create`,
+        data: data,
+    });
+};
+export const scriptVocabRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_vocab/remove`,
+        data: data,
+    });
+};
+export const scriptVocabList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_vocab/list`,
+        params: params,
+    });
+};
+// Script Vocabulary
+
+// Script Role
+export const scriptRoleCreate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_role/create`,
+        data: data,
+    });
+};
+export const scriptRoleUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_role/update`,
+        data: data,
+    });
+};
+export const scriptRoleRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_role/remove`,
+        data: data,
+    });
+};
+export const scriptRoleList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_role/list`,
+        params: params,
+    });
+};
+// Script Role
+
+// Script Scene
+export const scriptSceneCreate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_scene/create`,
+        data: data,
+    });
+};
+export const scriptSceneUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_scene/update`,
+        data: data,
+    });
+};
+export const scriptSceneRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_scene/remove`,
+        data: data,
+    });
+};
+export const scriptSceneList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_scene/list`,
+        params: params,
+    });
+};
+// Script Scene
+
+// Script Example Sentence
+export const scriptExampleSentenceCreate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_example_sentence/create`,
+        data: data,
+    });
+};
+export const scriptExampleSentenceUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_example_sentence/update`,
+        data: data,
+    });
+};
+export const scriptExampleSentenceRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_example_sentence/remove`,
+        data: data,
+    });
+};
+export const scriptExampleSentenceList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_example_sentence/list`,
+        params: params,
+    });
+};
+// Script Example Sentence
 
 // Audio
 export const audioClip = (params: object): Promise<Response> => {
@@ -120,91 +320,96 @@ export const speechBatchTranscode = (params: object): Promise<Response> => {
         params: params,
     });
 };
-export const speechConcat = (params: object): Promise<Blob> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/speech/concat`,
-        responseType: "blob",
-        params: params,
-    });
-};
 // Speech
 
-// Statistics
-export const statisticsCountVocab = (): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/statistics/count_vocab`,
-    });
-};
-export const statisticsSearch = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/statistics/search`,
-        params: params,
-    });
-};
-// Statistics
-
-// Vocab
+// Vocabulary
 export const vocabCreate = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/create`,
+        url: `/vocabulary/create`,
         data: data,
     });
 };
 export const vocabUpdate = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/update`,
+        url: `/vocabulary/update`,
         data: data,
     });
 };
 export const vocabRemove = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/remove`,
+        url: `/vocabulary/remove`,
         data: data,
     });
 };
 export const vocabList = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/list`,
+        url: `/vocabulary/list`,
         params: params,
     });
 };
-export const vocabFileMove = (params: object): Promise<Response> => {
+export const vocabFileMove = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/file/move`,
-        params: params,
+        url: `/vocabulary/file/move`,
+        data: data,
     });
 };
-export const vocabFileRemove = (params: object): Promise<Response> => {
+export const vocabFileRemove = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/file/remove`,
-        params: params,
+        url: `/vocabulary/file/remove`,
+        data: data,
     });
 };
 export const vocabFileUploadImage = (params: object, data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
-        url: `/vocab/file/image_upload`,
+        url: `/vocabulary/file/image_upload`,
         data: data,
         params: params,
     });
 };
-// Vocab
-
-// Script
-export const scriptDetail = (params: object): Promise<Response> => {
+export const vocabFileExportSpeech = (params: object): Promise<Blob> => {
     return requestInstance.request({
         method: "post",
-        url: `/script/detail`,
+        url: `/vocabulary/file/export_speech`,
+        responseType: "blob",
         params: params,
     });
 };
-// Script
+// Vocabulary
+
+// Grammar
+export const grammarList = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/grammar/list`,
+        params: params,
+    });
+};
+export const grammarCreate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/grammar/create`,
+        data: data,
+    });
+};
+export const grammarUpdate = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/grammar/update`,
+        data: data,
+    });
+};
+export const grammarRemove = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/grammar/remove`,
+        data: data,
+    });
+};
+// Grammar

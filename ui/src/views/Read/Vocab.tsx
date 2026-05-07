@@ -1,25 +1,24 @@
 import React from "react";
 import { Tooltip } from "antd";
-import { Vocab as DataVocab } from "../../types/Data";
+import { Vocabulary } from "../../types/Data";
+import { Domain } from "../../settings.js";
 import "./Vocab.scss";
 
 interface VocabProps {
     text: string;
-    assetsPrefix: string;
-    vocabList: DataVocab[];
+    vocabList: Vocabulary[];
     onClick?: (speech: string) => void;
 }
 
-const tipBgColor = "#c5a587";
-
-const Vocab: React.FC<VocabProps> = ({ text, assetsPrefix, vocabList, onClick }) => {
+const Vocab: React.FC<VocabProps> = ({ text, vocabList, onClick }) => {
+    if (!text) return <></>;
     if (!vocabList) return <>{text}</>;
     const handlerPlay = (speech: string) => {
         if (onClick !== undefined) {
-            onClick(`${assetsPrefix}${speech}?${Date.now()}`);
+            onClick(`${Domain}/database/speech/${speech}?${Date.now()}`);
         }
     };
-    const fnRecurHalf = (text: string, inputs: DataVocab[]) => {
+    const fnRecurHalf = (text: string, inputs: Vocabulary[]) => {
         const theInputs = [...inputs];
         const next = theInputs.pop();
         if (next) {
@@ -43,7 +42,7 @@ const Vocab: React.FC<VocabProps> = ({ text, assetsPrefix, vocabList, onClick })
                 res.push(...fnRecurHalf(half, theInputs));
                 if (halfs.length === 2 && k === 0) {
                     res.push(
-                        <Tooltip className="vocab-item" title={next.definition} color={tipBgColor}>
+                        <Tooltip className="vocab-item" title={next.definition} color={"#c5a587"}>
                             <span onClick={() => handlerPlay(next.speech)}>{inputMatch ? inputMatch[0] : inputParts[0]}</span>
                         </Tooltip>,
                     );

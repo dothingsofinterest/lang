@@ -2,91 +2,79 @@ export interface StateAuth {
     ACCESS_TOKEN: string | undefined;
 }
 
-export interface PayloadScript {
-    pKey?: number;
-    sKey?: number;
-    type?: number;
-    text?: string;
-    index?: number;
-    list?: string[];
-}
-
 /* Data */
-// export interface Script {
-//     title: string;
-//     roles: string[];
-//     scenes: Scene[];
-//     paragraphs: Paragraph[];
-//     vocab: Vocab[];
-//     grammar: Grammar[];
-//     impression: Impression;
-// }
 export interface Script {
     id: number;
-    title: string;
-    scenes: SceneBlock[];
-}
-export interface ScriptParsed {
-    hash: string;
-    title: string;
-    vocab: Vocab[];
-    grammar: Grammar[];
-    exampleRecogn: GrammarExamplePractice[];
-    exampleTranslation: GrammarExamplePractice[];
-    scenes: SceneBlock[];
-    sentences: Sentence[];
-    impression: Impression;
-}
-export interface SceneBlock {
     name: string;
-    paragraphs: Paragraph[];
+    studyCount: number;
 }
-export interface Scene {
-    index: number;
-    value: string;
-}
-export interface Paragraph {
+
+export interface ScriptScene {
     id: number;
-    scene: string | number; // temporary
-    roles: string[];
-    sentences: Sentence[];
+    scriptId: number;
+    name: string;
 }
-export interface Sentence {
+
+export interface ScriptRole {
     id: number;
+    scriptId: number;
+    name: string;
+}
+
+export interface ScriptParagraph {
+    id: number;
+    scriptId: number;
+    sceneId: number;
+    roleId: number;
+    orderNum: number;
+}
+export interface ScriptParagraphWithSentences {
+    id: number;
+    scriptId: number;
+    sceneId: number | null;
+    roleId: number | null;
+    orderNum: number;
+    sentences: {
+        id: number;
+        startTime: number;
+        endTime: number;
+        orderNum: number;
+        text: string;
+        piece: string;
+    }[];
+}
+export interface ScriptSentence {
+    id: number;
+    scriptId?: number;
+    paragraphId?: number;
     startTime: number;
     endTime: number;
+    orderNum?: number;
     text: string;
+    piece: string;
 }
-export interface Video {
-    id: number;
-    name: string;
-}
-export interface Vocab {
+export interface Vocabulary {
     id: number;
     definition: string;
     image: string;
     speech: string;
     category: number; // 1:listening, 2:watching, 4:thinking of
+    script_ids?: string;
 }
+
 export interface Grammar {
     id: number;
-    order: number;
     name: string;
     text: string;
-    examples: GrammarExample[];
 }
+
 export interface GrammarExample {
     id: number;
-    type: number;
+    scriptId: number;
+    grammarId: number;
     text: string;
-}
-export interface GrammarExamplePractice {
-    text: string[];
-    type: number;
-}
-export interface Impression {
-    content: string;
-    grammar: string[];
+    piece: string;
+    speech: string;
 }
 /* Data */
 

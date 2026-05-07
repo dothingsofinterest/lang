@@ -1,15 +1,12 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Input, Button, Upload } from "antd";
-import { EyeFilled, TranslationOutlined, ExpandOutlined, SettingFilled, CustomerServiceFilled, ProfileFilled, ReadFilled, BulbFilled, EditFilled } from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
-import { PlusCircleOutlined, UploadOutlined, DownloadOutlined, LineChartOutlined, SearchOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { Video as DataVideo } from "../../types/Data";
-import { videoList, videoCreate } from "../../api/requestAuth";
-import { useSelector, useDispatch } from "react-redux";
-import { updateLoadingUploadVideo, updateLoadingImportData } from "../../stores/reducers/status";
-import { updateVideoURL, updateVideoAudioWaverURL, updateVideoAudioURL } from "../../stores/reducers/video";
-import { useParams } from "react-router-dom";
+import { Button } from "antd";
+import { HomeOutlined, CustomerServiceFilled, EditOutlined, ReadFilled, FileWordFilled, TranslationOutlined, GoogleOutlined, HighlightOutlined } from "@ant-design/icons";
+import { useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../stores";
+import PanelVocab from "../Vocabulary/Index";
+import PanelGrammar from "../Grammar/Index";
 import "./Nav.scss";
 
 interface RouteItem {
@@ -18,26 +15,40 @@ interface RouteItem {
 }
 
 const navs: RouteItem[] = [
+    { url: "/home", icon: <HomeOutlined /> },
     { url: "/read", icon: <ReadFilled /> },
-    { url: "/script", icon: <ProfileFilled /> },
-    { url: "/vocab-listen", icon: <CustomerServiceFilled /> },
-    { url: "/vocab-meaning", icon: <BulbFilled /> },
+    { url: "/vocabListen", icon: <CustomerServiceFilled /> },
+    { url: "/vocabMeaning", icon: <TranslationOutlined /> },
+    { url: "/skeleton", icon: <HighlightOutlined /> },
+    { url: "/script", icon: <EditOutlined /> },
 ];
 
 const Nav = () => {
     const { id } = useParams();
-    const videoId = Number(id);
+    const catalogFolding = useSelector((state: RootState) => state.status.catalogFolding);
     const { pathname } = useLocation();
     const firstPath = pathname.split("/").filter(Boolean)[0] ?? "";
+    const [vocabPanel, setVocabPanel] = useState(false);
+    const [grammarPanel, setGrammarPanel] = useState(false);
     return (
-        <nav id="nav">
-            {navs.map((nav, key) => {
-                return (
-                    <Link to={`${nav.url}/${videoId}`} key={key} className={`item${nav.url.slice(1) === firstPath ? " active" : ""}`}>
-                        <Button icon={nav.icon}></Button>
-                    </Link>
-                );
-            })}
+        <nav id="nav" className={catalogFolding ? `folding` : ``}>
+            <div className="navs">
+                {navs.map((nav, key) => {
+                    return (
+                        <Link to={`${nav.url}/${Number(id)}`} key={key} className={`item${nav.url.slice(1) === firstPath ? " active" : ""}`}>
+                            <Button icon={nav.icon} />
+                        </Link>
+                    );
+                })}
+                <div className="item">
+                    <Button icon={<GoogleOutlined />} onClick={() => setGrammarPanel(true)} />
+                </div>
+                <div className="item">
+                    <Button icon={<FileWordFilled />} onClick={() => setVocabPanel(true)} />
+                </div>
+            </div>
+            <PanelVocab open={vocabPanel} onClose={() => setVocabPanel(false)} />
+            <PanelGrammar open={grammarPanel} onClose={() => setGrammarPanel(false)} />
         </nav>
     );
 };

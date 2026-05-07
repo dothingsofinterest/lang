@@ -2,14 +2,12 @@ import { createBrowserRouter, createHashRouter, Navigate, redirect } from "react
 import Login from "../views/Public/Login";
 import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
-// import Settings from "../views/Settings/Index";
+import Home from "../views/Home/Index";
 import Read from "../views/Read/Index";
 import Script from "../views/Script/Index";
-// import VocabListen from "../views/VocabListen/Index";
-// import VocabWatch from "../views/VocabWatch/Index";
+import VocabListen from "../views/VocabListen/Index";
 import VocabMeaning from "../views/VocabMeaning/Index";
-import ExampleRecogn from "../views/Example/ExampleRecogn";
-import ExampleTranslation from "../views/Example/ExampleTranslation";
+import Skeleton from "../views/Skeleton/Index";
 
 const routes = [
     {
@@ -22,12 +20,12 @@ const routes = [
         children: [
             {
                 index: true,
-                element: <Navigate to="read/1" replace />,
+                element: <Navigate to="home/1" replace />,
             },
-            // {
-            //     path: "settings",
-            //     element: <Settings />,
-            // },
+            {
+                path: "home/:id",
+                element: <Home />,
+            },
             {
                 path: "script/:id",
                 element: <Script />,
@@ -36,25 +34,17 @@ const routes = [
                 path: "read/:id",
                 element: <Read />,
             },
-            // {
-            //     path: "vocab-listen",
-            //     element: <VocabListen />,
-            // },
-            // {
-            //     path: "vocab-watch",
-            //     element: <VocabWatch />,
-            // },
             {
-                path: "vocab-meaning",
+                path: "vocabListen/:id",
+                element: <VocabListen />,
+            },
+            {
+                path: "vocabMeaning/:id",
                 element: <VocabMeaning />,
             },
             {
-                path: "example-recogn",
-                element: <ExampleRecogn />,
-            },
-            {
-                path: "example-translation",
-                element: <ExampleTranslation />,
+                path: "skeleton/:id",
+                element: <Skeleton />,
             },
         ],
     },

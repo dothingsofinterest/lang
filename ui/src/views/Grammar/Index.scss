@@ -1,0 +1,196 @@
+#grammar-index {
+    .panel {
+        .name {
+            color: #000;
+            height: 42px;
+            border-radius: 0;
+            font-size: 12px;
+        }
+        .text {
+            min-height: 100px !important;
+            resize: none;
+            border-radius: 0;
+            border-top: 0;
+            padding: 12px 6px;
+            font-size: 14px;
+            &:focus {
+                border-color: #ccc;
+            }
+        }
+        .ant-input {
+            &:focus,
+            &:hover {
+                border-color: #ccc;
+            }
+        }
+        .panel-base {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            .text {
+                flex: 1;
+            }
+            .image {
+                border-top: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+                height: 32px;
+                width: 32px;
+            }
+            .ant-select-selector {
+                border-radius: 0;
+                border-left: 0;
+                &:hover {
+                    border-color: #ccc !important;
+                }
+            }
+            .ant-upload-wrapper {
+                .ant-btn {
+                    border-radius: 0;
+                    width: 32px;
+                    height: 32px;
+                    background-color: #ccc;
+                    &:hover {
+                        border: 0;
+                        color: rgba(0, 0, 0, 0.88);
+                    }
+                }
+            }
+        }
+        .panel-audio {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            .audio-meta {
+                display: none;
+                &.visible {
+                    flex: 0 0 200px;
+                    display: flex;
+                    justify-content: space-between;
+                    .ant-select {
+                        flex: 1;
+                    }
+                }
+            }
+            .base64 {
+                border-radius: 0;
+                border-right: 0;
+            }
+            .pa-btn {
+                flex: 0 0 32px;
+                border-radius: 0;
+                background-color: #ccc;
+                .ant-btn {
+                    border-radius: 0;
+                    width: 32px;
+                    height: 32px;
+                    background-color: #ccc;
+                    &:hover {
+                        border: 0;
+                        color: rgba(0, 0, 0, 0.88);
+                    }
+                }
+            }
+            .ant-select-selector {
+                border-radius: 0;
+                border-right: 0;
+                &:hover {
+                    border-color: #ccc !important;
+                }
+            }
+        }
+        .submit {
+            display: flex;
+            margin-top: 10px;
+            button {
+                flex: 1;
+                padding: 20px 0;
+                border-radius: 0;
+                background-color: #ccc;
+            }
+        }
+    }
+    .table {
+        .search {
+            display: flex;
+            margin: 10px 0;
+            .ant-input-affix-wrapper {
+                flex: 1;
+                border-radius: 0;
+                .ant-input {
+                    border-radius: 0;
+                }
+            }
+            .sbtn {
+                flex: 1;
+                padding: 20px 0;
+                border-radius: 0;
+                background-color: #ccc;
+            }
+        }
+        .list {
+            color: #000;
+            background: #fff;
+            border-radius: 10px;
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0;
+                padding: 0px 2px;
+                border-top: 1px dotted #000;
+                font-size: 12px;
+                height: 40px;
+                &.active {
+                    font-weight: 900;
+                }
+                &:first-child {
+                    border: 0;
+                }
+                img {
+                    width: 26px;
+                    height: 26px;
+                }
+            }
+        }
+        .pagination {
+            margin-top: 10px;
+            background: #ccc;
+            border-radius: 5px;
+            padding: 6px 0;
+        }
+    }
+    .example {
+        margin-top: 10px;
+        .example-panel {
+            .submit {
+                display: flex;
+                margin-top: 10px;
+                .item {
+                    flex: 1;
+                    background-color: #ccc;
+                    border-radius: 0;
+                }
+                .ant-btn {
+                    padding: 20px 0;
+                }
+            }
+        }
+        .chunks {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            span {
+                margin: 0 6px 6px 0;
+                border: 1px solid;
+                padding: 4px 12px;
+                border-radius: 4px;
+                cursor: pointer;
+                &.piece {
+                    background-color: #ccc;
+                }
+            }
+        }
+    }
+}

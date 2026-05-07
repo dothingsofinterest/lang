@@ -11,21 +11,21 @@ import { getAudioCodec, transcodeToMp3 } from "../utils/FFmpeg";
 const basePath = process.env.UPLOAD_PATH;
 
 export const textToSpeech = async (req: Request, res: Response) => {
-    const schemaQuery = Joi.object({
-        engine: Joi.number().required(),
-        content: Joi.string().required(),
-        filename: Joi.string().required(),
-        voice: Joi.number().required(),
-        speed: Joi.number().required(),
-    });
-    const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
-    if (errorQuery) {
-        return res.status(200).json({
-            code: 0,
-            message: `Failed to validate params.`,
-        });
-    }
     try {
+        const schemaQuery = Joi.object({
+            engine: Joi.number().required(),
+            content: Joi.string().required(),
+            filename: Joi.string().required(),
+            voice: Joi.number().required(),
+            speed: Joi.number().required(),
+        });
+        const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
+        if (errorQuery) {
+            return res.status(200).json({
+                code: 0,
+                message: `Failed to validate params.`,
+            });
+        }
         if (valueQuery.engine === 0) {
             await speechGenerateByGoogle(valueQuery.content, valueQuery.filename);
         } else if (valueQuery.engine === 1) {
@@ -60,31 +60,31 @@ export const uploadSpeech = (req: Request, res: Response) => {
 };
 
 export const batchTranscodeToMp3 = async (req: Request, res: Response) => {
-    const schemaQuery = Joi.object({
-        hash: Joi.string().required(),
-    });
-    const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
-    if (errorQuery) {
-        return res.status(200).json({
-            code: 0,
-            message: `Failed to validate params.`,
-        });
-    }
-    const videoFolder = path.join(`${basePath}`, valueQuery.hash);
-    if (!fs.existsSync(videoFolder)) {
-        return res.status(200).json({
-            code: 0,
-            message: `Video folder does not exist.`,
-        });
-    }
-    const vocabPronunciationsFolder = path.join(videoFolder, "vocab_pronunciations");
-    if (!fs.existsSync(vocabPronunciationsFolder)) {
-        return res.status(200).json({
-            code: 0,
-            message: `Pronunciations folder does not exist.`,
-        });
-    }
     try {
+        const schemaQuery = Joi.object({
+            hash: Joi.string().required(),
+        });
+        const { error: errorQuery, value: valueQuery } = schemaQuery.validate(req.query);
+        if (errorQuery) {
+            return res.status(200).json({
+                code: 0,
+                message: `Failed to validate params.`,
+            });
+        }
+        const videoFolder = path.join(`${basePath}`, valueQuery.hash);
+        if (!fs.existsSync(videoFolder)) {
+            return res.status(200).json({
+                code: 0,
+                message: `Video folder does not exist.`,
+            });
+        }
+        const vocabPronunciationsFolder = path.join(videoFolder, "vocab_pronunciations");
+        if (!fs.existsSync(vocabPronunciationsFolder)) {
+            return res.status(200).json({
+                code: 0,
+                message: `Pronunciations folder does not exist.`,
+            });
+        }
         const filesVocabPronunciations = await fsPromise.readdir(vocabPronunciationsFolder);
         for (const pronunciation of filesVocabPronunciations) {
             const pronunciationFilePath = path.join(vocabPronunciationsFolder, pronunciation);

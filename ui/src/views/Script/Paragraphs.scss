@@ -1,4 +1,4 @@
-#video-script-paragraphs {
+#script-paragraphs {
     .paragraph {
         margin-top: 4px;
         .meta {
@@ -8,15 +8,6 @@
             .ant-select {
                 flex: 1;
                 border-radius: 0;
-            }
-            .ant-mentions {
-                flex: 1;
-                font-size: 12px;
-                line-height: 22px;
-                border-radius: 0;
-                border-left: 1px solid #fff;
-                height: 24px;
-                background: #ccc;
             }
             .ant-select-selector {
                 border-radius: 0;
@@ -55,12 +46,5 @@
                 color: #000;
             }
         }
-    }
-}
-
-.ant-mentions {
-    .rc-textarea {
-        padding: 0px 7px;
-        height: 24px;
     }
 }
