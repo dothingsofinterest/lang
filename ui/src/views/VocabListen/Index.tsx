@@ -120,6 +120,9 @@ const Index = () => {
                     handlerPlayForward();
                 }
             }
+            if (event.code === "ControlRight") {
+                handlerToggleTips();
+            }
             const active = document.activeElement;
             // prettier-ignore
             const isTyping = 
@@ -138,9 +141,6 @@ const Index = () => {
                 if (!refState.current.isFocused) {
                     handlerPlayForward();
                 }
-            }
-            if (event.code === "ControlRight") {
-                handlerToggleTips();
             }
             if (event.code === "ArrowUp") {
                 handlerPlaySpeedUp();
@@ -163,25 +163,9 @@ const Index = () => {
     return (
         <Layout className="main-inner" id="vocab-listen-index">
             <div className="main-inner-item-aside"></div>
-            <div className="main-inner-item-main" style={{ position: "relative", padding: "64px 0 120px" }}>
-                <section id="panel">
-                    <div className="buttons">
-                        <Button icon={<FastBackwardOutlined />} onClick={handlerPlayBackward} className="btn">
-                            Click or Press Left
-                        </Button>
-                        <Button icon={<CopyOutlined />} onClick={handlerInputCopy} className="btn" />
-                        <Button icon={<ClearOutlined />} onClick={handlerPlayClear} className="btn" />
-                        <Button icon={<EyeFilled />} onClick={handlerToggleTips} className="btn"></Button>
-                        <Button icon={<DashboardOutlined />} className="btn">
-                            {playSpeed}
-                        </Button>
-                        <Button icon={<FastForwardOutlined />} onClick={handlerPlayForward} className="btn">
-                            Click or Press Right
-                        </Button>
-                    </div>
-                    <div className="progress">
-                        <Progress percent={Math.ceil(((curVocabIndex + 1) / scriptVocabList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
-                    </div>
+            <div className="main-inner-item-main" style={{ position: "relative", padding: "0 0 252px" }}>
+                <section id="progress">
+                    <Progress percent={Math.ceil(((curVocabIndex + 1) / scriptVocabList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
                 </section>
                 <section id="display">
                     {curVocab && (
@@ -193,6 +177,16 @@ const Index = () => {
                     )}
                 </section>
                 <section id="input">
+                    <div id="panel">
+                        <Button icon={<FastBackwardOutlined />} onClick={handlerPlayBackward} className="btn" />
+                        <Button icon={<CopyOutlined />} onClick={handlerInputCopy} className="btn" />
+                        <Button icon={<ClearOutlined />} onClick={handlerPlayClear} className="btn" />
+                        <Button icon={<EyeFilled />} onClick={handlerToggleTips} className="btn"></Button>
+                        <Button icon={<DashboardOutlined />} className="btn">
+                            {playSpeed}
+                        </Button>
+                        <Button icon={<FastForwardOutlined />} onClick={handlerPlayForward} className="btn" />
+                    </div>
                     <Input.TextArea onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} value={textareaValue} onChange={(e) => handlerTypeVocab(e.target.value)} />
                 </section>
                 <Audio ref={refAudio} loop={true} />

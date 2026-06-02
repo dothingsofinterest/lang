@@ -80,7 +80,8 @@ const speechCharacterOptions = [
 const speechEngineOptions = [
     { value: 0, label: "Google" },
     { value: 1, label: "Baidu" },
-    { value: 2, label: "pyttsx3" },
+    { value: 2, label: "Youdao" },
+    { value: 3, label: "pyttsx3" },
 ];
 
 const defaultVocab = {
@@ -164,6 +165,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
             try {
                 const part = vocab.definition.split(" | ");
                 const content = part[0].replaceAll("/", ", ");
+                // const filenameEN = part[0].replaceAll(/[^a-zA-Z0-9\-]+/g, "_");
                 const filenameEN = part[0].replaceAll(/[^a-zA-Z0-9\-]+/g, "_");
                 const filenameCNHash = md5(part[2]).slice(25);
                 const filename = `${filenameEN}_${filenameCNHash}`;
@@ -412,7 +414,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                 </div>
                 <div className="panel-audio">
                     <Select style={{ width: 120 }} value={speechEngine} onChange={handlerSpeechUpdateEngine} options={speechEngineOptions} />
-                    <div className={`audio-meta${speechEngine === 2 ? " visible" : ""}`}>
+                    <div className={`audio-meta${speechEngine === 3 ? " visible" : ""}`}>
                         <Select value={speechVoice} onChange={handlerSpeechUpdateVoice} options={speechCharacterOptions} />
                         <Select value={speechSpeed} onChange={handlerSpeechUpdateSpeed} options={speechSpeedOptions} />
                     </div>
@@ -445,7 +447,13 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                                         <span className="text">
                                             {value.definition}（{value.script_ids}）
                                         </span>
-                                        <span className="img">{value.image && <img src={`${AssetsPrefix}/image/${value.image}`} />}</span>
+                                        <span className="img">
+                                            {value.image && (
+                                                <a href={`${AssetsPrefix}/image/${value.image}`} target="_blank">
+                                                    <img src={`${AssetsPrefix}/image/${value.image}`} />
+                                                </a>
+                                            )}
+                                        </span>
                                     </div>
                                 );
                             })}

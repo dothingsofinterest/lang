@@ -7,6 +7,7 @@ import routeNotFound from "./routes/NotFound";
 import bodyParser from "body-parser";
 import GlobalExceptionHandler from "./middleware/GlobalExceptionHandler";
 import { checkUnauthorized } from "./middleware/AuthJWT";
+import { initSchedule } from "./schedule/Index";
 
 const app = express();
 
@@ -25,8 +26,9 @@ app.use("/upload", express.static("upload"));
 app.use(routeNotFound);
 // Exception
 app.use(GlobalExceptionHandler);
-
+// Schedules
+initSchedule();
 // Start App
 app.listen(process.env.APP_PORT, () => {
-    console.log(`Server is running on port ${process.env.APP_PORT}`);
+    console.log(`✅ Server is running on port ${process.env.APP_PORT}`);
 });

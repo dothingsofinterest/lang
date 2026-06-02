@@ -10,8 +10,11 @@
     background-color: #ccc;
     &.folding {
         width: 50px;
-        .search-btn {
-            padding: 0;
+        .search {
+            .search-btn,
+            .study-count-btn {
+                display: none;
+            }
         }
         .menu {
             height: 0 !important;

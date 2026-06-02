@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Layout, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+// prettier-ignore
+import { 
+    EyeInvisibleOutlined, 
+    EyeOutlined
+} from "@ant-design/icons";
+import ReadOnly from "./ReadOnly";
+import Writable from "./Writable";
 import "./Writable";
 import "./Index.scss";
-import ReadOnly from "./ReadOnly";
-import Writable, { WritableRef } from "./Writable";
 // prettier-ignore
 import { 
     scriptRead, 
@@ -63,17 +67,18 @@ const Index = () => {
                                                     <React.Fragment key={paragraph.id}>
                                                         <p key={paragraph.id} className={!paragraph.role ? "indent" : undefined}>
                                                             {paragraph.role && <i className="role">{paragraph.role}: </i>}
-                                                            {paragraph.sentences.map((sentence: any, index: number) =>
+                                                            {paragraph.sentences.map((sentence: any) =>
                                                                 sentence.piece ? (
                                                                     // prettier-ignore
                                                                     <Writable 
+                                                                        key={sentence.id}
                                                                         id={sentence.id} 
                                                                         ref={(el) => { el && (refSentenceMap.current.set(sentence.id, el)) }} 
                                                                         sentence={sentence} 
                                                                         showOrigin={showOrigin} 
                                                                         onComplete={handlerOnComplete} />
                                                                 ) : (
-                                                                    <ReadOnly sentence={sentence} />
+                                                                    <ReadOnly key={sentence.id} sentence={sentence} />
                                                                 ),
                                                             )}
                                                         </p>

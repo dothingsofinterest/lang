@@ -74,6 +74,7 @@ export const update = (req: Request, res: Response) => {
         const schema = Joi.object({
             id: Joi.number().required(),
             name: Joi.string().required(),
+            studyCount: Joi.number().required(),
         });
         const { error, value } = schema.validate(req.body);
         if (error) {
@@ -82,7 +83,17 @@ export const update = (req: Request, res: Response) => {
                 message: error.message,
             });
         }
-        db.prepare<[string, number]>("UPDATE `script` SET name = ? WHERE id = ?").run(value.name, value.id);
+        // prettier-ignore
+        db.prepare<[string, number, number]>(`
+            UPDATE \`script\` 
+            SET name = ?, 
+            study_count = ? 
+            WHERE id = ?
+        `).run(
+            value.name, 
+            value.studyCount,
+            value.id
+        );
         return res.status(200).json({
             code: 1,
             message: `Succeed`,
@@ -162,7 +173,7 @@ export const list = (req: Request, res: Response) => {
                 name, 
                 study_count as studyCount 
             FROM \`script\` ${SQLWhere.join("")} 
-            ORDER BY study_count DESC 
+            ORDER BY study_count ASC, id ASC 
             LIMIT ? 
             OFFSET ?`,
         ).all(...SQLParams, pageSize, offset);

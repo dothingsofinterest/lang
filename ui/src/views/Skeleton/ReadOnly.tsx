@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
-import { Input } from "antd";
+import React from "react";
 import "./Index.scss";
-import type { InputRef } from "antd";
 
 const tokenize = (text: string) => {
     return (

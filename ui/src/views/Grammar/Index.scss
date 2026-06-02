@@ -4,14 +4,14 @@
             color: #000;
             height: 42px;
             border-radius: 0;
-            font-size: 12px;
+            font-size: 14px;
         }
         .text {
             min-height: 100px !important;
             resize: none;
             border-radius: 0;
             border-top: 0;
-            padding: 12px 6px;
+            padding: 6px;
             font-size: 14px;
             &:focus {
                 border-color: #ccc;
@@ -103,15 +103,19 @@
         .submit {
             display: flex;
             margin-top: 10px;
-            button {
+            .sitem {
                 flex: 1;
-                padding: 20px 0;
+                height: 40px;
                 border-radius: 0;
                 background-color: #ccc;
+            }
+            .ant-input-affix-wrapper {
+                background-color: #fff;
             }
         }
     }
     .table {
+        margin-top: 20px;
         .search {
             display: flex;
             margin: 10px 0;
@@ -140,7 +144,7 @@
                 margin: 0;
                 padding: 0px 2px;
                 border-top: 1px dotted #000;
-                font-size: 12px;
+                font-size: 14px;
                 height: 40px;
                 &.active {
                     font-weight: 900;
@@ -159,38 +163,6 @@
             background: #ccc;
             border-radius: 5px;
             padding: 6px 0;
-        }
-    }
-    .example {
-        margin-top: 10px;
-        .example-panel {
-            .submit {
-                display: flex;
-                margin-top: 10px;
-                .item {
-                    flex: 1;
-                    background-color: #ccc;
-                    border-radius: 0;
-                }
-                .ant-btn {
-                    padding: 20px 0;
-                }
-            }
-        }
-        .chunks {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            span {
-                margin: 0 6px 6px 0;
-                border: 1px solid;
-                padding: 4px 12px;
-                border-radius: 4px;
-                cursor: pointer;
-                &.piece {
-                    background-color: #ccc;
-                }
-            }
         }
     }
 }

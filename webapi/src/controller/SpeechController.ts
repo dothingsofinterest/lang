@@ -7,6 +7,7 @@ import { getAudioCodec, transcodeToMp3 } from "../utils/FFmpeg";
 import { speechGenerate as speechGenerateByGoogle } from "../service/TTSGoogle";
 import { speechGenerate as speechGenerateByPyttsx3 } from "../service/TTSPyttsx3";
 import { speechGenerate as speechGenerateByBaidu } from "../service/TTSBaidu";
+import { speechGenerate as speechGenerateByYoudao } from "../service/TTSYoudao";
 
 const dataPath = process.env.DATA_PATH;
 
@@ -31,6 +32,8 @@ export const textToSpeech = async (req: Request, res: Response) => {
         } else if (valueQuery.engine === 1) {
             await speechGenerateByBaidu(valueQuery.content, valueQuery.filename);
         } else if (valueQuery.engine === 2) {
+            await speechGenerateByYoudao(valueQuery.content, valueQuery.filename);
+        } else if (valueQuery.engine === 3) {
             await speechGenerateByPyttsx3(valueQuery.content, valueQuery.filename, valueQuery.voice, valueQuery.speed);
         }
         return res.status(200).json({

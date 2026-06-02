@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { HomeOutlined, CustomerServiceFilled, EditOutlined, ReadFilled, FileWordFilled, TranslationOutlined, GoogleOutlined, HighlightOutlined } from "@ant-design/icons";
+import { HomeOutlined, CustomerServiceFilled, EditOutlined, ReadFilled, FileWordFilled, TranslationOutlined, GoogleOutlined, HighlightOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores";
 import PanelVocab from "../Vocabulary/Index";
 import PanelGrammar from "../Grammar/Index";
+import PanelSentence from "../ScriptSentence/Index";
 import "./Nav.scss";
 
 interface RouteItem {
@@ -17,8 +18,8 @@ interface RouteItem {
 const navs: RouteItem[] = [
     { url: "/home", icon: <HomeOutlined /> },
     { url: "/read", icon: <ReadFilled /> },
-    { url: "/vocabListen", icon: <CustomerServiceFilled /> },
     { url: "/vocabMeaning", icon: <TranslationOutlined /> },
+    { url: "/vocabListen", icon: <CustomerServiceFilled /> },
     { url: "/skeleton", icon: <HighlightOutlined /> },
     { url: "/script", icon: <EditOutlined /> },
 ];
@@ -30,6 +31,7 @@ const Nav = () => {
     const firstPath = pathname.split("/").filter(Boolean)[0] ?? "";
     const [vocabPanel, setVocabPanel] = useState(false);
     const [grammarPanel, setGrammarPanel] = useState(false);
+    const [sentencePanel, setSentencePanel] = useState(false);
     return (
         <nav id="nav" className={catalogFolding ? `folding` : ``}>
             <div className="navs">
@@ -41,6 +43,9 @@ const Nav = () => {
                     );
                 })}
                 <div className="item">
+                    <Button icon={<UnorderedListOutlined />} onClick={() => setSentencePanel(true)} />
+                </div>
+                <div className="item">
                     <Button icon={<GoogleOutlined />} onClick={() => setGrammarPanel(true)} />
                 </div>
                 <div className="item">
@@ -49,6 +54,7 @@ const Nav = () => {
             </div>
             <PanelVocab open={vocabPanel} onClose={() => setVocabPanel(false)} />
             <PanelGrammar open={grammarPanel} onClose={() => setGrammarPanel(false)} />
+            <PanelSentence open={sentencePanel} onClose={() => setSentencePanel(false)} />
         </nav>
     );
 };

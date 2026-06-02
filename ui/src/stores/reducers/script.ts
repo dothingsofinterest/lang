@@ -8,7 +8,6 @@ interface StateVideo {
     script: any;
     scriptSentenceList: any[];
     scriptVocabList: any[];
-    scriptExampleSentenceList: any[];
 }
 
 const initialState: StateVideo = {
@@ -19,7 +18,6 @@ const initialState: StateVideo = {
     script: {},
     scriptSentenceList: [],
     scriptVocabList: [],
-    scriptExampleSentenceList: [],
 };
 
 const slice = createSlice({
@@ -48,9 +46,6 @@ const slice = createSlice({
         updateScriptVocabList: (state, action: PayloadAction<any>) => {
             state.scriptVocabList = action.payload;
         },
-        updateScriptExampleSentenceList: (state, action: PayloadAction<any>) => {
-            state.scriptExampleSentenceList = action.payload;
-        },
     },
 });
 
@@ -63,7 +58,6 @@ export const {
     updateScript, 
     updateScriptSentenceList, 
     updateScriptVocabList,
-    updateScriptExampleSentenceList 
 } = slice.actions;
 
 export default slice.reducer;

@@ -24,8 +24,8 @@ const tokenize = (text: string) => {
         text
             // 拆分缩写
             .replace(/([a-zA-Z])('re|'ve|'ll|'d|'s|'m|'t)\b/g, "$1 $2")
-            // 标点前加空格
-            .replace(/([:.,!?])/g, " $1")
+            // 将标点和符号独立成 token
+            .replace(/([:.,!?;"()[\]{}])/g, " $1 ")
             // 多空格压缩
             .replace(/\s+/g, " ")
             .trim()
@@ -58,7 +58,6 @@ const Index = () => {
     const [editSentence, setEditSentence] = useState<any>(defaultEditSentence);
     const refScrollbar = useRef<Scrollbars>(null);
     const refVideo = useRef<HTMLVideoElement>(null);
-    const refSentences = useRef<HTMLElement[]>([]);
     const refSentenceMap = useRef(new Map<number, HTMLElement>());
     const refAudio = useRef<AudioRef>(null);
     const refState = useRef({ sentenceList, vocabList, curSentence, playSpeed });

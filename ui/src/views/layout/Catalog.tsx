@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { Button, Upload, Input } from "antd";
-import { PlusCircleOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, MenuFoldOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Script as DataScript } from "../../types/Data";
-import { videoList, videoCreate } from "../../api/requestAuth";
+import { scriptList, scriptCreate, scriptUpdate } from "../../api/requestAuth";
 import { useParams } from "react-router-dom";
 import { updateCatalogFolding } from "../../stores/reducers/status";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -29,9 +29,12 @@ const Catalog = () => {
             try {
                 const formData = new FormData();
                 formData.append("file", file);
-                const res = await videoCreate(formData);
-                if (res.code !== 1) {
-                    alert(res.message);
+                const res = await scriptCreate(formData);
+                if (res.code === 1) {
+                    apiGetList(listParams);
+                    alert("Succeed");
+                } else {
+                    alert("Failed");
                 }
             } catch (e: any) {
                 alert(e.message);
@@ -46,11 +49,27 @@ const Catalog = () => {
         setListParams(listParamsNew);
         apiGetList(listParamsNew);
     };
+    const handlerUpdate = async () => {
+        const confirmed = window.confirm("Do you confirm to do this?");
+        if (confirmed) {
+            const scriptId = Number(id);
+            const item = list.find(({ id }) => id === scriptId);
+            if (item) {
+                scriptUpdate({ ...item, studyCount: item.studyCount + 1 }).then((res) => {
+                    if (res.code === 1) {
+                        apiGetList(listParams);
+                    } else {
+                        alert("Failed.");
+                    }
+                });
+            }
+        }
+    };
     const handlerMenuFold = () => {
         dispatch(updateCatalogFolding(!catalogFolding));
     };
     const apiGetList = async (listParams: ListParams) => {
-        const res = await videoList({
+        const res = await scriptList({
             page: listParams.page,
             pageSize: listParams.pageSize,
             keyword: listParams.keyword,
@@ -70,7 +89,8 @@ const Catalog = () => {
             </Upload>
             <div className="search">
                 <Input className="search-btn" value={listParams.keyword} onChange={(e) => handlerSearch(e.target.value)} allowClear />
-                <Button icon={<MenuFoldOutlined />} onClick={handlerMenuFold} />
+                <Button className="study-count-btn" icon={<PlusSquareOutlined />} onClick={handlerUpdate} />
+                <Button className="fold-btn" icon={<MenuFoldOutlined />} onClick={handlerMenuFold} />
             </div>
             <Scrollbars className="menu" style={{ height: "calc(100vh - 100px)" }}>
                 {list.map((item, key) => {

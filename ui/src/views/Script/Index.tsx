@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button, Tooltip } from "antd";
+import { Layout, Input, Button } from "antd";
 // prettier-ignore
 import { 
     FastBackwardOutlined, 
@@ -418,30 +418,14 @@ const Index = () => {
             <div className="main-inner-item-main">
                 <Scrollbars style={{ width: "100%", height: "100%" }} ref={refScrollbar} onScroll={handlersScroll}>
                     <div ref={refPanel} className="script-panel">
-                        <Tooltip title={`Add a Paragraph`}>
-                            <Button icon={<PlusSquareOutlined />} onClick={handlersParagraphInsert} />
-                        </Tooltip>
-                        <Tooltip title={`Remove a Paragraph`}>
-                            <Button icon={<MinusSquareOutlined />} onClick={handlersParagraphDelete} />
-                        </Tooltip>
-                        <Tooltip title={`Cut a Paragraph`}>
-                            <Button icon={<ScissorOutlined />} onClick={handlersParagraphCut} />
-                        </Tooltip>
-                        <Tooltip title={`Insert a Sentence`}>
-                            <Button icon={<PlusCircleOutlined />} onClick={handlersSentenceInsert} />
-                        </Tooltip>
-                        <Tooltip title={`Remove a Sentence`}>
-                            <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete} />
-                        </Tooltip>
-                        <Tooltip title={`Import Lines`}>
-                            <Button icon={<DownloadOutlined />} onClick={() => setLinesPanel(true)} />
-                        </Tooltip>
-                        <Tooltip title={`Edit Roles`}>
-                            <Button icon={<TeamOutlined />} onClick={() => setRolesPanel(true)} />
-                        </Tooltip>
-                        <Tooltip title={`Edit Scenes`}>
-                            <Button icon={<DesktopOutlined />} onClick={() => setScenesPanel(true)} />
-                        </Tooltip>
+                        <Button icon={<PlusSquareOutlined />} onClick={handlersParagraphInsert} />
+                        <Button icon={<MinusSquareOutlined />} onClick={handlersParagraphDelete} />
+                        <Button icon={<ScissorOutlined />} onClick={handlersParagraphCut} />
+                        <Button icon={<PlusCircleOutlined />} onClick={handlersSentenceInsert} />
+                        <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete} />
+                        <Button icon={<DownloadOutlined />} onClick={() => setLinesPanel(true)} />
+                        <Button icon={<TeamOutlined />} onClick={() => setRolesPanel(true)} />
+                        <Button icon={<DesktopOutlined />} onClick={() => setScenesPanel(true)} />
                     </div>
                     {/* prettier-ignore */}
                     <Paragraphs 

@@ -8,8 +8,8 @@ const tokenize = (text: string) => {
         text
             // 拆分缩写
             .replace(/([a-zA-Z])('re|'ve|'ll|'d|'s|'m|'t)\b/g, "$1 $2")
-            // 标点前加空格
-            .replace(/([:.,!?])/g, " $1")
+            // 将标点和符号独立成 token
+            .replace(/([:.,!?;"()[\]{}])/g, " $1 ")
             // 多空格压缩
             .replace(/\s+/g, " ")
             .trim()

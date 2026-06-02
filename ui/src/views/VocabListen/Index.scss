@@ -1,34 +1,14 @@
 #vocab-listen-index {
     .main-inner-item-main {
-        #panel {
-            width: 100%;
-            height: 64px;
-            position: absolute;
-            right: 0;
-            top: 0;
-            .buttons {
-                display: flex;
-                justify-content: space-between;
-                .btn {
-                    flex: 1;
-                }
-                .ant-btn {
-                    border-top: 0;
-                    border-left: 0;
-                    border-radius: 0;
-                    background: linear-gradient(to bottom, #888, #bbb, #888);
-                }
-            }
-            .progress {
-                height: 32px;
-                position: relative;
-                .ant-progress-outer {
-                    width: 100% !important;
-                    .ant-progress-bg-inner {
-                        width: 100%;
-                        height: 32px !important;
-                        background-color: #52c41a;
-                    }
+        #progress {
+            height: 32px;
+            position: relative;
+            .ant-progress-outer {
+                width: 100% !important;
+                .ant-progress-bg-inner {
+                    width: 100%;
+                    height: 32px !important;
+                    background-color: #52c41a;
                 }
             }
         }
@@ -83,29 +63,44 @@
         }
         #input {
             width: 100%;
-            height: 120px;
+            height: 152px;
             position: absolute;
             right: 0;
-            bottom: 0;
+            bottom: 100px;
             background: #c5a587;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            #panel {
+                width: 100%;
+                height: 32px;
+                display: flex;
+                justify-content: space-between;
+                .btn {
+                    flex: 1;
+                    border-top: 0;
+                    border-left: 0;
+                    border-radius: 0;
+                    background: linear-gradient(to bottom, #888, #bbb, #888);
+                    &:first-child {
+                        border-top-left-radius: 5px;
+                    }
+                    &:last-child {
+                        border-right: 0;
+                        border-top-right-radius: 5px;
+                    }
+                }
+            }
             textarea {
-                border: 1px solid #ccc;
-                border-radius: 5px;
+                border: 4px solid #ccc;
+                border-radius: 0;
+                border-bottom-right-radius: 5px;
+                border-bottom-left-radius: 5px;
                 color: #000;
-                height: 80px;
-                width: 760px;
+                height: 120px;
+                width: 100%;
                 padding: 10px 20px;
-                font-size: 16px;
+                font-size: 26px;
                 line-height: 30px;
                 box-sizing: border-box;
                 resize: none;
-                &:focus {
-                }
-                &:hover {
-                }
             }
         }
     }

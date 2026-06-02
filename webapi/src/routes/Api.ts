@@ -7,16 +7,17 @@ import {
     insert as ScriptParagraphInsert, 
     update as ScriptParagraphUpdate, 
     remove as ScriptParagraphRemove, 
-    cut as ScriptParagraphCut 
+    cut as ScriptParagraphCut
 } from "../controller/ScriptParagraphController";
 // prettier-ignore
 import { 
-    list as ScriptExampleSentenceList, 
-    create as ScriptExampleSentenceCreate, 
-    update as ScriptExampleSentenceUpdate,
-    remove as ScriptExampleSentenceRemove, 
-} from "../controller/ScriptExampleSentenceController";
-import { list as ScriptSentenceList, insert as ScriptSentenceInsert, insertBatch as ScriptSentenceInsertBatch, remove as ScriptSentenceRemove, update as ScriptSentenceUpdate } from "../controller/ScriptSentenceController";
+    list as ScriptSentenceList, 
+    insert as ScriptSentenceInsert, 
+    insertBatch as ScriptSentenceInsertBatch, 
+    remove as ScriptSentenceRemove, 
+    update as ScriptSentenceUpdate ,
+    search as ScriptSentenceSearch
+} from "../controller/ScriptSentenceController";
 import { list as videoVocabList, create as videoVocabCreate, remove as videoVocabRemove } from "../controller/ScriptVocabularyController";
 import { list as scriptSceneList, create as scriptSceneCreate, update as scriptSceneUpdate, remove as scriptSceneRemove } from "../controller/ScriptSceneController";
 import { list as scriptRoleList, create as scriptRoleCreate, update as scriptRoleUpdate, remove as scriptRoleRemove } from "../controller/ScriptRoleController";
@@ -73,7 +74,7 @@ router.post("/script_sentence/insert", ScriptSentenceInsert);
 router.post("/script_sentence/update", ScriptSentenceUpdate);
 router.post("/script_sentence/insert_batch", ScriptSentenceInsertBatch);
 router.post("/script_sentence/remove", ScriptSentenceRemove);
-
+router.post("/script_sentence/search", ScriptSentenceSearch);
 // Script Sentence
 
 // Script Vocabulary
@@ -81,13 +82,6 @@ router.post("/script_vocab/list", videoVocabList);
 router.post("/script_vocab/create", videoVocabCreate);
 router.post("/script_vocab/remove", videoVocabRemove);
 // Script Vocabulary
-
-// Script Example Sentence
-router.post("/script_example_sentence/list", ScriptExampleSentenceList);
-router.post("/script_example_sentence/create", ScriptExampleSentenceCreate);
-router.post("/script_example_sentence/update", ScriptExampleSentenceUpdate);
-router.post("/script_example_sentence/remove", ScriptExampleSentenceRemove);
-// Script Example Sentence
 
 // Script Scene
 router.post("/script_scene/list", scriptSceneList);

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Layout, Input, Button, Progress } from "antd";
-import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined, EyeFilled } from "@ant-design/icons";
+import { ClearOutlined, FastBackwardOutlined, FastForwardOutlined, EyeFilled, CustomerServiceFilled } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateVocabMeaningCur, updateVocabMeaningCurIndex } from "../../stores/reducers/status";
@@ -21,6 +21,7 @@ const Index = () => {
     const [maskClass, setMaskClass] = useState("mask");
     const [isFocused, setIsFocused] = useState(false);
     const refAudio = useRef<AudioRef>(null);
+    const refAudioPay = useRef<AudioRef>(null);
     const refState = useRef({ curVocab, curVocabIndex, maskClass, isFocused });
     const handlerTypeVocab = (value: string) => {
         setTextareaValue(value);
@@ -44,9 +45,15 @@ const Index = () => {
     const handlerToggleTips = () => {
         setMaskClass(refState.current.maskClass === "mask" ? "unmask" : "mask");
     };
-    const handlersPlayClear = () => {
+    const handlerPlayClear = () => {
         if (scriptVocabList.length > 0) {
             fnPlayTo(scriptVocabList[0]);
+        }
+    };
+    const handlerPlayAudio = () => {
+        const curVocab = refState.current.curVocab;
+        if (curVocab !== undefined) {
+            refAudio.current?.play(`${Domain}/database/speech/${curVocab.speech}`, 1);
         }
     };
     const fnPlayTo = (vocab: any) => {
@@ -64,7 +71,7 @@ const Index = () => {
                 const definitionParts = definition.split("/");
                 if (definitionParts[0] === value) {
                     setMaskClass("unmask");
-                    refAudio.current?.play("/audio/paid.mp3", 1);
+                    refAudioPay.current?.play("/audio/paid.mp3", 1);
                 }
             }
         }, 100),
@@ -78,6 +85,9 @@ const Index = () => {
                     setMaskClass("mask");
                     handlerPlayForward();
                 }
+            }
+            if (event.code === "ControlRight") {
+                handlerToggleTips();
             }
             const active = document.activeElement;
             // prettier-ignore
@@ -98,9 +108,6 @@ const Index = () => {
                     handlerPlayForward();
                 }
             }
-            if (event.code === "ControlRight") {
-                handlerToggleTips();
-            }
         };
         window.addEventListener("keydown", onKeyDownHandler);
         return () => {
@@ -113,17 +120,9 @@ const Index = () => {
     return (
         <Layout className="main-inner" id="vocab-meaning-index">
             <div className="main-inner-item-aside"></div>
-            <div className="main-inner-item-main" style={{ position: "relative", padding: "64px 0 120px" }}>
-                <section id="panel">
-                    <section className="buttons">
-                        <Button icon={<FastBackwardOutlined />} onClick={handlerPlayBackward} className="btn" />
-                        <Button icon={<EyeFilled />} onClick={handlerToggleTips} className="btn"></Button>
-                        <Button icon={<ClearOutlined />} onClick={handlersPlayClear} className="btn" />
-                        <Button icon={<FastForwardOutlined />} onClick={handlerPlayForward} className="btn" />
-                    </section>
-                    <section className="progress">
-                        <Progress percent={Math.ceil(((curVocabIndex + 1) / scriptVocabList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
-                    </section>
+            <div className="main-inner-item-main" style={{ position: "relative", padding: "0 0 252px" }}>
+                <section id="progress">
+                    <Progress percent={Math.ceil(((curVocabIndex + 1) / scriptVocabList.length) * 100)} percentPosition={{ align: "center", type: "inner" }} strokeLinecap="butt" />
                 </section>
                 <section id="display">
                     {curVocab && (
@@ -134,10 +133,18 @@ const Index = () => {
                     )}
                 </section>
                 <section id="input">
+                    <div id="panel">
+                        <Button icon={<FastBackwardOutlined />} onClick={handlerPlayBackward} className="btn" />
+                        <Button icon={<EyeFilled />} onClick={handlerToggleTips} className="btn"></Button>
+                        <Button icon={<ClearOutlined />} onClick={handlerPlayClear} className="btn" />
+                        <Button icon={<CustomerServiceFilled />} onClick={handlerPlayAudio} className="btn" />
+                        <Button icon={<FastForwardOutlined />} onClick={handlerPlayForward} className="btn" />
+                    </div>
                     <Input.TextArea onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} value={textareaValue} onChange={(e) => handlerTypeVocab(e.target.value)} />
                 </section>
                 <section id="audio">
                     <Audio ref={refAudio} loop={false} />
+                    <Audio ref={refAudioPay} loop={false} />
                 </section>
             </div>
             <div className="main-inner-item-aside"></div>

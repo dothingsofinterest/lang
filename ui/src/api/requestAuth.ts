@@ -57,28 +57,28 @@ export const OAuthUpdatePassword = (data: RequestDataUpdatePassword): Promise<Re
 // User
 
 // Script
-export const videoCreate = (data: FormData): Promise<Response> => {
+export const scriptCreate = (data: FormData): Promise<Response> => {
     return requestInstance.request({
         method: "post",
         url: `/script/create`,
         data: data,
     });
 };
-export const videoUpdate = (data: object): Promise<Response> => {
+export const scriptUpdate = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
         url: `/script/update`,
         data: data,
     });
 };
-export const videoRemove = (data: object): Promise<Response> => {
+export const scriptRemove = (data: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
         url: `/script/remove`,
         data: data,
     });
 };
-export const videoList = (params: object): Promise<Response> => {
+export const scriptList = (params: object): Promise<Response> => {
     return requestInstance.request({
         method: "post",
         url: `/script/list`,
@@ -168,6 +168,13 @@ export const scriptSentenceRemove = (data: object): Promise<Response> => {
         data: data,
     });
 };
+export const scriptSentenceSearch = (params: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_sentence/search`,
+        params: params,
+    });
+};
 // Script Sentence
 
 // Script Vocabulary
@@ -255,37 +262,6 @@ export const scriptSceneList = (params: object): Promise<Response> => {
     });
 };
 // Script Scene
-
-// Script Example Sentence
-export const scriptExampleSentenceCreate = (data: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/script_example_sentence/create`,
-        data: data,
-    });
-};
-export const scriptExampleSentenceUpdate = (data: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/script_example_sentence/update`,
-        data: data,
-    });
-};
-export const scriptExampleSentenceRemove = (data: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/script_example_sentence/remove`,
-        data: data,
-    });
-};
-export const scriptExampleSentenceList = (params: object): Promise<Response> => {
-    return requestInstance.request({
-        method: "post",
-        url: `/script_example_sentence/list`,
-        params: params,
-    });
-};
-// Script Example Sentence
 
 // Audio
 export const audioClip = (params: object): Promise<Response> => {

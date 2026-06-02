@@ -24,7 +24,7 @@ const Vocab: React.FC<VocabProps> = ({ text, vocabList, onClick }) => {
         if (next) {
             let res: any[] = [];
             const inputParts = next.definition.split(" | ");
-            const inputReg = new RegExp(`(^| )${inputParts[0]}`, "i");
+            const inputReg = new RegExp(`(^| |-)${inputParts[0]}`, "i");
             const inputMatch = text.match(inputReg);
             const halfs = [];
             if (inputMatch && inputMatch.index !== undefined) {

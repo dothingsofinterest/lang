@@ -156,7 +156,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                     onSentenceUpdate(
                         curParagraph.id, 
                         curSentence.id, 
-                        lastSentence.endTime + 1, 
+                        strip(lastSentence.endTime + 1), 
                         curSentence.endTime, 
                         curSentence.text ? curSentence.text : "",
                         curSentence.piece ? curSentence.piece : ""
@@ -203,7 +203,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                         </div>
                         {paragraph.sentences.map((sentence: any) => {
                             return (
-                                <div className="sentence" key={sentence.id}>
+                                <div className="sentence" key={`${sentence.id}${sentence.startTime}${sentence.endTime}`}>
                                     <Space size="small" className="time" direction="vertical">
                                         <Space size="small" className="time-inner">
                                             {/* prettier-ignore */}
@@ -230,6 +230,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                     </Space>
                                     {/* prettier-ignore */}
                                     <Input.TextArea 
+                                        spellCheck={true}
                                         autoSize 
                                         className="text" 
                                         defaultValue={sentence.text} 

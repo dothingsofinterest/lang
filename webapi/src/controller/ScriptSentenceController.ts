@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import { LoggerSystem } from "../lib/Log";
 import Database from "better-sqlite3";
 import { ScriptParagraph, ScriptSentence } from "../types/Script";
+import { getPagination } from "../utils/Page";
 
 const dataPath = process.env.DATA_PATH;
 const dbFile = path.join(`${dataPath}`, `${process.env.DATA_DATABASE}`);
@@ -85,8 +86,8 @@ export const list = (req: Request, res: Response) => {
                 ss.order_num AS orderNum, 
                 ss.text,
                 ss.piece
-            FROM script_sentence as ss
-            INNER JOIN script_paragraph as sp ON sp.id = ss.paragraph_id
+            FROM script_sentence AS ss
+            INNER JOIN script_paragraph AS sp ON sp.id = ss.paragraph_id
             WHERE ss.script_id = ? 
             ORDER BY sp.order_num, ss.order_num
         `).all(value.scriptId);
@@ -343,6 +344,74 @@ export const update = (req: Request, res: Response) => {
         return res.status(200).json({
             code: 1,
             message: `Succeed`,
+        });
+    } catch (error: any) {
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed`,
+        });
+    }
+};
+
+export const search = (req: Request, res: Response) => {
+    try {
+        const schema = Joi.object({
+            keyword: Joi.string().allow(null, ""),
+            page: Joi.number().required(),
+            pageSize: Joi.number().required(),
+        });
+        const { error, value } = schema.validate(req.query);
+        if (error) {
+            return res.status(200).json({
+                code: 0,
+                message: error.message,
+            });
+        }
+
+        const { page, offset, pageSize } = getPagination({ page: value.page, pageSize: value.pageSize });
+
+        const SQLWhere = ["WHERE 1=1"];
+        const SQLParams: string[] = [];
+
+        const keyword = value.keyword || "";
+        if (keyword) {
+            SQLWhere.push(" AND `ss`.`text` LIKE ?");
+            SQLParams.push(`%${keyword}%`);
+        }
+
+        // prettier-ignore
+        const totalRow = db.prepare<unknown[], { total: number }>(`
+            SELECT COUNT(*) as total FROM script_sentence ss
+            ${SQLWhere.join("")}
+        `).get(...SQLParams);
+        const totalPages = Math.ceil((totalRow ? totalRow.total : 0) / pageSize);
+        // prettier-ignore
+        const list = db.prepare<[...string[], number, number]>(`
+            SELECT 
+                ss.id, 
+                ss.text, 
+                s.name AS sName,
+                s.id AS sId
+            FROM script_sentence AS ss
+            INNER JOIN \`script\` AS s ON s.id = ss.script_id
+            ${SQLWhere.join("")} 
+            LIMIT ? 
+            OFFSET ?
+        `).all(...SQLParams, pageSize, offset);
+
+        res.status(200).json({
+            code: 1,
+            message: `Succeed`,
+            data: {
+                list,
+                listParams: {
+                    keyword,
+                    page,
+                    pageSize,
+                    totalPages,
+                },
+            },
         });
     } catch (error: any) {
         LoggerSystem.error(error.message);

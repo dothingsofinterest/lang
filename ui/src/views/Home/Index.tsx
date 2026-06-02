@@ -4,8 +4,7 @@ import { Layout, Button } from "antd";
 import { 
     scriptRead, 
     scriptSentenceList, 
-    scriptVocabList,
-    scriptExampleSentenceList
+    scriptVocabList
 } from "../../api/requestAuth";
 import { useDispatch } from "react-redux";
 // prettier-ignore
@@ -13,8 +12,7 @@ import {
     updateScriptId, 
     updateScript, 
     updateScriptSentenceList, 
-    updateScriptVocabList,
-    updateScriptExampleSentenceList 
+    updateScriptVocabList
 } from "../../stores/reducers/script";
 // prettier-ignore
 import { 
@@ -26,6 +24,10 @@ import {
     updateExampleCur, 
     updateExampleCurIndex, 
 } from "../../stores/reducers/status";
+// prettier-ignore
+import { 
+    PlusCircleOutlined 
+} from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 
 const Index = () => {
@@ -55,14 +57,9 @@ const Index = () => {
                 dispatch(updateScriptVocabList(res.data));
             }
         });
-        scriptExampleSentenceList({ scriptId: id }).then((res) => {
-            if (res.code === 1) {
-                dispatch(updateScriptExampleSentenceList(res.data));
-            }
-        });
     }, [id]);
     return (
-        <Layout className="main-inner" id="vocab-meaning-index">
+        <Layout className="main-inner" id="home-index">
             <div className="main-inner-item-aside"></div>
             <div className="main-inner-item-main"></div>
             <div className="main-inner-item-aside"></div>
