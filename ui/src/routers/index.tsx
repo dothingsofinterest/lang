@@ -4,6 +4,7 @@ import App from "../views/Layout/App";
 import NotFound from "../views/Public/NotFound";
 import Home from "../views/Home/Index";
 import Read from "../views/Read/Index";
+import Listen from "../views/Listen/Index";
 import Script from "../views/Script/Index";
 import VocabListen from "../views/VocabListen/Index";
 import VocabMeaning from "../views/VocabMeaning/Index";
@@ -33,6 +34,10 @@ const routes = [
             {
                 path: "read/:id",
                 element: <Read />,
+            },
+            {
+                path: "listen/:id",
+                element: <Listen />,
             },
             {
                 path: "vocabListen/:id",

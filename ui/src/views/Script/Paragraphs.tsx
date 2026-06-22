@@ -216,7 +216,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                             <Button icon={<AimOutlined />} onClick={() => handlerLocateTime(sentence.startTime / 1000)} />
                                             <Button icon={<EnterOutlined />} onClick={() => handlerButtTime(paragraph.id, sentence.id)} />
                                         </Space>
-                                        <Space size="small" className="time-inner">
+                                        <Space size="small" className="time-inner end">
                                             {/* prettier-ignore */}
                                             <Input 
                                                 size="small" 

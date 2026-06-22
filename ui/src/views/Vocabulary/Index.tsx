@@ -445,7 +445,14 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                                 return (
                                     <div key={value.id} className={vocab.id === value.id ? "item active" : "item"} onClick={() => handlerVocabActivate(value)}>
                                         <span className="text">
-                                            {value.definition}（{value.script_ids}）
+                                            {value.definition}
+                                            {value.script_ids?.split(",").map((v) => {
+                                                return (
+                                                    <a href={`/#/read/${v}`} target="_blank">
+                                                        {`【${v}】`}
+                                                    </a>
+                                                );
+                                            })}
                                         </span>
                                         <span className="img">
                                             {value.image && (

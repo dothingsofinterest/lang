@@ -3,7 +3,6 @@ import { Vocabulary } from "../../types/Data";
 
 type initialState = {
     catalogFolding: boolean;
-
     videoScriptWaveformZoom: number;
     videoMatchingSentence: number;
     videoMatchingSentencePos: number;
@@ -12,7 +11,6 @@ type initialState = {
     loadingUploadVideo: number;
     loadingImportData: number;
     loadingVideoScriptIndexWaver: number;
-
     scriptVideoCurrentTime: number;
     vocabMeaningCur: Vocabulary | null;
     vocabMeaningCurIndex: number;
@@ -20,6 +18,7 @@ type initialState = {
     vocabListenCurIndex: number;
     exampleCur: any | null;
     exampleCurIndex: number;
+    listenCurSentenceId: number;
     readCurSentence: any;
     readCurSentenceIndex: number;
     readVideoCurrentTime: number;
@@ -28,7 +27,6 @@ type initialState = {
 
 const initialState: initialState = {
     catalogFolding: false,
-
     videoScriptWaveformZoom: 0,
     videoMatchingSentence: 0,
     videoMatchingSentencePos: 0,
@@ -37,7 +35,6 @@ const initialState: initialState = {
     loadingUploadVideo: 0,
     loadingImportData: 0,
     loadingVideoScriptIndexWaver: 0,
-
     scriptVideoCurrentTime: 0,
     vocabMeaningCur: null,
     vocabMeaningCurIndex: 0,
@@ -45,6 +42,7 @@ const initialState: initialState = {
     vocabListenCurIndex: 0,
     exampleCur: null,
     exampleCurIndex: 0,
+    listenCurSentenceId: 0,
     readCurSentence: null,
     readCurSentenceIndex: 0,
     readVideoCurrentTime: 0,
@@ -103,6 +101,9 @@ const slice = createSlice({
         updateLoadingVideoScriptIndexWaver: (state, action: PayloadAction<number>) => {
             state.loadingVideoScriptIndexWaver = action.payload;
         },
+        updateListenCurSentence: (state, action: PayloadAction<number>) => {
+            state.listenCurSentenceId = action.payload;
+        },
         updateReadCurSentence: (state, action: PayloadAction<any>) => {
             state.readCurSentence = action.payload;
         },
@@ -118,6 +119,7 @@ const slice = createSlice({
 // prettier-ignore
 export const { 
     updateCatalogFolding,
+    updateListenCurSentence, 
     updateReadScrollPos, 
     updateReadCurSentence, 
     updateReadVideoCurrentTime, 

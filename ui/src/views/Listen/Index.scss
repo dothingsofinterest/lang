@@ -1,4 +1,4 @@
-#skeleton-index {
+#listen-index {
     .main-inner-item-main {
         #panel {
             width: 100%;
@@ -17,7 +17,8 @@
                 background: linear-gradient(to bottom, #888, #bbb, #888);
             }
         }
-        #script {
+        #script,
+        #script-answer {
             height: 100%;
             h1 {
                 text-align: center;
@@ -64,13 +65,12 @@
                         font-size: 16px;
                         display: inline;
                         text-align: center;
-                        margin-right: 4px;
-                        padding: 2px 4px;
-                        min-width: 40px;
+                        border-radius: 0;
+                        margin: 0;
+                        padding: 0px 4px;
                         background: #fff;
                         color: #000;
-                        padding: 0px 4px;
-                        border-radius: 0;
+                        min-width: 40px;
                         &.visible {
                             display: inline;
                         }

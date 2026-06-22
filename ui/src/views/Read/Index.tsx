@@ -294,7 +294,6 @@ const Index = () => {
                 handlerPanelPlaySpeedDown();
             }
         };
-
         scriptRead({ scriptId: id }).then((res) => {
             if (res.code === 1) {
                 setScript(res.data);

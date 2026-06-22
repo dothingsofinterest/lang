@@ -68,10 +68,19 @@ const Index: React.FC<Props> = ({ open, onClose }) => {
                             list.map((value) => {
                                 return (
                                     <div key={value.id} className="item">
-                                        <span className="text">{value.text}</span>
+                                        <span className="text">
+                                            {value.text.includes(`${listQuery.keyword}`)
+                                                ? value.text
+                                                      .replace(new RegExp(`(${listQuery.keyword})`), `|$1|`)
+                                                      .split("|")
+                                                      .map((part: string, k: number) => {
+                                                          return k === 1 ? <b>{part}</b> : <>{part}</>;
+                                                      })
+                                                : value.text}
+                                        </span>
                                         <span className="text">
                                             <a href={`/#/read/${value.sId}`} target="_blank">
-                                                {value.sName}
+                                                <b>{value.sName}</b>
                                             </a>
                                         </span>
                                     </div>

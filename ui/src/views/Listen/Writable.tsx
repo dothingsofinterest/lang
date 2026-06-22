@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 import { Input } from "antd";
 import "./Index.scss";
 import type { InputRef } from "antd";
+import { visibility } from "html2canvas/dist/types/css/property-descriptors/visibility";
 
 const tokenize = (text: string) => {
     return (
@@ -20,14 +21,15 @@ const manipulate = (sentence: any) => {
     if (!sentence) return [];
     const sentenceTemp = { ...sentence };
     sentenceTemp.text = sentenceTemp.text ? tokenize(sentenceTemp.text).split(" ") : [];
-    sentenceTemp.piece = sentenceTemp.piece ? sentenceTemp.piece.split("|").map((v: string) => Number(v)) : [];
+    sentenceTemp.piece = sentenceTemp.text.map((_: any, k: number) => k);
     return sentenceTemp;
 };
 
 interface WritableProps {
     id: number;
     sentence: any;
-    showOrigin?: boolean;
+    showAnswer?: boolean;
+    active?: boolean;
     onComplete?: (id: number) => void;
 }
 
@@ -39,7 +41,8 @@ export interface WritableRef {
 const Writable = React.forwardRef<WritableRef, WritableProps>(({ 
     id, 
     sentence, 
-    showOrigin = false, 
+    showAnswer = false, 
+    active = false, 
     onComplete 
 }, ref) => {
     if (!sentence) return <></>;
@@ -89,29 +92,27 @@ const Writable = React.forwardRef<WritableRef, WritableProps>(({
         <>
             {data &&
                 data.text.map((piece: string, k: number) => {
-                    return data.piece.includes(k) ? (
+                    return data.piece.includes(k) && (
                         // prettier-ignore
                         <>
                             <Input 
-                                key={`a${k}${piece}`} 
+                                key={`a${k}`} 
                                 defaultValue={``}
+                                className={showAnswer? "invisible": "visible"}
                                 ref={(el) => el && (refInputsMap.current.set(k, el))} 
-                                className={showOrigin === true ? "invisible": ""}
                                 onBlur={(e) => handlerOnType(e.target.value, k)}
                                 onChange={(e) => handlerOnType(e.target.value, k)} 
                                 onClick={(_) => handlerOnClick(k)}
-                                style={{ width: `${piece.length + 2}ch`, background: !pieceStack.includes(k)? "#8b8b8b": "#fff"}}
+                                style={{ width: `${piece.length + 2}ch`, background: !pieceStack.includes(k) || active === true ? "#8b8b8b": "#fff"}}
                             />
                             <Input 
-                                key={`b${k}${piece}`} 
+                                key={`b${k}`} 
                                 value={piece}
-                                className={showOrigin === true ? "visible": "invisible"}
+                                className={showAnswer? "visible": "invisible"}
                                 disabled={true}
                                 style={{ width: `${piece.length + 2}ch` }}
                             />
                         </>
-                    ) : (
-                        <React.Fragment key={k}>{`${piece} `}</React.Fragment>
                     );
                 })}
         </>
