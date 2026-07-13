@@ -24,7 +24,8 @@ interface Props {
 interface ListQuery {
     page: number;
     pageSize: number;
-    keyword?: string;
+    name?: string;
+    text?: string;
 }
 
 const defaultGrammar = {
@@ -45,7 +46,8 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const [listQuery, setListQuery] = useState<ListQuery>(defaultListQuery);
     const [dataTotal, setDataTotal] = useState<number>(0);
     const [grammar, setGrammar] = useState<Grammar>(defaultGrammar);
-    const [keyword, setKeyword] = useState("");
+    const [searchText, setSearchText] = useState("");
+    const [searchName, setSearchName] = useState("");
     const handlerGrammarUpdateName = (value: string) => {
         setGrammar({ ...grammar, name: value });
     };
@@ -103,9 +105,15 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
             });
         }
     };
-    const handlerGrammarSearch = (keyword: string) => {
-        const listQueryNew = { ...listQuery, page: 1, keyword };
-        setKeyword(keyword);
+    const handlerSearchByName = (name: string) => {
+        const listQueryNew = { ...listQuery, page: 1, name };
+        setSearchName(name);
+        setListQuery(listQueryNew);
+        apiGetList(listQueryNew);
+    };
+    const handlerSearchByText = (text: string) => {
+        const listQueryNew = { ...listQuery, page: 1, text };
+        setSearchText(text);
         setListQuery(listQueryNew);
         apiGetList(listQueryNew);
     };
@@ -122,7 +130,8 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
         if (res.code === 1) {
             setList(res.data.list);
             setListQuery({
-                keyword: res.data.listParams.keyword,
+                name: res.data.listParams.name,
+                text: res.data.listParams.text,
                 page: res.data.listParams.page,
                 pageSize: res.data.listParams.pageSize,
             });
@@ -131,14 +140,15 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     };
     useEffect(() => {
         apiGetList(listQuery);
-    }, [listQuery.keyword, listQuery.page, listQuery.pageSize]);
+    }, [listQuery.name, listQuery.text, listQuery.page, listQuery.pageSize]);
     return (
         <Drawer id="grammar-index" title="Grammar" width={800} size="large" onClose={handlerOnClose} open={open}>
             <div className="panel">
                 <Input className="name" value={grammar.name} onChange={(e) => handlerGrammarUpdateName(e.target.value)} />
                 <Input.TextArea className="text" autoSize value={grammar.text} onChange={(e) => handlerGrammarUpdateText(e.target.value)} />
                 <div className="submit">
-                    <Input className="sitem" value={keyword} onChange={(e) => handlerGrammarSearch(e.target.value)} allowClear />
+                    <Input className="sitem" value={searchName} onChange={(e) => handlerSearchByName(e.target.value)} allowClear />
+                    <Input className="sitem" value={searchText} onChange={(e) => handlerSearchByText(e.target.value)} allowClear />
                     <Button className="sitem" icon={<ReloadOutlined />} onClick={handlerGrammarUpdate} />
                     <Button className="sitem" icon={<ClearOutlined />} onClick={() => setGrammar(defaultGrammar)} />
                     <Button className="sitem" icon={<MinusOutlined />} onClick={handlerGrammarRemove} />

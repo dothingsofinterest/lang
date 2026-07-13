@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 import { Input } from "antd";
 import "./Index.scss";
 import type { InputRef } from "antd";
-import { visibility } from "html2canvas/dist/types/css/property-descriptors/visibility";
 
 const tokenize = (text: string) => {
     return (

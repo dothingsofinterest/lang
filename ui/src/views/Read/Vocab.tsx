@@ -13,19 +13,18 @@ interface VocabProps {
 const Vocab: React.FC<VocabProps> = ({ text, vocabList, onClick }) => {
     if (!text) return <></>;
     if (!vocabList) return <>{text}</>;
-    const handlerPlay = (speech: string) => {
+    const handlerOnClick = (speech: string) => {
         if (onClick !== undefined) {
             onClick(`${Domain}/database/speech/${speech}?${Date.now()}`);
         }
     };
-    const fnRecurHalf = (text: string, inputs: Vocabulary[]) => {
+    const fnRecurHalf = (text: string, inputs: any[]) => {
         const theInputs = [...inputs];
         const next = theInputs.pop();
         if (next) {
             let res: any[] = [];
             const inputParts = next.definition.split(" | ");
-            const inputReg = new RegExp(`(^| |-)${inputParts[0]}`, "i");
-            const inputMatch = text.match(inputReg);
+            const inputMatch = text.match(next.reg);
             const halfs = [];
             if (inputMatch && inputMatch.index !== undefined) {
                 const index = inputMatch.index;
@@ -43,7 +42,7 @@ const Vocab: React.FC<VocabProps> = ({ text, vocabList, onClick }) => {
                 if (halfs.length === 2 && k === 0) {
                     res.push(
                         <Tooltip className="vocab-item" title={next.definition} color={"#c5a587"}>
-                            <span onClick={() => handlerPlay(next.speech)}>{inputMatch ? inputMatch[0] : inputParts[0]}</span>
+                            <span onClick={() => handlerOnClick(next.speech)}>{inputMatch ? inputMatch[0] : inputParts[0]}</span>
                         </Tooltip>,
                     );
                 }
@@ -63,4 +62,5 @@ const Vocab: React.FC<VocabProps> = ({ text, vocabList, onClick }) => {
     );
 };
 
-export default Vocab;
+// export default Vocab;
+export default React.memo(Vocab);

@@ -438,7 +438,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                     <Button className="sbtn" onClick={handlerVocabAddToScript} icon={<PlusCircleOutlined />}></Button>
                     <Button className="sbtn" onClick={handlerVocabExportAudio} icon={<DownloadOutlined />}></Button>
                 </div>
-                <Scrollbars style={{ height: "210px" }}>
+                <Scrollbars style={{ height: "400px" }}>
                     <div className="list">
                         {list.length > 0 &&
                             list.map((value, key) => {

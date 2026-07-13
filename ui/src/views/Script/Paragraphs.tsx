@@ -45,7 +45,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
     }, ref) => {
     const refCurPId = useRef<number>(0);
     const refCurSId = useRef<number>(0);
-    const handlerSetCurOrderNums = (pOrderNum: number, sOrderNum: number) => {
+    const handlerSetActive = (pOrderNum: number, sOrderNum: number) => {
         refCurPId.current = pOrderNum;
         refCurSId.current = sOrderNum;
     };
@@ -127,13 +127,13 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
             onSentenceUpdate(paragraphId, sentence.id, precision * 1000, sentence.endTime, sentence.text, sentence.piece);
         }
     };
-    const handlersSentenceUpdateEndTime = (paragraphId: number, sentence: ScriptSentence, value: string) => {
+    const handlerSentenceUpdateEndTime = (paragraphId: number, sentence: ScriptSentence, value: string) => {
         if (onSentenceUpdate !== undefined) {
             const precision = Number(strip(value).toFixed(3));
             onSentenceUpdate(paragraphId, sentence.id, sentence.startTime, precision * 1000, sentence.text, sentence.piece);
         }
     };
-    const handlersSentenceUpdateText = (paragraphId: number, sentence: ScriptSentence, value: string) => {
+    const handlerSentenceUpdateText = (paragraphId: number, sentence: ScriptSentence, value: string) => {
         if (onSentenceUpdate !== undefined) {
             onSentenceUpdate(paragraphId, sentence.id, sentence.startTime, sentence.endTime, value, sentence.piece);
         }
@@ -211,8 +211,8 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                                 size="small" 
                                                 className="time-input" 
                                                 defaultValue={sentence.startTime / 1000} 
-                                                onFocus={() => handlerSetCurOrderNums(paragraph.id, sentence.id)} 
-                                                onChange={(e) => handlerSentenceUpdateStartTime(paragraph.id, sentence, e.target.value)} />
+                                                onFocus={(_) => handlerSetActive(paragraph.id, sentence.id)} 
+                                                onBlur={(e) => handlerSentenceUpdateStartTime(paragraph.id, sentence, e.target.value)} />
                                             <Button icon={<AimOutlined />} onClick={() => handlerLocateTime(sentence.startTime / 1000)} />
                                             <Button icon={<EnterOutlined />} onClick={() => handlerButtTime(paragraph.id, sentence.id)} />
                                         </Space>
@@ -222,8 +222,8 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                                 size="small" 
                                                 className="time-input" 
                                                 defaultValue={sentence.endTime / 1000} 
-                                                onFocus={() => handlerSetCurOrderNums(paragraph.id, sentence.id)} 
-                                                onChange={(e) => handlersSentenceUpdateEndTime(paragraph.id, sentence, e.target.value)} />
+                                                onFocus={(_) => handlerSetActive(paragraph.id, sentence.id)} 
+                                                onBlur={(e) => handlerSentenceUpdateEndTime(paragraph.id, sentence, e.target.value)} />
                                             <Button icon={<AimOutlined />} onClick={() => handlerLocateTime(sentence.endTime / 1000)} />
                                             <Button icon={<EnterOutlined />} />
                                         </Space>
@@ -234,8 +234,8 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                         autoSize 
                                         className="text" 
                                         defaultValue={sentence.text} 
-                                        onFocus={(e) => handlerSetCurOrderNums(paragraph.id, sentence.id)} 
-                                        onChange={(e) => handlersSentenceUpdateText(paragraph.id, sentence, e.target.value)} />
+                                        onFocus={(_) => handlerSetActive(paragraph.id, sentence.id)} 
+                                        onBlur={(e) => handlerSentenceUpdateText(paragraph.id, sentence, e.target.value)} />
                                 </div>
                             );
                         })}

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { HomeOutlined, CustomerServiceFilled, EditOutlined, RedditOutlined, ReadFilled, FileWordFilled, TranslationOutlined, GoogleOutlined, HighlightOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { HomeOutlined, CustomerServiceFilled, EditOutlined, ReadFilled, FileWordFilled, GoogleOutlined, HighlightOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores";
@@ -18,9 +18,7 @@ interface RouteItem {
 const navs: RouteItem[] = [
     { url: "/home", icon: <HomeOutlined /> },
     { url: "/read", icon: <ReadFilled /> },
-    { url: "/listen", icon: <RedditOutlined /> },
-    { url: "/vocabMeaning", icon: <TranslationOutlined /> },
-    { url: "/vocabListen", icon: <CustomerServiceFilled /> },
+    { url: "/listen", icon: <CustomerServiceFilled /> },
     { url: "/skeleton", icon: <HighlightOutlined /> },
     { url: "/script", icon: <EditOutlined /> },
 ];

@@ -4,6 +4,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateListenCurSentence } from "../../stores/reducers/status";
+import { strip } from "../../utils/number";
 // prettier-ignore
 import { 
     EyeInvisibleOutlined, 
@@ -85,6 +86,38 @@ const Index = () => {
             }
         }
     };
+    const handlerPanelPlaySpeedUp = () => {
+        if (refVideo.current) {
+            const playSpeed = strip(refPlaySpeed.current + 0.2);
+            const playSpeedMax = playSpeed > 2 ? 2 : playSpeed;
+            const sentenceList = refSentenceList.current;
+            const sentenceCurId = refSentenceCurId.current;
+            const sentenceCur = sentenceList.find(({ id }) => id === sentenceCurId);
+            const theSentence = sentenceCur ? sentenceCur : sentenceList[0];
+            if (theSentence && theSentence.startTime) {
+                refVideo.current.currentTime = theSentence.startTime / 1000;
+                refVideo.current.playbackRate = playSpeedMax;
+                refVideo.current.play();
+                setPlaySpeed(playSpeedMax);
+            }
+        }
+    };
+    const handlerPanelPlaySpeedDown = () => {
+        if (refVideo.current) {
+            const playSpeed = strip(refPlaySpeed.current - 0.2);
+            const playSpeedMin = playSpeed === 0 ? 0.2 : playSpeed;
+            const sentenceList = refSentenceList.current;
+            const sentenceCurId = refSentenceCurId.current;
+            const sentenceCur = sentenceList.find(({ id }) => id === sentenceCurId);
+            const theSentence = sentenceCur ? sentenceCur : sentenceList[0];
+            if (theSentence && theSentence.startTime) {
+                refVideo.current.currentTime = theSentence.startTime / 1000;
+                refVideo.current.playbackRate = playSpeedMin;
+                refVideo.current.play();
+                setPlaySpeed(playSpeedMin);
+            }
+        }
+    };
     useEffect(() => {
         scriptRead({ scriptId: id }).then((res) => {
             if (res.code === 1) {
@@ -106,6 +139,14 @@ const Index = () => {
                 event.preventDefault();
                 handlerPanelPlay();
             }
+            if (event.code === "ArrowUp") {
+                event.preventDefault();
+                handlerPanelPlaySpeedUp();
+            }
+            if (event.code === "ArrowDown") {
+                event.preventDefault();
+                handlerPanelPlaySpeedDown();
+            }
         };
         window.addEventListener("keydown", keyboardEvenHandler);
         return () => {
@@ -118,6 +159,9 @@ const Index = () => {
             }
         };
     }, []);
+    useEffect(() => {
+        refPlaySpeed.current = playSpeed;
+    }, [playSpeed]);
     return (
         <Layout id="listen-index" className="main-inner">
             <div className="main-inner-item-aside">

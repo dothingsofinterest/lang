@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Layout, Button, Modal } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined, HighlightOutlined } from "@ant-design/icons";
+import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, ApiOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined, HighlightOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateReadCurSentence, updateReadVideoCurrentTime, updateReadScrollPos } from "../../stores/reducers/status";
@@ -50,7 +50,14 @@ const Index = () => {
     const [script, setScript] = useState<any>({});
     const [sentenceList, setSentenceList] = useState<any[]>([]);
     const [vocabList, setVocabList] = useState<any[]>([]);
-    const vocabListSorted = [...vocabList].sort((a, b) => a.definition.split(" | ")[0].length - b.definition.split(" | ")[0].length);
+    const vocabListSorted = useMemo(() => {
+        const vocabListAdded = vocabList.map((v) => {
+            const inputParts = v.definition.split(" | ");
+            v.reg = new RegExp(`(^| |-)${inputParts[0]}`, "i");
+            return v;
+        });
+        return vocabListAdded.sort((a, b) => a.definition.split(" | ")[0].length - b.definition.split(" | ")[0].length);
+    }, [vocabList]);
     const curSentence = useSelector((state: RootState) => (state.status.readCurSentence === null ? sentenceList[0] : state.status.readCurSentence));
     const [playButton, setPlayButton] = useState(<PlayCircleOutlined />);
     const [playSpeed, setPlaySpeed] = useState<number>(1);
@@ -168,7 +175,6 @@ const Index = () => {
         });
         setIsModalOpen(true);
     };
-
     const handlerVideoEnded = () => {
         setPlayButton(<PlayCircleOutlined />);
     };
@@ -187,13 +193,13 @@ const Index = () => {
             }
         }
     };
-    const handlerPlayAudio = (speech: string) => {
+    const handlerVocabOnClick = useCallback((speech: string) => {
         const audio = refAudio.current;
         if (audio && speech) {
             audio.pause();
             audio.play(speech, 1);
         }
-    };
+    }, []);
     const handleClickArticle = (e: React.MouseEvent) => {
         const target = e.target as HTMLElement;
         if (target.closest(".point")) {
@@ -242,6 +248,44 @@ const Index = () => {
                     });
                 } else {
                     alert("Failed to update");
+                }
+            });
+        }
+    };
+    const handlerBatchUpdateSentencePiece = async () => {
+        const confirmed = window.confirm("Do you confirm to do this?");
+        if (confirmed) {
+            const sentenceList = refState.current.sentenceList;
+            const vocabList = vocabListSorted.map((v) => v.definition.split(" | ")[0]);
+            sentenceList.forEach(async (sentence) => {
+                if (sentence.scriptId && sentence.paragraphId && sentence.id) {
+                    const pieceArr: any[] = sentence.piece ? sentence.piece.split("|") : [];
+                    const textArr = tokenize(sentence.text);
+                    textArr.forEach((t, index) => {
+                        if (vocabList.includes(t)) {
+                            pieceArr.push(`${index}`);
+                        }
+                    });
+                    const textArrNonDup = Array.from(new Set(pieceArr));
+                    await scriptSentenceUpdate({
+                        scriptId: sentence.scriptId,
+                        paragraphId: sentence.paragraphId,
+                        sentenceId: sentence.id,
+                        startTime: sentence.startTime,
+                        endTime: sentence.endTime,
+                        text: sentence.text,
+                        piece: textArrNonDup.sort((a: number, b: number) => a - b).join("|"),
+                    }).then((res) => {
+                        if (res.code !== 1) {
+                            alert("Failed to update");
+                        }
+                    });
+                }
+            });
+            scriptSentenceList({ scriptId: id }).then((res) => {
+                if (res.code === 1) {
+                    setSentenceList(res.data);
+                    alert("Succeed");
                 }
             });
         }
@@ -326,7 +370,7 @@ const Index = () => {
     return (
         <Layout id="read-index" className="main-inner">
             <div className="main-inner-item-aside">
-                <video style={{ width: "100%" }} id="video" onPlay={handlerVideoPlay} onPause={handlerVideoPause} onEnded={handlerVideoEnded} onTimeUpdate={handlerVideoTimeUpdate} ref={refVideo}>
+                <video style={{ width: "100%", maxHeight: "100%", margin: "0px auto" }} id="video" onPlay={handlerVideoPlay} onPause={handlerVideoPause} onEnded={handlerVideoEnded} onTimeUpdate={handlerVideoTimeUpdate} ref={refVideo}>
                     <source src={`${Domain}/database/${id}/video.mp4`} type="video/mp4" /> Your browser does not support video tag.
                 </video>
             </div>
@@ -339,6 +383,7 @@ const Index = () => {
                     </Button>
                     <Button icon={<FastForwardOutlined />} onClick={handlerPanelPlayForward} className="btn"></Button>
                     <Button icon={<ClearOutlined />} onClick={handlerPanelPlayClear} className="btn"></Button>
+                    <Button icon={<ApiOutlined />} onClick={handlerBatchUpdateSentencePiece} className="btn"></Button>
                     <Button icon={<HighlightOutlined />} onClick={handlerPanelSentenceOpen} className="btn"></Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>
@@ -362,7 +407,7 @@ const Index = () => {
                                                                         ref={(el) => { el && (refSentenceMap.current.set(sentence.id, el)) }} 
                                                                         className={`point${curSentence && curSentence.id === sentence.id ? " matching" : ""}`} 
                                                                         key={sentence.id}>
-                                                                            {<Vocab text={sentence.text} vocabList={vocabListSorted} onClick={handlerPlayAudio} />}&nbsp;
+                                                                            {<Vocab text={sentence.text} vocabList={vocabListSorted} onClick={handlerVocabOnClick} />}&nbsp;
                                                                     </span>
                                                                 );
                                                             })}
@@ -397,6 +442,7 @@ const Index = () => {
                         </div>
                 </Modal>
             </div>
+            <div className="main-inner-item-aside"></div>
         </Layout>
     );
 };

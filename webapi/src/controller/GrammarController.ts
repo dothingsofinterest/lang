@@ -104,7 +104,8 @@ export const remove = (req: Request, res: Response) => {
 
 export const list = (req: Request, res: Response) => {
     const schema = Joi.object({
-        keyword: Joi.string().allow(null, ""),
+        name: Joi.string().allow(null, ""),
+        text: Joi.string().allow(null, ""),
         page: Joi.number().required(),
         pageSize: Joi.number().required(),
     });
@@ -121,10 +122,14 @@ export const list = (req: Request, res: Response) => {
         const SQLWhere = ["WHERE 1=1"];
         const SQLParams: string[] = [];
 
-        const keyword = value.keyword || "";
-        if (keyword) {
+        const name = value.name || "";
+        const text = value.text || "";
+        if (name) {
             SQLWhere.push(" AND `name` LIKE ?");
-            SQLParams.push(`%${keyword}%`);
+            SQLParams.push(`%${name}%`);
+        } else if (text) {
+            SQLWhere.push(" AND `text` LIKE ?");
+            SQLParams.push(`%${text}%`);
         }
 
         // prettier-ignore
@@ -150,7 +155,8 @@ export const list = (req: Request, res: Response) => {
             data: {
                 list,
                 listParams: {
-                    keyword,
+                    name,
+                    text,
                     page,
                     pageSize,
                     totalPages,
