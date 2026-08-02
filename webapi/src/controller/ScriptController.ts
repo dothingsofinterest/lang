@@ -38,11 +38,7 @@ export const create = async (req: Request, res: Response) => {
         }
         // Init Folders
         const scriptFolder = path.join(`${dataPath}`, `${result.lastInsertRowid}`);
-        const scriptSpeechFolder = path.join(`${scriptFolder}`, "speech");
-        const scriptImageFolder = path.join(`${scriptFolder}`, "image");
         fs.mkdirSync(scriptFolder, { recursive: true });
-        fs.mkdirSync(scriptSpeechFolder);
-        fs.mkdirSync(scriptImageFolder);
 
         const scriptFile = path.join(`${scriptFolder}`, "video.mp4");
         fs.renameSync(req.file.path, scriptFile);

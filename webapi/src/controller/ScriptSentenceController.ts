@@ -284,10 +284,10 @@ export const insertBatch = (req: Request, res: Response) => {
         value.sentences.forEach((s: any) => {
             orderNum = getOrderNum(orderNum, null);
             // prettier-ignore
-            db.prepare<[number, number, number, string, number]>(`
-                INSERT INTO script_sentence (script_id, paragraph_id, start_time, text, order_num)
-                VALUES (?, ?, ?, ?, ?)
-            `).run(value.scriptId, value.paragraphId, Number(s.startTime), s.text, orderNum);
+            db.prepare<[number, number, number, number, string, number]>(`
+                INSERT INTO script_sentence (script_id, paragraph_id, start_time, end_time, text, order_num)
+                VALUES (?, ?, ?, ?, ?, ?)
+            `).run(value.scriptId, value.paragraphId, Number(s.startTime), Number(s.endTime), s.text, orderNum);
         });
         return res.status(200).json({
             code: 1,

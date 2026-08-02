@@ -17,12 +17,11 @@ const defaultSentence = {
 };
 
 const EditorLines: React.FC<EditorLinesProps> = ({ open, onClose, onSubmit }) => {
-    const [sentences, setSentences] = useState<ScriptSentence[]>([]);
+    const [sentences, setSentences] = useState<any[]>([]);
     const handlerParseSentences = (text: string) => {
-        const sentences = text.split("\n").map((v, k) => {
-            const time = v.match(/^\d+:\d+/);
+        const sentences = text.split("\n").map((v) => {
             const text = v.replace(/^\d+:\d+\r?\n?/gm, "");
-            return { startTime: 0, endTime: 0, text };
+            return { startTime: 300000, endTime: 300000, text };
         });
         setSentences(sentences);
     };

@@ -258,6 +258,7 @@ export const cut = (req: Request, res: Response) => {
             });
         }
         const tx = db.transaction((value: { scriptId: number; prevId?: number; nextId?: number; sentenceIds: number[] }) => {
+            let prevSceneId: number | null = null;
             let prevOrder: number | null = null;
             let nextOrder: number | null = null;
             if (value.prevId) {
@@ -274,6 +275,7 @@ export const cut = (req: Request, res: Response) => {
                 `).get(value.prevId, value.scriptId);
                 if (!row) throw new Error("prevId not found");
                 prevOrder = row.orderNum;
+                prevSceneId = row.sceneId;
             }
             if (value.nextId) {
                 // prettier-ignore
@@ -294,10 +296,10 @@ export const cut = (req: Request, res: Response) => {
             const newOrder = getOrderNum(prevOrder, nextOrder);
 
             // prettier-ignore
-            const result = db.prepare<[number, number]>(`
-                INSERT INTO script_paragraph (script_id, order_num)
-                VALUES (?, ?)
-            `).run(value.scriptId, newOrder);
+            const result = db.prepare<[number, number|null, number]>(`
+                INSERT INTO script_paragraph (script_id, scene_id, order_num)
+                VALUES (?, ?, ?)
+            `).run(value.scriptId, prevSceneId, newOrder);
             const paragraphId = Number(result.lastInsertRowid);
 
             // prettier-ignore
@@ -380,7 +382,7 @@ export const list = (req: Request, res: Response) => {
                     endTime: row.s_end,
                     orderNum: row.s_order,
                     text: row.s_text,
-                    piece: row.s_piece
+                    piece: row.s_piece,
                 });
             }
         });

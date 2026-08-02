@@ -15,6 +15,7 @@ import {
     scriptRead, 
     scriptSentenceList, 
 } from "../../api/requestAuth";
+import { Domain } from "../../settings.js";
 import { useParams } from "react-router-dom";
 
 const Index = () => {
@@ -68,18 +69,20 @@ const Index = () => {
                                                         <p key={paragraph.id} className={!paragraph.role ? "indent" : undefined}>
                                                             {paragraph.role && <i className="role">{paragraph.role}: </i>}
                                                             {paragraph.sentences.map((sentence: any) =>
-                                                                sentence.piece ? (
-                                                                    // prettier-ignore
-                                                                    <Writable 
-                                                                        key={sentence.id}
-                                                                        id={sentence.id} 
-                                                                        ref={(el) => { el && (refSentenceMap.current.set(sentence.id, el)) }} 
-                                                                        sentence={sentence} 
-                                                                        showOrigin={showOrigin} 
-                                                                        onComplete={handlerOnComplete} />
-                                                                ) : (
-                                                                    <ReadOnly key={sentence.id} sentence={sentence} />
-                                                                ),
+                                                                // prettier-ignore
+                                                                /^\d{4}-\d{2}-\d{2}\/([^\/]+)\.(png|jpeg)$/i.test(sentence.text) ?  
+                                                                    <img src={`${Domain}/database/image/${sentence.text}`} alt="img" />
+                                                                    :
+                                                                    sentence.piece ? 
+                                                                        <Writable 
+                                                                            key={sentence.id}
+                                                                            id={sentence.id} 
+                                                                            ref={(el) => { el && (refSentenceMap.current.set(sentence.id, el)) }} 
+                                                                            sentence={sentence} 
+                                                                            showOrigin={showOrigin} 
+                                                                            onComplete={handlerOnComplete} />
+                                                                    : 
+                                                                    <ReadOnly key={sentence.id} sentence={sentence} />,
                                                             )}
                                                         </p>
                                                     </React.Fragment>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Input, Button } from "antd";
+import { Layout, Input, Button, Upload } from "antd";
 // prettier-ignore
 import { 
     FastBackwardOutlined, 
@@ -15,7 +15,8 @@ import {
     TeamOutlined, 
     DesktopOutlined, 
     PlusSquareOutlined, 
-    MinusSquareOutlined 
+    MinusSquareOutlined,
+    FileImageOutlined
 } from "@ant-design/icons";
 import { updateLoadingVideoScriptIndexWaver, updateScriptVideoCurrentTime, updateVideoScriptWaveformZoom } from "../../stores/reducers/status";
 import { RootState } from "../../stores";
@@ -47,7 +48,8 @@ import { scriptParagraphList,
     scriptSceneCreate, 
     scriptSceneUpdate, 
     scriptSceneRemove,
-    audioClip
+    audioClip,
+    fileUploadImage
 } from "../../api/requestAuth";
 import "./Index.scss";
 
@@ -95,6 +97,23 @@ const Index = () => {
         const confirmed = window.confirm("Do you confirm to cut?");
         if (confirmed) {
             refParagraphs.current?.cutParagraph();
+        }
+    };
+    const handlerUploadIllustration = async (file: any) => {
+        if (/^(.+?)\.(png|jpg)$/g.test(file.name) && (file.type === "image/png" || file.type === "image/jpeg")) {
+            try {
+                const name = `i_${Date.now()}.png`;
+                const formData = new FormData();
+                formData.append("file", file, name);
+                const res = await fileUploadImage({}, formData);
+                if (res.code === 1) {
+                    alert(`${AssetsPrefix}/image/${res.data}`);
+                }
+            } catch (e: any) {
+                alert(`${e.message}`);
+            }
+        } else {
+            alert(`Please upload a png or jpg image.`);
         }
     };
     const onLocateTime = (time: number) => {
@@ -423,6 +442,9 @@ const Index = () => {
                         <Button icon={<ScissorOutlined />} onClick={handlersParagraphCut} />
                         <Button icon={<PlusCircleOutlined />} onClick={handlersSentenceInsert} />
                         <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete} />
+                        <Upload beforeUpload={handlerUploadIllustration} showUploadList={false}>
+                            <Button icon={<FileImageOutlined />} />
+                        </Upload>
                         <Button icon={<DownloadOutlined />} onClick={() => setLinesPanel(true)} />
                         <Button icon={<TeamOutlined />} onClick={() => setRolesPanel(true)} />
                         <Button icon={<DesktopOutlined />} onClick={() => setScenesPanel(true)} />

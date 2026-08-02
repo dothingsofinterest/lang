@@ -9,8 +9,8 @@ import { Domain } from "../../settings.js";
 import { strip } from "../../utils/number";
 import Audio, { AudioRef } from "../Public/Audio";
 import Vocab from "./Vocab";
-import "./Index.scss";
 import { useParams } from "react-router-dom";
+import "./Index.scss";
 // prettier-ignore
 import { 
     scriptRead, 
@@ -85,7 +85,7 @@ const Index = () => {
         if (refVideo.current) {
             const playSpeed = refState.current.playSpeed;
             const curSentence = refState.current.curSentence;
-            if (curSentence && curSentence.startTime) {
+            if (curSentence && curSentence.startTime !== undefined) {
                 refVideo.current.currentTime = curSentence.startTime / 1000;
                 refVideo.current.playbackRate = playSpeed;
                 refVideo.current.play();
@@ -100,7 +100,7 @@ const Index = () => {
             const curSentence = refState.current.curSentence;
             const curSentenceIndex = sentenceList.findIndex(({ id }) => id === curSentence.id);
             const prevSentence = sentenceList[curSentenceIndex - 1];
-            if (prevSentence && prevSentence.startTime) {
+            if (prevSentence && prevSentence.startTime !== undefined) {
                 refVideo.current.currentTime = prevSentence.startTime / 1000;
                 refVideo.current.playbackRate = playSpeed;
                 refVideo.current.play();
@@ -116,7 +116,7 @@ const Index = () => {
             const curSentence = refState.current.curSentence;
             const curSentenceIndex = sentenceList.findIndex(({ id }) => id === curSentence.id);
             const nextSentence = sentenceList[curSentenceIndex + 1];
-            if (nextSentence && nextSentence.startTime) {
+            if (nextSentence && nextSentence.startTime !== undefined) {
                 refVideo.current.currentTime = nextSentence.startTime / 1000;
                 refVideo.current.playbackRate = playSpeed;
                 refVideo.current.play();
@@ -130,7 +130,7 @@ const Index = () => {
             const playSpeed = strip(refState.current.playSpeed + 0.2);
             const playSpeedMax = playSpeed > 2 ? 2 : playSpeed;
             const curSentence = refState.current.curSentence;
-            if (curSentence && curSentence.startTime) {
+            if (curSentence && curSentence.startTime !== undefined) {
                 refVideo.current.currentTime = curSentence.startTime / 1000;
                 refVideo.current.playbackRate = playSpeedMax;
                 refVideo.current.play();
@@ -144,7 +144,7 @@ const Index = () => {
             const playSpeed = strip(refState.current.playSpeed - 0.2);
             const playSpeedMin = playSpeed === 0 ? 0.2 : playSpeed;
             const curSentence = refState.current.curSentence;
-            if (curSentence && curSentence.startTime) {
+            if (curSentence && curSentence.startTime !== undefined) {
                 refVideo.current.currentTime = curSentence.startTime / 1000;
                 refVideo.current.playbackRate = playSpeedMin;
                 refVideo.current.play();
@@ -219,6 +219,15 @@ const Index = () => {
             setEditSentence({
                 ...editSentence,
                 piece: piece.sort((a: number, b: number) => a - b),
+            });
+        }
+    };
+    const handlerSentenceClearPiece = () => {
+        const confirmed = window.confirm("Do you confirm to do this?");
+        if (confirmed) {
+            setEditSentence({
+                ...editSentence,
+                piece: [],
             });
         }
     };
@@ -401,8 +410,13 @@ const Index = () => {
                                                         <p key={paragraph.id} className={!paragraph.role ? "indent" : undefined}>
                                                             {paragraph.role && <i className="role">{paragraph.role}: </i>}
                                                             {paragraph.sentences.map((sentence: any) => {
-                                                                return (
-                                                                    // prettier-ignore
+                                                                // prettier-ignore
+                                                                return /^\d{4}-\d{2}-\d{2}\/([^\/]+)\.(png|jpeg)$/i.test(sentence.text) ? 
+                                                                (
+                                                                    <img src={`${Domain}/database/image/${sentence.text}`} alt="img" />
+                                                                )
+                                                                :
+                                                                (
                                                                     <span
                                                                         ref={(el) => { el && (refSentenceMap.current.set(sentence.id, el)) }} 
                                                                         className={`point${curSentence && curSentence.id === sentence.id ? " matching" : ""}`} 
@@ -426,7 +440,14 @@ const Index = () => {
                 <Modal
                     open={isModalOpen} 
                     onOk={handlerSentenceSubmit} 
-                    onCancel={handlerSentenceClose}>
+                    onCancel={handlerSentenceClose}
+                    footer={(_, { OkBtn, CancelBtn }) => (
+                        <>
+                            <CancelBtn />
+                            <Button onClick={handlerSentenceClearPiece}>Clear</Button>
+                            <OkBtn />
+                        </>
+                    )}>
                         <div className="chunks">
                             {editSentence && editSentence.textArr.map((value: string, k: number) => {
                                 return (

@@ -35,14 +35,14 @@
             .scene {
                 color: #000;
                 background: #ccc;
-                padding: 20px 0;
+                padding: 30px 0;
                 border-top: 2px dotted;
                 &:nth-child(2) {
                     border-top: 0;
                 }
                 h2 {
                     text-align: center;
-                    font-size: 16px;
+                    font-size: 18px;
                     font-style: normal;
                     line-height: 20px;
                     color: #000;
@@ -50,10 +50,10 @@
                 }
                 p {
                     margin: 0;
-                    padding: 4px 26px;
+                    padding: 0 26px;
                     color: #000;
-                    font-size: 16px;
-                    line-height: 30px;
+                    font-size: 18px;
+                    line-height: 34px;
                     &:first-of-type {
                         border-top: 0;
                     }
@@ -65,13 +65,14 @@
                         font-weight: 500;
                         color: #000;
                     }
+                    img {
+                        display: block;
+                        margin: 10px auto;
+                    }
                 }
                 .point {
                     &.matching {
-                        font-weight: 800;
-                        .vocab-item {
-                            font-weight: 800;
-                        }
+                        color: #0058e7;
                     }
                     &:first-child {
                         padding: 0;
@@ -102,5 +103,12 @@
                 background-color: #ccc;
             }
         }
+    }
+}
+
+.ant-tooltip {
+    max-width: 300px;
+    .ant-tooltip-inner {
+        font-size: 18px;
     }
 }

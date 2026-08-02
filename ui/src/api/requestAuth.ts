@@ -273,6 +273,17 @@ export const audioClip = (params: object): Promise<Response> => {
 };
 // Audio
 
+// File
+export const fileUploadImage = (params: object, data: FormData): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/file/upload_image`,
+        data: data,
+        params: params,
+    });
+};
+// File
+
 // Speech
 export const speechTTS = (params: object): Promise<Response> => {
     return requestInstance.request({

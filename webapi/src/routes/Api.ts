@@ -46,6 +46,7 @@ import {
     upload as speechUpload
 } from "../controller/SpeechController";
 import { clip as audioClip } from "../controller/AudioController";
+import { uploadImage } from "../controller/FileController";
 
 const router = express.Router();
 
@@ -124,6 +125,10 @@ router.post("/speech/batch_transcode", batchTranscodeToMp3);
 // Audio
 router.post("/audio/clip", audioClip);
 // Audio
+
+// File
+router.post("/file/upload_image", upload, uploadImage);
+// File
 
 // User
 router.post("/logout", (req: Request, res: Response) => res.json({ code: 1, message: "success" }));
