@@ -65,6 +65,7 @@ const Index = () => {
     const [listParagraph, setListParagraph] = useState<ScriptParagraphWithSentences[]>([]);
     const [listScriptRole, setListScriptRole] = useState<ScriptRole[]>([]);
     const [listScriptScene, setListScriptScene] = useState<ScriptScene[]>([]);
+    const [listFocus, setListFocus] = useState<boolean>(false);
     const [scenesPanel, setScenesPanel] = useState(false);
     const [rolesPanel, setRolesPanel] = useState(false);
     const [linesPanel, setLinesPanel] = useState(false);
@@ -203,8 +204,8 @@ const Index = () => {
             }
         });
     };
-    const onSceneChange = (time: number) => {
-        fnLocateCurrentTime(time);
+    const onActive = () => {
+        setListFocus(false);
     };
     const handlersScroll = (event: React.UIEvent<HTMLElement>) => {
         const target = event.currentTarget;
@@ -420,7 +421,20 @@ const Index = () => {
         apiGetRoleList();
         apiGetSceneList();
         apiGetParagraphList();
+        const keyboardEvenHandler = (event: KeyboardEvent) => {
+            if (event.code === "NumpadAdd") {
+                event.preventDefault();
+                setListFocus(true);
+                handlersSentenceInsert();
+            }
+            if (event.code === "NumpadSubtract") {
+                event.preventDefault();
+                handlersSentenceDelete();
+            }
+        };
+        window.addEventListener("keydown", keyboardEvenHandler);
         return () => {
+            window.removeEventListener("keydown", keyboardEvenHandler);
             if (refWavesurfer.current) {
                 refWavesurfer.current.destroy();
                 refWavesurfer.current = null;
@@ -454,6 +468,7 @@ const Index = () => {
                         paragraphs={listParagraph} 
                         roles={listScriptRole} 
                         scenes={listScriptScene} 
+                        focus={listFocus}
                         onParagraphInsert={onParagraphInsert} 
                         onParagraphUpdate={onParagraphUpdate} 
                         onParagraphDelete={onParagraphDelete} 
@@ -462,7 +477,7 @@ const Index = () => {
                         onSentenceUpdate={onSentenceUpdate} 
                         onParagraphCut={onParagraphCut} 
                         onLocateTime={onLocateTime} 
-                        onSceneChange={onSceneChange} 
+                        onActive={onActive} 
                         ref={refParagraphs} />
                 </Scrollbars>
                 {/* prettier-ignore */}

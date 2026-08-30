@@ -9,6 +9,7 @@ interface ParagraphsProps {
     paragraphs: ScriptParagraphWithSentences[];
     roles: ScriptRole[];
     scenes: ScriptScene[];
+    focus: boolean;
     onParagraphInsert?: (prevId: number | null, nextId: number | null) => void;
     onParagraphUpdate?: (paragraphId: number, roleId: number, sceneId: number) => void;
     onParagraphDelete?: (pId: number) => void;
@@ -17,8 +18,7 @@ interface ParagraphsProps {
     onSentenceDelete?: (paragraphId: number, sentenceId: number) => void;
     onSentenceUpdate?: (paragraphId: number, sentenceId: number, startTime: number, endTime: number, text: string, piece: string) => void;
     onLocateTime?: (time: number) => void;
-    onSceneChange?: (sceneId: number, paragraphId: number) => void;
-    onRoleChange?: (roleId: number, paragraphId: number) => void;
+    onActive?: () => void;
 }
 
 export interface ParagraphsRef {
@@ -34,6 +34,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
         paragraphs, 
         roles, 
         scenes, 
+        focus,
         onParagraphInsert, 
         onParagraphUpdate, 
         onParagraphDelete, 
@@ -41,13 +42,18 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
         onSentenceInsert, 
         onSentenceDelete, 
         onSentenceUpdate, 
-        onLocateTime 
+        onLocateTime,
+        onActive
     }, ref) => {
     const refCurPId = useRef<number>(0);
     const refCurSId = useRef<number>(0);
+    const refSentenceMap = useRef(new Map<number, any>());
     const handlerSetActive = (pOrderNum: number, sOrderNum: number) => {
         refCurPId.current = pOrderNum;
         refCurSId.current = sOrderNum;
+        if (onActive !== undefined) {
+            onActive();
+        }
     };
     const handlerParagraphInsert = () => {
         if (onParagraphInsert !== undefined) {
@@ -121,6 +127,18 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
             }
         }
     };
+    const handlerSentenceFocus = () => {
+        const pID = refCurPId.current;
+        const curParagraph = paragraphs.find(({ id }) => id === pID);
+        if (curParagraph) {
+            if (curParagraph.sentences.length > 0) {
+                const maxID = Math.max(1, ...curParagraph.sentences.map((s) => s.id));
+                const dom = refSentenceMap.current.get(maxID);
+                dom.focus();
+            }
+
+        }
+    };
     const handlerSentenceUpdateStartTime = (paragraphId: number, sentence: ScriptSentence, value: string) => {
         if (onSentenceUpdate !== undefined) {
             const precision = Number(strip(value).toFixed(3));
@@ -182,6 +200,17 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
         insertSentence: handlerSentenceInsert,
         deleteSentence: handlerSentenceDelete,
     }));
+    useEffect(() => {
+        if (focus) {
+            const pID = refCurPId.current;
+            const curParagraph = paragraphs.find(({ id }) => id === pID);
+            if (curParagraph) {
+                const maxID = Math.max(0, ...curParagraph.sentences.map((s) => s.id));
+                const dom = refSentenceMap.current.get(maxID);
+                dom.focus();
+            }
+        }
+    }, [paragraphs]);
     return (
         <div id="script-paragraphs">
             {paragraphs.map((paragraph) => {
@@ -201,7 +230,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                 onChange={(v) => handlerRoleChange(paragraph, v)} 
                                 options={roles.map((v) => ({ label: v.name, value: v.id }))} />
                         </div>
-                        {paragraph.sentences.map((sentence: any) => {
+                        {paragraph.sentences.map((sentence: any, index: number) => {
                             return (
                                 <div className="sentence" key={`${sentence.id}${sentence.startTime}${sentence.endTime}`}>
                                     <Space size="small" className="time" direction="vertical">
@@ -230,6 +259,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                     </Space>
                                     {/* prettier-ignore */}
                                     <Input.TextArea 
+                                        ref={(el) => { el && (refSentenceMap.current.set(sentence.id, el)) }} 
                                         spellCheck={true}
                                         autoSize 
                                         className="text" 

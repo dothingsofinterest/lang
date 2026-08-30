@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button, Upload, Input } from "antd";
 import { PlusCircleOutlined, MenuFoldOutlined, PlusSquareOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Script as DataScript } from "../../types/Data";
@@ -24,6 +24,9 @@ const Catalog = () => {
     const catalogFolding = useSelector((state: RootState) => state.status.catalogFolding);
     const [list, setList] = useState<DataScript[]>([]);
     const [listParams, setListParams] = useState<ListParams>({ page: 1, pageSize: 100, totalPages: 0, keyword: "" });
+    const refCatalogMap = useRef(new Map<number, HTMLElement>());
+    const refScrollbar = useRef<Scrollbars>(null);
+
     const handlerCreate = async (file: any) => {
         if (/^(.+?)\.(mp4)$/g.test(file.name) && file.type === "video/mp4") {
             try {
@@ -82,6 +85,17 @@ const Catalog = () => {
     useEffect(() => {
         apiGetList(listParams);
     }, []);
+    useEffect(() => {
+        const item = list.find((item: any) => item.id == id);
+        if (item) {
+            const dom = refCatalogMap.current.get(item.id);
+            if (dom) {
+                const scrollTop = refScrollbar.current?.getScrollTop() || 0;
+                const scrollTopPointValue = scrollTop + dom.getBoundingClientRect().top - 200;
+                refScrollbar.current?.scrollTop(scrollTopPointValue);
+            }
+        }
+    }, [list]);
     return (
         <aside id="catalog" className={catalogFolding ? `folding` : ``}>
             <Upload className="create-btn" showUploadList={false} beforeUpload={handlerCreate}>
@@ -92,11 +106,16 @@ const Catalog = () => {
                 <Button className="study-count-btn" icon={<PlusSquareOutlined />} onClick={handlerUpdate} />
                 <Button className="fold-btn" icon={<MenuFoldOutlined />} onClick={handlerMenuFold} />
             </div>
-            <Scrollbars className="menu" style={{ height: "calc(100vh - 100px)" }}>
+            <Scrollbars className="menu" style={{ height: "calc(100vh - 100px)" }} ref={refScrollbar}>
                 {list.map((item, key) => {
                     return (
-                        <Link to={`/home/${item.id}`} key={key} className={item.id === Number(id) ? `item active` : `item`}>
-                            {catalogFolding ? `` : `[${item.studyCount}] ${item.name}`}
+                        // prettier-ignore
+                        <Link 
+                            ref={(el) => { el && (refCatalogMap.current.set(item.id, el)) }} 
+                            to={`/home/${item.id}`} 
+                            key={key} 
+                            className={item.id === Number(id) ? `item active` : `item`}>
+                                {catalogFolding ? `` : `[${item.studyCount}] ${item.name}`}
                         </Link>
                     );
                 })}
