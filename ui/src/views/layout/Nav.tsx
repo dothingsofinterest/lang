@@ -19,7 +19,7 @@ const navs: RouteItem[] = [
     { url: "/home", icon: <HomeOutlined /> },
     { url: "/read", icon: <ReadFilled /> },
     { url: "/listen", icon: <CustomerServiceFilled /> },
-    { url: "/skeleton", icon: <HighlightOutlined /> },
+    { url: "/fill", icon: <HighlightOutlined /> },
     { url: "/script", icon: <EditOutlined /> },
 ];
 

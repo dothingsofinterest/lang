@@ -3,6 +3,20 @@
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
+        .shortcuts {
+            padding: 10px;
+            li {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 4px 0;
+                button {
+                    flex: 0 0 112px;
+                    margin-right: 8px;
+                    background: #ccc;
+                }
+            }
+        }
     }
     .main-inner-item-main {
         #panel {
@@ -81,6 +95,9 @@
                         color: #9b0900;
                         cursor: pointer;
                         font-weight: 500;
+                        &.kw {
+                            font-size: 38px;
+                        }
                     }
                 }
             }

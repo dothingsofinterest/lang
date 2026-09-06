@@ -91,9 +91,8 @@ const Writable = React.forwardRef<WritableRef, WritableProps>(({
                 data.text.map((piece: string, k: number) => {
                     return data.piece.includes(k) ? (
                         // prettier-ignore
-                        <>
+                         <React.Fragment key={k}>
                             <Input 
-                                key={`a${k}${piece}`} 
                                 defaultValue={``}
                                 ref={(el) => el && (refInputsMap.current.set(k, el))} 
                                 className={showOrigin === true ? "invisible": ""}
@@ -103,13 +102,12 @@ const Writable = React.forwardRef<WritableRef, WritableProps>(({
                                 style={{ width: `${piece.length + 2}ch`, background: !pieceStack.includes(k)? "#8b8b8b": "#fff"}}
                             />
                             <Input 
-                                key={`b${k}${piece}`} 
                                 value={piece}
                                 className={showOrigin === true ? "visible": "invisible"}
                                 disabled={true}
                                 style={{ width: `${piece.length + 2}ch` }}
                             />
-                        </>
+                        </React.Fragment>
                     ) : (
                         <React.Fragment key={k}>{`${piece} `}</React.Fragment>
                     );

@@ -3,7 +3,6 @@ import { Tooltip } from "antd";
 import { Vocabulary } from "../../types/Data";
 import { Domain } from "../../settings.js";
 import "./Vocab.scss";
-import { fontWeight } from "html2canvas/dist/types/css/property-descriptors/font-weight";
 
 interface VocabProps {
     text: string;

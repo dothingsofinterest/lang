@@ -8,7 +8,7 @@ import Listen from "../views/Listen/Index";
 import Script from "../views/Script/Index";
 import VocabListen from "../views/VocabListen/Index";
 import VocabMeaning from "../views/VocabMeaning/Index";
-import Skeleton from "../views/Skeleton/Index";
+import Fill from "../views/Fill/Index";
 
 const routes = [
     {
@@ -48,8 +48,8 @@ const routes = [
                 element: <VocabMeaning />,
             },
             {
-                path: "skeleton/:id",
-                element: <Skeleton />,
+                path: "fill/:id",
+                element: <Fill />,
             },
         ],
     },

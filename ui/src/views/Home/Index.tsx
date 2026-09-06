@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Layout, Button } from "antd";
+import { useEffect } from "react";
+import { Layout } from "antd";
 // prettier-ignore
 import { 
     scriptRead, 
@@ -24,10 +24,6 @@ import {
     updateExampleCur, 
     updateExampleCurIndex, 
 } from "../../stores/reducers/status";
-// prettier-ignore
-import { 
-    PlusCircleOutlined 
-} from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 
 const Index = () => {

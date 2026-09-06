@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import { Layout, Button, Modal } from "antd";
+import { Layout, Button, Modal, Affix } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, ApiOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined, HighlightOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
@@ -9,7 +9,7 @@ import { Domain } from "../../settings.js";
 import { strip } from "../../utils/number";
 import Audio, { AudioRef } from "../Public/Audio";
 import Vocab from "./Vocab";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import "./Index.scss";
 // prettier-ignore
 import { 
@@ -44,8 +44,19 @@ const defaultEditSentence = {
     piece: [],
 };
 
+const shortcuts = [
+    { button: "Numpad0", text: "To play" },
+    { button: "ArrowLeft", text: "To play the previous sentence" },
+    { button: "ArrowRight", text: "To play the next sentence" },
+    { button: "ControlRight", text: "To pause" },
+    { button: "ArrowUp", text: "To speed up and play" },
+    { button: "ArrowDown", text: "To speed down and play" },
+];
+
 const Index = () => {
     const { id } = useParams();
+    const [searchParams] = useSearchParams();
+    const search = searchParams.get("search");
     const dispatch = useDispatch();
     const [script, setScript] = useState<any>({});
     const [sentenceList, setSentenceList] = useState<any[]>([]);
@@ -355,6 +366,11 @@ const Index = () => {
         scriptSentenceList({ scriptId: id }).then((res) => {
             if (res.code === 1) {
                 setSentenceList(res.data);
+                if (search) {
+                    const curSentenceIndex = res.data.findIndex((item: any) => item.text.includes(search));
+                    const curSentence = res.data[curSentenceIndex];
+                    dispatch(updateReadCurSentence(curSentence));
+                }
             }
         });
         scriptVocabList({ scriptId: id }).then((res) => {
@@ -463,7 +479,16 @@ const Index = () => {
                         </div>
                 </Modal>
             </div>
-            <div className="main-inner-item-aside"></div>
+            <div className="main-inner-item-aside">
+                <ul className="shortcuts" style={{ width: "100%", maxHeight: "100%" }}>
+                    {shortcuts.map((si, k) => (
+                        <li key={k}>
+                            <Button>{si.button}</Button>
+                            <span>{si.text}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </Layout>
     );
 };

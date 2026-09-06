@@ -48,7 +48,7 @@ const Index = () => {
         });
     }, []);
     return (
-        <Layout id="skeleton-index" className="main-inner">
+        <Layout id="fill-index" className="main-inner">
             <div className="main-inner-item-aside"></div>
             <div className="main-inner-item-main" style={{ position: "relative", padding: "32px 0 0" }}>
                 <section id="panel">

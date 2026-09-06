@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Input, Button, Drawer } from "antd";
+import React, { useState, useEffect } from "react";
+import { Input, Drawer } from "antd";
 import { scriptSentenceSearch } from "../../api/requestAuth";
 import { Pagination } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { Grammar } from "../../types/Data";
 import "./Index.scss";
 
 interface Props {
@@ -74,7 +73,7 @@ const Index: React.FC<Props> = ({ open, onClose }) => {
                                                       .replace(new RegExp(`(${listQuery.keyword})`), `|$1|`)
                                                       .split("|")
                                                       .map((part: string, k: number) => {
-                                                          return k === 1 ? <b>{part}</b> : <>{part}</>;
+                                                          return k === 1 ? <b key={k}>{part}</b> : <React.Fragment key={k}>{part}</React.Fragment>;
                                                       })
                                                 : value.text}
                                         </span>

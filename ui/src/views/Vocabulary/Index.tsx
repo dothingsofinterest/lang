@@ -441,14 +441,14 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                 <Scrollbars style={{ height: "400px" }}>
                     <div className="list">
                         {list.length > 0 &&
-                            list.map((value, key) => {
+                            list.map((value) => {
                                 return (
                                     <div key={value.id} className={vocab.id === value.id ? "item active" : "item"} onClick={() => handlerVocabActivate(value)}>
                                         <span className="text">
                                             {value.definition}
-                                            {value.script_ids?.split(",").map((v) => {
+                                            {value.script_ids?.split(",").map((v, k) => {
                                                 return (
-                                                    <a href={`/#/read/${v}`} target="_blank">
+                                                    <a key={k} href={`/#/read/${v}?search=${value.definition.split(" | ")[0]}`} target="_blank">
                                                         {`【${v}】`}
                                                     </a>
                                                 );

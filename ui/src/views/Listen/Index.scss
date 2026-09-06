@@ -1,4 +1,23 @@
 #listen-index {
+    .main-inner-item-aside {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        .shortcuts {
+            padding: 10px;
+            li {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 4px 0;
+                button {
+                    flex: 0 0 112px;
+                    margin-right: 8px;
+                    background: #ccc;
+                }
+            }
+        }
+    }
     .main-inner-item-main {
         #panel {
             width: 100%;

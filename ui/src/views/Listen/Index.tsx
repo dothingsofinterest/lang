@@ -23,6 +23,13 @@ import {
 } from "../../api/requestAuth";
 import { useParams } from "react-router-dom";
 
+const shortcuts = [
+    { button: "Enter", text: "To play" },
+    { button: "ControlRight", text: "To pause" },
+    { button: "ArrowUp", text: "To speed up and play" },
+    { button: "ArrowDown", text: "To speed down and play" },
+];
+
 const Index = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -131,6 +138,14 @@ const Index = () => {
         });
         const videoElem = refVideo.current;
         const keyboardEvenHandler = (event: KeyboardEvent) => {
+            const active = document.activeElement;
+            // prettier-ignore
+            const isTyping = 
+                active instanceof HTMLTextAreaElement || 
+                active?.getAttribute("contenteditable") === "true";
+            if (isTyping) {
+                return;
+            }
             if (event.code === "Enter") {
                 event.preventDefault();
                 handlerPanelPlayAgain();
@@ -211,9 +226,19 @@ const Index = () => {
                         </React.Fragment>
                     </article>
                 </Scrollbars>
+                <Audio ref={refAudioPay} loop={false} />
             </div>
             <div className="main-inner-item-aside">
-                <Audio ref={refAudioPay} loop={false} />
+                <div className="main-inner-item-aside">
+                    <ul className="shortcuts" style={{ width: "100%", maxHeight: "100%" }}>
+                        {shortcuts.map((si, k) => (
+                            <li key={k}>
+                                <Button>{si.button}</Button>
+                                <span>{si.text}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </Layout>
     );
