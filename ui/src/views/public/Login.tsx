@@ -62,7 +62,7 @@ const Login = () => {
     useEffect(() => {
         const cookie = Cookies.get(`ACCESS_TOKEN`);
         if (cookie) {
-            navigate("/settings");
+            navigate("/home/1");
         }
         loadCaptcha();
     }, []);

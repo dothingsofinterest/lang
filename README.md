@@ -19,7 +19,16 @@ A tool for study languages through videos.
     3. npm run build<br>
     4. npm run start<br>
 
-# Screenshots
+# Screenshots for version 3.1
+
+![demo](assets/Login.png)
+![demo](assets/Edit.png)
+![demo](assets/Read.png)
+![demo](assets/Fill.png)
+![demo](assets/Dictation.png)
+![demo](assets/Vocab.png)
+
+# Screenshots for 1.0
 
 ![demo](assets/1.png)
 ![demo](assets/2.png)
