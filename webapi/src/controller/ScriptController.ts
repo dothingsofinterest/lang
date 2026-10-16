@@ -115,7 +115,11 @@ export const remove = (req: Request, res: Response) => {
                 message: error.message,
             });
         }
-        // db.prepare<[number]>("DELETE FROM `script` WHERE id = ?").run(value.id);
+        db.prepare<[number]>("DELETE FROM `script` WHERE id = ?").run(value.id);
+        const scriptFolder = path.join(`${dataPath}`, `${value.id}`);
+        if (fs.existsSync(scriptFolder)) {
+            fs.rmSync(scriptFolder, { recursive: true });
+        }
         return res.status(200).json({
             code: 1,
             message: `Succeed`,

@@ -180,7 +180,7 @@ const Index = () => {
     return (
         <Layout id="listen-index" className="main-inner">
             <div className="main-inner-item-aside">
-                <video style={{ width: "100%" }} id="video" onTimeUpdate={handlerVideoTimeUpdate} ref={refVideo}>
+                <video style={{ width: "100%", maxHeight: "100%", margin: "0px auto" }} id="video" onTimeUpdate={handlerVideoTimeUpdate} ref={refVideo}>
                     <source src={`${Domain}/database/${id}/video.mp4`} type="video/mp4" /> Your browser does not support video tag.
                 </video>
             </div>

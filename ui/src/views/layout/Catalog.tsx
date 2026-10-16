@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { Button, Upload, Input } from "antd";
-import { PlusCircleOutlined, MenuFoldOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, MinusCircleOutlined, MenuFoldOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useEffect, useState, useRef } from "react";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { Script as DataScript } from "../../types/Data";
-import { scriptList, scriptCreate, scriptUpdate } from "../../api/requestAuth";
+import { scriptList, scriptCreate, scriptUpdate, scriptRemove } from "../../api/requestAuth";
 import { useParams } from "react-router-dom";
 import { updateCatalogFolding } from "../../stores/reducers/status";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -26,7 +26,6 @@ const Catalog = () => {
     const [listParams, setListParams] = useState<ListParams>({ page: 1, pageSize: 100, totalPages: 0, keyword: "" });
     const refCatalogMap = useRef(new Map<number, HTMLElement>());
     const refScrollbar = useRef<Scrollbars>(null);
-
     const handlerCreate = async (file: any) => {
         if (/^(.+?)\.(mp4)$/g.test(file.name) && file.type === "video/mp4") {
             try {
@@ -68,6 +67,22 @@ const Catalog = () => {
             }
         }
     };
+    const handlerRemove = async () => {
+        const confirmed = window.confirm("Do you confirm to delete it?");
+        if (confirmed) {
+            const scriptId = Number(id);
+            const item = list.find(({ id }) => id === scriptId);
+            if (item) {
+                scriptRemove({ id: scriptId }).then((res) => {
+                    if (res.code === 1) {
+                        apiGetList(listParams);
+                    } else {
+                        alert("Failed.");
+                    }
+                });
+            }
+        }
+    };
     const handlerMenuFold = () => {
         dispatch(updateCatalogFolding(!catalogFolding));
     };
@@ -98,9 +113,12 @@ const Catalog = () => {
     }, [list]);
     return (
         <aside id="catalog" className={catalogFolding ? `folding` : ``}>
-            <Upload className="create-btn" showUploadList={false} beforeUpload={handlerCreate}>
-                <Button icon={<PlusCircleOutlined />} />
-            </Upload>
+            <div className="upload">
+                <Upload className="create" showUploadList={false} beforeUpload={handlerCreate}>
+                    <Button icon={<PlusCircleOutlined />} />
+                </Upload>
+                <Button className="remove" icon={<MinusCircleOutlined />} onClick={handlerRemove} />
+            </div>
             <div className="search">
                 <Input className="search-btn" value={listParams.keyword} onChange={(e) => handlerSearch(e.target.value)} allowClear />
                 <Button className="study-count-btn" icon={<PlusSquareOutlined />} onClick={handlerUpdate} />

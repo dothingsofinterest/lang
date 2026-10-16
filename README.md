@@ -13,6 +13,7 @@ A tool for study languages through videos.
 2. Config<br>
    Replace AUDIOWAVEFORM_PATH, FFMPEG_PATH, APP_LOG_PATH, UPLOAD_PATH in "/webapi/.env" to your own paths<br><br>
    Replace APP_LOG_PATH in "/webserver/.env" to your own path<br>
+   Replace DATA_PATH to your own path and put the database file "/webapi/Lang.db" in it<br>
 3. Start <br>
     1. cd /<br>
     2. npm install<br>
