@@ -11,34 +11,28 @@ const ffprobeBin = process.env.FFMPEG_FFPROBE_PATH;
 ffmpeg.setFfmpegPath(`${ffmepgBin}`);
 
 /*
- * Original Command:
+ * Scale down quality
  *
- * ffmpeg -i "input.mp4" -y -vf scale=600:-2 -c:v libx264 -b:v 600k -profile:v baseline -level 3.0 -g 24 -c:a copy -r 24 -video_track_timescale 24 -vsync 1 -shortest -movflags faststart "output.mp4"
+ * ffmpeg -i video.mp4 -vf "scale=-2:180" -c:v libx264 -crf 30 -c:a copy output.mp4
+ *
+ * -vf "scale=-2:180" -------- 画面高度
+ * -c:v libx264 -------------- 使用 H.264 重新压缩视频
+ * -crf 30 ------------------- 控制视频画质，数字越大，画质越低，文件越小，范围 0–51，默认值 23
+ * -c:a copy ----------------- 复制音频，不重新编码
  */
-export const compressVideo = (input: string, output: string): Promise<void> => {
+export const scaleDownVideo = (input: string, output: string): Promise<void> => {
     return new Promise((resolve, reject) => {
         ffmpeg(input)
-            .inputOptions(["-analyzeduration 2147483647", "-probesize 2147483647"]) // 提高分析时长与探测缓冲，防止大文件或长视频探测失败，以提高对大文件或高码率文件的容错能力。
-            .videoFilter("scale=600:-2") // -vf scale=600:-2
-            .videoCodec("libx264") // -c:v libx264
-            .videoBitrate("600k") // -b:v 600k
-            .outputOptions([
-                "-profile:v baseline", // -profile:v baseline
-                "-level 3.0", // -level 3.0
-                "-g 24", // -g 24
-                "-c:a copy", // -c:a copy
-                "-r 24", // -r 24
-                "-video_track_timescale 24", // -video_track_timescale 24
-                "-vsync 1", // -vsync 1
-                "-shortest", // -shortest
-                "-movflags faststart", // -movflags faststart
-            ])
+            .videoFilter("scale=-2:180")
+            .videoCodec("libx264")
+            .outputOptions(["-crf 30"])
+            .audioCodec("copy")
             .save(output)
             .on("start", (commandLine) => {
-                LoggerSystem.info(`fluent-ffmpeg compress video command: ${commandLine}`);
+                LoggerSystem.info(`fluent-ffmpeg scaleDown video command: ${commandLine}`);
             })
             .on("end", () => {
-                LoggerSystem.info("fluent-ffmpeg compress video command succeed");
+                LoggerSystem.info("fluent-ffmpeg scaleDown video command succeed");
                 resolve();
             })
             .on("error", (err) => {

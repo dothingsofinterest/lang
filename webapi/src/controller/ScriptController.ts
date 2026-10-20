@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { LoggerSystem } from "../lib/Log";
 import Database from "better-sqlite3";
 import { getPagination } from "../utils/Page";
-import { enhanceDialogueAndExtractMP3, extractAudio } from "../utils/FFmpeg";
+import { scaleDownVideo, extractAudio, enhanceDialogueAndExtractMP3 } from "../utils/FFmpeg";
 import { waveformCreate as waveformCreateService } from "../service/BBCAudioWaveform";
 import { Script, ScriptScene, ScriptRole, ScriptParagraph, ScriptSentence } from "../types/Script";
 
@@ -40,18 +40,25 @@ export const create = async (req: Request, res: Response) => {
         const scriptFolder = path.join(`${dataPath}`, `${result.lastInsertRowid}`);
         fs.mkdirSync(scriptFolder, { recursive: true });
 
-        const scriptFile = path.join(`${scriptFolder}`, "video.mp4");
-        fs.renameSync(req.file.path, scriptFile);
+        // Move original video
+        const videoOriginalFile = path.join(scriptFolder, "origin.mp4");
+        fs.renameSync(req.file.path, videoOriginalFile);
 
+        // Reduce original video
+        const videoReducedFile = path.join(scriptFolder, "video.mp4");
+        await scaleDownVideo(videoOriginalFile, videoReducedFile);
+
+        // Extract audio
         const audioFile = path.join(scriptFolder, "audio.mp3");
-        await extractAudio(`${scriptFile}`, audioFile);
+        await extractAudio(videoReducedFile, audioFile);
 
         // Init Waveform
-        const audiowaveform = path.join(`${scriptFolder}`, "audiowaveform.json");
-        const outputAudio = path.join(`${scriptFolder}`, "audio_enhanced.mp3");
-        await enhanceDialogueAndExtractMP3(scriptFile, outputAudio);
-        await waveformCreateService(`${outputAudio}`, `${audiowaveform}`);
-        fs.unlinkSync(outputAudio);
+        const audiowaveformFile = path.join(scriptFolder, "audiowaveform.json");
+        const outputAudioFile = path.join(scriptFolder, "audio_enhanced.mp3");
+        await enhanceDialogueAndExtractMP3(videoReducedFile, outputAudioFile);
+        await waveformCreateService(`${outputAudioFile}`, `${audiowaveformFile}`);
+        fs.unlinkSync(outputAudioFile);
+        fs.unlinkSync(videoOriginalFile);
         res.status(200).json({
             code: 1,
             message: `Succeed`,

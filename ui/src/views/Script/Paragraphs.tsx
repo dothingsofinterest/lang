@@ -164,21 +164,39 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
     const handlerButtTime = (pId: number, sId: number) => {
         if (onSentenceUpdate !== undefined) {
             const curParagraph = paragraphs.find(({ id }) => id === pId);
+            const curParagraphIndex = paragraphs.findIndex(({ id }) => id === pId);
             if (curParagraph !== undefined) {
-                const curPSentences = curParagraph.sentences;
-                const curSIndex = curPSentences.findIndex(({ id }) => id === sId);
-                const curSentence = curPSentences.find(({ id }) => id === sId);
-                const lastSentence = curParagraph.sentences[curSIndex - 1];
-                if (curSentence !== undefined && lastSentence !== undefined) {
-                    // prettier-ignore
-                    onSentenceUpdate(
-                        curParagraph.id, 
-                        curSentence.id, 
-                        strip(lastSentence.endTime + 1), 
-                        curSentence.endTime, 
-                        curSentence.text ? curSentence.text : "",
-                        curSentence.piece ? curSentence.piece : ""
-                    );
+                const curParagraphSentences = curParagraph.sentences;
+                const curSentence = curParagraphSentences.find(({ id }) => id === sId);
+                const curSentenceIndex = curParagraphSentences.findIndex(({ id }) => id === sId);
+                if (curSentence !== undefined) {
+                    const lastSentence = curParagraphSentences[curSentenceIndex - 1];
+                    if (lastSentence !== undefined) {
+                        onSentenceUpdate(
+                            curParagraph.id, 
+                            curSentence.id, 
+                            strip(lastSentence.endTime + 1), 
+                            curSentence.endTime, 
+                            curSentence.text ? curSentence.text : "",
+                            curSentence.piece ? curSentence.piece : ""
+                        );
+                    } else {
+                        const lastParagraph = paragraphs[curParagraphIndex - 1];
+                        if (lastParagraph) {
+                            const lastParagraphSentences = lastParagraph.sentences;
+                            const theSentence = lastParagraphSentences[lastParagraphSentences.length - 1];
+                            if (theSentence !== undefined) {
+                                onSentenceUpdate(
+                                    curParagraph.id, 
+                                    curSentence.id, 
+                                    strip(theSentence.endTime + 1), 
+                                    curSentence.endTime, 
+                                    curSentence.text ? curSentence.text : "",
+                                    curSentence.piece ? curSentence.piece : ""
+                                );
+                            }
+                        }
+                    }
                 }
             }
         }

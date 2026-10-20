@@ -10,6 +10,11 @@
     background-color: #ccc;
     &.folding {
         width: 50px;
+        .upload {
+            .remove {
+                display: none;
+            }
+        }
         .search {
             .search-btn,
             .study-count-btn {
