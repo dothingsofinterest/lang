@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import { Button, Upload, Input } from "antd";
-import { PlusCircleOutlined, MinusCircleOutlined, MenuFoldOutlined, PlusSquareOutlined } from "@ant-design/icons";
-import { useEffect, useState, useRef } from "react";
+import { PlusCircleOutlined, MinusCircleOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import { useEffect, useRef } from "react";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
-import { Script as DataScript } from "../../types/Data";
-import { scriptList, scriptCreate, scriptUpdate, scriptRemove } from "../../api/requestAuth";
+import { scriptList, scriptCreate, scriptRemove } from "../../api/requestAuth";
 import { useParams } from "react-router-dom";
+import { setList, setListParams } from "../../stores/reducers/catalog";
 import { updateCatalogFolding } from "../../stores/reducers/status";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import "./Catalog.scss";
 
-interface ListParams {
+interface CatalogListParams {
     page: number;
     pageSize: number;
     totalPages: number;
@@ -21,9 +21,9 @@ interface ListParams {
 const Catalog = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const catalogList = useSelector((state: RootState) => state.catalog.list);
+    const catalogListParams = useSelector((state: RootState) => state.catalog.listParams);
     const catalogFolding = useSelector((state: RootState) => state.status.catalogFolding);
-    const [list, setList] = useState<DataScript[]>([]);
-    const [listParams, setListParams] = useState<ListParams>({ page: 1, pageSize: 100, totalPages: 0, keyword: "" });
     const refCatalogMap = useRef(new Map<number, HTMLElement>());
     const refScrollbar = useRef<Scrollbars>(null);
     const handlerCreate = async (file: any) => {
@@ -33,7 +33,7 @@ const Catalog = () => {
                 formData.append("file", file);
                 const res = await scriptCreate(formData);
                 if (res.code === 1) {
-                    apiGetList(listParams);
+                    apiGetCatalog(catalogListParams);
                     alert("Succeed");
                 } else {
                     alert("Failed");
@@ -47,35 +47,19 @@ const Catalog = () => {
         return false;
     };
     const handlerSearch = async (value: string) => {
-        const listParamsNew = { ...listParams, keyword: value };
+        const listParamsNew = { ...catalogListParams, keyword: value };
         setListParams(listParamsNew);
-        apiGetList(listParamsNew);
-    };
-    const handlerUpdate = async () => {
-        const confirmed = window.confirm("Do you confirm to do this?");
-        if (confirmed) {
-            const scriptId = Number(id);
-            const item = list.find(({ id }) => id === scriptId);
-            if (item) {
-                scriptUpdate({ ...item, studyCount: item.studyCount + 1 }).then((res) => {
-                    if (res.code === 1) {
-                        apiGetList(listParams);
-                    } else {
-                        alert("Failed.");
-                    }
-                });
-            }
-        }
+        apiGetCatalog(listParamsNew);
     };
     const handlerRemove = async () => {
         const confirmed = window.confirm("Do you confirm to delete it?");
         if (confirmed) {
             const scriptId = Number(id);
-            const item = list.find(({ id }) => id === scriptId);
+            const item = catalogList.find(({ id }) => id === scriptId);
             if (item) {
                 scriptRemove({ id: scriptId }).then((res) => {
                     if (res.code === 1) {
-                        apiGetList(listParams);
+                        apiGetCatalog(catalogListParams);
                     } else {
                         alert("Failed.");
                     }
@@ -86,22 +70,22 @@ const Catalog = () => {
     const handlerMenuFold = () => {
         dispatch(updateCatalogFolding(!catalogFolding));
     };
-    const apiGetList = async (listParams: ListParams) => {
+    const apiGetCatalog = async (catalogListParams: CatalogListParams) => {
         const res = await scriptList({
-            page: listParams.page,
-            pageSize: listParams.pageSize,
-            keyword: listParams.keyword,
+            page: catalogListParams.page,
+            pageSize: catalogListParams.pageSize,
+            keyword: catalogListParams.keyword,
         });
         if (res.code === 1) {
-            setList(res.data.list);
-            setListParams(res.data.listParams);
+            dispatch(setList(res.data.list));
+            dispatch(setListParams(res.data.listParams));
         }
     };
     useEffect(() => {
-        apiGetList(listParams);
+        apiGetCatalog(catalogListParams);
     }, []);
     useEffect(() => {
-        const item = list.find((item: any) => item.id == id);
+        const item = catalogList.find((item: any) => item.id == id);
         if (item) {
             const dom = refCatalogMap.current.get(item.id);
             if (dom) {
@@ -110,7 +94,7 @@ const Catalog = () => {
                 refScrollbar.current?.scrollTop(scrollTopPointValue);
             }
         }
-    }, [list]);
+    }, [catalogList]);
     return (
         <aside id="catalog" className={catalogFolding ? `folding` : ``}>
             <div className="upload">
@@ -120,23 +104,20 @@ const Catalog = () => {
                 <Button className="remove" icon={<MinusCircleOutlined />} onClick={handlerRemove} />
             </div>
             <div className="search">
-                <Input className="search-btn" value={listParams.keyword} onChange={(e) => handlerSearch(e.target.value)} allowClear />
-                <Button className="study-count-btn" icon={<PlusSquareOutlined />} onClick={handlerUpdate} />
+                <Input className="search-btn" value={catalogListParams.keyword} onChange={(e) => handlerSearch(e.target.value)} allowClear />
                 <Button className="fold-btn" icon={<MenuFoldOutlined />} onClick={handlerMenuFold} />
             </div>
             <Scrollbars className="menu" style={{ height: "calc(100vh - 100px)" }} ref={refScrollbar}>
-                {list.map((item, key) => {
-                    return (
-                        // prettier-ignore
-                        <Link 
-                            ref={(el) => { el && (refCatalogMap.current.set(item.id, el)) }} 
-                            to={`/home/${item.id}`} 
-                            key={key} 
-                            className={item.id === Number(id) ? `item active` : `item`}>
-                                {catalogFolding ? `` : `[${item.studyCount}] ${item.name}`}
-                        </Link>
-                    );
-                })}
+                {catalogList.map((item, key) =>
+                    // prettier-ignore
+                    <Link 
+                        ref={(el) => { el && (refCatalogMap.current.set(item.id, el)) }} 
+                        to={`/home/${item.id}`} 
+                        key={key} 
+                        className={item.id === Number(id) ? `item active` : `item`}>
+                            {catalogFolding ? `` : `[${item.studyCount}] ${item.name}`}
+                    </Link>,
+                )}
             </Scrollbars>
         </aside>
     );

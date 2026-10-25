@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { HomeOutlined, CustomerServiceFilled, EditOutlined, ReadFilled, FileWordFilled, GoogleOutlined, HighlightOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores";
@@ -9,6 +8,17 @@ import PanelVocab from "../Vocabulary/Index";
 import PanelGrammar from "../Grammar/Index";
 import PanelSentence from "../ScriptSentence/Index";
 import "./Nav.scss";
+// prettier-ignore
+import { 
+    HomeOutlined, 
+    CustomerServiceFilled, 
+    EditOutlined, 
+    ReadFilled, 
+    FileWordFilled, 
+    GoogleOutlined, 
+    HighlightOutlined, 
+    UnorderedListOutlined 
+} from "@ant-design/icons";
 
 interface RouteItem {
     url: string;
@@ -34,13 +44,11 @@ const Nav = () => {
     return (
         <nav id="nav" className={catalogFolding ? `folding` : ``}>
             <div className="navs">
-                {navs.map((nav, key) => {
-                    return (
-                        <Link to={`${nav.url}/${Number(id)}`} key={key} className={`item${nav.url.slice(1) === firstPath ? " active" : ""}`}>
-                            <Button icon={nav.icon} />
-                        </Link>
-                    );
-                })}
+                {navs.map((nav, key) => (
+                    <Link to={`${nav.url}/${Number(id)}`} key={key} className={`item${nav.url.slice(1) === firstPath ? " active" : ""}`}>
+                        <Button icon={nav.icon} />
+                    </Link>
+                ))}
                 <div className="item">
                     <Button icon={<UnorderedListOutlined />} onClick={() => setSentencePanel(true)} />
                 </div>

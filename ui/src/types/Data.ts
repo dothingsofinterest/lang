@@ -28,6 +28,7 @@ export interface ScriptParagraph {
     roleId: number;
     orderNum: number;
 }
+
 export interface ScriptParagraphWithSentences {
     id: number;
     scriptId: number;
@@ -43,6 +44,7 @@ export interface ScriptParagraphWithSentences {
         piece: string;
     }[];
 }
+
 export interface ScriptSentence {
     id: number;
     scriptId?: number;
@@ -53,6 +55,7 @@ export interface ScriptSentence {
     text: string;
     piece: string;
 }
+
 export interface Vocabulary {
     id: number;
     definition: string;

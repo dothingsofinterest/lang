@@ -92,6 +92,14 @@ export const scriptRead = (params: object): Promise<Response> => {
         params: params,
     });
 };
+export const scriptExportAudio = (params: object): Promise<Blob> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script/exportAudio`,
+        responseType: "blob",
+        params: params,
+    });
+};
 /// Script
 
 // Script Paragraph

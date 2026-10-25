@@ -1,6 +1,14 @@
 import express, { Request, Response } from "express";
 import { upload } from "../middleware/Upload";
-import { create as scriptCreate, update as scriptUpdate, remove as scriptRemove, list as scriptList, read as ScriptRead } from "../controller/ScriptController";
+// prettier-ignore
+import { 
+    create as scriptCreate, 
+    update as scriptUpdate, 
+    remove as scriptRemove, 
+    list as scriptList, 
+    read as scriptRead,
+    exportAudio as scriptExportAudio
+} from "../controller/ScriptController";
 // prettier-ignore
 import { 
     list as ScriptParagraphList, 
@@ -58,7 +66,8 @@ router.post("/script/create", upload, scriptCreate);
 router.post("/script/update", scriptUpdate);
 router.post("/script/remove", scriptRemove);
 router.post("/script/list", scriptList);
-router.post("/script/read", ScriptRead);
+router.post("/script/read", scriptRead);
+router.post("/script/exportAudio", scriptExportAudio);
 // Script
 
 // Script Paragraph
@@ -106,7 +115,7 @@ router.post("/vocabulary/list", vocabularyList);
 router.post("/vocabulary/file/move", vocabularyFileMove);
 router.post("/vocabulary/file/remove", vocabularyFileRemove);
 router.post("/vocabulary/file/image_upload", upload, vocabularyFileUploadImage);
-router.post("/vocabulary/file/export_speech", upload, vocabularyFileExportSpeech);
+router.post("/vocabulary/file/export_speech", vocabularyFileExportSpeech);
 // Vocabulary
 
 // Grammar

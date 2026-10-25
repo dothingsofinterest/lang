@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 const initialState: StateAuth = {
     ACCESS_TOKEN: Cookies.get(`ACCESS_TOKEN`),
 };
+
 const slice = createSlice({
     name: "auth",
     initialState,

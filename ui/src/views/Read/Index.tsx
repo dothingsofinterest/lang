@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import { Layout, Button, Modal, Affix } from "antd";
+import { Layout, Button, Modal } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, ApiOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined, HighlightOutlined } from "@ant-design/icons";
 import { RootState } from "../../stores";
@@ -401,15 +401,15 @@ const Index = () => {
             </div>
             <div className="main-inner-item-main" style={{ position: "relative", padding: "32px 0 0" }}>
                 <section id="panel">
-                    <Button icon={<RedoOutlined />} onClick={handlerPanelPlayAgain} className="btn"></Button>
-                    <Button icon={<FastBackwardOutlined />} onClick={handlerPanelPlayBackward} className="btn"></Button>
-                    <Button icon={playButton} onClick={handlerPanelPlay} className="btn">
+                    <Button icon={<RedoOutlined />} onClick={handlerPanelPlayAgain} className="btn-brass-dial"></Button>
+                    <Button icon={<FastBackwardOutlined />} onClick={handlerPanelPlayBackward} className="btn-brass-dial"></Button>
+                    <Button icon={playButton} onClick={handlerPanelPlay} className="btn-brass-dial">
                         {playSpeed}
                     </Button>
-                    <Button icon={<FastForwardOutlined />} onClick={handlerPanelPlayForward} className="btn"></Button>
-                    <Button icon={<ClearOutlined />} onClick={handlerPanelPlayClear} className="btn"></Button>
-                    <Button icon={<ApiOutlined />} onClick={handlerBatchUpdateSentencePiece} className="btn"></Button>
-                    <Button icon={<HighlightOutlined />} onClick={handlerPanelSentenceOpen} className="btn"></Button>
+                    <Button icon={<FastForwardOutlined />} onClick={handlerPanelPlayForward} className="btn-brass-dial"></Button>
+                    <Button icon={<ClearOutlined />} onClick={handlerPanelPlayClear} className="btn-brass-dial"></Button>
+                    <Button icon={<ApiOutlined />} onClick={handlerBatchUpdateSentencePiece} className="btn-brass-dial"></Button>
+                    <Button icon={<HighlightOutlined />} onClick={handlerPanelSentenceOpen} className="btn-brass-dial"></Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>
                     <article onClick={handleClickArticle} id="script" onFocus={() => alert(1)} onBlur={() => alert(2)}>

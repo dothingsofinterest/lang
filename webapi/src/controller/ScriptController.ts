@@ -325,3 +325,40 @@ export const read = (req: Request, res: Response) => {
         });
     }
 };
+
+export const exportAudio = async (req: Request, res: Response) => {
+    try {
+        const schema = Joi.object({
+            scriptId: Joi.number().required(),
+        });
+        const { error, value } = schema.validate(req.query);
+        if (error) {
+            return res.status(200).json({
+                code: 0,
+                message: error.message,
+            });
+        }
+        const scriptFolder = path.join(`${dataPath}`, `${value.scriptId}`);
+        if (fs.existsSync(scriptFolder)) {
+            const audioFile = path.join(scriptFolder, "audio.mp3");
+            console.log(audioFile);
+            const stat = fs.statSync(audioFile);
+            res.setHeader("Content-Length", stat.size);
+            res.setHeader("Content-Type", "audio/mpeg");
+            const stream = fs.createReadStream(audioFile);
+            stream.pipe(res);
+            stream.on("error", (_) => {
+                return res.status(200).json({
+                    code: 0,
+                    message: `Failed.`,
+                });
+            });
+        }
+    } catch (error: any) {
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed.`,
+        });
+    }
+};
