@@ -203,7 +203,7 @@ const Index = () => {
                                             {scene.paragraphs.map((paragraph: any) => {
                                                 return (
                                                     <React.Fragment key={paragraph.id}>
-                                                        <p key={paragraph.id} className={!paragraph.role ? "indent" : undefined}>
+                                                        <p key={paragraph.id}>
                                                             {paragraph.role && <i className="role">{paragraph.role}: </i>}
                                                             {paragraph.sentences.map((sentence: any) =>
                                                                 // prettier-ignore
