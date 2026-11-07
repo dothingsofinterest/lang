@@ -138,6 +138,13 @@ export const scriptParagraphCut = (data: object): Promise<Response> => {
         data: data,
     });
 };
+export const scriptParagraphCombine = (data: object): Promise<Response> => {
+    return requestInstance.request({
+        method: "post",
+        url: `/script_paragraph/combine`,
+        data: data,
+    });
+};
 // Script Paragraph
 
 // Script Sentence

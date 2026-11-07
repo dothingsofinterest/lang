@@ -15,7 +15,8 @@ import {
     insert as ScriptParagraphInsert, 
     update as ScriptParagraphUpdate, 
     remove as ScriptParagraphRemove, 
-    cut as ScriptParagraphCut
+    cut as ScriptParagraphCut,
+    combine as ScriptParagraphCombine
 } from "../controller/ScriptParagraphController";
 // prettier-ignore
 import { 
@@ -76,6 +77,7 @@ router.post("/script_paragraph/insert", ScriptParagraphInsert);
 router.post("/script_paragraph/update", ScriptParagraphUpdate);
 router.post("/script_paragraph/remove", ScriptParagraphRemove);
 router.post("/script_paragraph/cut", ScriptParagraphCut);
+router.post("/script_paragraph/combine", ScriptParagraphCombine);
 // Script Paragraph
 
 // Script Sentence

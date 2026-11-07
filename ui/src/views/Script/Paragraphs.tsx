@@ -14,6 +14,7 @@ interface ParagraphsProps {
     onParagraphUpdate?: (paragraphId: number, roleId: number, sceneId: number) => void;
     onParagraphDelete?: (pId: number) => void;
     onParagraphCut?: (prevId: number | null, nextId: number | null, sentenceIds: number[]) => void;
+    onParagraphCombine?: (prevId: number | null, currId: number | null) => void;
     onSentenceInsert?: (paragraphId: number, prevId: number | null, nextId: number | null) => void;
     onSentenceDelete?: (paragraphId: number, sentenceId: number) => void;
     onSentenceUpdate?: (paragraphId: number, sentenceId: number, startTime: number, endTime: number, text: string, piece: string) => void;
@@ -25,6 +26,7 @@ export interface ParagraphsRef {
     insertParagraph: () => void;
     deleteParagraph: () => void;
     cutParagraph: () => void;
+    combineParagraph: () => void;
     insertSentence: () => void;
     deleteSentence: () => void;
 }
@@ -39,6 +41,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
         onParagraphUpdate, 
         onParagraphDelete, 
         onParagraphCut, 
+        onParagraphCombine, 
         onSentenceInsert, 
         onSentenceDelete, 
         onSentenceUpdate, 
@@ -92,6 +95,18 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                         const nextParagraph = paragraphs[curParagraphIndex + 1];
                         onParagraphCut(pID, nextParagraph ? nextParagraph.id : null, sentenceIds);
                     }
+                }
+            }
+        }
+    };
+    const handlerParagraphCombine = () => {
+        if (onParagraphCombine !== undefined) {
+            const pID = refCurPId.current;
+            const curParagraphIndex = paragraphs.findIndex(({ id }) => id === pID);
+            if (curParagraphIndex !== -1) {
+                const prevParagraph = paragraphs[curParagraphIndex - 1];
+                if (prevParagraph) {
+                    onParagraphCombine(prevParagraph.id, pID);
                 }
             }
         }
@@ -215,6 +230,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
         insertParagraph: handlerParagraphInsert,
         deleteParagraph: handlerParagraphDelete,
         cutParagraph: handlerParagraphCut,
+        combineParagraph: handlerParagraphCombine,
         insertSentence: handlerSentenceInsert,
         deleteSentence: handlerSentenceDelete,
     }));
@@ -248,7 +264,7 @@ const Paragraphs = React.forwardRef<ParagraphsRef, ParagraphsProps>(({
                                 onChange={(v) => handlerRoleChange(paragraph, v)} 
                                 options={roles.map((v) => ({ label: v.name, value: v.id }))} />
                         </div>
-                        {paragraph.sentences.map((sentence: any, index: number) => {
+                        {paragraph.sentences.map((sentence: any) => {
                             return (
                                 <div className="sentence" key={`${sentence.id}${sentence.startTime}${sentence.endTime}`}>
                                     <Space size="small" className="time" direction="vertical">

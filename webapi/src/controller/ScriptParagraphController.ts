@@ -4,7 +4,7 @@ import path from "path";
 import { Request, Response } from "express";
 import { LoggerSystem } from "../lib/Log";
 import Database from "better-sqlite3";
-import { Script, ScriptScene, ScriptRole, ScriptParagraph, ScriptSentence, ScriptParagraphWithSentences } from "../types/Script";
+import { ScriptParagraph, ScriptSentence, ScriptParagraphWithSentences } from "../types/Script";
 
 const dataPath = process.env.DATA_PATH;
 const dbFile = path.join(`${dataPath}`, `${process.env.DATA_DATABASE}`);
@@ -315,6 +315,79 @@ export const cut = (req: Request, res: Response) => {
             prevId: value.prevId,
             nextId: value.nextId,
             sentenceIds: value.sentenceIds,
+        });
+        return res.status(200).json({
+            code: 1,
+            message: `Succeed`,
+        });
+    } catch (error: any) {
+        LoggerSystem.error(error.message);
+        return res.status(200).json({
+            code: 0,
+            message: `Failed`,
+        });
+    }
+};
+
+export const combine = (req: Request, res: Response) => {
+    try {
+        const schema = Joi.object({
+            scriptId: Joi.number().required(),
+            prevId: Joi.number().required(),
+            currId: Joi.number().required(),
+        });
+        const { error, value } = schema.validate(req.body);
+        if (error) {
+            return res.status(200).json({
+                code: 0,
+                message: error.message,
+            });
+        }
+        const tx = db.transaction((value: { scriptId: number; prevId: number; currId: number }) => {
+            // prettier-ignore
+            const prevSentences = db.prepare<[number, number], ScriptSentence>(`
+                SELECT id, script_id AS scriptId, paragraph_id AS paragraphId, order_num AS orderNum
+                FROM script_sentence
+                WHERE script_id = ? AND paragraph_id = ?
+                ORDER BY order_num
+            `).all(value.scriptId, value.prevId);
+            if (!prevSentences) throw new Error("prevId not found");
+
+            // prettier-ignore
+            const currSentences = db.prepare<[number, number], ScriptSentence>(`
+                SELECT id, script_id AS scriptId, paragraph_id AS paragraphId, order_num AS orderNum
+                FROM script_sentence
+                WHERE script_id = ? AND paragraph_id = ?
+                ORDER BY order_num
+            `).all(value.scriptId, value.currId);
+            if (!currSentences) throw new Error("currId not found");
+
+            // Combine and Deal with sentences
+            const sentences = prevSentences.concat(currSentences).map((v, k) => {
+                v.orderNum = k * GAP;
+                v.paragraphId = value.prevId;
+                return v;
+            });
+            // Batch Update
+            for (const sentence of sentences) {
+                // prettier-ignore
+                db.prepare<[number, number, number, number]>(`
+                    UPDATE script_sentence 
+                    SET order_num = ?, paragraph_id = ? 
+                    WHERE script_id = ? AND id = ?
+                `).run(sentence.orderNum, sentence.paragraphId, sentence.scriptId, sentence.id);
+            }
+            // Delete Current Paragraph
+            // prettier-ignore
+            db.prepare(`
+                DELETE FROM script_paragraph
+                WHERE script_id = ? AND id = ?
+            `).run(value.scriptId, value.currId);
+        });
+        tx({
+            scriptId: value.scriptId,
+            prevId: value.prevId,
+            currId: value.currId,
         });
         return res.status(200).json({
             code: 1,

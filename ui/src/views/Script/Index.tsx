@@ -9,6 +9,7 @@ import {
     LinkOutlined,
     RedoOutlined, 
     ScissorOutlined, 
+    VerticalAlignMiddleOutlined,
     MinusCircleOutlined, 
     PlusCircleOutlined, 
     DownloadOutlined, 
@@ -36,6 +37,7 @@ import { scriptParagraphList,
     scriptParagraphUpdate, 
     scriptParagraphRemove, 
     scriptParagraphCut, 
+    scriptParagraphCombine,
     scriptSentenceInsert, 
     scriptSentenceInsertBatch, 
     scriptSentenceRemove, 
@@ -100,6 +102,12 @@ const Index = () => {
             refParagraphs.current?.cutParagraph();
         }
     };
+    const handlersParagraphCombine = () => {
+        const confirmed = window.confirm("Do you confirm to combine?");
+        if (confirmed) {
+            refParagraphs.current?.combineParagraph();
+        }
+    };
     const handlerUploadIllustration = async (file: any) => {
         if (/^(.+?)\.(png|jpg)$/g.test(file.name) && (file.type === "image/png" || file.type === "image/jpeg")) {
             try {
@@ -149,6 +157,15 @@ const Index = () => {
     };
     const onParagraphCut = (prevId: number | null, nextId: number | null, sentenceIds: number[]) => {
         scriptParagraphCut({ scriptId, prevId, nextId, sentenceIds }).then((res) => {
+            if (res.code === 1) {
+                apiGetParagraphList();
+            } else {
+                alert("Failed");
+            }
+        });
+    };
+    const onParagraphCombine = (prevId: number | null, currId: number | null) => {
+        scriptParagraphCombine({ scriptId, prevId, currId }).then((res) => {
             if (res.code === 1) {
                 apiGetParagraphList();
             } else {
@@ -454,6 +471,7 @@ const Index = () => {
                         <Button icon={<PlusSquareOutlined />} onClick={handlersParagraphInsert} />
                         <Button icon={<MinusSquareOutlined />} onClick={handlersParagraphDelete} />
                         <Button icon={<ScissorOutlined />} onClick={handlersParagraphCut} />
+                        <Button icon={<VerticalAlignMiddleOutlined />} onClick={handlersParagraphCombine} />
                         <Button icon={<PlusCircleOutlined />} onClick={handlersSentenceInsert} />
                         <Button icon={<MinusCircleOutlined />} onClick={handlersSentenceDelete} />
                         <Upload beforeUpload={handlerUploadIllustration} showUploadList={false}>
@@ -476,6 +494,7 @@ const Index = () => {
                         onSentenceDelete={onSentenceDelete} 
                         onSentenceUpdate={onSentenceUpdate} 
                         onParagraphCut={onParagraphCut} 
+                        onParagraphCombine={onParagraphCombine} 
                         onLocateTime={onLocateTime} 
                         onActive={onActive} 
                         ref={refParagraphs} />
