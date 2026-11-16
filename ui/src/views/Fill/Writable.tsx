@@ -95,11 +95,11 @@ const Writable = React.forwardRef<WritableRef, WritableProps>(({
                             <Input 
                                 defaultValue={``}
                                 ref={(el) => el && (refInputsMap.current.set(k, el))} 
-                                className={showOrigin === true ? "invisible": ""}
+                                className={showOrigin === true ? "invisible": pieceStack.includes(k)? "filling": "filled"}
                                 onBlur={(e) => handlerOnType(e.target.value, k)}
                                 onChange={(e) => handlerOnType(e.target.value, k)} 
                                 onClick={(_) => handlerOnClick(k)}
-                                style={{ width: `${piece.length + 2}ch`, background: !pieceStack.includes(k)? "#8b8b8b": "#fff"}}
+                                style={{ width: `${piece.length + 2}ch`}}
                             />
                             <Input 
                                 value={piece}

@@ -52,8 +52,8 @@ export const create = (req: Request, res: Response) => {
 export const remove = (req: Request, res: Response) => {
     try {
         const schema = Joi.object({
-            vocabId: Joi.number().required(),
             scriptId: Joi.number().required(),
+            vocabId: Joi.number().required(),
         });
         const { error, value } = schema.validate(req.body);
         if (error) {
@@ -64,7 +64,7 @@ export const remove = (req: Request, res: Response) => {
         }
         // prettier-ignore
         const item = db.prepare<[number, number], any>(`
-            SELECT id FROM script_vocabulary WHERE script_id = ? AND id = ?
+            SELECT id FROM script_vocabulary WHERE script_id = ? AND vocab_id = ?
         `).get(value.scriptId, value.vocabId);
         if (!item) {
             return res.status(200).json({
@@ -72,10 +72,7 @@ export const remove = (req: Request, res: Response) => {
                 message: `Does not exist`,
             });
         }
-        // prettier-ignore
-        db.prepare<[number, number]>(`
-            DELETE FROM script_vocabulary WHERE script_id = ? AND id = ?
-        `).run(value.scriptId, value.vocabId);
+        db.prepare<[number]>(`DELETE FROM script_vocabulary WHERE id = ?`).run(item.id);
         res.status(200).json({
             code: 1,
             message: `Succeed`,
@@ -107,8 +104,7 @@ export const list = (req: Request, res: Response) => {
                 sv.id,
                 v.definition, 
                 v.image, 
-                v.speech, 
-                v.category
+                v.speech
             FROM script_vocabulary sv
             JOIN vocabulary v ON v.id = sv.vocab_id
             WHERE sv.script_id = ?

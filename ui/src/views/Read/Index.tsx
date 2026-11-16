@@ -1,7 +1,18 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Layout, Button, Modal } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { RedoOutlined, FastBackwardOutlined, PauseCircleOutlined, ApiOutlined, FastForwardOutlined, PlayCircleOutlined, ClearOutlined, HighlightOutlined } from "@ant-design/icons";
+// prettier-ignore
+import { 
+    RedoOutlined, 
+    ArrowUpOutlined, 
+    FastBackwardOutlined, 
+    PauseCircleOutlined, 
+    ApiOutlined, 
+    FastForwardOutlined, 
+    PlayCircleOutlined, 
+    ClearOutlined, 
+    HighlightOutlined 
+} from "@ant-design/icons";
 import { RootState } from "../../stores";
 import { useSelector, useDispatch } from "react-redux";
 import { updateReadCurSentence, updateReadVideoCurrentTime, updateReadScrollPos } from "../../stores/reducers/status";
@@ -166,6 +177,7 @@ const Index = () => {
     };
     const handlerPanelPlayClear = () => {
         if (refVideo.current) {
+            console.log(1);
             refVideo.current.currentTime = 0;
             refVideo.current.pause();
             setPlayButton(<PlayCircleOutlined />);
@@ -309,6 +321,9 @@ const Index = () => {
                 }
             });
         }
+    };
+    const handlerToTop = () => {
+        refScrollbar.current?.scrollTop(0);
     };
     const fnScroll = (sentence: any) => {
         if (sentence) {
@@ -488,6 +503,7 @@ const Index = () => {
                         </li>
                     ))}
                 </ul>
+                <Button icon={<ArrowUpOutlined />} onClick={handlerToTop} className="totop"></Button>
             </div>
         </Layout>
     );

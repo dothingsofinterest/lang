@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Vocabulary } from "../../types/Data";
-import { Input, Button, Select, Upload, Drawer } from "antd";
+import { Input, Button, Select, Upload, Drawer, Modal, Popconfirm, Divider } from "antd";
 // prettier-ignore
 import { 
     PlusSquareOutlined, 
@@ -11,11 +11,12 @@ import {
     MinusOutlined, 
     ClearOutlined, 
     LinkOutlined, 
-    FileImageOutlined 
+    FileImageOutlined,
+    SoundTwoTone,
+    FileTextOutlined 
 } from "@ant-design/icons";
 import { fnParseVocab } from "../../utils/script";
 import { fnBase64ToBlob } from "../../utils/util";
-import { updateScriptVocabList } from "../../stores/reducers/script";
 import { Domain } from "../../settings.js";
 import { md5 } from "js-md5";
 import { RootState } from "../../stores";
@@ -29,8 +30,7 @@ import {
     speechUpload, 
     vocabFileMove, 
     vocabFileRemove, 
-    vocabFileUploadImage, 
-    scriptVocabList, 
+    vocabFileUploadImage,
     scriptVocabCreate, 
     scriptVocabRemove,
     vocabFileExportSpeech
@@ -59,13 +59,6 @@ const checkVocabDefinition = (text: string) => /^(.+) \| (.+) \| (.+)$/.test(tex
 const AssetsPrefix = `${Domain}/database`;
 const UploadPrefix = `${Domain}/upload/temp`;
 
-const inputTypeOptions = [
-    { value: 1, label: "Listening" },
-    { value: 5, label: "L & T" },
-    { value: 6, label: "W & T" },
-    { value: 7, label: "All" },
-];
-
 const speechSpeedOptions = [
     { value: 150, label: "Normal" },
     { value: 120, label: "Slow" },
@@ -87,9 +80,9 @@ const speechEngineOptions = [
 const defaultVocab = {
     id: 0,
     definition: "",
+    explanation: "",
     image: "",
     speech: "",
-    category: 7,
 };
 
 const defaultListQuery = {
@@ -100,7 +93,6 @@ const defaultListQuery = {
 const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const dispatch = useDispatch();
     const scriptId = useSelector((state: RootState) => state.script.scriptId);
-    const scriptVocabularyList = useSelector((state: RootState) => state.script.scriptVocabList);
     const [list, setList] = useState<Vocabulary[]>([]);
     const [listQuery, setListQuery] = useState<ListQuery>(defaultListQuery);
     const [dataTotal, setDataTotal] = useState<number>(0);
@@ -109,6 +101,8 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const [speechEngine, setSpeechEngine] = useState(0);
     const [speechVoice, setSpeechVoice] = useState(0);
     const [speechSpeed, setSpeechSpeed] = useState(150);
+    const [externalSpeechDialog, setSExternalSpeechDialog] = useState(false);
+    const [uploadImageDialog, setUploadImageDialog] = useState(false);
     const [keyword, setKeyword] = useState("");
     const refAudio = useRef<AudioRef>(null);
     const handlerParseVocab = (text: string) => {
@@ -117,8 +111,8 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const handlerVocabUpdateText = (value: string) => {
         setVocab({ ...vocab, definition: value });
     };
-    const handlerVocabUpdateCate = (value: number) => {
-        setVocab({ ...vocab, category: value });
+    const handlerVocabUpdateExplanation = (value: string) => {
+        setVocab({ ...vocab, explanation: value });
     };
     const handlerVocabUpdateImage = async (file: any) => {
         if (checkVocabDefinition(vocab.definition)) {
@@ -153,12 +147,31 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const handlerSpeechUpdateSpeed = (value: number) => {
         setSpeechSpeed(value);
     };
-    const handlerSpeechPlay = async () => {
+    const handlerSpeechPlayBase64 = async () => {
         if (vocab.speech) {
             const audioSrc = `${UploadPrefix}/${vocab.speech}`;
-            refAudio.current?.play(audioSrc, 1);
             window.open(audioSrc, "_blank");
         }
+    };
+    const onClickExternalSpeech = () => {
+        setSExternalSpeechDialog(true);
+    };
+    const onOkExternalSpeechDialog = () => {
+        setSExternalSpeechDialog(false);
+    };
+    const onCancelExternalSpeechDialog = () => {
+        setVocab({ ...vocab, speech: "" });
+        setSExternalSpeechDialog(false);
+    };
+    const onClickUploadImage = () => {
+        setUploadImageDialog(true);
+    };
+    const onOkUploadImageDialog = () => {
+        setUploadImageDialog(false);
+    };
+    const onCancelUploadImageDialog = () => {
+        setVocab({ ...vocab, image: "" });
+        setUploadImageDialog(false);
     };
     const handlerSpeechGenerate = async () => {
         if (vocab.definition && checkVocabDefinition(vocab.definition)) {
@@ -239,9 +252,9 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                     if (res.code === 1) {
                         vocabCreate({
                             definition: vocab.definition,
+                            explanation: vocab.explanation,
                             image: res.data.image,
                             speech: res.data.speech,
-                            category: vocab.category,
                         }).then((res) => {
                             if (res.code === 1) {
                                 setVocab(defaultVocab);
@@ -259,27 +272,19 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const handlerVocabUpdate = async () => {
         if (vocab.id !== 0) {
             if (checkVocabDefinition(vocab.definition)) {
-                vocabFileMove({
-                    image: vocab.image,
-                    speech: vocab.speech,
-                }).then(async (res) => {
+                vocabFileMove({ image: vocab.image, speech: vocab.speech }).then(async (res) => {
                     const theVocab = list.find(({ id }) => id === vocab.id);
                     vocabUpdate({
                         id: vocab.id,
                         definition: vocab.definition,
+                        explanation: vocab.explanation,
                         image: res.data.image ? res.data.image : theVocab?.image,
                         speech: res.data.speech ? res.data.speech : theVocab?.speech,
-                        category: vocab.category,
                     }).then((res) => {
                         if (res.code === 1) {
                             setVocab(defaultVocab);
                             setParsedVocab("");
                             apiGetList(listQuery);
-                            scriptVocabList({ scriptId }).then((res) => {
-                                if (res.code === 1) {
-                                    dispatch(updateScriptVocabList(res.data));
-                                }
-                            });
                         }
                     });
                 });
@@ -297,11 +302,6 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                             setVocab(defaultVocab);
                             setParsedVocab("");
                             apiGetList(listQuery);
-                            scriptVocabList({ scriptId }).then((res) => {
-                                if (res.code === 1) {
-                                    dispatch(updateScriptVocabList(res.data));
-                                }
-                            });
                         }
                     });
                 });
@@ -315,7 +315,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                 ...defaultVocab,
                 id: vocab.id,
                 definition: vocab.definition,
-                category: vocab.category,
+                explanation: vocab.explanation,
             });
         }
     };
@@ -356,34 +356,30 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
             scriptVocabCreate({ scriptId, vocabId: vocab.id }).then((res) => {
                 if (res.code === 1) {
                     setVocab(defaultVocab);
-                    scriptVocabList({ scriptId }).then((res) => {
-                        if (res.code === 1) {
-                            dispatch(updateScriptVocabList(res.data));
-                        }
-                    });
+                    apiGetList(listQuery);
                 } else {
                     alert("Failed");
                 }
             });
         }
     };
-    const handlerVocabRemoveFromScript = async (id: number) => {
-        if (scriptId && id) {
+    const onConfirmVocabItemRemoveFromScript = (vocabId: number | string) => {
+        if (scriptId && vocabId) {
             const confirmed = window.confirm("Are you confirmed to do this?");
             if (confirmed) {
-                scriptVocabRemove({ scriptId, vocabId: id }).then((res) => {
+                scriptVocabRemove({ scriptId, vocabId }).then((res) => {
                     if (res.code === 1) {
-                        scriptVocabList({ scriptId }).then((res) => {
-                            if (res.code === 1) {
-                                dispatch(updateScriptVocabList(res.data));
-                            }
-                        });
+                        apiGetList(listQuery);
                     } else {
                         alert("Failed");
                     }
                 });
             }
         }
+    };
+    const onConfirmVocabItemBelongsto = (scriptId: number | string, vocabDefinition: string) => {
+        const url = `/#/read/${scriptId}?search=${vocabDefinition.split(" | ")[0]}`;
+        window.open(url, "_blank");
     };
     const apiGetList = async (listQuery: ListQuery) => {
         const res = await vocabList(listQuery);
@@ -404,26 +400,39 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
         <Drawer id="vocabulary-index" title="Vocabulary" width={800} size="large" onClose={handlerOnClose} open={open}>
             <div className="panel">
                 <Input.TextArea autoSize value={parsedVocab} onChange={(e) => handlerParseVocab(e.target.value)} />
-                <div className="panel-base">
+                <div className="baseinfo">
                     <Input className="text" value={vocab.definition} onChange={(e) => handlerVocabUpdateText(e.target.value)} style={{ borderRadius: "0", color: "#000" }} />
-                    <Select style={{ width: 100 }} value={vocab.category} onChange={handlerVocabUpdateCate} options={inputTypeOptions} />
-                    <div className="image">{vocab.image && <img src={`${UploadPrefix}/${vocab.image}`} />}</div>
-                    <Upload beforeUpload={handlerVocabUpdateImage} showUploadList={false}>
-                        <Button icon={<FileImageOutlined />} />
-                    </Upload>
-                </div>
-                <div className="panel-audio">
-                    <Select style={{ width: 120 }} value={speechEngine} onChange={handlerSpeechUpdateEngine} options={speechEngineOptions} />
-                    <div className={`audio-meta${speechEngine === 3 ? " visible" : ""}`}>
-                        <Select value={speechVoice} onChange={handlerSpeechUpdateVoice} options={speechCharacterOptions} />
-                        <Select value={speechSpeed} onChange={handlerSpeechUpdateSpeed} options={speechSpeedOptions} />
+                    <Button className="btn" onClick={onClickUploadImage} icon={<FileImageOutlined />} />
+                    <Modal title="Upload Image" className="upload-image-modal" open={uploadImageDialog} onOk={onOkUploadImageDialog} onCancel={onCancelUploadImageDialog}>
+                        <div className="inner">
+                            <div className="image">{vocab.image && <img src={`${UploadPrefix}/${vocab.image}`} />}</div>
+                            <Upload beforeUpload={handlerVocabUpdateImage} showUploadList={false}>
+                                <Button icon={<FileImageOutlined />} size="large" />
+                            </Upload>
+                        </div>
+                    </Modal>
+                    <Button className="btn" onClick={onClickExternalSpeech} icon={<LinkOutlined />} />
+                    <Modal title="External Speech" className="speech-base64-modal" open={externalSpeechDialog} onOk={onOkExternalSpeechDialog} onCancel={onCancelExternalSpeechDialog}>
+                        <div className="inner">
+                            <Button className="play" size="large" onClick={handlerSpeechPlayBase64} icon={<SoundTwoTone />} />
+                            <div className="btn">
+                                <Input className="base64-string" value={``} size="large" onChange={(e) => handlerSpeechUploadBase64(e.target.value)} placeholder="Paste base64 strings from Google" />
+                                <div className="text-or">OR</div>
+                                <Upload className="upload" beforeUpload={handlerSpeechUpload} showUploadList={false}>
+                                    <Button icon={<PlusSquareOutlined />} size="large" />
+                                </Upload>
+                            </div>
+                        </div>
+                    </Modal>
+                    <Select style={{ width: 90 }} value={speechEngine} onChange={handlerSpeechUpdateEngine} options={speechEngineOptions} />
+                    <div className={`pytts-options${speechEngine === 3 ? " visible" : ""}`}>
+                        <Select value={speechVoice} style={{ width: 80 }} onChange={handlerSpeechUpdateVoice} options={speechCharacterOptions} />
+                        <Select value={speechSpeed} style={{ width: 90 }} onChange={handlerSpeechUpdateSpeed} options={speechSpeedOptions} />
                     </div>
-                    <Input className="base64" value={``} onChange={(e) => handlerSpeechUploadBase64(e.target.value)} />
-                    <Button className="pa-btn" onClick={handlerSpeechPlay} icon={<LinkOutlined />} />
-                    <Button className="pa-btn" icon={<RedoOutlined />} onClick={handlerSpeechGenerate} />
-                    <Upload className="pa-btn" beforeUpload={handlerSpeechUpload} showUploadList={false}>
-                        <Button icon={<PlusSquareOutlined />} />
-                    </Upload>
+                    <Button className="btn" icon={<RedoOutlined />} onClick={handlerSpeechGenerate} />
+                </div>
+                <div className="explanation">
+                    <Input.TextArea autoSize value={vocab.explanation} onChange={(e) => handlerVocabUpdateExplanation(e.target.value)} />
                 </div>
                 <div className="submit">
                     <Button icon={<ReloadOutlined />} onClick={handlerVocabUpdate} />
@@ -432,6 +441,9 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                     <Button icon={<PlusSquareOutlined />} onClick={handlerVocabCreate} />
                 </div>
             </div>
+            <Divider variant="dashed" style={{ borderColor: "#ccc" }} dashed>
+                List
+            </Divider>
             <div className="table">
                 <div className="search">
                     <Input value={keyword} onChange={(e) => handlerVocabSearch(e.target.value)} allowClear />
@@ -444,22 +456,28 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                             list.map((value) => {
                                 return (
                                     <div key={value.id} className={vocab.id === value.id ? "item active" : "item"} onClick={() => handlerVocabActivate(value)}>
-                                        <span className="text">
-                                            {value.definition}
+                                        <span className="definition">{value.definition}</span>
+                                        <span className="belongsto">
                                             {value.script_ids?.split(",").map((v, k) => {
                                                 return (
-                                                    <a key={k} href={`/#/read/${v}?search=${value.definition.split(" | ")[0]}`} target="_blank">
-                                                        {`【${v}】`}
-                                                    </a>
+                                                    <Popconfirm
+                                                        placement="bottom"
+                                                        title={v}
+                                                        okText="Jump"
+                                                        cancelText="Delete"
+                                                        onCancel={() => {
+                                                            onConfirmVocabItemRemoveFromScript(value.id);
+                                                        }}
+                                                        onConfirm={() => {
+                                                            onConfirmVocabItemBelongsto(v, value.definition);
+                                                        }}
+                                                    >
+                                                        <Button type="primary" icon={<FileTextOutlined />} size="small">
+                                                            {v}
+                                                        </Button>
+                                                    </Popconfirm>
                                                 );
                                             })}
-                                        </span>
-                                        <span className="img">
-                                            {value.image && (
-                                                <a href={`${AssetsPrefix}/image/${value.image}`} target="_blank">
-                                                    <img src={`${AssetsPrefix}/image/${value.image}`} />
-                                                </a>
-                                            )}
                                         </span>
                                     </div>
                                 );
@@ -469,16 +487,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                 <div className="pagination">
                     <Pagination current={listQuery.page} pageSize={listQuery.pageSize} total={dataTotal} onChange={handlerPageChange} />
                 </div>
-            </div>
-            <div className="tag">
-                {scriptVocabularyList.map((value, key) => {
-                    return (
-                        <Button key={key} onClick={() => handlerVocabRemoveFromScript(value.id)}>
-                            {value.definition.split(" | ")[0]}
-                            {value.image && <img src={`${AssetsPrefix}/image/${value.image}`} />}
-                        </Button>
-                    );
-                })}
+                <Popconfirm placement="right" title="Operation" okText="Jump" cancelText="Delete" />
             </div>
             <Audio ref={refAudio} loop={false}></Audio>
         </Drawer>

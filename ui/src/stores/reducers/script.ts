@@ -7,7 +7,6 @@ interface StateVideo {
     scriptId: number;
     script: any;
     scriptSentenceList: any[];
-    scriptVocabList: any[];
 }
 
 const initialState: StateVideo = {
@@ -16,8 +15,7 @@ const initialState: StateVideo = {
     videoAudioWaveformURL: "",
     scriptId: 0,
     script: {},
-    scriptSentenceList: [],
-    scriptVocabList: [],
+    scriptSentenceList: []
 };
 
 const slice = createSlice({
@@ -42,10 +40,7 @@ const slice = createSlice({
         },
         updateScriptSentenceList: (state, action: PayloadAction<any>) => {
             state.scriptSentenceList = action.payload;
-        },
-        updateScriptVocabList: (state, action: PayloadAction<any>) => {
-            state.scriptVocabList = action.payload;
-        },
+        }
     },
 });
 
@@ -56,8 +51,7 @@ export const {
     updateVideoAudioURL, 
     updateVideoAudioWaverURL,
     updateScript, 
-    updateScriptSentenceList, 
-    updateScriptVocabList,
+    updateScriptSentenceList
 } = slice.actions;
 
 export default slice.reducer;

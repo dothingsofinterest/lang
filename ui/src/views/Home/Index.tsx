@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { Layout, Button } from "antd";
 import { DownloadOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
-import { scriptList, scriptUpdate, scriptRead, scriptExportAudio, scriptSentenceList, scriptVocabList } from "../../api/requestAuth";
+import { scriptList, scriptUpdate, scriptRead, scriptExportAudio, scriptSentenceList } from "../../api/requestAuth";
 import { setList } from "../../stores/reducers/catalog";
 import { useParams } from "react-router-dom";
 import { RootState } from "../../stores";
-import { updateScriptId, updateScript, updateScriptSentenceList, updateScriptVocabList } from "../../stores/reducers/script";
+import { updateScriptId, updateScript, updateScriptSentenceList } from "../../stores/reducers/script";
 import "./Index.scss";
 // prettier-ignore
 import { 
@@ -90,11 +90,6 @@ const Index = () => {
         scriptSentenceList({ scriptId: id }).then((res) => {
             if (res.code === 1) {
                 dispatch(updateScriptSentenceList(res.data));
-            }
-        });
-        scriptVocabList({ scriptId: id }).then((res) => {
-            if (res.code === 1) {
-                dispatch(updateScriptVocabList(res.data));
             }
         });
     }, [id]);

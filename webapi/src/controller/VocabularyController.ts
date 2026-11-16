@@ -17,9 +17,9 @@ export const create = (req: Request, res: Response) => {
     try {
         const schema = Joi.object({
             definition: Joi.string().required(),
+            explanation: Joi.string().required(),
             image: Joi.string().allow(null, ""),
             speech: Joi.string().allow(null, ""),
-            category: Joi.number(),
         });
         const { error, value } = schema.validate(req.body);
         if (error) {
@@ -29,9 +29,7 @@ export const create = (req: Request, res: Response) => {
             });
         }
         // prettier-ignore
-        const item = db.prepare<[string], Vocabulary>(`
-            SELECT id FROM vocabulary WHERE definition = ?
-        `).get(value.definition);
+        const item = db.prepare<[string], Vocabulary>(`SELECT id FROM vocabulary WHERE definition = ?`).get(value.definition);
         if (item) {
             return res.status(200).json({
                 code: 0,
@@ -39,13 +37,13 @@ export const create = (req: Request, res: Response) => {
             });
         }
         // prettier-ignore
-        db.prepare<[string, string, string , number]>(`
-            INSERT INTO vocabulary (definition, speech, image, category) VALUES (?, ?, ?, ?)
+        db.prepare<[string, string, string, string]>(`
+            INSERT INTO vocabulary (definition, explanation, speech, image) VALUES (?, ?, ?, ?)
         `).run(
             value.definition, 
+            value.explanation, 
             value.speech, 
-            value.image, 
-            value.category
+            value.image
         );
         return res.status(200).json({
             code: 1,
@@ -64,9 +62,9 @@ export const update = (req: Request, res: Response) => {
     const schema = Joi.object({
         id: Joi.number().required(),
         definition: Joi.string().required(),
+        explanation: Joi.string().required(),
         image: Joi.string().allow(null, ""),
         speech: Joi.string().allow(null, ""),
-        category: Joi.number(),
     });
     const { error, value } = schema.validate(req.body);
     if (error) {
@@ -77,20 +75,19 @@ export const update = (req: Request, res: Response) => {
     }
     try {
         // prettier-ignore
-        db.prepare<[string, string, string , number, number]>(`
-            UPDATE 
-                vocabulary 
+        db.prepare<[string, string, string, string, number]>(`
+            UPDATE vocabulary 
             SET 
                 definition = ?, 
+                explanation = ?, 
                 speech = ?, 
-                image = ?, 
-                category = ?
+                image = ?
             WHERE id = ?
         `).run(
             value.definition, 
+            value.explanation, 
             value.speech, 
-            value.image, 
-            value.category, 
+            value.image,
             value.id
         );
         return res.status(200).json({
@@ -172,13 +169,12 @@ export const list = (req: Request, res: Response) => {
     }
     try {
         const { page, offset, pageSize } = getPagination({ page: value.page, pageSize: value.pageSize });
-
         const SQLWhere = ["WHERE 1=1"];
         const SQLParams: string[] = [];
         const keyword = value.keyword || "";
         if (keyword) {
-            SQLWhere.push(" AND v.definition LIKE ?");
-            SQLParams.push(`%${keyword}%`);
+            SQLWhere.push(" AND (v.definition LIKE ? OR v.explanation LIKE ?)");
+            SQLParams.push(`%${keyword}%`, `%${keyword}%`);
         }
         // prettier-ignore
         const totalRow = db.prepare<unknown[], { total: number }>(`
@@ -191,9 +187,9 @@ export const list = (req: Request, res: Response) => {
             SELECT
                 v.id,
                 v.definition, 
+                v.explanation, 
                 v.speech, 
                 v.image, 
-                v.category,
                 GROUP_CONCAT(sv.script_id) AS script_ids
             FROM vocabulary v 
             LEFT JOIN script_vocabulary sv ON sv.vocab_id = v.id
@@ -202,7 +198,6 @@ export const list = (req: Request, res: Response) => {
             ORDER BY v.id DESC 
             LIMIT ? OFFSET ?`,
         ).all(...SQLParams, pageSize, offset);
-
         res.status(200).json({
             code: 1,
             message: `Succeed`,

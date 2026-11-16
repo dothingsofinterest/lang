@@ -76,16 +76,24 @@
                         text-align: center;
                         margin-right: 4px;
                         min-width: 40px;
-                        background: #fff;
+                        background: #ccc;
                         color: #000;
-                        padding: 0px 4px;
+                        padding: 0;
                         border-radius: 0;
+                        border: 0;
+                        border-bottom: 1px dotted #000;
                         line-height: 22px;
                         &.visible {
                             display: inline;
                         }
                         &.invisible {
                             display: none;
+                        }
+                        &:focus {
+                            box-shadow: none;
+                        }
+                        &.filling {
+                            color: red
                         }
                     }
                     img {

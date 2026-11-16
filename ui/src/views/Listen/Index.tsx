@@ -9,7 +9,8 @@ import { strip } from "../../utils/number";
 import { 
     EyeInvisibleOutlined, 
     EyeOutlined,
-    PlayCircleOutlined
+    PlayCircleOutlined,
+    ClearOutlined
 } from "@ant-design/icons";
 import Writable from "./Writable";
 import "./Writable";
@@ -190,6 +191,7 @@ const Index = () => {
                     <Button icon={<PlayCircleOutlined />} onClick={handlerPanelPlay} className="btn">
                         {playSpeed}
                     </Button>
+                    <Button icon={<ClearOutlined />} className="btn"></Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>
                     <article id="script">

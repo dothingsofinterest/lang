@@ -3,7 +3,10 @@ import { Layout, Button } from "antd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 // prettier-ignore
 import { 
+    FastBackwardOutlined,
+    FastForwardOutlined,
     EyeInvisibleOutlined, 
+    ClearOutlined,
     EyeOutlined
 } from "@ant-design/icons";
 import ReadOnly from "./ReadOnly";
@@ -52,7 +55,10 @@ const Index = () => {
             <div className="main-inner-item-aside"></div>
             <div className="main-inner-item-main" style={{ position: "relative", padding: "32px 0 0" }}>
                 <section id="panel">
+                    <Button icon={<FastBackwardOutlined />} className="btn"></Button>
                     <Button icon={showOrigin ? <EyeInvisibleOutlined /> : <EyeOutlined />} onClick={(_) => setShowOrigin(!showOrigin)} className="btn" />
+                    <Button icon={<FastForwardOutlined />} className="btn"></Button>
+                    <Button icon={<ClearOutlined />} className="btn"></Button>
                 </section>
                 <Scrollbars ref={refScrollbar}>
                     <article id="script">
