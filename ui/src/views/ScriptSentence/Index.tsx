@@ -77,7 +77,7 @@ const Index: React.FC<Props> = ({ open, onClose }) => {
                                                       })
                                                 : value.text}
                                         </span>
-                                        <span className="text">
+                                        <span className="script-title">
                                             <a href={`/#/read/${value.sId}`} target="_blank">
                                                 <b>{value.sName}</b>
                                             </a>

@@ -177,7 +177,6 @@ const Index = () => {
     };
     const handlerPanelPlayClear = () => {
         if (refVideo.current) {
-            console.log(1);
             refVideo.current.currentTime = 0;
             refVideo.current.pause();
             setPlayButton(<PlayCircleOutlined />);

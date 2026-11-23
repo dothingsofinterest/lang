@@ -277,7 +277,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                     vocabUpdate({
                         id: vocab.id,
                         definition: vocab.definition,
-                        explanation: vocab.explanation,
+                        explanation: vocab.explanation ? vocab.explanation : "",
                         image: res.data.image ? res.data.image : theVocab?.image,
                         speech: res.data.speech ? res.data.speech : theVocab?.speech,
                     }).then((res) => {
@@ -363,7 +363,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
             });
         }
     };
-    const onConfirmVocabItemRemoveFromScript = (vocabId: number | string) => {
+    const onConfirmVocabItemRemoveFromScript = (scriptId: number | string, vocabId: number | string) => {
         if (scriptId && vocabId) {
             const confirmed = window.confirm("Are you confirmed to do this?");
             if (confirmed) {
@@ -466,7 +466,7 @@ const Index: React.FC<Props> = ({ open, onClose, onSubmit }) => {
                                                         okText="Jump"
                                                         cancelText="Delete"
                                                         onCancel={() => {
-                                                            onConfirmVocabItemRemoveFromScript(value.id);
+                                                            onConfirmVocabItemRemoveFromScript(v, value.id);
                                                         }}
                                                         onConfirm={() => {
                                                             onConfirmVocabItemBelongsto(v, value.definition);

@@ -17,7 +17,7 @@ export const create = (req: Request, res: Response) => {
     try {
         const schema = Joi.object({
             definition: Joi.string().required(),
-            explanation: Joi.string().required(),
+            explanation: Joi.string().allow(null, ""),
             image: Joi.string().allow(null, ""),
             speech: Joi.string().allow(null, ""),
         });
@@ -62,7 +62,7 @@ export const update = (req: Request, res: Response) => {
     const schema = Joi.object({
         id: Joi.number().required(),
         definition: Joi.string().required(),
-        explanation: Joi.string().required(),
+        explanation: Joi.string().allow(null, ""),
         image: Joi.string().allow(null, ""),
         speech: Joi.string().allow(null, ""),
     });
